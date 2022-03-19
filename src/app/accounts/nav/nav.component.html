@@ -1,0 +1,103 @@
+
+<nav class="config-drawer">
+
+  <ng-container *ngIf="config.state == 'draft'; else status">
+
+    <div>
+      <a mat-button [routerLink]="'../label'" routerLinkActive="active">
+	<mat-icon>label</mat-icon>
+	&nbsp;Label
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../company'"
+	 routerLinkActive="active">
+	<mat-icon>business</mat-icon>
+	&nbsp;
+	Company
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../periods'"
+	 routerLinkActive="active">
+	<mat-icon>date_range</mat-icon>
+	&nbsp;
+	Periods
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../authorisation'"
+	 routerLinkActive="active">
+	<mat-icon>approval</mat-icon>
+	&nbsp;
+	Authorisation
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../employees'"
+	 routerLinkActive="active">
+	<mat-icon>people</mat-icon>
+	&nbsp;
+	Employees
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../signature'"
+	 routerLinkActive="active">
+	<mat-icon>edit</mat-icon>
+	&nbsp;
+	Signature
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../preview'"
+	 routerLinkActive="active">
+	<mat-icon>preview</mat-icon>
+	&nbsp;
+	Preview
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../submit'"
+	 routerLinkActive="active">
+	<mat-icon>publish</mat-icon>
+	&nbsp;
+	Submit
+      </a>
+    </div>
+
+  </ng-container>
+
+  <ng-template #status>
+    
+    <div>
+      <a mat-button [routerLink]="'../report'" routerLinkActive="active">
+	<mat-icon>preview</mat-icon>
+	&nbsp;Report
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../data'" routerLinkActive="active">
+	<mat-icon>table_rows</mat-icon>
+	&nbsp;Record
+      </a>
+    </div>
+
+    <div>
+      <a mat-button [routerLink]="'../status'" routerLinkActive="active">
+	<mat-icon>toc</mat-icon>
+	&nbsp;Log
+      </a>
+    </div>
+
+  </ng-template>
+
+</nav>

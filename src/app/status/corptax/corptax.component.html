@@ -1,0 +1,66 @@
+
+<section class="tab-contents">
+  
+  <h1>Corporation Tax</h1>
+
+  <div *ngIf="!setup">
+    <mat-card>
+      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+      Credentials for corporation tax submission to HMRC have not been set up for
+      {{company.company_name}}.
+    </mat-card>
+    <div>
+      
+      <form (ngSubmit)="submit()">
+
+	<mat-card>
+	  To connect, you must enter the Government gateway ID and
+	  password which you use to connect to HMRC on behalf of your
+	  company.
+	
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>Gateway ID</mat-label>
+	    <input matInput [(ngModel)]="gateway_id" name="gateway_id"
+		   placeholder="123456789012">
+	    <mat-hint>Enter your Government gateway ID (no spaces)</mat-hint>
+	  </mat-form-field>
+	</div>
+
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>Password</mat-label>
+	    <input matInput type="password" [(ngModel)]="password"
+		   name="password">
+	    <mat-hint>Enter your Government gateway password</mat-hint>
+	  </mat-form-field>
+	</div>
+	
+	<button type="submit"
+		mat-raised-button color="primary">
+	  <mat-icon>save</mat-icon>&nbsp;Save credentials
+	</button>
+	</mat-card>
+      
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="setup">
+    <mat-card>
+      <mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
+      Credentials for corporation tax submission to HMRC have been set up for
+      {{company.company_name}}.
+      <a mat-raised-button (click)="disconnect()">
+	<mat-icon>block</mat-icon>
+	click to disconnect
+      </a>
+    </mat-card>
+
+  </div>
+
+</section>
+

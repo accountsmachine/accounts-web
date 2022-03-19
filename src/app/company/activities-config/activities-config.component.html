@@ -1,0 +1,129 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container autosize class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
+
+      <h1>Activities configuration</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+
+	<p>
+	  <mat-form-field id="industrysector" appearance="fill">
+	    <mat-label>Industry sector</mat-label>
+	    <mat-select formControlName="sector" name="industry-sector">
+	      <mat-option [value]="'a'">
+		Agriculture Forestry Fishing
+	      </mat-option>
+	      <mat-option [value]="'b'">
+		Mining Quarrying
+	      </mat-option>
+	      <mat-option [value]="'c'">
+		Manufacturing
+	      </mat-option>
+	      <mat-option [value]="'d'">
+		Electricity Gas Steam Air Conditioning Supply
+	      </mat-option>
+	      <mat-option [value]="'e'">
+		Water Supply Sewerage Waste Management Remediation Activities
+	      </mat-option>
+	      <mat-option [value]="'f'">
+		Construction
+	      </mat-option>
+	      <mat-option [value]="'g'">
+		Wholesale Retail Trade Repair Motor Vehicles Motorcycles
+	      </mat-option>
+	      <mat-option [value]="'h'">
+		Transportation Storage
+	      </mat-option>
+	      <mat-option [value]="'i'">
+		Accommodation Food Service Activities
+	      </mat-option>
+	      <mat-option [value]="'j'">
+		Information Communication
+	      </mat-option>
+	      <mat-option [value]="'k'">
+		Financial Insurance Activities
+	      </mat-option>
+	      <mat-option [value]="'l'">
+		Real Estate Activities
+	      </mat-option>
+	      <mat-option [value]="'m'">
+		Professional Scientific Technical Activities
+	      </mat-option>
+	      <mat-option [value]="'n'">
+		Administrative Support Service Activities
+	      </mat-option>
+	      <mat-option [value]="'o'">
+		Public Administration Defence Compulsory Social Security
+	      </mat-option>
+	      <mat-option [value]="'p'">
+		Education
+	      </mat-option>
+	      <mat-option [value]="'q'">
+		Human Health Social Work Activities
+	      </mat-option>
+	      <mat-option [value]="'r'">
+		Arts Entertainment Recreation
+	      </mat-option>
+	      <mat-option [value]="'s'">
+		Other Service Activities
+	      </mat-option>
+	      </mat-select>
+	    <mat-hint>Industrial sector</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field id="activities" class="config-field" appearance="fill">
+	    <mat-label>Principle activities</mat-label>
+	    <input matInput
+		   placeholder="Software development and technical consultancy services"
+		   formControlName="activities"
+		   name="activities">
+	    <mat-hint>Brief description of primary company activities</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="chip-list" appearance="fill">
+	    <mat-label>SIC codes</mat-label>
+	    <mat-chip-list #siccodes aria-label="SIC codes">
+	      <mat-chip *ngFor="let v of sic_codes!.value" (removed)="removeSIC(v)">
+		{{v}}
+		<button matChipRemove>
+		  <mat-icon>cancel</mat-icon>
+		</button>
+	      </mat-chip>
+	      <input placeholder="62020"
+		     [matChipInputFor]="siccodes"
+		     [matChipInputSeparatorKeyCodes]="chipSeparatorKeysCodes"
+		     [matChipInputAddOnBlur]="'true'"
+		     (matChipInputTokenEnd)="addSIC($event)">
+	    </mat-chip-list>
+	    <mat-hint>Enter SIC cdodes e.g. 12001 12009</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<button type="submit" [disabled]="!form.valid"
+		mat-raised-button color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+  </mat-drawer-container>
+
+</section>
+
+

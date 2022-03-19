@@ -1,0 +1,34 @@
+
+<div class="container mat-elevation-z8"
+     *ngIf="payments.data.length > 0; else nodata">
+  
+  <mat-table #table [dataSource]="payments">
+
+    <ng-container matColumnDef="amount">
+      <mat-header-cell mat-header-cell *matHeaderCellDef>
+	Amount
+      </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.amount | currency}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="received">
+      <mat-header-cell mat-header-cell *matHeaderCellDef>
+	Received
+      </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.received | date:'dd/MM/YYYY'}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: columns;">
+    </mat-row>
+
+  </mat-table>
+
+</div>
+
+<ng-template #nodata>
+  <div>
+    There is no data for the period.
+  </div>
+</ng-template>

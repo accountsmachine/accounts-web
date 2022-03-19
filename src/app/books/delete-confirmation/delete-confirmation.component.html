@@ -1,0 +1,31 @@
+
+<h1 mat-dialog-title>Delete accounts</h1>
+
+<div mat-dialog-content>
+  <p>
+    This operation will delete the account book held for
+    <b>{{data.company.company}}</b> (company number {{data.company.number}}).
+  </p>
+  <p>
+    This only deletes the account book data,
+    the company and filing information is not deleted.
+  </p>
+  <p>
+    If you proceed, you can choose to upload the account book again
+    at a later time.
+  </p>
+  <p>
+    Are you sure you want to delete the account books?
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="no()" cdkFocusInitial>
+    No
+  </button>
+  <button mat-raised-button color="warn"
+	  [mat-dialog-close]="{proceed: true, company: data.company}">
+    Yes
+  </button>
+</div>
+

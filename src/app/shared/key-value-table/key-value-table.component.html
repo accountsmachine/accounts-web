@@ -1,0 +1,31 @@
+<mat-table #table [dataSource]="data" class="mat-elevation-z2">
+
+  <ng-container matColumnDef="key">
+    <mat-header-cell mat-sort-header *matHeaderCellDef>
+      Key
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <span class="ellipsis">
+	{{row.key}}
+      </span>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="value">
+    <mat-header-cell class="header-right" mat-sort-header *matHeaderCellDef>
+      Value
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <span class="ellipsis">
+	{{row.value}}
+      </span>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+  <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+
+</mat-table>
+
+

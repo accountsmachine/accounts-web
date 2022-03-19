@@ -1,0 +1,28 @@
+
+<h1 mat-dialog-title>Delete company configuration</h1>
+
+<div mat-dialog-content>
+  <p>
+    This operation will delete all information held regarding the company:
+  </p>
+  <p>
+    <b>{{data.company.company_name}}</b><br>
+    (company number {{data.company.company_number}}).
+  </p>
+  <p>
+    This will delete the company information, account books and all filing
+    information, including submitted filings.
+  <p>
+    Are you sure you want to delete this configuration?
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="no()" cdkFocusInitial>
+    No
+  </button>
+  <button mat-raised-button color="warn"
+	  [mat-dialog-close]="{proceed: true, company: data.company}">
+    Yes
+  </button>
+</div>

@@ -1,0 +1,47 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container" autoresize>
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>Accounts submit - {{config.label}}</h1>
+
+      <div class="submission">
+
+      <div class="warn">
+	When you submit this information you are making a legal
+	declaration that the information is true and complete. A false
+	declaration can result in prosecution.
+      </div>
+
+      <div class="confirm">
+	<mat-slide-toggle color="warn" class="config-field"
+			  [(ngModel)]="confirmed"
+			  name="confirmed">
+	  I confirm that the information is true and complete.
+	</mat-slide-toggle>
+      </div>
+
+      <div class="buttons">
+	<button mat-raised-button color="warn"
+		[disabled]="!confirmed" (click)="submit()">
+	  Submit
+	</button>
+	<button mat-raised-button color="basic" (click)="cancel()">
+	  Revert
+	</button>
+      </div>
+
+      </div>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+  
+</section>
+

@@ -1,0 +1,29 @@
+<mat-table #table [dataSource]="vat_table" class="mat-elevation-z2">
+
+  <ng-container matColumnDef="box">
+    <mat-header-cell mat-sort-header *matHeaderCellDef>
+      Box
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.box}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <mat-header-cell class="header-right" mat-sort-header *matHeaderCellDef>
+      Description
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="value">
+    <mat-header-cell class="header-right" mat-sort-header *matHeaderCellDef>
+      Value
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.value | currency}}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+  <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+
+</mat-table>
+

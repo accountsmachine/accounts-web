@@ -1,0 +1,50 @@
+
+@import "../../../theme.scss";
+
+.tab-contents {
+    padding: 1rem;
+}
+
+.container {
+    //    max-height: 40rem;
+    width: 60rem;
+    overflow: auto;
+}
+
+mat-table {
+    width: 58rem;
+}
+
+section {
+    padding: 0.5rem;
+}
+
+mat-cell {
+    white-space: nowrap;
+}
+
+.mat-column-company {
+    flex: 0 0 40% !important;
+    width: 40% !important;
+}
+
+.mat-column-number {
+    flex: 0 0 12% !important;
+    width: 12% !important;
+}
+
+.mat-column-size {
+    flex: 0 0 10% !important;
+    width: 10% !important;
+}
+
+.mat-column-uploaded {
+    flex: 0 0 15% !important;
+    width: 15% !important;
+}
+
+.mat-column-actions {
+    flex: 0 0 15% !important;
+    width: 15% !important;
+}
+

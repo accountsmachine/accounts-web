@@ -1,0 +1,105 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
+
+      <h1>Address configuration</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>Contact name</mat-label>
+	    <input matInput
+		   formControlName="contact_name" name="contact-name"
+		   placeholder="Corporate Enquiries">
+	    <mat-hint>Contact name on written correspondence</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>Contact Address</mat-label>
+	    <input matInput
+		   formControlName="contact_address0"
+		   name="contact-address0"
+		   placeholder="9, Barton Street">
+	    <input matInput
+		   formControlName="contact_address1"
+		   name="contact-address1"
+		   placeholder="Starks Business Park">
+	    <input matInput
+		   formControlName="contact_address2"
+		   name="contact-address2"
+		   placeholder="">
+	    <mat-hint>Address</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>City/Town</mat-label>
+	    <input matInput
+		   formControlName="contact_city"
+		   name="contact_city"
+		   placeholder="Winthinthrophampton">
+	    <mat-hint>City/town of contact address</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>County</mat-label>
+	    <input matInput 
+		   formControlName="contact_county"
+		   name="contact-county"
+		   placeholder="Cornwall">
+	    <mat-hint>County of contact address</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>Country</mat-label>
+	    <input matInput 
+		   formControlName="contact_country"
+		   name="contact-country"
+		   placeholder="England">
+	    <mat-hint>Country of contact address</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>Postcode</mat-label>
+	    <input matInput 
+		   formControlName="contact_postcode"
+		   name="contact-postcode"
+		   placeholder="QQ11 1QQ">
+	    <mat-hint>Postcode</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<button type="submit" [disabled]="!form.valid"
+		mat-raised-button color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+  </mat-drawer-container>
+
+</section>
+
+

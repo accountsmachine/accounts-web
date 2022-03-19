@@ -1,0 +1,81 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container" autoresize>
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>Accounts periods - {{config.label}}</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+
+	<p>
+	  <mat-form-field class="date-field" appearance="fill">
+	    <mat-label>Start of accounting period</mat-label>
+	    <input matInput
+		   [matDatepicker]="period_start_date"
+		   formControlName="period_start_date"
+		   name="start-date" (dateChange)="start_change()">
+	    <mat-datepicker-toggle matSuffix [for]="period_start_date">
+	    </mat-datepicker-toggle>
+	    <mat-datepicker #period_start_date startView="year">
+	    </mat-datepicker>
+	    <mat-hint>Start of accounting period</mat-hint>
+	  </mat-form-field>
+	  <mat-form-field class="date-field" appearance="fill">
+	    <mat-label>End of accounting period</mat-label>
+	    <input matInput
+		   [matDatepicker]="period_end_date"
+		   formControlName="period_end_date"
+		   name="end-date" (dateChange)="end_change()">
+	    <mat-datepicker-toggle matSuffix [for]="period_end_date">
+	    </mat-datepicker-toggle>
+	    <mat-datepicker #period_end_date startView="year"></mat-datepicker>
+	    <mat-hint>End of accounting period</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="date-field" appearance="fill">
+	    <mat-label>Start of previous account period</mat-label>
+	    <input matInput
+		   [matDatepicker]="prev_start_date"
+		   formControlName="prev_start_date"
+		   name="prev-start-date">
+	    <mat-datepicker-toggle matSuffix [for]="prev_start_date"></mat-datepicker-toggle>
+	    <mat-datepicker #prev_start_date startView="year"></mat-datepicker>
+	    <mat-hint>Start of <b>previous</b> accounting period</mat-hint>
+	  </mat-form-field>
+	  <mat-form-field class="date-field" appearance="fill">
+	    <mat-label>End of previous accounting period</mat-label>
+	    <input matInput
+		   [matDatepicker]="prev_end_date"
+		   formControlName="prev_end_date"
+		   name="end-date">
+	    <mat-datepicker-toggle matSuffix [for]="prev_end_date"></mat-datepicker-toggle>
+	    <mat-datepicker #prev_end_date startView="year"></mat-datepicker>
+	    <mat-hint>End of <b>previous</b> accounting period</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<button mat-raised-button [disabled]="!form.valid"
+		kind="submit" color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+      
+</section>
+

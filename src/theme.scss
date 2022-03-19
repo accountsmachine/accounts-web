@@ -1,0 +1,53 @@
+
+@use 'sass:map';
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+
+@import './palette';
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$accountsmachine-primary: mat.define-palette($accountsmachine-palette);
+$accountsmachine-accent: mat.define-palette($accountsmachine-accent-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$accountsmachine-warn: mat.define-palette($accountsmachine-warn-palette);
+$accountsmachine-affirm: mat.define-palette($accountsmachine-affirm-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$accountsmachine-theme: mat.define-light-theme((
+  color: (
+    primary: $accountsmachine-primary,
+    accent: $accountsmachine-accent,
+    warn: $accountsmachine-warn,
+  )
+));
+
+
+$colour-config: mat.get-color-config($accountsmachine-theme);
+$primary-palette: map.get($colour-config, 'primary');
+$accent-palette: map.get($colour-config, 'accent');
+$warn-palette: map.get($colour-config, 'warn');
+$affirm-palette: map.get($colour-config, 'affirm');
+
+$pale-background: mat.get-color-from-palette($primary-palette, 50);
+$very-pale-background: #f8f8f8;
+$light-background: mat.get-color-from-palette($primary-palette, 100);
+$dark-background: mat.get-color-from-palette($primary-palette, 700);
+$lighter-text: mat.get-color-from-palette($primary-palette, 500);
+$subtle-text: mat.get-color-from-palette($primary-palette, 400);
+$primary-text: mat.get-color-from-palette($primary-palette, 500);
+
+$affirm-text: mat.get-color-from-palette($accountsmachine-affirm, 800);
+$deny-text: mat.get-color-from-palette($warn-palette, 800);
+$warn-text: mat.get-color-from-palette($warn-palette, 800);
+$warn-background: mat.get-color-from-palette($warn-palette, 50);

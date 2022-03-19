@@ -1,0 +1,66 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container autosize class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>Tax configuration</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>UTR</mat-label>
+	    <input matInput
+		   formControlName="utr"
+		   name="utr"
+		   placeholder="Unique Tax Reference">
+	    <mat-hint>HMRC provided tax reference</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>VAT identifier (if applicable)</mat-label>
+	    <input matInput
+		   placeholder="GB123456789"
+		   formControlName="vat_registration"
+		   name="vat_registration">
+	    <mat-hint>VAT registration</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>VRN (if applicable)</mat-label>
+	    <input matInput
+		   placeholder="123456789"
+		   formControlName="vrn"
+		   name="vrn">
+	    <mat-hint>VAT registration from HMRC e.g. 123456789, does
+	      <b>not</b> have GB prefix
+	    </mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<button type="submit" [disabled]="!form.valid" mat-raised-button
+		color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+  </mat-drawer-container>
+
+</section>
+

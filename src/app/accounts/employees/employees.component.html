@@ -1,0 +1,60 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container" autoresize>
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>Accounts configuration - {{config.label}}</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+	
+	<div>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>Average employees in current accounting period</mat-label>
+	    <input matInput type="number"
+		   placeholder="12"
+		   formControlName="period_average_employees"
+		   name="period_average_employees">
+	    <mat-hint>
+	      <a href="https://www.accountingweb.co.uk/any-answers/frs-102-query-re-average-number-of-employees" target="_blank">
+		Average number of employees
+	      </a>
+	      in <b>current</b> period
+	    </mat-hint>
+	  </mat-form-field>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>
+	      Average number of employees in previous accounting period
+	    </mat-label>
+	    <input matInput type="number"
+		   placeholder="12"
+		   formControlName="prev_average_employees"
+		   name="prev_average_employees">
+	    <mat-hint>
+	      Average number of employees in <b>previous</b> period
+	    </mat-hint>
+	  </mat-form-field>
+	</div>
+
+	<button mat-raised-button [disabled]="!form.valid"
+		kind="submit" color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+      
+</section>
+

@@ -1,0 +1,59 @@
+
+<div class="container mat-elevation-z8"
+     *ngIf="obligations.data.length > 0; else nodata">
+  
+  <mat-table #table [dataSource]="obligations">
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell mat-header-cell *matHeaderCellDef>
+	Submitted?
+      </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">
+	<mat-icon class="status-{{row.status}}">
+	  {{row.status == "F" ? "done" : "pending_actions"}}
+	</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="start">
+      <mat-header-cell mat-header-cell *matHeaderCellDef>
+	Start
+      </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.start | date:'dd/MM/YYYY'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="end">
+      <mat-header-cell mat-header-cell *matHeaderCellDef>
+	End
+      </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.end | date:'dd/MM/YYYY'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="due">
+      <mat-header-cell mat-header-cell *matHeaderCellDef>
+	Due
+      </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.due | date:'dd/MM/YYYY'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="received">
+      <mat-header-cell mat-header-cell *matHeaderCellDef>
+	Received
+      </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">{{row.received | date:'dd/MM/YYYY'}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: columns;">
+    </mat-row>
+
+  </mat-table>
+
+</div>
+
+<ng-template #nodata>
+  <div>
+    There is no data for the period.
+  </div>
+</ng-template>

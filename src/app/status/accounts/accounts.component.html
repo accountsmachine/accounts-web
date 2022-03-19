@@ -1,0 +1,58 @@
+
+<section class="tab-contents">
+  
+  <h1>Company Accounts</h1>
+
+  <div *ngIf="!setup">
+    <mat-card>
+      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+      Credentials for Company Accounts filing to Companies House
+      have not been set up for {{company.company_name}}.
+    </mat-card>
+    <div>
+      
+      <form (ngSubmit)="submit()">
+
+	<mat-card>
+	  To connect, you must enter the Government gateway ID and
+	  password which you use to connect to HMRC on behalf of your
+	  company.
+	
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>Company authentication code</mat-label>
+	    <input matInput [(ngModel)]="authentication_code"
+		   name="authentication_code"
+		   placeholder="ABC123">
+	    <mat-hint>Enter your company authentication code</mat-hint>
+	  </mat-form-field>
+	</div>
+	
+	<button type="submit"
+		mat-raised-button color="primary">
+	  <mat-icon>save</mat-icon>&nbsp;Save credentials
+	</button>
+	</mat-card>
+      
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="setup">
+    <mat-card>
+      <mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
+      Credentials for Company Accounts filing to Companies House
+      have been set up for {{company.company_name}}.
+      <a mat-raised-button (click)="disconnect()">
+	<mat-icon>block</mat-icon>
+	click to disconnect
+      </a>
+    </mat-card>
+
+  </div>
+
+</section>
+

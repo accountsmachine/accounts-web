@@ -1,0 +1,73 @@
+
+<section class="tab-contents">
+  
+  <h1>Status</h1>
+
+  <div class="container mat-elevation-z8"
+       *ngIf="status.data.length > 0; else nodata">
+
+    <mat-table #table [dataSource]="status">
+
+      <ng-container matColumnDef="company">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Company
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">{{row.company}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="number">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Reg no.
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">{{row.number}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="vat">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  VAT
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">
+	  <a mat-button [routerLink]="'/status/' + row.number + '/vat'">
+	    <mat-icon class="tick-{{row.vat}}">{{row.vat ? "check_circle_outline" : "highlight_off"}}</mat-icon>
+	  </a>
+	</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="corptax">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Tax
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">
+	  <a mat-button [routerLink]="'/status/' + row.number + '/corptax'">
+	    <mat-icon class="tick-{{row.corptax}}">{{row.corptax ? "check_circle_outline" : "highlight_off"}}</mat-icon>
+	  </a>
+	</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="accounts">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Accounts
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">
+	  <a mat-button [routerLink]="'/status/' + row.number + '/accounts'">
+	    <mat-icon class="tick-{{row.accounts}}">{{row.accounts ? "check_circle_outline" : "highlight_off"}}</mat-icon>
+	  </a>
+	</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: columns;">
+      </mat-row>
+
+    </mat-table>
+
+  </div>
+
+  <ng-template #nodata>
+    <div>
+      Nothing to display; create a company configuration.
+    </div>
+  </ng-template>
+
+</section>

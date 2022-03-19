@@ -1,0 +1,73 @@
+
+:host {
+    display: block;
+    box-sizing: border-box;
+}
+
+.menu-area mat-card {
+    transition: transform 200ms, opacity 200ms;
+    max-width: 10rem;
+    margin: 2px;
+    padding: 5px;
+}
+
+.target-area mat-card {
+    transition: transform 200ms, opacity 200ms;
+    max-width: 14rem;
+    margin: 0px;
+    padding: 5px;
+}
+
+.dndDraggingSource {
+  opacity: .5;
+  transform: scale(.98);
+}
+
+.layout-padding {
+}
+
+.layout-padding > * {
+}
+
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+[draggable=true] {
+  cursor: pointer;
+}
+
+[draggable].dndDraggableDisabled {
+  cursor: not-allowed;
+  opacity: .7;
+}
+
+[dndHandle] {
+  display: inline-block;
+  padding: 2px;
+  border: 1px solid darkgray;
+  border-radius: 50%;
+}
+
+[dndDropzone] {
+  border: 1px #a0a0a0 solid;
+  min-height: 2rem;
+  max-width: 20rem;
+}
+
+[dndDropzone].dndDropzoneDisabled {
+
+  cursor: no-drop;
+  opacity: .7;
+  border-color: gray;
+}
+
+[dndDropzone].dndDragover {
+  border-color: green;
+}
+
+.dnd-area {
+    margin: 2rem;
+}

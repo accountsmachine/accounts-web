@@ -1,0 +1,31 @@
+
+mat-drawer {
+    width: auto;
+}
+
+mat-drawer a {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+mat-drawer-content {
+    min-height: 25rem;
+}
+
+button {
+    margin: 0.5rem;
+}
+
+input {
+  display: none;
+}
+
+.img-preview {
+    border: 1px solid black;
+    padding: 0.2rem;
+    margin: 2rem;
+    max-width: 15rem;
+    max-height: 25rem;
+}
+
+

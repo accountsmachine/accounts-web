@@ -1,0 +1,42 @@
+
+@import '../../../theme.scss';
+
+.tab-contents {
+    padding: 1rem;
+}
+
+button {
+    margin: 0.5rem;
+    background-color: $dark-background;
+    color: $light-primary-text;
+}
+
+a {
+    text-decoration: none;
+}
+
+.card-display {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+mat-card {
+    min-width: 12rem;
+    margin: 1rem;
+    background-color: $light-background;
+    color: $dark-primary-text;
+}
+
+mat-card-title {
+    font-size: medium !important;
+}
+
+mat-card * {
+    background-color: $light-background;
+    color: $dark-primary-text;
+}
+
+section {
+    padding: 0.5rem;
+}
+

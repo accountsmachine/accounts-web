@@ -1,0 +1,45 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container" autoresize>
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>VAT configuration - {{config.label}}</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+	
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>Company</mat-label>
+	    <mat-select formControlName="company" name="company">
+	      <mat-option *ngFor="let c of companies | keyvalue"
+			  [value]="c.key">
+		{{c.value.company_name}} | {{c.value.company_number}}
+	      </mat-option>
+	    </mat-select>
+	    <mat-hint>Company to file for</mat-hint>
+	  </mat-form-field>
+	</div>
+
+	<button mat-raised-button [disabled]="!form.valid"
+		kind="submit" color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+      
+</section>
+

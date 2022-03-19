@@ -1,0 +1,46 @@
+
+<section id="vat-config" class="tab-contents">
+
+  <mat-drawer-container class="drawer-container" autoresize>
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>VAT configuration - {{config.label}}</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+
+	<p>
+	  <mat-form-field appearance="fill">
+	    <mat-label>VAT period</mat-label>
+	    <mat-select formControlName="period_key" name="country">
+	      <mat-option *ngFor="let obligation of obligations"
+			  [value]="obligation.periodKey">
+		{{obligation.start}} to {{obligation.end}}
+	      </mat-option>
+	    </mat-select>
+	    <mat-hint>The country of registration at Companies House</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<button mat-raised-button type="submit" [disabled]="!form.valid"
+		color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+      
+</section>
+
+

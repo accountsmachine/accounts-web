@@ -1,0 +1,51 @@
+
+<section class="tab-contents">
+  
+  <h1>Upload accounts file</h1>
+
+  <input type="file" class="file-input" (change)="onFileSelected($event)"
+	 #fileUpload>
+
+  <div class="upload">
+
+    <div class="file-upload">
+      <span class="filename">
+	{{filename || "Click to upload accounts."}}
+      </span>
+      <button mat-mini-fab color="primary" class="upload-btn"
+	      (click)="fileUpload.click(); false">
+        <mat-icon>attach_file</mat-icon>
+      </button>
+    </div>
+    
+    <div class="progress" *ngIf="status != 'idle'">
+      <label>{{status}}</label>
+      <mat-progress-bar class="progress-bar" [mode]="mode"
+			[value]="uploadProgress">
+      </mat-progress-bar>
+      
+      <mat-icon class="cancel-upload" (click)="cancelUpload()" 
+		*ngIf="uploadProgress">delete_forever</mat-icon>
+      
+    </div>
+
+  </div>
+
+  <div class="status">
+
+    <div *ngIf="books_info; else noAccounts">
+
+      <div>Accounts have been uploaded.</div>
+      <div>Updated: {{time | date:'dd/MM/YYYY HH:mm:ss'}}</div>
+      <div>Size: {{length}}</div>
+      
+    </div>
+
+    <ng-template #noAccounts>
+      No accounts have been uploaded.
+    </ng-template>
+
+  </div>
+
+</section>
+

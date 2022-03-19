@@ -1,0 +1,26 @@
+
+.mat-cell {
+    margin-right: 1rem !important;
+}
+
+.mat-cell > span.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mat-column-key {
+    flex: 0 0 40% !important;
+    width: 40% !important;
+}
+
+.mat-column-value {
+    flex: 0 0 60% !important;
+    width: 60% !important;
+}
+
+mat-table {
+    margin: 1rem auto 1rem auto;
+    padding: 2rem;
+}
+

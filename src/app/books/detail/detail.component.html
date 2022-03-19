@@ -1,0 +1,39 @@
+
+<section class="tab-contents">
+
+  <h1>Accounting books summary</h1>
+
+  <div class="container mat-elevation-z8">
+
+    <mat-form-field>
+      <input matInput (keyup)="apply_filter($event.target)"
+	     placeholder="Filter">
+    </mat-form-field>
+
+    <mat-table #table [dataSource]="summary" matSort>
+
+      <ng-container matColumnDef="account">
+	<mat-header-cell mat-sort-header *matHeaderCellDef>
+	  Account name
+	</mat-header-cell>
+	<mat-cell *matCellDef="let row">{{row.account}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="balance">
+	<mat-header-cell class="header-right" mat-sort-header *matHeaderCellDef>
+	  Balance
+	</mat-header-cell>
+	<mat-cell *matCellDef="let row">{{row.balance | currency}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+
+  </div>
+
+</section>

@@ -1,0 +1,23 @@
+
+<div id="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<nav mat-tab-nav-bar [tabPanel]="tabPanel">
+
+  <a mat-tab-link *ngFor="let link of links"
+     [routerLink]="link.link"
+     routerLinkActive
+     #rla="routerLinkActive"
+     [active]="rla.isActive">
+    <mat-icon>{{link.icon}}</mat-icon>
+    &nbsp;
+    {{link.label}}
+  </a>
+
+</nav>
+
+<mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+     
+<router-outlet></router-outlet>
+

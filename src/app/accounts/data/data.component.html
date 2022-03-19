@@ -1,0 +1,21 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container" autoresize>
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>Accounts data - {{config.label}}</h1>
+
+      <key-value-table [data]="accounts_table"></key-value-table>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+      
+</section>
+

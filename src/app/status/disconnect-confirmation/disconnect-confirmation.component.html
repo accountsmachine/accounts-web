@@ -1,0 +1,31 @@
+
+<h1 mat-dialog-title>Disconnect</h1>
+
+<div mat-dialog-content>
+  <p>
+    This operation will delete the connection between
+    accountsmachine.io, and the filing backend.  This will delete credentials
+    held by accountsmachine.io on your behalf. Once this action is
+    performed, you will not be able to use accountsmachine.io to
+    file for this company until you authorise the connection again.
+  </p>
+  <p>
+    <b>{{data.company.company_name}}</b><br>
+    (company number {{data.company.company_number}}).
+  </p>
+  <p>
+    This will delete the filing credentials held by accountsmachine.io.
+  <p>
+    Are you sure you want to delete this connection?
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="no()" cdkFocusInitial>
+    No
+  </button>
+  <button mat-raised-button color="warn"
+	  [mat-dialog-close]="{proceed: true, company: data.company}">
+    Yes
+  </button>
+</div>

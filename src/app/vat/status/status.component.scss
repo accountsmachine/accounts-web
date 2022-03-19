@@ -1,0 +1,29 @@
+
+@import "../../../theme.scss";
+
+mat-drawer {
+    width: auto;
+}
+
+mat-drawer a {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+mat-drawer-content {
+    min-height: 10rem;
+}
+
+button {
+    margin: 0.5rem;
+}
+
+pre {
+    padding: 0.5rem;
+    border: 1px solid $dark-primary-text;
+    background: $very-pale-background;
+    overflow: auto;
+    height: 20rem;
+}
+
+

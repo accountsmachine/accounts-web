@@ -1,0 +1,62 @@
+
+@import '../../../theme.scss';
+
+.tab-contents {
+    padding: 1rem;
+}
+
+button {
+    margin: 0.5rem;
+    background-color: $dark-background;
+    color: $light-primary-text;
+}
+
+a {
+    text-decoration: none;
+}
+
+.card-display {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+mat-card {
+    min-width: 12rem;
+    margin: 1rem;
+    background-color: $light-background;
+    color: $dark-primary-text;
+}
+
+mat-card * {
+    background-color: $light-background;
+    color: $dark-primary-text;
+}
+
+section {
+    padding-top: 1rem;
+}
+
+mat-icon {
+    vertical-align: middle;
+}
+
+.errored * {
+    color: $warn-text;
+}
+
+mat-card.errored, mat-card.errored * {
+    background-color: $warn-background;
+}
+
+.pending * {
+    color: $dark-primary-text;
+}
+
+mat-card.pending, mat-card.pending * {
+    background-color: white;
+}
+
+div.kind {
+    color: $lighter-text;
+}
+

@@ -1,0 +1,50 @@
+
+@import "../../../theme.scss";
+
+.tab-contents {
+    padding: 1rem;
+}
+
+section {
+    padding: 0.5rem;
+}
+
+mat-form-field {
+    margin: 1rem;
+}
+
+mat-icon {
+    vertical-align: middle;
+}
+
+.tick-true {
+    color: $affirm-text;
+}
+
+.tick-false {
+    color: $deny-text;
+}
+
+h2 {
+    padding-top: 0.5rem;
+}
+
+mat-card {
+    margin: 1rem;
+}
+
+.year-button {
+    margin: 0.2rem;
+}
+
+mat-radio-group {
+    margin: 1rem;
+    display: flex;
+    flex-direction: row;
+    margin: 1rem 0;
+    align-items: flex-start;
+}
+
+mat-radio-button {
+    margin: 0.5rem;
+}

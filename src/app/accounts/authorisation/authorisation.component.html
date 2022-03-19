@@ -1,0 +1,86 @@
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container" autoresize>
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>Accounts authorisation - {{config.label}}</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+	
+	<p>
+	  <mat-form-field class="date-field" appearance="fill">
+	    <mat-label>Accounts issue date</mat-label>
+	    <input matInput
+		   [matDatepicker]="report_date"
+		   formControlName="report_date"
+		   name="report-date">
+	    <mat-datepicker-toggle
+	      matSuffix [for]="report_date">
+	    </mat-datepicker-toggle>
+	    <mat-datepicker #report_date></mat-datepicker>
+	    <mat-hint>Date accounting reports issued by the board</mat-hint>
+	  </mat-form-field>
+	  <mat-form-field class="date-field" appearance="fill">
+	    <mat-label>Accounts authorisation date</mat-label>
+	    <input matInput
+		   [matDatepicker]="authorisation_date"
+		   formControlName="authorisation_date"
+		   name="authorisation-date">
+	    <mat-datepicker-toggle
+	      matSuffix
+	      [for]="authorisation_date">
+	    </mat-datepicker-toggle>
+	    <mat-datepicker #authorisation_date></mat-datepicker>
+	    <mat-hint>Date accounts authorised for issue by the board</mat-hint>
+	  </mat-form-field>
+	  <mat-form-field class="date-field" appearance="fill">
+	    <mat-label>Balance sheet date</mat-label>
+	    <input matInput
+		   [matDatepicker]="balance_sheet_date"
+		   formControlName="balance_sheet_date"
+		   name="balance-sheet">
+	    <mat-datepicker-toggle
+	      matSuffix
+	      [for]="balance_sheet_date"></mat-datepicker-toggle>
+	    <mat-datepicker #balance_sheet_date></mat-datepicker>
+	    <mat-hint>Point in time of the balance sheet (use last day of reporting period)</mat-hint>
+	  </mat-form-field>
+	</p>
+	
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>Director authorising</mat-label>
+	    <mat-select formControlName="director_authorising">
+	      <mat-option *ngFor="let d of directors"
+			  [value]="d.name">
+		{{d.name}}
+	      </mat-option>
+	    </mat-select>
+	    <mat-hint>
+	      Director signing the reports on behalf of the board
+	    </mat-hint>
+	  </mat-form-field>
+	</div>
+
+	<button mat-raised-button [disabled]="!form.valid"
+		kind="submit" color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+      
+</section>
+

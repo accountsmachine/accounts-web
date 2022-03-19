@@ -1,0 +1,131 @@
+
+<section class="tab-contents">
+  
+  <h1>Filing</h1>
+
+  <div *ngIf="!empty; else nodata">
+
+    <button mat-raised-button *ngIf="feature('vat')" (click)="create_vat()">
+      <mat-icon>work</mat-icon>
+      Create VAT filing
+    </button>
+
+    <button mat-raised-button *ngIf="feature('corptax')" (click)="create_corptax()">
+      <mat-icon>work</mat-icon>
+      Create tax filing
+    </button>
+
+    <button mat-raised-button *ngIf="feature('accounts')" (click)="create_accounts()">
+      <mat-icon>work</mat-icon>
+      Create company accounts filing
+    </button>
+
+  </div>
+
+  <ng-template #nodata>
+    You need to create a company configuration before you can create any filings.
+  </ng-template>
+
+  <div>
+
+    <section *ngIf="draft.length > 0">
+      <h2>Draft</h2>
+      <div class="card-display">
+	<ng-container *ngFor="let config of draft">
+	  <mat-card>
+	    <mat-card-title>
+	      <mat-icon>drafts</mat-icon>
+	      &nbsp;
+	      {{config.label}}
+	    </mat-card-title>
+	    <div class="company">{{company(config)}}</div>
+	    <div class="kind">{{kind_label(config.kind)}}</div>
+	    <mat-card-actions align="start">
+	      <button mat-button (click)="edit(config)">
+		<mat-icon>edit</mat-icon> EDIT
+	      </button>
+	      <button mat-button (click)="delete(config)">
+		<mat-icon>delete</mat-icon> DELETE
+	      </button>
+	    </mat-card-actions>
+	  </mat-card>
+	</ng-container>
+      </div>
+    </section>
+
+    <section *ngIf="pending.length > 0">
+      <h2>Pending</h2>
+      <div class="card-display">
+	<ng-container *ngFor="let config of pending">
+	  <mat-card class="pending">
+	    <mat-card-title>
+	      <mat-icon>pending</mat-icon>
+	      &nbsp;
+	      {{config.label}}
+	    </mat-card-title>
+	    <div class="company">{{company(config)}}</div>
+	    <div class="kind">{{kind_label(config.kind)}}</div>
+	    <mat-card-actions align="start">
+	      <button mat-button (click)="view(config)">
+		<mat-icon>edit</mat-icon> VIEW
+	      </button>
+	    </mat-card-actions>
+	  </mat-card>
+	</ng-container>
+      </div>
+    </section>
+
+    <section *ngIf="errored.length > 0">
+      <h2>Errored</h2>
+      <div class="card-display">
+	<ng-container *ngFor="let config of errored">
+	  <mat-card class="errored">
+	    <mat-card-title>
+	      <mat-icon>error</mat-icon>
+	      &nbsp;
+	      {{config.label}}
+	    </mat-card-title>
+	    <div class="company">{{company(config)}}</div>
+	    <div class="kind">{{kind_label(config.kind)}}</div>
+	    <mat-card-actions align="start">
+	      <button mat-button (click)="view(config)">
+		<mat-icon>edit</mat-icon> VIEW
+	      </button>
+	      <button mat-button (click)="move_draft(config)">
+		<mat-icon>drafts</mat-icon> DRAFT
+	      </button>
+	    </mat-card-actions>
+	  </mat-card>
+	</ng-container>
+      </div>
+    </section>
+
+    <section *ngIf="published.length > 0">
+      <h2>Published</h2>
+      <div class="card-display">
+	<ng-container *ngFor="let config of published">
+	  <mat-card>
+	    <mat-card-title>
+	      <mat-icon>check_circle</mat-icon>
+	      &nbsp;
+	      {{config.label}}
+	    </mat-card-title>
+	    <div class="company">{{company(config)}}</div>
+	    <div class="kind">{{kind_label(config.kind)}}</div>
+	    <mat-card-actions align="start">
+	      <button mat-button (click)="view(config)">
+		<mat-icon>edit</mat-icon> VIEW
+	      </button>
+	      <button mat-button (click)="delete(config)">
+		<mat-icon>delete</mat-icon> DELETE
+	      </button>
+	    </mat-card-actions>
+	  </mat-card>
+	</ng-container>
+      </div>
+    </section>
+
+  </div>
+
+</section>
+

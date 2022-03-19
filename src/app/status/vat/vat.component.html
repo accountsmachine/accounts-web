@@ -1,0 +1,64 @@
+
+<section class="tab-contents">
+  
+  <h1>VAT</h1>
+
+  <div *ngIf="!setup">
+
+    <p>
+      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+      VAT connection to HMRC has not been set up for {{company.company_name}}.
+    </p>
+
+    <p>
+      This dialog will help you perform the setup.
+    </p>
+
+    <button mat-raised-button color="primary" (click)="authenticate()">
+      <mat-icon>key</mat-icon>&nbsp;
+      Initiate setup
+    </button>
+
+  </div>
+
+  <div *ngIf="setup">
+
+    <mat-card>
+      <mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
+      VAT connection to HMRC has been set up for {{company.company_name}}.
+      <a mat-raised-button (click)="disconnect()">
+	<mat-icon>block</mat-icon>
+	click to disconnect
+      </a>
+    </mat-card>
+
+    <mat-card>
+      Select year to view:
+      <a mat-raised-button (click)="select(y)" *ngFor="let y of years"
+	 class="year-button" color="{{y == year ? 'primary' : 'basic'}}">
+	{{y.name}}
+      </a>
+    </mat-card>
+
+    <h2>Obligations</h2>
+
+    <p>
+      <obligations [start]="year.start" [end]="year.end"></obligations>
+    </p>
+
+    <h2>Liabilities</h2>
+
+    <p>
+      <liabilities [start]="year.start" [end]="year.end"></liabilities>
+    </p>
+
+    <h2>Payments</h2>
+
+    <p>
+      <payments [start]="year.start" [end]="year.end"></payments>
+    </p>
+
+  </div>
+
+</section>
+

@@ -1,0 +1,33 @@
+
+@import "../../../theme.scss";
+
+.tab-contents {
+    padding: 1rem;
+}
+
+.container {
+    width: 45rem;
+    overflow: auto;
+}
+
+mat-table {
+    max-height: 30rem;
+}
+
+section {
+    padding: 0.5rem;
+}
+
+mat-cell {
+    white-space: nowrap;
+}
+
+.mat-column-amount {
+    flex: 6rem;
+    min-width: 6rem;
+}
+
+.mat-column-received {
+    flex: 8rem;
+    min-width: 8rem;
+}

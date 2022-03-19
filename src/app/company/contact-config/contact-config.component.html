@@ -1,0 +1,82 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container autosize class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
+
+      <h1>Contact configuration</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>Contact email</mat-label>
+	    <input matInput 
+		   formControlName="contact_email"
+		   name="contact-email"
+		   type="email" placeholder="you@example.com">
+	    <mat-hint>Contact email</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<p>
+	  <mat-form-field id="tel_country" class="config-field" appearance="fill">
+	    <mat-label>Contact phone</mat-label>
+	    <input matInput 
+		   formControlName="contact_tel_country"
+		   name="contact-tel-country"
+		   placeholder="+44">
+	    <mat-hint>Country code e.g. +44</mat-hint>
+	  </mat-form-field>
+	  <mat-form-field id="tel_area" class="config-field" appearance="fill">
+	    <mat-label>Area code</mat-label>
+	    <input matInput 
+		   formControlName="contact_tel_area"
+		   name="contact-tel-area"
+		   placeholder="900">
+	    <mat-hint>Area code without leading zero</mat-hint>
+	  </mat-form-field>
+	  <mat-form-field id="tel_local" class="config-field" appearance="fill">
+	    <mat-label>Local phone number</mat-label>
+	    <input matInput
+		   formControlName="contact_tel_number"
+		   name="contact-tel-number"
+		   placeholder="999999">
+	    <mat-hint>Local phone number</mat-hint>
+	  </mat-form-field>
+	  <mat-form-field id="tel_type" appearance="fill">
+	    <mat-label>Phone type</mat-label>
+	    <mat-select formControlName="contact_tel_type"
+			name="contact-tel-type">
+	      <mat-option [value]="'landline'">
+		Landline
+	      </mat-option>
+	      <mat-option [value]="'mobile'">
+		Mobile
+	      </mat-option>
+	    </mat-select>
+	    <mat-hint>Type of contact phone</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<button type="submit" [disabled]="!form.valid"
+		mat-raised-button color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+  </mat-drawer-container>
+
+</section>
+

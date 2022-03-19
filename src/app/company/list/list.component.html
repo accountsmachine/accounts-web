@@ -1,0 +1,40 @@
+
+<section class="tab-contents">
+  
+  <h1>Companies</h1>
+
+  <div>
+
+    <button mat-raised-button (click)="create()">
+          <mat-icon>add_business</mat-icon>
+	  Create company configuration
+    </button>
+
+  </div>
+
+  <div>
+
+    <div class="card-display">
+      <ng-container *ngFor="let config of configs | keyvalue">
+	<mat-card>
+	  <mat-card-title>{{config.value.company_name}}</mat-card-title>
+	  <mat-card-subtitle>{{config.value.contact_city}}</mat-card-subtitle>
+	  <div>
+	    Number: {{config.value.company_number}}</div>
+	  <div>Registered in: {{country_label(config.value.country)}}</div>
+	  <mat-card-actions align="start">
+	    <button mat-button (click)="edit(config.value)">
+	      <mat-icon>edit</mat-icon> EDIT
+	    </button>
+	    <button mat-button (click)="delete(config.value)">
+	      <mat-icon>delete</mat-icon> DELETE
+	    </button>
+	  </mat-card-actions>
+	</mat-card>
+      </ng-container>
+    </div>
+
+  </div>
+
+</section>
+

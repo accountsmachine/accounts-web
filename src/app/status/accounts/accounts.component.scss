@@ -1,0 +1,40 @@
+
+@import "../../../theme.scss";
+
+.tab-contents {
+    padding: 1rem;
+}
+
+section {
+    padding: 0.5rem;
+}
+
+mat-icon {
+    vertical-align: middle;
+}
+
+.tick-true {
+    color: $affirm-text;
+}
+
+.tick-false {
+    color: $deny-text;
+}
+
+mat-form-field {
+    padding: 1rem;
+    width: 20rem;
+}
+
+button {
+    margin: 1rem;
+}
+
+mat-card {
+    margin: 1rem;
+    padding: 1rem;
+}
+
+mat-icon {
+    vertical-align: middle;
+}

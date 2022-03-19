@@ -1,0 +1,57 @@
+
+@import "../../../theme.scss";
+
+.tab-contents {
+    padding: 1rem;
+}
+
+.container {
+    width: 45rem;
+    overflow: auto;
+}
+
+mat-table {
+    max-height: 30rem;
+}
+
+section {
+    padding: 0.5rem;
+}
+
+mat-cell {
+    white-space: nowrap;
+}
+
+.mat-column-status {
+    flex: 4rem;
+    min-width: 4rem;
+}
+
+.mat-column-start {
+    flex: 8rem;
+    min-width: 8rem;
+}
+
+.mat-column-end {
+    flex: 8rem;
+    min-width: 8rem;
+}
+
+.mat-column-due {
+    flex: 8rem;
+    min-width: 8rem;
+}
+
+.mat-column-received {
+    flex: 8rem;
+    min-width: 8rem;
+}
+
+.status-F {
+    color: $affirm-text;
+}
+
+.status-O {
+    color: $deny-text;
+}
+

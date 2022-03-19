@@ -1,0 +1,30 @@
+
+mat-cell {
+    white-space: nowrap;
+}
+
+.mat-column-box {
+    flex: 0 0 3rem !important;
+    width: 3rem !important;
+}
+
+.mat-column-description {
+    flex: 0 0 11rem !important;
+    width: 11rem !important;
+}
+
+.mat-column-value {
+    flex: 0 0 8rem !important;
+    width: 8rem !important;
+    text-align: right;
+    justify-content: flex-end;
+    font-family: monospace;
+}
+
+mat-table {
+    margin: 1rem auto 1rem auto;
+    width: 25rem;
+    padding: 2rem;
+}
+
+

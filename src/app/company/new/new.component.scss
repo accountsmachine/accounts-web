@@ -1,0 +1,33 @@
+
+section {
+    padding: 1rem;
+}
+
+button {
+    margin: 0.5rem;
+}
+
+mat-form-field {
+    padding: 0.5rem;
+    width: 40%;
+}
+
+table {
+    margin: 1rem;
+    border-collapse: collapse;
+    border-spacing: 20px;
+}
+
+td {
+    border: 1px solid black;
+    padding: 0.5rem;
+    vertical-align: top;
+}
+
+th {
+    border: 1px solid black;
+    background-color: #e0e0e0;
+    padding: 0.5rem;
+    vertical-align: top;
+}
+

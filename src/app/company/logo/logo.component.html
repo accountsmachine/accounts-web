@@ -1,0 +1,25 @@
+<section class="tab-contents">
+
+  <mat-drawer-container autosize class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>Logo</h1>
+
+      <image-uploader [uploader]="upload"></image-uploader>
+
+      <div *ngIf="image_url">
+	<h2>Current logo</h2>
+	<img class="img-preview" [src]="image_url">
+      </div>
+
+    </mat-drawer-content>
+  </mat-drawer-container>
+
+</section>
+
+

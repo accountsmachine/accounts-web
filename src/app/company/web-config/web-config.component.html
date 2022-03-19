@@ -1,0 +1,56 @@
+
+<section class="tab-contents">
+
+  <mat-drawer-container autosize class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
+
+      <h1>Web configuration</h1>
+
+      <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
+
+	<p>
+	  <mat-form-field class="config-field" appearance="fill">
+	    <mat-label>Website description</mat-label>
+	    <input matInput 
+		   formControlName="web_description"
+		   name="web-description"
+		   placeholder="Corporate website">
+	    <mat-hint>Website description e.g. Corporate website</mat-hint>
+	  </mat-form-field>
+	</p>
+	  
+	<p>
+	  <mat-form-field id="website-url" class="config-field"
+			  appearance="fill">
+	    <mat-label>Website URL</mat-label>
+	    <input matInput 
+		   formControlName="web_url"
+		   name="web-url"
+		   placeholder="http://example.com/corporate">
+	    <mat-hint>Website URL</mat-hint>
+	  </mat-form-field>
+	</p>
+
+	<button type="submit" [disabled]="!form.valid"
+		mat-raised-button color="primary">
+	  Save
+	</button>
+
+	<button mat-raised-button color="basic" (click)="revert()">
+	  Revert
+	</button>
+
+      </form>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+
+</section>
+
+

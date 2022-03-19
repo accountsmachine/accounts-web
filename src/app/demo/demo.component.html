@@ -1,0 +1,84 @@
+
+<div class="layout-padding">
+
+  <ng-template #sourceList
+               let-list>
+    <mat-card *ngFor="let item of list"
+              [dndDraggable]="item"
+	      [dndType]="item.offers"
+              dndEffectAllowed="copy"
+              [dndDisableIf]="is_disabled(item)"
+              (dndStart)="onDragStart($event)"
+              (dndCopied)="onDragged(item, list, 'copy')"
+              (dndLinked)="onDragged(item, list, 'link')"
+              (dndMoved)="onDragged(item, list, 'move')"
+              (dndCanceled)="onDragged(item, list, 'none')"
+              (dndEnd)="onDragEnd($event)">
+      <mat-icon *ngIf="item.handle"
+                mat-list-icon
+                dndHandle>drag_handle
+      </mat-icon>
+      {{item.content}}
+      <div *ngIf="item.customDragImage"
+           dndDragImageRef>MY_CUSTOM_DRAG_IMAGE
+      </div>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #recursiveList
+               let-list>
+    <mat-card dndPlaceholderRef
+              class="dndPlaceholder">
+      &nbsp;
+    </mat-card>
+    <mat-card *ngFor="let item of list"
+              [dndDraggable]="item"
+	      [dndType]="item.offers"
+              dndEffectAllowed="move"
+              (dndStart)="onDragStart($event)"
+              (dndCopied)="onDragged(item, list, 'copy')"
+              (dndLinked)="onDragged(item, list, 'link')"
+              (dndMoved)="onDragged(item, list, 'move')"
+              (dndCanceled)="onDragged(item, list, 'none')"
+              (dndEnd)="onDragEnd($event)">
+      <mat-icon *ngIf="item.handle"
+                mat-list-icon
+                dndHandle>drag_handle
+      </mat-icon>
+      {{item.content}}
+      <div *ngIf="item.kind == 'frs-102'">
+	<input [(ngModel)]="item.title" type="text" name="title">
+	<div *ngIf="item.children.length == 0">
+	  drop report item here
+	</div>
+      </div>
+      <div *ngIf="item.kind == 'report'">
+	<div *ngIf="item.children.length == 0">
+	  drop report components here
+	</div>
+      </div>
+      <div *ngIf="item.children"
+           class="layout-padding"
+	   dndDropzone
+           [dndDropzone]="item.accepts"
+           (dndDrop)="onDrop($event, item.children)">
+        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: item.children }"></ng-container>
+      </div>
+    </mat-card>
+  </ng-template>
+
+  <div class="layout-padding menu-area dnd-area">
+    <ng-container *ngTemplateOutlet="sourceList; context:{ $implicit: menuList }"></ng-container>
+  </div>
+
+  <div class="layout-padding target-area dnd-area"
+       dndDropzone
+       [dndDropzone]="['accounts']"
+       (dndDrop)="onDrop($event, nestableList)">
+    <div *ngIf="nestableList.length == 0">
+      drop FRS-102 or micro-entity here
+    </div>
+    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: nestableList }"></ng-container>
+  </div>
+
+</div>

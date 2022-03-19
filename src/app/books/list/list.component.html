@@ -1,0 +1,80 @@
+
+<section class="tab-contents">
+  
+  <h1>Accounting books</h1>
+
+  <div class="container mat-elevation-z8"
+       *ngIf="books.data.length > 0; else nodata">
+
+    <mat-table #table [dataSource]="books">
+
+      <ng-container matColumnDef="company">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Company
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">{{row.company}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="number">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Reg no.
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">{{row.number}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="size">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Size
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">{{length(row.size)}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="uploaded">
+	<mat-header-cell mat-header-cell
+			 *matHeaderCellDef>Uploaded</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">
+	  {{row.uploaded | date:'dd/MM/YYYY HH:mm:ss'}}
+	</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+	<mat-header-cell mat-header-cell *matHeaderCellDef></mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">
+	  <button mat-button (click)="upload(row)">
+	    <mat-icon>upload</mat-icon>
+	  </button>
+	  <button mat-button (click)="info(row)">
+	    <mat-icon>info</mat-icon>
+	  </button>
+	  <button mat-button [matMenuTriggerFor]="menu"
+		  [matMenuTriggerData]="{row:row}">
+	    <mat-icon>more_vert</mat-icon>
+	  </button>
+	</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: columns;">
+      </mat-row>
+
+    </mat-table>
+
+    <mat-menu #menu="matMenu">
+      <ng-template matMenuContent let-row="row">
+	<button (click)="upload(row)" mat-menu-item>Upload</button>
+	<button (click)="info(row)" mat-menu-item>Show detail</button>
+	<button (click)="delete(row)" mat-menu-item>Delete accounts</button>
+      </ng-template>
+    </mat-menu>
+
+  </div>
+
+  <ng-template #nodata>
+    <div>
+      Nothing to display; create a company configuration.
+    </div>
+  </ng-template>
+
+</section>
+

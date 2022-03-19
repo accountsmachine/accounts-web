@@ -1,0 +1,23 @@
+
+<section class="tab-contents">
+
+
+  <mat-drawer-container class="drawer-container" autoresize>
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+
+    <mat-drawer-content class="main-content">
+
+      <h1>Corporation tax report - {{config.label}}</h1>
+
+      <iframe [src]="src | safe"></iframe>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+
+</section>
+
+
