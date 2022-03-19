@@ -14,9 +14,18 @@ stage: build
 prod: KIND=prod
 prod: build
 
+deploy-stage: KIND=stage
+deploy-stage: deploy
+
+deploy-prod: KIND=prod
+deploy-prod: deploy
+
 build:
 	rm -rf deploy/${KIND}/public/
 	mkdir -p deploy/${KIND}/public/
 	ng build -c ${KIND} --output-path deploy/${KIND}/public/
 	cp 404.html deploy/${KIND}/public
+
+deploy:
+	echo Deploying ${KIND}...
 
