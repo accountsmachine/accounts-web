@@ -29,5 +29,6 @@ build:
 	cp 404.html ${DIST}/${KIND}/public
 
 deploy:
-	echo Deploying ${KIND}...
+	(cd dist/${KIND} && firebase deploy --only hosting)
+
 
