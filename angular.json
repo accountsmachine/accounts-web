@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "startup-accounts": {
+    "accounts-machine": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/startup-accounts",
+            "outputPath": "dist/accounts-machine",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -57,6 +57,27 @@
               ],
               "outputHashing": "all"
             },
+            "stage": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1200kb",
+                  "maximumError": "2000kb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "20kb",
+                  "maximumError": "15kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.stage.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
@@ -66,16 +87,16 @@
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "stage"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "startup-accounts:build:production"
+              "browserTarget": "accounts-machine:build:production"
             },
             "development": {
-              "browserTarget": "startup-accounts:build:development"
+              "browserTarget": "accounts-machine:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +104,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "startup-accounts:build"
+            "browserTarget": "accounts-machine:build"
           }
         },
         "test": {
@@ -107,5 +128,5 @@
       }
     }
   },
-  "defaultProject": "startup-accounts"
+  "defaultProject": "accounts-machine"
 }
