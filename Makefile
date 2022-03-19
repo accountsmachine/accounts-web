@@ -6,21 +6,21 @@ NAME=vat-test-service
 REPO=europe-west2-docker.pkg.dev/accounts-machine-dev/accounts-machine
 CONTAINER=${REPO}/vat-test-service
 
-DIST=dist/
+DIST=dist
 
 all: stage
 
 stage: KIND=stage
 stage: build
 
-prod: KIND=prod
-prod: build
+production: KIND=production
+production: build
 
 deploy-stage: KIND=stage
 deploy-stage: deploy
 
-deploy-prod: KIND=prod
-deploy-prod: deploy
+deploy-production: KIND=production
+deploy-production: deploy
 
 build:
 	rm -rf ${DIST}/${KIND}/public/
