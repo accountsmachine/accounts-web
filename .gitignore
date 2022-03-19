@@ -1,5 +1,5 @@
 node_modules/
 *~
 .angular/cache
-deploy/prod/
-deploy/stage/
+dist/prod/
+dist/stage/

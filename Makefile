@@ -6,6 +6,8 @@ NAME=vat-test-service
 REPO=europe-west2-docker.pkg.dev/accounts-machine-dev/accounts-machine
 CONTAINER=${REPO}/vat-test-service
 
+DIST=dist/
+
 all: stage
 
 stage: KIND=stage
@@ -21,10 +23,10 @@ deploy-prod: KIND=prod
 deploy-prod: deploy
 
 build:
-	rm -rf deploy/${KIND}/public/
-	mkdir -p deploy/${KIND}/public/
-	ng build -c ${KIND} --output-path deploy/${KIND}/public/
-	cp 404.html deploy/${KIND}/public
+	rm -rf ${DIST}/${KIND}/public/
+	mkdir -p ${DIST}/${KIND}/public/
+	ng build -c ${KIND} --output-path ${DIST}/${KIND}/public/
+	cp 404.html ${DIST}/${KIND}/public
 
 deploy:
 	echo Deploying ${KIND}...
