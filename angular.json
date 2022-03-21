@@ -78,16 +78,36 @@
               ],
               "outputHashing": "all"
             },
-            "development": {
+            "local": {
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+  	      "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
+            },
+            "emulator": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+		"namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.emulator.ts"
+                }
+              ]
             }
           },
-          "defaultConfiguration": "stage"
+          "defaultConfiguration": "emulator"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -95,11 +115,14 @@
             "production": {
               "browserTarget": "accounts-machine:build:production"
             },
-            "development": {
-              "browserTarget": "accounts-machine:build:development"
+            "local": {
+              "browserTarget": "accounts-machine:build:local"
+            },
+            "emulator": {
+              "browserTarget": "accounts-machine:build:emulator"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "emulator"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

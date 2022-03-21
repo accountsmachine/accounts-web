@@ -3,3 +3,4 @@ node_modules/
 .angular/cache
 dist/production/
 dist/stage/
+serve
