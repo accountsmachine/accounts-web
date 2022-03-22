@@ -58,26 +58,10 @@ export class AppComponent implements OnInit {
 		console.log("App: LOGGED IN");
 		this.userProfile.load().subscribe((e : any) => {});
 
-//		this.router.navigate(
-//		    [ "/home" ]
-//		);
-
 	    } else if (s == AuthState.UNVERIFIED) {
-
 		this.auth_state = "unverified";
-
-//		this.router.navigate(
-//		    [ "/verify-email" ]
-//		);
-
 	    } else if (s == AuthState.UNAUTHENTICATED) {
-
 		this.auth_state = "unauthenticated";
-
-//		this.router.navigate(
-//		    [ "/front" ],
-//		);
-
 	    } else if (s == AuthState.UNINITIALISED) {
 
 		this.auth_state = "uninitialised";

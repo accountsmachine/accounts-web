@@ -13,8 +13,11 @@ export class FrontComponent implements OnInit {
 
     username : string = "";
     password : string = "";
+    firstname : string = "";
+    lastname : string = "";
     name : string = "";
-    registering : boolean = false;
+
+    state : string = "normal";
 
     email = "";
     
@@ -45,7 +48,7 @@ export class FrontComponent implements OnInit {
     }
 
     register() {
-	this.registering = true;
+	this.state = "registering";
     }
 
     resetPassword() {
@@ -116,9 +119,16 @@ export class FrontComponent implements OnInit {
 	);
     }
 
-getUser() {
-return this.auth._user;
-}
+    forgottenPassword() {
+	this.state = "forgotten";
+    }
+
+    normal() {
+	this.state = "normal";
+    }
+
+    send_reset() {
+    }
 
 }
 

@@ -255,7 +255,7 @@ export class FilingConfigService {
 
 	return new Observable(obs => {
 
-	    this.http.get<any>(url).pipe(
+	    this.http.get(url, {responseType: 'text'}).pipe(
 		retry(3),
 		catchError(this.handleError)
 	    ).subscribe(config => {
