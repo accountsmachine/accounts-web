@@ -1,33 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-
 import { UserProfileService, UserProfile } from '../user-profile.service';
-import { WorkingService } from '../working.service';
 
 @Component({
-    selector: 'main',
-    templateUrl: './main.component.html',
-    styleUrls: ['./main.component.scss']
+    selector: 'tabs',
+    templateUrl: './tabs.component.html',
+    styleUrls: ['./tabs.component.scss']
 })
-export class MainComponent implements OnInit {
-
-    loading = false;
+export class TabsComponent implements OnInit {
 
     links : { link : string, icon : string, label : string}[] = [];
 
     constructor(
 	private profile : UserProfileService,
-	private working : WorkingService,
     ) {
-
     }
 
     ngOnInit(): void {
-	
-	this.working.onchange().subscribe(
-	    w => {
-		this.loading = w;
-	    }
-	);
 
 	this.profile.onload().subscribe((profile : UserProfile) => {
 

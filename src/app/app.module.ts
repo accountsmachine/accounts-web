@@ -23,10 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { DATE_FORMATS } from './date-formats';
 
-import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MainComponent } from './main/main.component';
-import { FrontComponent } from './front/front.component';
 
 import { SharedModule } from './shared/shared.module';
 
@@ -40,11 +37,13 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
-//import { USE_EMULATOR as USE_DATABASE_EMULATOR } from '@angular/fire/compat/database';
-//import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/compat/firestore';
-//import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/compat/functions';
-//import { USE_EMULATOR as USE_FIRE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
 
+import { HomeComponent } from './home/home.component';
+import { TabsComponent } from './tabs/tabs.component';
+import { FrontComponent } from './front/front.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { RegisterComponent } from './register/register.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 export function init(appInitService: AppInitService) {
     return (): Promise<any> => { 
@@ -56,17 +55,18 @@ export function init(appInitService: AppInitService) {
     declarations: [
 	AppComponent,
 	HomeComponent,
-	MainComponent,
+	TabsComponent,
 	FrontComponent,
+	ResetPasswordComponent,
+	RegisterComponent,
+	VerifyEmailComponent,
     ],
     imports: [
 	AppRoutingModule,
 	RouterModule,
 	BrowserModule,
-
 	AngularFireModule.initializeApp(environment.firebase),
 	AngularFireAuthModule,
-
 	BrowserAnimationsModule,
 	MatCardModule,
 	MatFormFieldModule,

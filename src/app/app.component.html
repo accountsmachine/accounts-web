@@ -1,13 +1,26 @@
-<div *ngIf="authenticated; else unauth">
+<div id="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="auth_state == 'authenticated'">
   <div class="logout">
     <button mat-raised-button (click)="logout()">
       <mat-icon>account_circle</mat-icon> Profile
     </button>
   </div>
-  <main></main>
+  <tabs></tabs>
+  <router-outlet></router-outlet>
 </div>
 
-<ng-template #unauth>
-  <front></front>
-</ng-template>
+<div class="centerbox" *ngIf="auth_state == 'unverified'">
+  <div class="login">
+    <verify-email></verify-email>
+  </div>
+</div>
+
+<div class="centerbox" *ngIf="auth_state == 'unauthenticated'">
+  <div class="login">
+    <front></front>
+  </div>
+</div>
 

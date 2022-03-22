@@ -1,8 +1,4 @@
 
-<div id="loading" *ngIf="loading">
-  <mat-spinner></mat-spinner>
-</div>
-
 <nav mat-tab-nav-bar [tabPanel]="tabPanel">
 
   <a mat-tab-link *ngFor="let link of links"
@@ -19,5 +15,4 @@
 
 <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
      
-<router-outlet></router-outlet>
 

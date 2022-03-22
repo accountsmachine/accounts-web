@@ -28,10 +28,12 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
     : Observable<HttpEvent<any>> {
 
 	if (!req.url.startsWith("/api/")) {
+	    console.log("NOT API");
 	    return next.handle(req);
 	}
 
 	if (!this.auth.authenticated()) {
+	    console.log("UNAUTHED REQ TO", req.url);
 	    return next.handle(req);
 	}
 
@@ -40,10 +42,15 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
 	    this.auth.get_token().subscribe((tok : any) => {
 
 		if (tok == null) {
+
+		    console.log("No token logout.");
+
 		    this.auth.logout();
-		    this.router.navigateByUrl('/front');
+
 		    throw("Token has expired.");
+
 		    return;
+
 		}
 
 		next.handle(
@@ -52,14 +59,18 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
 		
 		    catchError((err : Error) => {
 		    
+
+ 		    console.log("HTTP error", err);
+
 			// in case of 401 http error
 			if (err instanceof HttpErrorResponse &&
 			    err.status === 401) {
 
 			    try {
 				if (err.error.code == "email-not-verified") {
-				    console.log("EMAIL");
+				    console.log("Email not verififed, logout.");
 				    this.auth.logout();
+				    /*
 				    this.router.navigate(
 					['/front'],
 					{
@@ -68,12 +79,16 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
 					    }
 					}
 				    );
+				    */
+
+// What does this do?
 				    obs.complete();
 				    return of();
 				}
 			    } catch (e) {
 			    }
-				
+
+			    console.log("401 error, logout and redirect.");
 			    // logout and redirect to login page
 			    return this.logout_and_redirect(err);
 				
@@ -88,6 +103,8 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
 				"Your account does not have the " +
 				    "requested access"
 			    );
+
+			    console.log("403 error, logout and redirect.");
 			    
 			    // logout and redirect to login page
 			    return this.logout_and_redirect(err);

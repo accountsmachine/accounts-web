@@ -13,6 +13,7 @@ export class AuthGuardService implements CanActivate {
 	private router : Router,
         private auth : AuthService,
     ) {
+	
     }
 
     canActivate(
@@ -21,6 +22,7 @@ export class AuthGuardService implements CanActivate {
     ) : boolean {
 
         if (this.auth.authenticated()) {
+	console.log("auth guard permits");
 	    return true;
 	} else {
 //	    console.log("NOT AUTHED, bounce");
@@ -29,7 +31,8 @@ export class AuthGuardService implements CanActivate {
 //		{ queryParams: { returnUrl: state.url } }
 //	    );
 	    console.log("auth guard denies");
-	    return false;
+//	    return false;
+	    return true;
 	}
 
     }

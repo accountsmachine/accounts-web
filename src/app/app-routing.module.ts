@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { FrontComponent } from './front/front.component';
 import { HomeComponent } from './home/home.component';
+import { RegisterComponent } from './register/register.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 import { VatTokenComponent }
     from './auth/vat-token/vat-token.component';
@@ -10,49 +13,50 @@ import { VatTokenComponent }
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
 
 const routes: Routes = [
-    { path: "", redirectTo: "home", pathMatch: "full" },
+
     { path: "vat-token", canActivate: [AuthGuard],
       loadChildren: () => import(
 	  './auth/auth.module'
       ).then(m => m.AuthModule)
     },
-    { path: "front", component: FrontComponent },
-    { path: "home", component: HomeComponent, canActivate: [AuthGuard] },
-    { path: "company", canActivate: [AuthGuard],
+
+    { path: "home", component: HomeComponent },
+
+    { path: "company",
       loadChildren: () =>
       import( './company/company.module').then(m => m.CompanyModule)
     },
-    { path: "books", canActivate: [AuthGuard],
+    { path: "books",
       loadChildren: () => import(
 	  './books/books.module'
       ).then(m => m.BooksModule)
     },
-    { path: "accounts", canActivate: [AuthGuard],
+    { path: "accounts",
       loadChildren: () => import(
 	  './accounts/accounts.module'
       ).then(m => m.AccountsModule)
     },
-    { path: "status", canActivate: [AuthGuard],
+    { path: "status",
       loadChildren: () => import(
 	  './status/status.module'
       ).then(m => m.StatusModule)
     },
-    { path: "filing", canActivate: [AuthGuard],
+    { path: "filing",
       loadChildren: () => import(
 	  './filing/filing.module'
       ).then(m => m.FilingModule)
     },
-    { path: "corptax", canActivate: [AuthGuard],
+    { path: "corptax",
       loadChildren: () => import(
 	  './corptax/corptax.module'
       ).then(m => m.CorptaxModule)
     },
-    { path: "vat", canActivate: [AuthGuard],
+    { path: "vat",
       loadChildren: () => import(
 	  './vat/vat.module'
       ).then(m => m.VatModule)
     },
-    { path: '**', redirectTo: 'front' },
+    { path: '**', redirectTo: 'home' },
 ];
 
 @NgModule({

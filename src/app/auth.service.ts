@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
+//import { Router } from '@angular/router';
 import {
     HttpClient, HttpErrorResponse, HttpHeaders
 } from '@angular/common/http';
@@ -13,6 +13,14 @@ import {
     onAuthStateChanged
 } from 'firebase/auth';
 
+export enum AuthState {
+    UNINITIALISED,
+    UNAUTHENTICATED,
+    UNVERIFIED,
+    AUTHENTICATED,
+}
+    
+
 @Injectable({
     providedIn: 'root'
 })
@@ -23,14 +31,15 @@ export class AuthService {
     _token : any | null = null;
 
     onuser_subject = new BehaviorSubject<string | null>(null);
-
-    onauth_subject = new Subject<boolean>();
-
+    onauth_subject = new Subject<any>();
+    onstatechange_subject = new Subject<AuthState>();
     onerr_subject = new Subject<string>();
+
+    auth_state : AuthState = AuthState.UNINITIALISED;
 
     constructor(
 	private http : HttpClient,
-	private router : Router,
+//	private router : Router,
 	public fireAuth : AngularFireAuth,
     ) {
 	this.fireAuth.authState.subscribe((e : any) => {
@@ -50,9 +59,17 @@ export class AuthService {
 	});
     }
 
-    onauth() : Observable<boolean> {
-	return new Observable<boolean>(obs => {
-	    this.onauth_subject.subscribe(e => {
+    onstatechange() : Observable<AuthState> {
+	return new Observable<AuthState>(obs => {
+	    this.onstatechange_subject.subscribe(e => {
+		obs.next(e);
+	    });
+	});
+    }
+
+    onauth() : Observable<any> {
+	return new Observable<any>(obs => {
+	    this.onauth_subject.subscribe((e : any) => {
 		obs.next(e);
 	    });
 	});
@@ -66,39 +83,28 @@ export class AuthService {
 	});
     }
 
-    authed = false;
-
     set_auth(auth : any | null) {
+
 	this._auth = auth;
 
 	let prev_state = (this._auth != null);
 
 	if (auth) {
-	    this._user = auth.email;
+	    if (auth.emailVerified)
+		this.auth_state = AuthState.AUTHENTICATED;
+	    else
+		this.auth_state = AuthState.UNVERIFIED;
+	    this._user = auth.uid;
 	    this._token = auth.auth.currentUser.accessToken;
-	    this.onuser_subject.next(auth.username);
-	    this.onauth_subject.next(true);
-
-	    this.authed = true;
-
-//	    console.log("Email:", auth.auth.currentUser.email);
-//	    console.log("Name:", auth.auth.currentUser.displayName);
-//	    console.log("Verified:", auth.auth.currentUser.emailVerified);
-//	    auth.auth.currentUser.getIdToken().then((t : any) =>
-//		console.log("Token:", t)
-//	    );
-//	    console.log(auth.auth);
-
 	} else {
+	    this.auth_state = AuthState.UNAUTHENTICATED;
 	    this._user = null;
 	    this._token = null;
-	    this.onuser_subject.next(null);
-
-	    if (this.authed) {
-		this.onauth_subject.next(false);
-		this.authed = false;
-	    }
 	}
+
+	this.onauth_subject.next(auth);
+	this.onuser_subject.next(this._user);
+	this.onstatechange_subject.next(this.auth_state);
 
 
     }
@@ -109,6 +115,7 @@ export class AuthService {
 		user, password
 	    ).then(
 		(result) => {
+		    console.log(result);
 		    obs.next(result);
 		}
 	    ).catch(
@@ -124,6 +131,7 @@ export class AuthService {
 	 this.fireAuth.
 		createUserWithEmailAndPassword(user, password).
 		then((result) => {
+		    console.log(result);
 		    obs.next(result);
 		}).
 		catch((error) => {
@@ -134,7 +142,7 @@ export class AuthService {
 
     logout() {
 	this.fireAuth.signOut();
-	this.set_auth(null);
+//	this.set_auth(null);
     }
 
     get_token() : Observable<string | null> {
