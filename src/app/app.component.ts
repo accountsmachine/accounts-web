@@ -4,17 +4,15 @@ import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { AuthService, AuthState } from './auth.service';
+import { AuthService, AuthState } from './profile/auth.service';
 import { UserProfileService } from './user-profile.service';
 import { WorkingService } from './working.service';
-import { FrontPageService, FrontState } from './front-page.service';
+import { FrontPageService, FrontState } from './profile/front-page.service';
 
 @Component({
-
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
-
 })
 export class AppComponent implements OnInit {
 

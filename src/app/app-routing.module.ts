@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FrontComponent } from './front/front.component';
 import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 import { VatTokenComponent }
     from './auth/vat-token/vat-token.component';

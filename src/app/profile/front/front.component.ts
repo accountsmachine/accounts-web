@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../auth.service';
-import { WorkingService } from '../working.service';
+import { WorkingService } from '../../working.service';
 import { FrontPageService, FrontState } from '../front-page.service';
 
 @Component({

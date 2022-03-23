@@ -24,13 +24,28 @@ import { DATE_FORMATS } from '../date-formats';
 import { HttpClientModule } from '@angular/common/http';
 
 import { ProfileComponent } from './profile/profile.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { FrontComponent } from './front/front.component';
+import { RegisterComponent } from './register/register.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
     declarations: [
 	ProfileComponent,
+	ResetPasswordComponent,
+	FrontComponent,
+	RegisterComponent,
+	VerifyEmailComponent,
+	LoginComponent,
     ],
     exports: [
 	ProfileComponent,
+	ResetPasswordComponent,
+	FrontComponent,
+	RegisterComponent,
+	VerifyEmailComponent,
+	LoginComponent,
     ],
     imports: [
 	RouterModule,

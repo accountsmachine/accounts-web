@@ -1,19 +1,19 @@
-
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
-import { WorkingService } from '../working.service';
+import { WorkingService } from '../../working.service';
 import { FrontPageService } from '../front-page.service';
 
 @Component({
-    selector: 'login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    selector: 'register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
     username : string = "";
     password : string = "";
+    name : string = "";
 
     constructor(
 	private auth : AuthService,
@@ -24,24 +24,20 @@ export class LoginComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    login() {
+    register() {
 	this.working.start();
-	this.auth.login(
+	this.auth.create_user(
 	    this.username, this.password
 	).subscribe(
 	    (e : any) => {
 		this.working.stop();
+		this.auth.change_name(this.name).subscribe(() => {});
 	    }
 	);
     }
 
-    forgotten_password() {
-	this.state.forgotten_password();
-    }
-
-    registering() {
-	this.state.registering();
+    login() {
+	this.state.login();
     }
 
 }
-

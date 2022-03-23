@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
-import { WorkingService } from '../working.service';
+import { WorkingService } from '../../working.service';
 import { FrontPageService } from '../front-page.service';
 
 @Component({

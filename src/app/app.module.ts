@@ -38,11 +38,6 @@ import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
 
 import { HomeComponent } from './home/home.component';
 import { TabsComponent } from './tabs/tabs.component';
-import { FrontComponent } from './front/front.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { RegisterComponent } from './register/register.component';
-import { VerifyEmailComponent } from './verify-email/verify-email.component';
-import { LoginComponent } from './login/login.component';
 
 import { SharedModule } from './shared/shared.module';
 import { ProfileModule } from './profile/profile.module';
@@ -58,11 +53,6 @@ export function init(appInitService: AppInitService) {
 	AppComponent,
 	HomeComponent,
 	TabsComponent,
-	FrontComponent,
-	ResetPasswordComponent,
-	RegisterComponent,
-	VerifyEmailComponent,
-	LoginComponent,
     ],
     imports: [
 	AppRoutingModule,
