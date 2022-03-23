@@ -11,6 +11,7 @@ export enum FrontState {
     VIEWING_PROFILE,
     UPDATING_PROFILE,
     CHANGING_EMAIL,
+    CHANGING_PASSWORD,
 };
 
 @Injectable({
@@ -61,6 +62,10 @@ export class FrontPageService {
 
     changing_email() {
 	this._subject.next(FrontState.CHANGING_EMAIL);
+    }
+
+    changing_password() {
+	this._subject.next(FrontState.CHANGING_PASSWORD);
     }
 
 }

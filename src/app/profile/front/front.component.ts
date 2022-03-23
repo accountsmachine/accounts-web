@@ -49,6 +49,10 @@ export class FrontComponent implements OnInit {
 	return this.state == FrontState.CHANGING_EMAIL;
     }
 
+    get changing_password_state() {
+	return this.state == FrontState.CHANGING_PASSWORD;
+    }
+
     constructor(
 	private auth : AuthService,
 	private frontPageService : FrontPageService,

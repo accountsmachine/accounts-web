@@ -14,11 +14,6 @@ export class ProfileComponent implements OnInit {
     username = "";
     name = "";
 
-    orig_username = "";
-    orig_name = "";
-
-    password = "";
-
     constructor(
 	private auth : AuthService,
 	private frontPageService : FrontPageService,
@@ -35,8 +30,8 @@ export class ProfileComponent implements OnInit {
 		return;
 	    }
 
-	    this.name = this.orig_name = auth.auth.currentUser.displayName;
-	    this.username = this.orig_username = auth.auth.currentUser.email;
+	    this.name = auth.auth.currentUser.displayName;
+	    this.username = auth.auth.currentUser.email;
 
 	});
 
@@ -48,6 +43,10 @@ export class ProfileComponent implements OnInit {
 
     email() {
 	this.frontPageService.changing_email();
+    }
+
+    change_password() {
+	this.frontPageService.changing_password();
     }
 
     application() {

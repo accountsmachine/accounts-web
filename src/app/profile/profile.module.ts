@@ -31,6 +31,7 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { LoginComponent } from './login/login.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ChangeEmailComponent } from './change-email/change-email.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { ChangeEmailComponent } from './change-email/change-email.component';
 	LoginComponent,
  UpdateProfileComponent,
  ChangeEmailComponent,
+ ChangePasswordComponent,
     ],
     exports: [
 	ProfileComponent,

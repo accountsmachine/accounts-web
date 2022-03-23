@@ -1,7 +1,7 @@
 
 <div class="container">
 
-  <div *ngIf="!viewing_profile_state">
+  <div *ngIf="login_state || registering_state || forgotten_password_state">
     <img src="/assets/accountsmachine.png">
   </div>
 
@@ -31,6 +31,10 @@
 
   <div *ngIf="changing_email_state">
     <change-email></change-email>
+  </div>
+
+  <div *ngIf="changing_password_state">
+    <change-password></change-password>
   </div>
 
 </div>
