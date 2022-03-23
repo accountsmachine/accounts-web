@@ -25,8 +25,6 @@ import { DATE_FORMATS } from './date-formats';
 
 import { HttpClientModule } from '@angular/common/http';
 
-import { SharedModule } from './shared/shared.module';
-
 import { AppInitService } from './initialise';
 import { ErrorInterceptor } from './error-interceptor';
 import { AuthHeaderInterceptor } from './auth-header-interceptor';
@@ -45,7 +43,9 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { RegisterComponent } from './register/register.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { LoginComponent } from './login/login.component';
-import { ProfileComponent } from './profile/profile.component';
+
+import { SharedModule } from './shared/shared.module';
+import { ProfileModule } from './profile/profile.module';
 
 export function init(appInitService: AppInitService) {
     return (): Promise<any> => { 
@@ -62,8 +62,7 @@ export function init(appInitService: AppInitService) {
 	ResetPasswordComponent,
 	RegisterComponent,
 	VerifyEmailComponent,
- LoginComponent,
- ProfileComponent,
+	LoginComponent,
     ],
     imports: [
 	AppRoutingModule,
@@ -85,6 +84,7 @@ export function init(appInitService: AppInitService) {
 	FormsModule,
 	ReactiveFormsModule,
 	SharedModule,
+	ProfileModule,
     ],
     providers: [
 	{
