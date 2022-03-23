@@ -1,153 +1,150 @@
 
-<div *ngIf="state == 'normal'">
+<div class="container">
 
-  <img src="/assets/accountsmachine.png">
+  <div>
+    <img src="/assets/accountsmachine.png">
+  </div>
 
-  <mat-card>
+  <div *ngIf="state == 'normal'">
 
-    <mat-card-title>Existing user</mat-card-title>
-    
-    <form>
+    <mat-card>
 
-      <div>
-	<mat-form-field appearance="fill">
-	  <mat-label>E-mail address</mat-label>
-	  <input matInput [(ngModel)]="username" name="username">
-	</mat-form-field>
-      </div>
+      <mat-card-title>Login</mat-card-title>
+      
+      <form>
 
-      <div *ngIf="state == 'normal'">
-	<mat-form-field appearance="fill">
-	  <mat-label>Password</mat-label>
-	  <input matInput type="password" [(ngModel)]="password" name="password">
-	</mat-form-field>
-      </div>
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>E-mail address</mat-label>
+	    <input matInput [(ngModel)]="username" name="username">
+	  </mat-form-field>
+	</div>
 
-      <div class="center">
-	<button (click)="submit()"
-		mat-raised-button color="primary">
-	  Login
-	</button>
-      </div>
+	<div *ngIf="state == 'normal'">
+	  <mat-form-field appearance="fill">
+	    <mat-label>Password</mat-label>
+	    <input matInput type="password" [(ngModel)]="password" name="password">
+	  </mat-form-field>
+	</div>
 
-      <div class="center">
-	<a mat-raised-button (click)="forgottenPassword()">
-	  Forgotten password?
-	</a>
-      </div>
+	<div class="center">
+	  <button (click)="submit()"
+		  mat-raised-button color="primary">
+	    Login
+	  </button>
+	</div>
 
-    </form>
+	<div class="center">
+	  <button mat-raised-button color="basic" (click)="forgottenPassword()">
+	    Forgotten password?
+	  </button>
+	</div>
 
-  </mat-card>
+	<div class="center">
+	  <button mat-raised-button color="basic" (click)="begin_register()">
+	    Register new account
+	  </button>
+	</div>
 
-  <mat-card>
+      </form>
 
-    <mat-card-title>New user</mat-card-title>
-  
-    <div class="center" *ngIf="state == 'normal'">
+    </mat-card>
+
+  </div>
+
+  <div *ngIf="state == 'registering'">
+
+    <mat-card>
+
+      <mat-card-title>Register new user account</mat-card-title>
 
       <form>
-	<button (click)="begin_register()"
-		mat-raised-button color="accent">
-	  Register new account
-	</button>
-      </form>
-      
-    </div>
 
-  </mat-card>
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>E-mail address</mat-label>
+	    <input matInput [(ngModel)]="username" name="username">
+	  </mat-form-field>
+	</div>
 
-</div>
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>Password</mat-label>
+	    <input matInput type="password" [(ngModel)]="password" name="password">
+	  </mat-form-field>
+	</div>
 
-<div *ngIf="state == 'registering'">
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>First name</mat-label>
+	    <input matInput [(ngModel)]="firstname" name="firstname">
+	  </mat-form-field>
+	</div>
 
-  <mat-card>
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>Last name</mat-label>
+	    <input matInput [(ngModel)]="lastname" name="lastname">
+	  </mat-form-field>
+	</div>
 
-    <mat-card-title>Register new user account</mat-card-title>
+	<div class="center">
+	  <button mat-raised-button color="primary" (click)="register()">
+	    Register
+	  </button>
+	</div>
 
-    <form>
-
-      <div>
-	<mat-form-field appearance="fill">
-	  <mat-label>E-mail address</mat-label>
-	  <input matInput [(ngModel)]="username" name="username">
-	</mat-form-field>
-      </div>
-
-      <div>
-	<mat-form-field appearance="fill">
-	  <mat-label>Password</mat-label>
-	  <input matInput type="password" [(ngModel)]="password" name="password">
-	</mat-form-field>
-      </div>
-
-      <div>
-	<mat-form-field appearance="fill">
-	  <mat-label>First name</mat-label>
-	  <input matInput [(ngModel)]="firstname" name="firstname">
-	</mat-form-field>
-      </div>
-
-      <div>
-	<mat-form-field appearance="fill">
-	  <mat-label>Last name</mat-label>
-	  <input matInput [(ngModel)]="lastname" name="lastname">
-	</mat-form-field>
-      </div>
-
-      <div class="center">
-	<button mat-raised-button color="primary" (click)="register()">
-	  Register
-	</button>
-      </div>
-
-      <div class="center">
-	<a mat-raised-button (click)="normal()">
-	  Back to login
+	<div class="center">
+	  <a mat-raised-button (click)="normal()">
+	    Back to login
 	  </a>
-      </div>
+	</div>
 
-    </form>
+      </form>
 
-  </mat-card>
+    </mat-card>
+
+  </div>
+
+  <div *ngIf="state == 'forgotten'">
+
+    <mat-card>
+
+      <mat-card-title>Send password reset</mat-card-title>
+
+      <form>
+	
+	<div>
+	  <mat-form-field appearance="fill">
+	    <mat-label>E-mail address</mat-label>
+	    <input matInput [(ngModel)]="username" name="username">
+	  </mat-form-field>
+	</div>
+
+	<div class="center">
+
+	  <button (click)="send_reset()"
+		  mat-raised-button color="primary">
+	    Reset
+	  </button>
+
+	</div>
+
+	<div class="center">
+	  
+
+	  <a mat-raised-button (click)="normal()">
+	    Back to login
+	  </a>
+
+	</div>
+
+      </form>
+
+    </mat-card>
+
+  </div>
 
 </div>
 
-<div *ngIf="state == 'forgotten'">
 
-  <mat-card>
-
-    <mat-card-title>Send password reset</mat-card-title>
-
-    <form>
-  
-      <div>
-	<mat-form-field appearance="fill">
-	  <mat-label>E-mail address</mat-label>
-	  <input matInput [(ngModel)]="username" name="username">
-	</mat-form-field>
-      </div>
-
-      <div class="center">
-
-	<button (click)="send_reset()"
-		mat-raised-button color="primary">
-	  Reset
-	</button>
-
-      </div>
-
-      <div class="center">
-      
-
-	<a mat-raised-button (click)="normal()">
-	  Back to login
-	</a>
-
-      </div>
-
-    </form>
-
-  </mat-card>
-
-</div>
