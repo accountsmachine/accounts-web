@@ -28,12 +28,11 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
     : Observable<HttpEvent<any>> {
 
 	if (!req.url.startsWith("/api/")) {
-	    console.log("NOT API");
 	    return next.handle(req);
 	}
 
 	if (!this.auth.authenticated()) {
-	    console.log("UNAUTHED REQ TO", req.url);
+	    console.log("Unauthed request to ", req.url);
 	    return next.handle(req);
 	}
 
@@ -42,15 +41,10 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
 	    this.auth.get_token().subscribe((tok : any) => {
 
 		if (tok == null) {
-
-		    console.log("No token logout.");
-
+		    console.log("No token, logout.");
 		    this.auth.logout();
-
 		    throw("Token has expired.");
-
 		    return;
-
 		}
 
 		next.handle(
@@ -58,9 +52,6 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
 		).pipe(
 		
 		    catchError((err : Error) => {
-		    
-
- 		    console.log("HTTP error", err);
 
 			// in case of 401 http error
 			if (err instanceof HttpErrorResponse &&

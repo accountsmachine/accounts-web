@@ -114,7 +114,6 @@ export class AuthService {
 		user, password
 	    ).then(
 		(result) => {
-		    console.log(result);
 		    obs.next(result);
 		}
 	    ).catch(
@@ -130,7 +129,6 @@ export class AuthService {
 	 this.fireAuth.
 		createUserWithEmailAndPassword(user, password).
 		then((result) => {
-		    console.log(result);
 		    obs.next(result);
 		}).
 		catch((error) => {
