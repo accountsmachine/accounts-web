@@ -29,6 +29,8 @@ import { FrontComponent } from './front/front.component';
 import { RegisterComponent } from './register/register.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { LoginComponent } from './login/login.component';
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
+import { ChangeEmailComponent } from './change-email/change-email.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +40,8 @@ import { LoginComponent } from './login/login.component';
 	RegisterComponent,
 	VerifyEmailComponent,
 	LoginComponent,
+ UpdateProfileComponent,
+ ChangeEmailComponent,
     ],
     exports: [
 	ProfileComponent,

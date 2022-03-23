@@ -5,12 +5,9 @@
 
   <form>
 
-    <div>
-      <mat-form-field appearance="fill">
-	<mat-label>E-mail address</mat-label>
-	<input matInput [(ngModel)]="username" name="username">
-      </mat-form-field>
-    </div>
+    <div>Email: {{username}}</div>
+    <div>Name: {{name}}</div>
+
 <!--
     <div>
       <mat-form-field appearance="fill">
@@ -20,27 +17,26 @@
     </div>
 -->
 
-    <div>
-      <mat-form-field appearance="fill">
-	<mat-label>Name</mat-label>
-	<input matInput [(ngModel)]="name" name="name">
-      </mat-form-field>
-    </div>
-
     <div class="center">
-      <button mat-raised-button color="primary" (click)="update()">
-	Update Profile
-      </button>
-    </div>
-
-    <div class="center">
-      <button mat-raised-button color="primary" (click)="logout()">
+      <button mat-button color="warn" (click)="logout()">
 	Logout
       </button>
     </div>
 
     <div class="center">
-      <button mat-raised-button color="basic" (click)="application()">
+      <button mat-button color="primary" (click)="update()">
+	Update Profile
+      </button>
+    </div>
+
+    <div class="center">
+      <button mat-button color="primary" (click)="email()">
+	Change email
+      </button>
+    </div>
+
+    <div class="center">
+      <button mat-button color="primary" (click)="application()">
 	Back to application
       </button>
     </div>

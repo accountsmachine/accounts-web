@@ -37,8 +37,16 @@ export class FrontComponent implements OnInit {
 	return this.state == FrontState.VERIFYING_EMAIL;
     }
 
-    get profile_state() {
-	return this.state == FrontState.PROFILE;
+    get viewing_profile_state() {
+	return this.state == FrontState.VIEWING_PROFILE;
+    }
+
+    get updating_profile_state() {
+	return this.state == FrontState.UPDATING_PROFILE;
+    }
+
+    get changing_email_state() {
+	return this.state == FrontState.CHANGING_EMAIL;
     }
 
     constructor(

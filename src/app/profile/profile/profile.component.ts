@@ -42,7 +42,13 @@ export class ProfileComponent implements OnInit {
 
     }
 
-    update() {}
+    update() {
+	this.frontPageService.updating_profile();
+    }
+
+    email() {
+	this.frontPageService.changing_email();
+    }
 
     application() {
 	this.frontPageService.application();
