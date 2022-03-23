@@ -31,8 +31,8 @@ export class AuthService {
     _token : any | null = null;
 
     onuser_subject = new BehaviorSubject<string | null>(null);
-    onauth_subject = new Subject<any>();
-    onstatechange_subject = new Subject<AuthState>();
+    onauth_subject = new BehaviorSubject<any>(null);
+    onstatechange_subject = new BehaviorSubject<AuthState>(AuthState.UNINITIALISED);
     onerr_subject = new Subject<string>();
 
     auth_state : AuthState = AuthState.UNINITIALISED;

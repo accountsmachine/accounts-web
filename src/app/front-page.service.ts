@@ -8,6 +8,7 @@ export enum FrontState {
     FORGOTTEN_PASSWORD,
     VERIFYING_EMAIL,
     APPLICATION,
+    PROFILE,
 };
 
 @Injectable({
@@ -48,4 +49,9 @@ export class FrontPageService {
 	this._subject.next(FrontState.APPLICATION);
     }
 
+    profile() {
+	this._subject.next(FrontState.PROFILE);
+    }
+
 }
+

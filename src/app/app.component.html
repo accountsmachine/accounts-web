@@ -4,7 +4,7 @@
 
 <div *ngIf="!front">
   <div class="logout">
-    <button mat-raised-button (click)="logout()">
+    <button mat-raised-button (click)="profile()">
       <mat-icon>account_circle</mat-icon> Profile
     </button>
   </div>
@@ -13,7 +13,7 @@
 </div>
 
 <div class="centerbox" *ngIf="front">
-  <div class="login">
+  <div class="front mat-elevation-z3">
     <front></front>
   </div>
 </div>

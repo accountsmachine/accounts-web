@@ -1,7 +1,7 @@
 
 <div class="container">
 
-  <div>
+  <div *ngIf="!profile_state">
     <img src="/assets/accountsmachine.png">
   </div>
 
@@ -19,6 +19,10 @@
 
   <div *ngIf="verifying_email_state">
     <verify-email></verify-email>
+  </div>
+
+  <div *ngIf="profile_state">
+    <profile></profile>
   </div>
 
 </div>

@@ -1,10 +1,10 @@
 
 import { Component, OnInit } from '@angular/core';
-import { AuthService, AuthState } from './auth.service';
 import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { AuthService, AuthState } from './auth.service';
 import { UserProfileService } from './user-profile.service';
 import { WorkingService } from './working.service';
 import { FrontPageService, FrontState } from './front-page.service';
@@ -61,25 +61,32 @@ export class AppComponent implements OnInit {
 	    if (s == AuthState.AUTHENTICATED) {
 		this.frontPageService.application();
 		this.userProfile.load().subscribe((e : any) => {});
-		this.front = false;
 	    } else if (s == AuthState.UNVERIFIED) {
 		this.frontPageService.verifying_email();
-		this.front = true;
 	    } else if (s == AuthState.UNAUTHENTICATED) {
 		this.frontPageService.login();
-		this.front = true;
 	    } else if (s == AuthState.UNINITIALISED) {
 		this.frontPageService.application();
-		this.front = false;
 		console.log("uninitialised");
+	    }
+
+	});
+
+	this.frontPageService.onchange().subscribe((s : FrontState) => {
+
+	    if (s == FrontState.APPLICATION) {
+		this.front = false;
+	    } else {
+		this.front = true;
 	    }
 
 	});
 
     };
 
-    logout() {
-	this.auth.logout();
+    profile() {
+	this.frontPageService.profile();
+	this.front = true;
     }
 
 }
