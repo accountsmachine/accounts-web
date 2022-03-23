@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../auth.service';
 import { WorkingService } from '../working.service';
+import { FrontPageService, FrontState } from '../front-page.service';
 
 @Component({
     selector: 'front',
@@ -11,31 +12,44 @@ import { WorkingService } from '../working.service';
 })
 export class FrontComponent implements OnInit {
 
-    username : string = "";
-    password : string = "";
-    firstname : string = "";
-    lastname : string = "";
-    name : string = "";
+//    username : string = "";
+//    password : string = "";
+//    firstname : string = "";
+//    lastname : string = "";
+//    name : string = "";
+//    email = "";
 
-    state : string = "normal";
+    state : FrontState = FrontState.APPLICATION;
 
-    email = "";
-    
-    scope : string[] = [
-	"vat", "filing-config", "books", "company", "ch-lookup", "render",
-	"status", "corptax", "accounts"
-    ]
+    get login_state() {
+	return this.state == FrontState.LOGIN;
+    }
+
+    get registering_state() {
+	return this.state == FrontState.REGISTERING;
+    }
+
+    get forgotten_password_state() {
+	return this.state == FrontState.FORGOTTEN_PASSWORD;
+    }
+
+    get verifying_email_state() {
+	return this.state == FrontState.VERIFYING_EMAIL;
+    }
 
     constructor(
 	private auth : AuthService,
+	private frontPageService : FrontPageService,
 	private router : Router,
 	public working : WorkingService,
     ) {
+	this.frontPageService.onchange().subscribe((s : FrontState) =>
+	    this.state = s);
     }
 
     ngOnInit(): void {
     }
-
+/*
     submit() {
 	this.working.start();
 	this.auth.login(
@@ -140,6 +154,6 @@ export class FrontComponent implements OnInit {
 
     send_reset() {
     }
-
+*/
 }
 

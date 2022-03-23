@@ -44,6 +44,7 @@ import { FrontComponent } from './front/front.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { RegisterComponent } from './register/register.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { LoginComponent } from './login/login.component';
 
 export function init(appInitService: AppInitService) {
     return (): Promise<any> => { 
@@ -60,6 +61,7 @@ export function init(appInitService: AppInitService) {
 	ResetPasswordComponent,
 	RegisterComponent,
 	VerifyEmailComponent,
+ LoginComponent,
     ],
     imports: [
 	AppRoutingModule,

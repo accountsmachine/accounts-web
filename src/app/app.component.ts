@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { UserProfileService } from './user-profile.service';
 import { WorkingService } from './working.service';
+import { FrontPageService, FrontState } from './front-page.service';
 
 @Component({
 
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
 	private auth : AuthService,
 	private route : ActivatedRoute,
 	private router : Router,
+	private frontPageService : FrontPageService,
 	private snackBar : MatSnackBar,
 	private userProfile : UserProfileService,
 	private working : WorkingService,
@@ -30,7 +32,9 @@ export class AppComponent implements OnInit {
     {
     }
 
-    auth_state : string = "uninitialised";
+    state : FrontState = FrontState.APPLICATION;
+
+    front = false;
 
     get authenticated() {
         return this.auth.authenticated();
@@ -45,6 +49,9 @@ export class AppComponent implements OnInit {
 	    }
 	);
 
+	this.frontPageService.onchange().subscribe((s : FrontState) =>
+	    this.state = s);
+
         this.auth.onerr().subscribe(msg => {
 	    this.snackBar.open(msg, "dismiss", { duration: 10000 });
 	});
@@ -52,23 +59,20 @@ export class AppComponent implements OnInit {
 	this.auth.onstatechange().subscribe((s : AuthState) => {
 
 	    if (s == AuthState.AUTHENTICATED) {
-
-		this.auth_state = "authenticated";
-
-		console.log("App: LOGGED IN");
+		this.frontPageService.application();
 		this.userProfile.load().subscribe((e : any) => {});
-
+		this.front = false;
 	    } else if (s == AuthState.UNVERIFIED) {
-		this.auth_state = "unverified";
+		this.frontPageService.verifying_email();
+		this.front = true;
 	    } else if (s == AuthState.UNAUTHENTICATED) {
-		this.auth_state = "unauthenticated";
+		this.frontPageService.login();
+		this.front = true;
 	    } else if (s == AuthState.UNINITIALISED) {
-
-		this.auth_state = "uninitialised";
-
+		this.frontPageService.application();
+		this.front = false;
+		console.log("uninitialised");
 	    }
-
-	    console.log(this.auth_state);
 
 	});
 
