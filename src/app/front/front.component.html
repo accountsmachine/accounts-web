@@ -1,7 +1,9 @@
 
 <div *ngIf="state == 'normal'">
 
-  <mat-card >
+  <img src="/assets/accountsmachine.png">
+
+  <mat-card>
 
     <mat-card-title>Existing user</mat-card-title>
     
@@ -45,7 +47,7 @@
     <div class="center" *ngIf="state == 'normal'">
 
       <form>
-	<button (click)="register()"
+	<button (click)="begin_register()"
 		mat-raised-button color="accent">
 	  Register new account
 	</button>

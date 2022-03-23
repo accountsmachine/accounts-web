@@ -47,8 +47,19 @@ export class FrontComponent implements OnInit {
 	);
     }
 
-    register() {
+    begin_register() {
 	this.state = "registering";
+    }
+
+    register() {
+	this.working.start();
+	this.auth.create_user(
+	    this.username, this.password
+	).subscribe(
+	    (e : any) => {
+		this.working.stop();
+	    }
+	);
     }
 
     resetPassword() {
