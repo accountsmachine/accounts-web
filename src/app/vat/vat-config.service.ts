@@ -4,7 +4,7 @@ import { debounceTime, tap } from 'rxjs/operators';
 
 import { VatConfig } from './vat-config';
 import { VatService, Obligation } from './vat.service';
-import { FilingConfigService } from '../shared/filing-config.service';
+import { FilingConfigService } from '../filing/filing-config.service';
 
 export type VatConfigEvent = {
     id : string,

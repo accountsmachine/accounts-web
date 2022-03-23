@@ -3,7 +3,7 @@ import { Subject, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { RenderService } from '../shared/render.service';
-import { FilingConfigService } from './filing-config.service';
+import { FilingConfigService } from '../filing/filing-config.service';
 import { CompanyService, Company } from '../company/company.service';
 import { BooksService } from '../books/books.service';
 

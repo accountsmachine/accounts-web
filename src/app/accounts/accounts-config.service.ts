@@ -3,7 +3,7 @@ import { Subject, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { AccountsConfig } from './accounts-config';
-import { FilingConfigService } from '../shared/filing-config.service';
+import { FilingConfigService } from '../filing/filing-config.service';
 
 export type AccountsConfigEvent = {
     id : string,

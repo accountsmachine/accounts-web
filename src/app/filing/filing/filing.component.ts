@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FilingConfigService, FilingItem }
-    from '../../shared/filing-config.service';
+import { FilingConfigService, FilingItem } from '../filing-config.service';
 import { get_kind_label } from '../../kinds';
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA

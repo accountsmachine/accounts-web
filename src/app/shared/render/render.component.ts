@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 // FIXME: Need both?
 import { PreviewService } from '../preview.service';
 import { RenderService } from '../render.service';
-import { FilingConfigService } from '../filing-config.service';
+import { FilingConfigService } from '../../filing/filing-config.service';
 import { WorkingService } from '../../working.service';
 
 @Component({
