@@ -7,7 +7,9 @@ import {
 } from '@angular/material/dialog';
 
 import { CompanyService, Companies } from '../../company/company.service';
-import { UserProfileService, UserProfile } from '../../user-profile.service';
+import {
+    UserProfileService, UserProfile
+} from '../../profile/user-profile.service';
 import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';

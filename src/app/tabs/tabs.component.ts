@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserProfileService, UserProfile } from '../user-profile.service';
+import { UserProfileService, UserProfile } from '../profile/user-profile.service';
 
 @Component({
     selector: 'tabs',

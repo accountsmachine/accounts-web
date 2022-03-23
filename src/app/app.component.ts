@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthService, AuthState } from './profile/auth.service';
-import { UserProfileService } from './user-profile.service';
+import { UserProfileService } from './profile/user-profile.service';
 import { WorkingService } from './working.service';
 import { FrontPageService, FrontState } from './profile/front-page.service';
 
