@@ -9,7 +9,7 @@ import {
 
 import { StatusService, Statuses } from '../status.service';
 import { CompanyService, Companies, Company } from '../../company/company.service';
-import { CorptaxService } from '../../corptax.service';
+import { CorptaxService } from '../../corptax/corptax.service';
 import {
     DisconnectConfirmationComponent
 } from '../disconnect-confirmation/disconnect-confirmation.component';
