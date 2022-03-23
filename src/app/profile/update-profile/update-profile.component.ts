@@ -10,8 +10,7 @@ import { FrontPageService, FrontState } from '../front-page.service';
 })
 export class UpdateProfileComponent implements OnInit {
 
-    username = "";
-    username2 = "";
+    name = "";
 
     constructor(
 	private auth : AuthService,
@@ -21,11 +20,11 @@ export class UpdateProfileComponent implements OnInit {
 	this.auth.onauth().subscribe(auth => {
 
 	    if (auth == null) {
-		this.username = "";
+		this.name = "";
 		return;
 	    }
 
-//	    this.username = auth.auth.currentUser.email;
+	    this.name = auth.auth.currentUser.displayName;
 
 	});
 
@@ -35,6 +34,9 @@ export class UpdateProfileComponent implements OnInit {
     }
 
     change() {
+	this.auth.change_name(this.name).subscribe(() => {
+	    this.frontPageService.profile();
+	});
     }
 
     profile() {
