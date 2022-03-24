@@ -27,7 +27,7 @@ export class SubscriptionsListComponent implements OnInit {
     companies : Companies = {};
 
     columns = [
-	"company", "number", "active", "expires", "vat", "corptax", "accounts"
+	"company", "number", "expires", "active", "vat", "corptax", "accounts"
     ];
 
     data : MatTableDataSource<Row> =
@@ -61,10 +61,6 @@ export class SubscriptionsListComponent implements OnInit {
 
     update(subs : Subscription[], companies : Companies) {
 
-	console.log("UPDATE");
-	console.log(subs);
-	console.log(companies);
-
 	let data : Row[] = [];
 
 	for (let k in companies) {
@@ -84,7 +80,7 @@ export class SubscriptionsListComponent implements OnInit {
 		    if (subs[j].valid) {
 			row["active"] = true;
 			row["expires"] = new Date(subs[j].expires);
-			console.log(subs[j].provides);
+
 			for (let p of subs[j].provides) {
 			    if (p == "vat") row.vat = true;
 			    if (p == "corptax") row.corptax = true;
@@ -93,8 +89,6 @@ export class SubscriptionsListComponent implements OnInit {
 		    }
 		}
 	    }
-
-	    console.log("true");
 
 	    data.push(row);
 
@@ -116,22 +110,6 @@ export class SubscriptionsListComponent implements OnInit {
 	);
 
     }
-
-
-/*
-	
-	this.companyService.get_list().subscribe(
-	    c => {
-		this.companies = c;
-	    }
-	);
-
-	this.svc.list().subscribe(s => {
-	    this.subs = s;
-	    console.log(s);
-	})
-    }
-*/
 
 }
 
