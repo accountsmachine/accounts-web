@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { combineLatest } from 'rxjs';
+
+import { MatTableDataSource } from '@angular/material/table';
 
 import { SubscriptionService, Subscription, LoadEvent
        } from '../subscription.service';
 import { CompanyService, Company, Companies } from '../../company/company.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { combineLatest } from 'rxjs';
+import { CheckoutService } from '../checkout.service';
 
 type Row = {
     company : string,
@@ -35,6 +37,7 @@ export class SubscriptionsListComponent implements OnInit {
 
     constructor(
 	private companyService : CompanyService,
+	private checkoutService : CheckoutService,
 	private svc : SubscriptionService,
     ) {
     }
@@ -109,6 +112,10 @@ export class SubscriptionsListComponent implements OnInit {
 	    }
 	);
 
+    }
+
+    select(c : string) {
+	this.checkoutService.select_company(c);
     }
 
 }

@@ -71,7 +71,7 @@ export class BusinessConfigComponent implements OnInit {
 	    }
 	);
 
-	this.state.subscribe(
+	this.state.onload().subscribe(
 	    (company : any) => {
 		this.company = company;
 		this.load();

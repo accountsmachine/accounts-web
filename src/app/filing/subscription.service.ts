@@ -7,6 +7,7 @@ import { Observable, Subject, throwError, map, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
+import * as moment from 'moment';
 
 export type Subscription = {
     id : string,
@@ -146,6 +147,44 @@ export class SubscriptionService {
 	// Return an observable with a user-facing error message.
 	return throwError(() =>
 	    new Error('Something bad happened; please try again later.'));
+    }
+
+    create(company : string, kind : string) : Subscription {
+
+	let now = moment.utc();
+
+	let expires = now.clone();
+
+	if (kind.endsWith("-6-months")) expires.add(6, "months");
+	if (kind.endsWith("-1-year")) expires.add(1, "years");
+	if (kind.endsWith("-2-year")) expires.add(2, "years");
+
+	let obj : Subscription = {
+	    id: "",
+	    company: company,
+	    uid: "",
+	    email: "",
+	    kind: kind,
+	    opened: now.format(),
+	    expires: expires.format(),
+	    purchaser: "",
+	    address: [],
+	    postcode: "",
+	    country: "",
+	    valid: true,
+	    billing_country: "",
+	    vat_rate: 20,
+	    vat_number: "",
+	    provides: [],
+	};
+
+	if (kind.startsWith("vat-")) obj.provides = ["vat"];
+	if (kind.startsWith("corptax-")) obj.provides = ["corptax"];
+	if (kind.startsWith("accounts-")) obj.provides = ["accounts"];
+	if (kind.startsWith("all-")) obj.provides = ["vat", "corptax", "accounts"];
+
+	return obj;
+
     }
 
 }

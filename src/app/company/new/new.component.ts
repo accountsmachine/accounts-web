@@ -27,7 +27,7 @@ export class NewComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-	this.companyService.subscribe((c : any) => {
+	this.companyService.onload().subscribe((c : any) => {
 	    this.company = c;
 	});
     }

@@ -6,7 +6,7 @@ import { debounceTime } from 'rxjs/operators';
 import {
     HttpClient, HttpErrorResponse, HttpHeaders
 } from '@angular/common/http';
-import { Observable, Subject, throwError, map } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, throwError, map } from 'rxjs';
 import { catchError, retry, tap } from 'rxjs/operators';
 import { WorkingService } from '../working.service';
 
@@ -79,14 +79,15 @@ export class CompanyService {
 					   
     }
 
-    subject : Subject<Company | null> = new Subject<Company | null>();
+    subject : BehaviorSubject<Company | null> =
+	new BehaviorSubject<Company | null>(null);
 
     chgobs : Subject<boolean> = new Subject<boolean>();
 
-    subscribe(f : any) {
-	this.subject.subscribe(f)
-	if (this.config)
-	    f(this.config);
+    onload() : Observable<Company | null> {
+	return new Observable<Company | null>(obs =>
+	    this.subject.subscribe(c => obs.next(c))
+	);
     }
 
     constructor(

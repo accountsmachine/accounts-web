@@ -50,7 +50,8 @@ export class CompanyComponent implements OnInit {
 	    }
 	);
 
-	this.companyService.subscribe((e : Company) => {
+	this.companyService.onload().subscribe((e : Company | null) => {
+	    if (e)
 	    this.company = e;
 	});
 

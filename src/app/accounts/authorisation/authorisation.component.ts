@@ -38,7 +38,10 @@ export class AuthorisationComponent implements OnInit {
     ) {
 
 
-	this.companyService.subscribe((e : Company) => {
+	this.companyService.onload().subscribe((e : Company | null) => {
+
+	    if (e == null) return;
+
 	    this.company = e;
 
 	    this.directors = [];

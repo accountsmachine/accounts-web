@@ -7,7 +7,11 @@
       <mat-header-cell mat-header-cell *matHeaderCellDef>
 	Company
       </mat-header-cell>
-      <mat-cell mat-cell *matCellDef="let row">{{row.company}}</mat-cell>
+      <mat-cell mat-cell *matCellDef="let row">
+	<a mat-button color="primary" (click)="select(row.number)">
+	  {{row.company}}
+	</a>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="number">
