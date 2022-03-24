@@ -16,11 +16,11 @@ import {
 import { WorkingService } from '../../working.service';
 
 @Component({
-    selector: 'filing',
-    templateUrl: './filing.component.html',
-    styleUrls: ['./filing.component.scss']
+    selector: 'list',
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.scss']
 })
-export class FilingComponent implements OnInit {
+export class ListComponent implements OnInit {
 
     filingConfigs : FilingItem[] = [];
     companies : Companies = {};
@@ -130,6 +130,10 @@ export class FilingComponent implements OnInit {
 
     view(config : any) {
 	this.router.navigate(["/" + config.kind + "/" + config.id + "/report"]);
+    }
+
+    subscriptions() {
+	this.router.navigate(["/filing/subscriptions"]);
     }
 
     delete(config : any) {

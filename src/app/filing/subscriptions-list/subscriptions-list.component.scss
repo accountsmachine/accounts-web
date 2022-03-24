@@ -1,0 +1,79 @@
+
+@import "../../../theme.scss";
+
+.tab-contents {
+    padding: 1rem;
+}
+
+.container {
+    width: 60rem;
+    overflow: auto;
+}
+
+mat-table {
+}
+
+section {
+    padding: 0.5rem;
+}
+
+mat-cell {
+    white-space: nowrap;
+}
+
+mat-table {
+    width: 70rem;
+}
+
+.container {
+    width: 73rem;
+    overflow: auto;
+}
+
+.mat-column-company {
+    flex: 20rem;
+    min-width: 20rem;
+}
+
+.mat-column-number {
+    flex: 8rem;
+    min-width: 8rem;
+}
+
+.mat-column-expires {
+    flex: 12em;
+    min-width: 12rem;
+}
+
+.mat-column-active {
+    flex: 0 0 6rem;
+    min-width: 6rem;
+    justify-content: center;
+}
+
+.mat-column-vat {
+    flex: 0 0 6rem;
+    min-width: 6rem;
+    justify-content: center;
+}
+
+.mat-column-corptax {
+    flex: 0 0 6rem;
+    min-width: 6rem;
+    justify-content: center;
+}
+
+.mat-column-accounts {
+    flex: 0 0 6rem;
+    min-width: 6rem;
+    justify-content: center;
+}
+
+.tick-true {
+    color: $affirm-text;
+}
+
+.tick-false {
+    color: $deny-text;
+}
+

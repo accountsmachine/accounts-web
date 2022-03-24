@@ -5,24 +5,36 @@ import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
-import { FilingRoutingModule } from './filing-routing.module';
-import { FilingComponent } from './filing/filing.component';
-
 import { MatNativeDateModule } from '@angular/material/core';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+    DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
+} from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
 import { DATE_FORMATS } from '../date-formats';
-import { DeleteConfirmationComponent } from './delete-confirmation/delete-confirmation.component';
+
+import { FilingRoutingModule } from './filing-routing.module';
+import { ListComponent } from './list/list.component';
+import {
+    DeleteConfirmationComponent
+} from './delete-confirmation/delete-confirmation.component';
+import { SubscriptionsComponent } from './subscriptions/subscriptions.component';
+import {
+    SubscriptionsListComponent
+} from './subscriptions-list/subscriptions-list.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 
 @NgModule({
     declarations: [
-	FilingComponent,
-	DeleteConfirmationComponent
+	ListComponent,
+	DeleteConfirmationComponent,
+	SubscriptionsComponent,
+        SubscriptionsListComponent,
+        CheckoutComponent
     ],
     imports: [
 	CommonModule,
@@ -30,6 +42,7 @@ import { DeleteConfirmationComponent } from './delete-confirmation/delete-confir
 	MatIconModule,
 	MatButtonModule,
 	MatDialogModule,
+	MatTableModule,
 	MatSnackBarModule,
 	RouterModule,
 	FilingRoutingModule,

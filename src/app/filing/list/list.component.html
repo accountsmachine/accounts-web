@@ -5,6 +5,11 @@
 
   <div *ngIf="!empty; else nodata">
 
+    <button mat-raised-button color="accent" (click)="subscriptions()">
+      <mat-icon>card_membership</mat-icon>
+      Manage subscriptions
+    </button>
+
     <button mat-raised-button *ngIf="feature('vat')" (click)="create_vat()">
       <mat-icon>work</mat-icon>
       Create VAT filing
@@ -15,7 +20,8 @@
       Create tax filing
     </button>
 
-    <button mat-raised-button *ngIf="feature('accounts')" (click)="create_accounts()">
+    <button mat-raised-button *ngIf="feature('accounts')"
+	    (click)="create_accounts()">
       <mat-icon>work</mat-icon>
       Create company accounts filing
     </button>
