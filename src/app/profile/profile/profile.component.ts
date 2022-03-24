@@ -37,22 +37,6 @@ export class ProfileComponent implements OnInit {
 
     }
 
-    update() {
-	this.frontPageService.updating_profile();
-    }
-
-    email() {
-	this.frontPageService.changing_email();
-    }
-
-    change_password() {
-	this.frontPageService.changing_password();
-    }
-
-    application() {
-	this.frontPageService.application();
-    }
-
     logout() {
 	this.auth.logout();
     }

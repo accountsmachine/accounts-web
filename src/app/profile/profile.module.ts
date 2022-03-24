@@ -32,6 +32,8 @@ import { LoginComponent } from './login/login.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ChangeEmailComponent } from './change-email/change-email.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { NavComponent } from './nav/nav.component';
+import { OverviewComponent } from './overview/overview.component';
 
 @NgModule({
     declarations: [
@@ -41,9 +43,11 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 	RegisterComponent,
 	VerifyEmailComponent,
 	LoginComponent,
- UpdateProfileComponent,
- ChangeEmailComponent,
- ChangePasswordComponent,
+	UpdateProfileComponent,
+	ChangeEmailComponent,
+	ChangePasswordComponent,
+	NavComponent,
+	OverviewComponent,
     ],
     exports: [
 	ProfileComponent,
@@ -65,6 +69,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 	MatProgressSpinnerModule,
 	MatIconModule,
 	MatTabsModule,
+	MatSidenavModule,
 	MatSnackBarModule,
 	HttpClientModule,
 	FormsModule,

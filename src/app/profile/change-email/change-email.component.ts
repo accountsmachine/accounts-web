@@ -25,8 +25,4 @@ export class ChangeEmailComponent implements OnInit {
     change() {
     }
 
-    profile() {
-	this.frontPageService.profile();
-    }
-
 }

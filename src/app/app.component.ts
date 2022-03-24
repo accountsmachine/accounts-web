@@ -82,10 +82,5 @@ export class AppComponent implements OnInit {
 
     };
 
-    profile() {
-	this.frontPageService.profile();
-	this.front = true;
-    }
-
 }
 

@@ -8,10 +8,6 @@ export enum FrontState {
     FORGOTTEN_PASSWORD,
     VERIFYING_EMAIL,
     APPLICATION,
-    VIEWING_PROFILE,
-    UPDATING_PROFILE,
-    CHANGING_EMAIL,
-    CHANGING_PASSWORD,
 };
 
 @Injectable({
@@ -50,22 +46,6 @@ export class FrontPageService {
 
     application() {
 	this._subject.next(FrontState.APPLICATION);
-    }
-
-    profile() {
-	this._subject.next(FrontState.VIEWING_PROFILE);
-    }
-
-    updating_profile() {
-	this._subject.next(FrontState.UPDATING_PROFILE);
-    }
-
-    changing_email() {
-	this._subject.next(FrontState.CHANGING_EMAIL);
-    }
-
-    changing_password() {
-	this._subject.next(FrontState.CHANGING_PASSWORD);
     }
 
 }

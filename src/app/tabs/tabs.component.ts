@@ -41,6 +41,10 @@ export class TabsComponent implements OnInit {
 		{ label: "Filing", icon: "assured_workload", link: "/filing" }
 	    );
 
+	    links.push(
+		{ label: "My account", icon: "account_circle", link: "/profile" }
+	    );
+
 	    this.links = links;
 
 	});
@@ -48,3 +52,5 @@ export class TabsComponent implements OnInit {
     }
 
 }
+
+

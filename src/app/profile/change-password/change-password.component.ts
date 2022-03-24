@@ -25,8 +25,4 @@ export class ChangePasswordComponent implements OnInit {
     change() {
     }
 
-    profile() {
-	this.frontPageService.profile();
-    }
-
 }

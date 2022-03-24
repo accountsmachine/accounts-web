@@ -1,24 +1,13 @@
 
+mat-drawer {
+    width: auto;
+}
+
+mat-drawer-content {
+    min-height: 12rem;
+}
+
 button {
-    margin: 0.4rem;
+    margin: 1rem 0 1rem 0;
 }
 
-mat-form-field {
-    width: 100%;
-}
-
-.center {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-mat-card {
-    margin: 1rem;
-    width: 20rem;
-}
-
-mat-card-title {
-    margin: 1rem;
-}

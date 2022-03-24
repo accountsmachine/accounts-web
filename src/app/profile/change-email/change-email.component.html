@@ -1,37 +1,38 @@
 
-<mat-card>
+<mat-drawer-container class="drawer-container" autoresize>
+  
+  <mat-drawer mode="side" class="drawer-side" opened>
+    <navigator></navigator>
+  </mat-drawer>
 
-  <mat-card-title>Change email</mat-card-title>
+  <mat-drawer-content class="main-content">
 
-  <form>
+    <h1>Change email</h1>
 
-    <div>
-      <mat-form-field appearance="fill">
-	<mat-label>New email address</mat-label>
-	<input matInput [(ngModel)]="username" name="username">
-      </mat-form-field>
-    </div>
+    <form>
 
-    <div>
-      <mat-form-field appearance="fill">
-	<mat-label>Re-type email address</mat-label>
-	<input matInput [(ngModel)]="username2" name="username2">
-      </mat-form-field>
-    </div>
+      <div>
+	<mat-form-field appearance="fill">
+	  <mat-label>New email address</mat-label>
+	  <input matInput [(ngModel)]="username" name="username">
+	</mat-form-field>
+      </div>
 
-    <div class="center">
-      <button mat-raised-button color="primary" (click)="change()">
-	Change email
-      </button>
-    </div>
+      <div>
+	<mat-form-field appearance="fill">
+	  <mat-label>Re-type email address</mat-label>
+	  <input matInput [(ngModel)]="username2" name="username2">
+	</mat-form-field>
+      </div>
 
-    <div class="center">
-      <button mat-button color="basic" (click)="profile()">
-	Back to profile
-      </button>
-    </div>
+      <div class="center">
+	<button mat-raised-button color="primary" (click)="change()">
+	  Change email
+	</button>
+      </div>
 
-  </form>
+    </form>
 
-</mat-card>
+  </mat-drawer-content>
 
+</mat-drawer-container>

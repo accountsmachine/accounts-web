@@ -1,7 +1,13 @@
 
-<mat-card>
+<mat-drawer-container class="drawer-container" autoresize>
+  
+  <mat-drawer mode="side" class="drawer-side" opened>
+    <navigator></navigator>
+  </mat-drawer>
 
-  <mat-card-title>Update profile</mat-card-title>
+  <mat-drawer-content class="main-content">
+
+  <h1>Update profile</h1>
 
   <form>
 
@@ -12,19 +18,14 @@
       </mat-form-field>
     </div>
 
-    <div class="center">
+    <div>
       <button mat-raised-button color="primary" (click)="change()">
 	Update profile
       </button>
     </div>
 
-    <div class="center">
-      <button mat-button color="basic" (click)="profile()">
-	Back to profile
-      </button>
-    </div>
-
   </form>
 
-</mat-card>
+  </mat-drawer-content>
 
+</mat-drawer-container>

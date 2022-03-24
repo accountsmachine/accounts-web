@@ -1,53 +1,28 @@
 
-<mat-card>
+<mat-drawer-container class="drawer-container">
+  
+  <mat-drawer mode="side" class="drawer-side" opened>
+    <navigator></navigator>
+  </mat-drawer>
 
-  <mat-card-title>Profile</mat-card-title>
+  <mat-drawer-content class="main-content">
 
-  <form>
+    <h1>Profile</h1>
 
-    <div>Email: {{username}}</div>
-    <div>Name: {{name}}</div>
+    <form>
 
-<!--
-    <div>
-      <mat-form-field appearance="fill">
-	<mat-label>Password</mat-label>
-	<input matInput type="password" [(ngModel)]="password" name="password">
-      </mat-form-field>
-    </div>
--->
+      <div>Email: {{username}}</div>
+      <div>Name: {{name}}</div>
 
-    <div class="center">
-      <button mat-button color="warn" (click)="logout()">
-	Logout
-      </button>
-    </div>
+      <div>
+	<button mat-raised-button color="warn" (click)="logout()">
+	  Logout
+	</button>
+      </div>
 
-    <div class="center">
-      <button mat-button color="primary" (click)="change_password()">
-	Change password
-      </button>
-    </div>
+    </form>
 
-    <div class="center">
-      <button mat-button color="primary" (click)="update()">
-	Update Profile
-      </button>
-    </div>
+  </mat-drawer-content>
 
-    <div class="center">
-      <button mat-button color="primary" (click)="email()">
-	Change email
-      </button>
-    </div>
-
-    <div class="center">
-      <button mat-button color="primary" (click)="application()">
-	Back to application
-      </button>
-    </div>
-
-  </form>
-
-</mat-card>
+</mat-drawer-container>
 

@@ -8,6 +8,19 @@ import { VatTokenComponent }
 
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
 
+import {
+    ProfileComponent
+} from './profile/profile/profile.component';
+import {
+    ChangePasswordComponent
+} from './profile/change-password/change-password.component';
+import {
+    UpdateProfileComponent
+} from './profile/update-profile/update-profile.component';
+import {
+    ChangeEmailComponent
+} from './profile/change-email/change-email.component';
+
 const routes: Routes = [
 
     { path: "vat-token", canActivate: [AuthGuard],
@@ -51,6 +64,15 @@ const routes: Routes = [
       loadChildren: () => import(
 	  './vat/vat.module'
       ).then(m => m.VatModule)
+    },
+    { path: "profile",
+      children: [
+	  { path: '', redirectTo: 'overview', pathMatch: 'full' },
+	  { path: 'overview', component: ProfileComponent },
+	  { path: 'password', component: ChangePasswordComponent },
+	  { path: 'update', component: UpdateProfileComponent },
+	  { path: 'email', component: ChangeEmailComponent },
+      ]
     },
     { path: '**', redirectTo: 'home' },
 ];

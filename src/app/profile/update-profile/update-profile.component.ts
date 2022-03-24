@@ -35,12 +35,7 @@ export class UpdateProfileComponent implements OnInit {
 
     change() {
 	this.auth.change_name(this.name).subscribe(() => {
-	    this.frontPageService.profile();
 	});
-    }
-
-    profile() {
-	this.frontPageService.profile();
     }
 
 }
