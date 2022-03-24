@@ -1,0 +1,31 @@
+
+<mat-drawer-container class="drawer-container" autoresize>
+  
+  <mat-drawer mode="side" class="drawer-side" opened>
+    <navigator></navigator>
+  </mat-drawer>
+
+  <mat-drawer-content class="main-content">
+
+    <h1>Delete account</h1>
+
+    <form>
+
+      <p>
+	This operation will permanently delete your account and erase all
+	data associated with it.
+      </p>
+
+      <div class="center">
+	<button mat-raised-button color="warn" (click)="delete()">
+	  <mat-icon>delete</mat-icon>
+	  Delete my account
+	</button>
+      </div>
+
+    </form>
+
+  </mat-drawer-content>
+
+</mat-drawer-container>
+

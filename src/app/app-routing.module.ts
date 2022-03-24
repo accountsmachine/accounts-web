@@ -20,6 +20,7 @@ import {
 import {
     ChangeEmailComponent
 } from './profile/change-email/change-email.component';
+import { DeleteComponent } from './profile/delete/delete.component';
 
 const routes: Routes = [
 
@@ -72,6 +73,7 @@ const routes: Routes = [
 	  { path: 'password', component: ChangePasswordComponent },
 	  { path: 'update', component: UpdateProfileComponent },
 	  { path: 'email', component: ChangeEmailComponent },
+	  { path: 'delete', component: DeleteComponent },
       ]
     },
     { path: '**', redirectTo: 'home' },

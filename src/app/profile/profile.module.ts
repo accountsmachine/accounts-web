@@ -8,7 +8,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,9 +32,15 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { LoginComponent } from './login/login.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { ChangeEmailComponent } from './change-email/change-email.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
+import {
+    ChangePasswordComponent
+} from './change-password/change-password.component';
 import { NavComponent } from './nav/nav.component';
 import { OverviewComponent } from './overview/overview.component';
+import {
+    DeleteConfirmationComponent
+} from './delete-confirmation/delete-confirmation.component';
+import { DeleteComponent } from './delete/delete.component';
 
 @NgModule({
     declarations: [
@@ -48,6 +55,8 @@ import { OverviewComponent } from './overview/overview.component';
 	ChangePasswordComponent,
 	NavComponent,
 	OverviewComponent,
+	DeleteConfirmationComponent,
+	DeleteComponent,
     ],
     exports: [
 	ProfileComponent,
@@ -64,6 +73,7 @@ import { OverviewComponent } from './overview/overview.component';
 	MatCardModule,
 	MatFormFieldModule,
 	MatButtonModule,
+	MatDialogModule,
 	MatNativeDateModule,
 	MatInputModule,
 	MatProgressSpinnerModule,
@@ -87,4 +97,5 @@ import { OverviewComponent } from './overview/overview.component';
 })
 
 export class ProfileModule {}
+
 

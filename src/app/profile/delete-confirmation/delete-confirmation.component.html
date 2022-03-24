@@ -1,0 +1,23 @@
+
+<h1 mat-dialog-title>Delete account and all data</h1>
+
+<div mat-dialog-content>
+  <p>
+    This operation will delete your account and all information associated with
+    it.  This operation cannot be reversed.
+  </p>
+  <p>
+    Are you sure you want to proceed with deleting your account?
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="no()" cdkFocusInitial>
+    No
+  </button>
+  <button mat-raised-button color="warn"
+	  [mat-dialog-close]="{proceed: true}">
+    Yes
+  </button>
+</div>
+
