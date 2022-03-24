@@ -2,9 +2,13 @@ import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -41,11 +45,15 @@ import { CheckoutComponent } from './checkout/checkout.component';
 	MatCardModule,
 	MatIconModule,
 	MatButtonModule,
+	MatButtonToggleModule,
 	MatDialogModule,
 	MatTableModule,
 	MatSnackBarModule,
 	RouterModule,
 	FilingRoutingModule,
+	FormsModule,
+	MatFormFieldModule,
+	ReactiveFormsModule,
     ],
     providers: [
 	{ provide: LOCALE_ID, useValue: "en-GB" },

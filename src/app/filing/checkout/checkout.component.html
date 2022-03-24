@@ -5,6 +5,66 @@
   <div>Company: {{company.company_name}}</div>
   <div>Company: {{company.company_number}}</div>
 
+  <div>
+    <form [formGroup]="form">
+      <div>
+	VAT:
+	<mat-button-toggle-group aria-label="VAT"
+				 (change)="doit()" formControlName="vat">
+	  <mat-button-toggle [value]="0">none</mat-button-toggle>
+	  <mat-button-toggle [value]="6">6 months</mat-button-toggle>
+	  <mat-button-toggle [value]="12">1 year</mat-button-toggle>
+	  <mat-button-toggle [value]="24">2 years</mat-button-toggle>
+	</mat-button-toggle-group>
+      </div>
+      <div>
+	Corptax:
+	<mat-button-toggle-group aria-label="Corptax"
+				 (change)="doit()" formControlName="corptax">
+	  <mat-button-toggle [value]="0">none</mat-button-toggle>
+	  <mat-button-toggle [value]="6">6 months</mat-button-toggle>
+	  <mat-button-toggle [value]="12">1 year</mat-button-toggle>
+	  <mat-button-toggle [value]="24">2 years</mat-button-toggle>
+	</mat-button-toggle-group>
+      </div>
+      <div>
+	Accounts:
+	<mat-button-toggle-group aria-label="Accounts"
+				 (change)="doit()" formControlName="accounts">
+	  <mat-button-toggle [value]="0">none</mat-button-toggle>
+	  <mat-button-toggle [value]="6">6 months</mat-button-toggle>
+	  <mat-button-toggle [value]="12">1 year</mat-button-toggle>
+	  <mat-button-toggle [value]="24">2 years</mat-button-toggle>
+	</mat-button-toggle-group>
+      </div>
+    </form>
+  </div>
+
+  <div>
+    <div class="timeline">
+      <div>VAT</div>
+      <span *ngFor="let month of months()"
+	    class="period {{month < form.value.vat ? 'on' : 'off'}}">
+	&nbsp;
+      </span>
+    </div>
+    <div class="timeline">
+      <div>Corptax</div>
+      <span *ngFor="let month of months()"
+	    class="period {{month < form.value.corptax ? 'on' : 'off'}}">
+	&nbsp;
+      </span>
+    </div>
+    <div class="timeline">
+      <div>Accounts</div>
+      <span *ngFor="let month of months()"
+	    class="period {{month < form.value.accounts ? 'on' : 'off'}}">
+	&nbsp;
+      </span>
+    </div>
+  </div>
+
+<!--
   <div *ngFor="let option of options">
     <mat-card>
       <mat-card-title>{{option.kind | uppercase}}</mat-card-title>
@@ -18,6 +78,7 @@
       </button>
     </mat-card>
   </div>
+-->
 
 </ng-container>
 

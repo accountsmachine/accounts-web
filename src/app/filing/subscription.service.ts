@@ -29,6 +29,12 @@ export type Subscription = {
     provides : string[],
 };
 
+export type Option = {
+    name : string,
+    price : number,
+    comprised : Subscription[],
+};
+
 export type LoadEvent = {
     id : string,
     subscription : Subscription,
@@ -71,6 +77,23 @@ export class SubscriptionService {
 
 		obs.next(f);
 
+	    });
+
+	});
+					   
+    }
+
+    get_options(company : string) : Observable<Option[]> {
+
+	let url = "/api/subscriptions/" + company + "/options";
+
+	return new Observable<Option[]>(obs => {
+
+	    this.http.get<Option[]>(url).pipe(
+		retry(3),
+		catchError(this.handleError)
+	    ).subscribe(res => {
+	        obs.next(res);
 	    });
 
 	});

@@ -114,8 +114,8 @@ export class SubscriptionsListComponent implements OnInit {
 
     }
 
-    select(c : string) {
-	this.checkoutService.select_company(c);
+    select(r : Row) {
+	this.checkoutService.select_company(r.number);
     }
 
 }

@@ -8,7 +8,7 @@
 	Company
       </mat-header-cell>
       <mat-cell mat-cell *matCellDef="let row">
-	<a mat-button color="primary" (click)="select(row.number)">
+	<a mat-button color="primary" (click)="select(row)">
 	  {{row.company}}
 	</a>
       </mat-cell>
@@ -18,7 +18,11 @@
       <mat-header-cell mat-header-cell *matHeaderCellDef>
 	Reg no.
       </mat-header-cell>
-      <mat-cell mat-cell *matCellDef="let row">{{row.number}}</mat-cell>
+      <mat-cell mat-cell *matCellDef="let row">
+	<a mat-button color="primary" (click)="select(row)">
+	  {{row.number}}
+	  </a>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="active">
