@@ -65,13 +65,8 @@ export class CompanyService {
     }
 
     get_list() : Observable<Companies> {
-
-	console.log("GET LIST");
-
 	let url = "/api/companies";
-
 	return this.api.get<Companies>(url);
-				   
     }
 
     subject : BehaviorSubject<Company | null> =
@@ -80,9 +75,11 @@ export class CompanyService {
     chgobs : Subject<boolean> = new Subject<boolean>();
 
     onload() : Observable<Company | null> {
-	return new Observable<Company | null>(obs =>
-	    this.subject.subscribe(c => obs.next(c))
-	);
+	return new Observable<Company | null>(obs => {
+	    this.subject.subscribe(c => {
+		if (c) obs.next(c);
+	    });
+	});
     }
 
     constructor(
@@ -109,8 +106,11 @@ export class CompanyService {
 
 	this.working.start();
 
-	this.api.get<Company>("/api/company/" + id).subscribe({
+	this.api.get<Company>(
+	    "/api/company/" + id
+	).subscribe({
 	    next(config) {
+
 		svc.working.stop();		
 		svc.config = config;
 		svc.id = id;
@@ -120,6 +120,9 @@ export class CompanyService {
 		svc.working.stop();		
 		svc.config = null;
 		svc.id = "";
+//		if (err && err.status && err.status == 404) {
+//		    svc.subject.next(new Company());
+		//		}
 		svc.subject.next(null);
 	    },
 	    complete() {
