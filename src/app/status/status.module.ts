@@ -6,6 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
@@ -43,6 +44,8 @@ import {
 	MatIconModule,
 	MatInputModule,
 	MatButtonModule,
+	ReactiveFormsModule,
+	MatButtonToggleModule,
 	MatCardModule,
 	MatSelectModule,
 	MatFormFieldModule,

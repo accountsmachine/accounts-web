@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { MatTableDataSource } from '@angular/material/table';
 import {
@@ -15,11 +16,13 @@ import {
 } from '../disconnect-confirmation/disconnect-confirmation.component';
 
 @Component({
-  selector: 'vat',
-  templateUrl: './vat.component.html',
-  styleUrls: ['./vat.component.scss']
+    selector: 'vat',
+    templateUrl: './vat.component.html',
+    styleUrls: ['./vat.component.scss']
 })
 export class VatComponent implements OnInit {
+
+    public form : FormGroup;
 
     setup = false;
 
@@ -37,6 +40,7 @@ export class VatComponent implements OnInit {
 	private companyService : CompanyService,
 	private vat : VatService,
 	private dialog : MatDialog,
+	private formBuilder: FormBuilder,
     ) {
 
 	let now = new Date();
@@ -58,6 +62,10 @@ export class VatComponent implements OnInit {
 
 	this.years = y;
 	this.year = y[0];
+
+	this.form = this.formBuilder.group({
+	    year: [this.year],
+	});
 
     }
 
@@ -114,7 +122,9 @@ export class VatComponent implements OnInit {
 
     }
 
-    select(y : any) { this.year = y; }
+    select() {
+	this.year = this.form.value.year;
+    }
 
 }
 

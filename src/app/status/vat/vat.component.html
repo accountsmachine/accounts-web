@@ -32,13 +32,17 @@
       </a>
     </mat-card>
 
-    <mat-card>
-      Select year to view:
-      <a mat-raised-button (click)="select(y)" *ngFor="let y of years"
-	 class="year-button" color="{{y == year ? 'primary' : 'basic'}}">
-	{{y.name}}
-      </a>
-    </mat-card>
+
+    <form [formGroup]="form">
+      <mat-button-toggle-group aria-label="Year"
+			       (change)="select()" formControlName="year">
+	<mat-button-toggle *ngFor="let y of years" [value]="y">
+	  {{y.name}}
+	</mat-button-toggle>
+	
+      </mat-button-toggle-group>
+
+    </form>
 
     <h2>Obligations</h2>
 
