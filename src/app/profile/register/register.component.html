@@ -8,7 +8,9 @@
     <div>
       <mat-form-field appearance="fill">
 	<mat-label>E-mail address</mat-label>
-	<input matInput [(ngModel)]="username" name="username">
+	<input matInput placeholder="user@example.com"
+	       [(ngModel)]="username" name="username">
+	<mat-hint>An email address which will also be your username</mat-hint>
       </mat-form-field>
     </div>
 
@@ -21,8 +23,27 @@
 
     <div>
       <mat-form-field appearance="fill">
+	<mat-label>Re-type password</mat-label>
+	<input matInput type="password2" [(ngModel)]="password2"
+	       name="password2">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="fill">
+	<mat-label>Phone-number</mat-label>
+	<input matInput type="phone" [(ngModel)]="phone"
+	       name="phone">
+	<mat-hint>Phone number with + prefix e.g. +447900123456</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="fill">
 	<mat-label>Name</mat-label>
 	<input matInput [(ngModel)]="name" name="name">
+	<mat-hint>Please include first name and surname as you wish to be
+	addressed.</mat-hint>
       </mat-form-field>
     </div>
 

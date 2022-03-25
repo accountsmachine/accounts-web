@@ -37,12 +37,17 @@ export class AuthService {
 
     auth_state : AuthState = AuthState.UNINITIALISED;
 
+    error(err : string) {
+	this.onerr_subject.next(err);
+    }
+
     constructor(
 	private http : HttpClient,
 	public fireAuth : AngularFireAuth,
     ) {
 	this.fireAuth.authState.subscribe((e : any) => {
 	    this.set_auth(e);
+	    console.log(e);
 	});
     }
 
@@ -124,22 +129,26 @@ export class AuthService {
 	});
     }
 
-    create_user(user : string, password : string) {
-	return new Observable<any>(obs => {
-	 this.fireAuth.
-		createUserWithEmailAndPassword(user, password).
-		then((result) => {
-		    obs.next(result);
-		}).
-		catch((error) => {
-		    this.onerr_subject.next(error.message);
-		});
+    create_user(user : string, password : string, phone : string,
+		name : string) {
+
+	return new Observable<void>(obs => {
+
+	    this.http.post("/api/user-account/register", {
+		email: user,
+		password: password,
+		phone_number: phone,
+		display_name: name,
+	    }, {"responseType": "text"}).subscribe(e => {
+		obs.next();
+	    });
+
 	});
+	    
     }
 
     logout() {
 	this.fireAuth.signOut();
-//	this.set_auth(null);
     }
 
     get_token() : Observable<string | null> {

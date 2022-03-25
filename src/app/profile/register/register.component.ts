@@ -11,9 +11,11 @@ import { FrontPageService } from '../front-page.service';
 })
 export class RegisterComponent implements OnInit {
 
-    username : string = "";
-    password : string = "";
-    name : string = "";
+    username : string = "mark@accountsmachine.io";
+    password : string = "bunchy99!";
+    password2 : string = "bunchy99!";
+    phone : string = "+441242323323";
+    name : string = "Mark A";
 
     constructor(
 	private auth : AuthService,
@@ -25,13 +27,29 @@ export class RegisterComponent implements OnInit {
     }
 
     register() {
+
+	if (this.password.length < 9) {
+	    this.auth.error("Password is too short.");
+	    return;
+	}
+
+	if (this.password != this.password2) {
+	    this.auth.error("Passwords do not match.");
+	}
+
 	this.working.start();
 	this.auth.create_user(
-	    this.username, this.password
+	    this.username, this.password, this.phone, this.name
 	).subscribe(
-	    (e : any) => {
+	    () => {
+
 		this.working.stop();
-		this.auth.change_name(this.name).subscribe(() => {});
+
+		// Login, should take us to the email verification step.
+		this.auth.login(this.username, this.password).subscribe(
+		    () => {}
+		);
+
 	    }
 	);
     }
