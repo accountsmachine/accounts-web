@@ -3,11 +3,13 @@
 
 import { Injectable } from '@angular/core';
 import {
-    HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType
+    HttpEventType
 } from '@angular/common/http';
 
 import { Observable, Subject, throwError, map } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+
+import { ApiService } from '../api.service';
 
 export class AccountBalance {
     account : string = "";
@@ -19,15 +21,15 @@ export class AccountBalance {
 })
 export class BooksService {
 
-    constructor(private http: HttpClient) {
+    constructor(private api : ApiService) {
     }
 
     get_books_info(id : string) {
-	return this.http.get("/api/books/" + id + "/info");
+	return this.api.get("/api/books/" + id + "/info");
     }
     
     get_books_detail(id : string) : Observable<AccountBalance[]>{
-	return this.http.get<AccountBalance[]>("/api/books/" + id + "/summary");
+	return this.api.get<AccountBalance[]>("/api/books/" + id + "/summary");
     }
 
     subject : Subject<boolean> = new Subject<boolean>();
@@ -50,11 +52,11 @@ export class BooksService {
 	
 	return new Observable<number>(
 	    subs => {
-		this.http.post(url, formData, {
+		this.api.post(url, formData, {
 		    reportProgress: true,
 		    observe: 'events'
 		}).subscribe(
-		    event => {
+		    (event : any) => {
 			if (event.type == HttpEventType.UploadProgress) {
 			    subs.next(this.progress(event));
 			} else if (event.type == HttpEventType.Response) {
@@ -73,10 +75,7 @@ export class BooksService {
 
 	return new Observable<any>(obs => {
 	    
-	    this.http.get<any>(url).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(res => {
+	    this.api.get<any>(url).subscribe(res => {
 		obs.next(res);
 	    });
 
@@ -85,27 +84,7 @@ export class BooksService {
     }
 
     delete(cid : string) {
-	return this.http.delete("/api/books/" + cid).pipe(
-	    retry(3),
-	    catchError(this.handleError)
-	);
-    }
-
-    private handleError(error: HttpErrorResponse) {
-	console.log(error);
-	if (error.status === 0) {
-	    // A client-side or network error
-	    console.error('An error occurred:', error.error);
-	} else {
-	    // The backend returned an unsuccessful response code.
-	    console.error(
-		`Backend returned code ${error.status}, body was: `,
-		error.error);
-	}
-
-	// Return an observable with a user-facing error message.
-	return throwError(() =>
-	    new Error('Something bad happened; please try again later.'));
+	return this.api.delete("/api/books/" + cid);
     }
 
 }

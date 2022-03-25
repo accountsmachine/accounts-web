@@ -18,20 +18,26 @@ export class ApiService {
     ) {
     }
 
-    headers(token : string) {
+    OLDheaders(token : string) {
 	const headers = new HttpHeaders();
 	return headers.set("Authorization", `Bearer ${token}`);
     }
 
-    options(token : string) {
-	return { headers: this.headers(token) };
-    }
+    headers(headers : any, token : string) {
+	if (headers == null) headers = new HttpHeaders();
 
-    add_header(opts : any, token : string) {
-	opts.headers = opts.headers.set(
+	return headers.set(
 	    "Authorization", `Bearer ${token}`
 	);
-	return opts;
+    }
+
+    options(options : any, token : string) {
+	if (options) {
+	    options.headers = this.headers(options.headers, token);
+	    return options;
+	}
+
+	return { headers: this.headers(null, token) };
     }
 
     get<T>(url: string, options? : any): Observable<T> {
@@ -45,11 +51,7 @@ export class ApiService {
 		    return;
 		}
 
-		let opts;
-		if (options)
-		    opts = this.add_header(options, token);
-		else
-		    opts = this.options(token);
+		let opts = this.options(options, token);
 
 		this.http.get<T>(url, opts).subscribe({
 		    next(e : any) { obs.next(e); },
@@ -90,11 +92,7 @@ export class ApiService {
 		    return;
 		}
 
-		let opts;
-		if (options)
-		    opts = this.add_header(options, token);
-		else
-		    opts = this.options(token);
+		let opts = this.options(options, token);
 
 		this.http.put<T>(url, data, opts).subscribe({
 		    next(e : any) { obs.next(e); },
@@ -119,13 +117,9 @@ export class ApiService {
 		    return;
 		}
 
-		let opts;
-		if (options)
-		    opts = this.add_header(options, token);
-		else
-		    opts = this.options(token);
+		let opts = this.options(options, token);
 
-		this.http.put<T>(url, data, opts).subscribe({
+		this.http.post<T>(url, data, opts).subscribe({
 		    next(e : any) { obs.next(e); },
 		    error(e : any) { obs.error(e); },
 		    complete() { obs.complete(); },
@@ -137,7 +131,7 @@ export class ApiService {
 
     }
 
-    delete<T>(url: string): Observable<T> {
+    delete<T>(url: string, options? : any): Observable<T> {
 
 	return new Observable<T>(obs => {
 
@@ -148,7 +142,9 @@ export class ApiService {
 		    return;
 		}
 
-		this.http.delete<T>(url, this.options(token)).subscribe({
+		let opts = this.options(options, token);
+
+		this.http.delete<T>(url, opts).subscribe({
 		    next(e : any) { obs.next(e); },
 		    error(e : any) { obs.error(e); },
 		    complete() { obs.complete(); },

@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import {
-    HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType
-} from '@angular/common/http';
+import { HttpEventType } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
 
-import { Observable, Subject, throwError, map } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { ApiService } from '../api.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class LogoService {
 
-    constructor(private http: HttpClient) {
+    constructor(private api: ApiService) {
     }
 
     subject : Subject<boolean> = new Subject<boolean>();
@@ -34,11 +32,11 @@ export class LogoService {
 	
 	return new Observable<number>(
 	    subs => {
-		this.http.post(url, formData, {
+		this.api.post(url, formData, {
 		    reportProgress: true,
 		    observe: 'events'
 		}).subscribe(
-		    event => {
+		    (event : any) => {
 			if (event.type == HttpEventType.UploadProgress) {
 			    subs.next(this.progress(event));
 			} else if (event.type == HttpEventType.Response) {
@@ -59,34 +57,14 @@ export class LogoService {
 
 	return new Observable<any>(obs => {
 
-	    this.http.get("/api/company/" + id + "/logo", {
+	    this.api.get("/api/company/" + id + "/logo", {
 		responseType: 'blob' as 'json'
-	    }).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe((res : any) => {
+	    }).subscribe((res : any) => {
 		obs.next(res);
 	    });
 
 	});
 					   
-    }
-
-    private handleError(error: HttpErrorResponse) {
-	console.log(error);
-	if (error.status === 0) {
-	    // A client-side or network error
-	    console.error('An error occurred:', error.error);
-	} else {
-	    // The backend returned an unsuccessful response code.
-	    console.error(
-		`Backend returned code ${error.status}, body was: `,
-		error.error);
-	}
-
-	// Return an observable with a user-facing error message.
-	return throwError(() =>
-	    new Error('Something bad happened; please try again later.'));
     }
 
 }
