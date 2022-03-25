@@ -1,16 +1,13 @@
 
 // FIXME: Should cache information (lists).
-
 import { Injectable } from '@angular/core';
-import {
-    HttpClient, HttpErrorResponse, HttpHeaders
-} from '@angular/common/http';
-import { Observable, Subject, throwError, map, of } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { Observable, Subject, of } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+
 import { v4 as uuid } from 'uuid';
 
 import { WorkingService } from '../working.service';
+import { ApiService } from '../api.service';
 
 export type ConfigEvent = {
     id : string;
@@ -34,7 +31,7 @@ export class FilingConfigService {
     config : any = {};
 
     constructor(
-	private http: HttpClient,
+	private api: ApiService,
 	private working : WorkingService,
     ) {
 
@@ -64,10 +61,7 @@ export class FilingConfigService {
 
 	return new Observable<FilingItem[]>(obs => {
 
-	    this.http.get<any[]>(url).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(res => {
+	    this.api.get<any[]>(url).subscribe(res => {
 
 		this.working.stop();
 
@@ -137,10 +131,7 @@ export class FilingConfigService {
 
 	return new Observable(obs => {
 
-	    this.http.get<any>(url).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(config => {
+	    this.api.get<any>(url).subscribe(config => {
 		this.working.stop();
 		this.id = id;
 		this.config = config;
@@ -160,10 +151,7 @@ export class FilingConfigService {
 
 	    this.working.start();
 	    
-	    return this.http.put<any>(url, this.config).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(e => {
+	    return this.api.put<any>(url, this.config).subscribe(e => {
 		this.working.stop();
 		    this.onsave_subject.next({id: this.id, config: this.config});
 		    obs.next();
@@ -195,22 +183,6 @@ export class FilingConfigService {
 
     }
 
-    private handleError(error: HttpErrorResponse) {
-	if (error.status === 0) {
-	    // A client-side or network error
-	    console.error('An error occurred:', error.error);
-	} else {
-	    // The backend returned an unsuccessful response code.
-	    console.error(
-		`Backend returned code ${error.status}, body was: `,
-		error.error);
-	}
-
-	// Return an observable with a user-facing error message.
-	return throwError(() =>
-	    new Error('Something bad happened; please try again later.'));
-    }
-
     change() {
 	this.onfieldchange_subject.next(true);
     }
@@ -221,10 +193,7 @@ export class FilingConfigService {
 
 	    let url = "/api/filing/" + id;
 
-	    this.http.delete(url).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(config => {
+	    this.api.delete(url).subscribe(config => {
 		obs.next();
 	    });
 
@@ -238,10 +207,7 @@ export class FilingConfigService {
 
 	    let url = "/api/filing/" + id + "/move-draft";
 
-	    this.http.post(url, {}).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(config => {
+	    this.api.post(url, {}).subscribe(config => {
 		obs.next();
 	    });
 
@@ -255,10 +221,7 @@ export class FilingConfigService {
 
 	return new Observable(obs => {
 
-	    this.http.get(url, {responseType: 'text'}).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(config => {
+	    this.api.get(url, {responseType: 'text'}).subscribe(config => {
 		obs.next(config);
 	    });
 	});
@@ -271,10 +234,7 @@ export class FilingConfigService {
 
 	return new Observable(obs => {
 
-	    this.http.get<any>(url).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(config => {
+	    this.api.get<any>(url).subscribe(config => {
 		obs.next(config);
 	    });
 	});
@@ -287,10 +247,7 @@ export class FilingConfigService {
 
 	return new Observable(obs => {
 
-	    this.http.get<any>(url).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(config => {
+	    this.api.get<any>(url).subscribe(config => {
 		obs.next(config);
 	    });
 	});
@@ -301,10 +258,7 @@ export class FilingConfigService {
 
 	let url = "/api/" + kind + "/submit/" + id;
 
-    	return this.http.post<any>(url, {}).pipe(
-	    retry(3),
-	    catchError(this.handleError)
-	);
+    	return this.api.post<any>(url, {});
 
     }
 
