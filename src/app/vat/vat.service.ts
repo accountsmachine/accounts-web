@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, catchError, retry } from 'rxjs';
-import { map, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
-    HttpClient, HttpErrorResponse, HttpHeaders
+    HttpHeaders
 } from '@angular/common/http';
+
+import { ApiService } from '../api.service';
 
 import { DeviceIdService } from './../device-id.service';
 
@@ -51,7 +52,7 @@ export type Return = {
 export class VatService {
 
     constructor(
-	private http : HttpClient,
+	private api : ApiService,
 	private device : DeviceIdService,
     ) {
     }
@@ -75,24 +76,20 @@ export class VatService {
 	url = url + "?start=" + start;
 	url = url + "&end=" + end;
 
-    	return this.http.get<Obligation[]>(
+    	return this.api.get<Obligation[]>(
 	    url, this.options
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError)
 	);
+
     }
 
     getOpenObligations(cid : string) : Observable<Obligation[]> {
 
 	let url = "/api/vat/open-obligations/" + cid;
 
-    	return this.http.get<Obligation[]>(
+    	return this.api.get<Obligation[]>(
 	    url, this.options
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError)
 	);
+
     }
 
     getPayments(
@@ -102,11 +99,8 @@ export class VatService {
 	url = url + "?start=" + start;
 	url = url + "&end=" + end;
 
-    	return this.http.get<Payment[]>(
+    	return this.api.get<Payment[]>(
 	    url, this.options
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError)
 	);
     }
 
@@ -117,11 +111,8 @@ export class VatService {
 	url = url + "?start=" + start;
 	url = url + "&end=" + end;
 
-    	return this.http.get<Liability[]>(
+    	return this.api.get<Liability[]>(
 	    url, this.options
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError)
 	);
     }
 
@@ -132,11 +123,8 @@ export class VatService {
 	url = url + "?start=" + start;
 	url = url + "&end=" + end;
 
-    	return this.http.get<Return[]>(
+    	return this.api.get<Return[]>(
 	    url, this.options
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError)
 	);
      }
 
@@ -153,12 +141,8 @@ export class VatService {
 
 	let url = "/api/vat/authorize/" + c;
 
-    	return this.http.get<any>(
+    	return this.api.get<any>(
 	    url, this.options
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError),
-	    map(e => e.url)
 	);
 
     }
@@ -167,11 +151,8 @@ export class VatService {
 
 	let url = "/api/vat/deauthorize/" + c;
 
-    	return this.http.post<any>(
+    	return this.api.post<any>(
 	    url, {}, this.options
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError)
 	);
 
     }
@@ -180,30 +161,10 @@ export class VatService {
 
 	let url = "/api/vat/submit/" + id;
 
-    	return this.http.post<any>(
+    	return this.api.post<any>(
 	    url, {}, this.options
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError)
 	);
 
-    }
-
-    private handleError(error: HttpErrorResponse) {
-	console.log(error);
-	if (error.status === 0) {
-	    // A client-side or network error
-	    console.error('An error occurred:', error.error);
-	} else {
-	    // The backend returned an unsuccessful response code.
-	    console.error(
-		`Backend returned code ${error.status}, body was: `,
-		error.error);
-	}
-
-	// Return an observable with a user-facing error message.
-	return throwError(() =>
-	    new Error('Something bad happened; please try again later.'));
     }
 
 }
