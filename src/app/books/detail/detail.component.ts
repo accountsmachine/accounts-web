@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpEventType } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -30,7 +29,6 @@ export class DetailComponent implements OnInit, AfterViewInit {
     constructor(
 	private route : ActivatedRoute,
 	private router : Router,
-	private http : HttpClient,
 	private booksService : BooksService,
     )
     {

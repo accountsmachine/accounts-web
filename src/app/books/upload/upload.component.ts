@@ -1,8 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize } from 'rxjs/operators';
 
 import { ProgressBarMode } from '@angular/material/progress-bar';
 
@@ -38,7 +36,6 @@ export class UploadComponent implements OnInit {
     constructor(
 	private route : ActivatedRoute,
 	private router : Router,
-	private http: HttpClient,
 	private books : BooksService,
     ) {
     }
