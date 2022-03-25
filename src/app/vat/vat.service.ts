@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import {
     HttpHeaders
 } from '@angular/common/http';
@@ -143,6 +143,8 @@ export class VatService {
 
     	return this.api.get<any>(
 	    url, this.options
+	).pipe(
+	    map(e => e.url)
 	);
 
     }

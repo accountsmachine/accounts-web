@@ -86,7 +86,6 @@ export class VatComponent implements OnInit {
 
     authenticate() {
 	this.vat.get_auth_url(this.id).subscribe((url : string) => {
-	    console.log(url);
 	    window.location.href = url;
 	});
     }
