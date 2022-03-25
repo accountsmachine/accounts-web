@@ -1,5 +1,5 @@
 
-<nav mat-tab-nav-bar [tabPanel]="tabPanel">
+<nav [color]="'primary'" [backgroundColor]="'primary'" mat-tab-nav-bar [tabPanel]="tabPanel">
 
   <a mat-tab-link *ngFor="let link of links"
      [routerLink]="link.link"
@@ -15,4 +15,3 @@
 
 <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
      
-
