@@ -41,26 +41,32 @@
   </div>
 
   <div>
-    <div class="timeline">
-      <div>VAT</div>
-      <span *ngFor="let month of months()"
+    <div>
+      <div class="timelinelabel">VAT</div>
+      <div class="timeline">
+      <div *ngFor="let month of months()"
 	    class="period {{month < form.value.vat ? 'on' : 'off'}}">
 	&nbsp;
-      </span>
+      </div>
+      </div>
     </div>
-    <div class="timeline">
-      <div>Corptax</div>
-      <span *ngFor="let month of months()"
+    <div>
+      <div class="timelinelabel">Corptax</div>
+      <div class="timeline">
+      <div *ngFor="let month of months()"
 	    class="period {{month < form.value.corptax ? 'on' : 'off'}}">
 	&nbsp;
-      </span>
+      </div>
+      </div>
     </div>
-    <div class="timeline">
-      <div>Accounts</div>
-      <span *ngFor="let month of months()"
+    <div>
+      <div class="timelinelabel">Accounts</div>
+      <div class="timeline">
+      <div *ngFor="let month of months()"
 	    class="period {{month < form.value.accounts ? 'on' : 'off'}}">
 	&nbsp;
-      </span>
+      </div>
+      </div>
     </div>
   </div>
 
