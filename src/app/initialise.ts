@@ -12,14 +12,14 @@ export class AppInitService {
 
         return new Promise<void>((resolve, reject) => {
 
-            console.log("AppInitService.init() called");
+//            console.log("AppInitService.init() called");
 
 //	    this.auth.refresh_token().subscribe().add(resolve);
 
-            setTimeout(() => {
-                console.log('AppInitService Finished');
-                resolve();
-            }, 100);
+//            setTimeout(() => {
+//                console.log('AppInitService Finished');
+//                resolve();
+//            }, 100);
  
         });
 

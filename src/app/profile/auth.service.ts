@@ -47,7 +47,6 @@ export class AuthService {
     ) {
 	this.fireAuth.authState.subscribe((e : any) => {
 	    this.set_auth(e);
-	    console.log(e);
 	});
     }
 
@@ -153,14 +152,11 @@ export class AuthService {
 
     get_token() : Observable<string | null> {
 	return new Observable<string | null>(obs => {
-	    this._auth.auth.currentUser.getIdToken(
-	    ).then(
-		(t : any) => obs.next(t)
-	    ).catch(
-		(error : any) => {
-		    obs.error(error.message);
-		}
-	    )
+	    this.fireAuth.idToken.subscribe({
+		next(e) { obs.next(e); },
+		error(e) { obs.error(e); },
+		complete() { obs.complete(); },
+	    });
 	});
     }
 

@@ -4,11 +4,13 @@
 import { Injectable } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import {
-    HttpClient, HttpErrorResponse, HttpHeaders
+    HttpHeaders
 } from '@angular/common/http';
-import { Observable, Subject, BehaviorSubject, throwError, map } from 'rxjs';
+import { Observable, Subject, of, BehaviorSubject, throwError, map } from 'rxjs';
 import { catchError, retry, tap } from 'rxjs/operators';
 import { WorkingService } from '../working.service';
+
+import { ApiService } from '../api.service';
 
 export class Company {
 
@@ -64,19 +66,12 @@ export class CompanyService {
 
     get_list() : Observable<Companies> {
 
+	console.log("GET LIST");
+
 	let url = "/api/companies";
 
-	return new Observable<Companies>(obs => {
-	    
-	    this.http.get<Companies>(url).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(res => {
-		obs.next(res);
-	    });
-
-	});
-					   
+	return this.api.get<Companies>(url);
+				   
     }
 
     subject : BehaviorSubject<Company | null> =
@@ -91,8 +86,8 @@ export class CompanyService {
     }
 
     constructor(
-	private http : HttpClient,
 	private working : WorkingService,
+	private api : ApiService,
     ) {
 
 	// All changes are announced on this subject.  Could be a lot of
@@ -114,7 +109,7 @@ export class CompanyService {
 
 	this.working.start();
 
-	this.http.get<Company>("/api/company/" + id).subscribe({
+	this.api.get<Company>("/api/company/" + id).subscribe({
 	    next(config) {
 		svc.working.stop();		
 		svc.config = config;
@@ -148,13 +143,9 @@ export class CompanyService {
 
 	this.working.start();
 
-	return this.http.put(
+	return this.api.put(
 	    "/api/company/" + this.id, this.config,
 	    httpOptions
-	).pipe(
-	    retry(3),
-	    catchError(this.handleError),
-	    tap(() => this.working.stop())
 	);
 
     }
@@ -172,13 +163,11 @@ export class CompanyService {
 		})
 	    };
 
-	    return this.http.put("/api/company/" + crn, c,
-				 httpOptions).pipe(
-		retry(3),
-		catchError(this.handleError)
-	    ).subscribe(
-		(e : any) => { subs.next(crn); }
-	    );
+	    return this.api.put(
+		"/api/company/" + crn, c, httpOptions
+	    ).subscribe((e : any) => {
+		subs.next(crn);
+	    });
 	});
 
     }
@@ -215,6 +204,9 @@ export class CompanyService {
 	    c.contact_city = rec.company.registered_office_address.locality;
 	    c.contact_postcode =
 		rec.company.registered_office_address.postal_code;
+
+	    // Maybe not true, but true for the bulk of cases.
+	    c.contact_country = "UK";
 
 	    try {
 		let form = {
@@ -254,10 +246,8 @@ export class CompanyService {
 		})
 	    };
 
-	    return this.http.put("/api/company/" + c.company_number, c,
-				 httpOptions).pipe(
-		retry(3),
-		catchError(this.handleError)
+	    return this.api.put(
+		"/api/company/" + c.company_number, c, httpOptions
 	    ).subscribe(
 		(e : any) => {
 		    subs.next(c.company_number);
@@ -268,10 +258,7 @@ export class CompanyService {
     }
 
     delete(cid : string) {
-	return this.http.delete("/api/company/" + cid).pipe(
-	    retry(3),
-	    catchError(this.handleError)
-	);
+	return this.api.delete("/api/company/" + cid);
     }
 
     change() {
@@ -332,23 +319,6 @@ export class CompanyService {
     set vrn(c) { this.config!.vrn = c; this.change(); }
     get utr() { return this.config!.utr; }
     set utr(c) { this.config!.utr = c; this.change(); }
-
-    private handleError(error: HttpErrorResponse) {
-	console.log(error);
-	if (error.status === 0) {
-	    // A client-side or network error
-	    console.error('An error occurred:', error.error);
-	} else {
-	    // The backend returned an unsuccessful response code.
-	    console.error(
-		`Backend returned code ${error.status}, body was: `,
-		error.error);
-	}
-
-	// Return an observable with a user-facing error message.
-	return throwError(() =>
-	    new Error('Something bad happened; please try again later.'));
-    }
 
 }
 

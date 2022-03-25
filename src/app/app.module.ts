@@ -42,11 +42,11 @@ import { TabsComponent } from './tabs/tabs.component';
 import { SharedModule } from './shared/shared.module';
 import { ProfileModule } from './profile/profile.module';
 
-export function init(appInitService: AppInitService) {
-    return (): Promise<any> => { 
-	return appInitService.Init();
-    }
-}
+//export function init(appInitService: AppInitService) {
+//    return (): Promise<any> => { 
+//	return appInitService.Init();
+//    }
+//}
 
 @NgModule({
     declarations: [
@@ -91,27 +91,26 @@ export function init(appInitService: AppInitService) {
 	    deps: [MAT_DATE_LOCALE]
 	},
 	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
-        AppInitService,
-	{
-	    provide: APP_INITIALIZER,
-	    useFactory: init,
-	    deps: [AppInitService],
-	    multi: true
-	},
-	{
-	    provide: HTTP_INTERCEPTORS,
-	    useClass: ErrorInterceptor,
-	    multi: true
-	},
-	{
-	    provide: HTTP_INTERCEPTORS,
-	    useClass: AuthHeaderInterceptor,
-	    multi: true
-	}
+//        AppInitService,
+//	{
+//	    provide: APP_INITIALIZER,
+//	    useFactory: init,
+//	    deps: [AppInitService],
+//	    multi: true
+//	},
+//	{
+//	    provide: HTTP_INTERCEPTORS,
+//	    useClass: ErrorInterceptor,
+//	    multi: true
+//	},
+//	{
+//	    provide: HTTP_INTERCEPTORS,
+//	    useClass: AuthHeaderInterceptor,
+//	    multi: true
+//	}
     ],
     bootstrap: [ AppComponent ]
 })
 
 export class AppModule {}
-
 
