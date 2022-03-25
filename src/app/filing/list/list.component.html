@@ -5,9 +5,9 @@
 
   <div *ngIf="!empty; else nodata">
 
-    <button mat-raised-button color="accent" (click)="subscriptions()">
+    <button mat-raised-button color="accent" (click)="commerce()">
       <mat-icon>card_membership</mat-icon>
-      Manage subscriptions
+      Manage credits
     </button>
 
     <button mat-raised-button *ngIf="feature('vat')" (click)="create_vat()">

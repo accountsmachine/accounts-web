@@ -25,20 +25,22 @@ import { ListComponent } from './list/list.component';
 import {
     DeleteConfirmationComponent
 } from './delete-confirmation/delete-confirmation.component';
-import { SubscriptionsComponent } from './subscriptions/subscriptions.component';
-import {
-    SubscriptionsListComponent
-} from './subscriptions-list/subscriptions-list.component';
-import { CheckoutComponent } from './checkout/checkout.component';
+import { CommerceComponent } from './commerce/commerce.component';
+import { BalanceComponent } from './balance/balance.component';
+//import {
+//    SubscriptionsListComponent
+//} from './subscriptions-list/subscriptions-list.component';
+//import { CheckoutComponent } from './checkout/checkout.component';
 
 
 @NgModule({
     declarations: [
 	ListComponent,
 	DeleteConfirmationComponent,
-	SubscriptionsComponent,
-        SubscriptionsListComponent,
-        CheckoutComponent
+	CommerceComponent,
+ BalanceComponent,
+//        SubscriptionsListComponent,
+//        CheckoutComponent
     ],
     imports: [
 	CommonModule,

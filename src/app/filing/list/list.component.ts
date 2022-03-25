@@ -132,8 +132,8 @@ export class ListComponent implements OnInit {
 	this.router.navigate(["/" + config.kind + "/" + config.id + "/report"]);
     }
 
-    subscriptions() {
-	this.router.navigate(["/filing/subscriptions"]);
+    commerce() {
+	this.router.navigate(["/filing/commerce"]);
     }
 
     delete(config : any) {
