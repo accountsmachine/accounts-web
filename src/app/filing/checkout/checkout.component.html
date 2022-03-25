@@ -1,16 +1,10 @@
+<!--
 
-<ng-container *ngIf="state == 'company' && company != null">
-
-  <h1>Company</h1>
-  <div>Company: {{company.company_name}}</div>
-  <div>Company: {{company.company_number}}</div>
-
+<form [formGroup]="form">
   <div>
-    <form [formGroup]="form">
-      <div>
-	VAT:
-	<mat-button-toggle-group aria-label="VAT"
-				 (change)="doit()" formControlName="vat">
+    VAT:
+    <mat-button-toggle-group aria-label="VAT credits to purchase"
+			     (change)="configure()" formControlName="vat">
 	  <mat-button-toggle [value]="0">none</mat-button-toggle>
 	  <mat-button-toggle [value]="6">6 months</mat-button-toggle>
 	  <mat-button-toggle [value]="12">1 year</mat-button-toggle>
@@ -70,21 +64,6 @@
     </div>
   </div>
 
-<!--
-  <div *ngFor="let option of options">
-    <mat-card>
-      <mat-card-title>{{option.kind | uppercase}}</mat-card-title>
-      <div>Valid from: {{option.opened | date}}</div>
-      <div>Valid to: {{option.expires | date}}</div>
-      <div>Covers:
-	<span *ngFor="let p of option.provides">{{p}}, </span>
-      </div>
-      <button mat-button (click)="select_subscription(option)">
-	Choose
-      </button>
-    </mat-card>
-  </div>
--->
 
 </ng-container>
 
@@ -108,3 +87,4 @@
     Back
   </button>
 </ng-container>
+-->

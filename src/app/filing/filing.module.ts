@@ -30,7 +30,7 @@ import { BalanceComponent } from './balance/balance.component';
 //import {
 //    SubscriptionsListComponent
 //} from './subscriptions-list/subscriptions-list.component';
-//import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 
 @NgModule({
@@ -38,9 +38,9 @@ import { BalanceComponent } from './balance/balance.component';
 	ListComponent,
 	DeleteConfirmationComponent,
 	CommerceComponent,
- BalanceComponent,
+	BalanceComponent,
 //        SubscriptionsListComponent,
-//        CheckoutComponent
+        CheckoutComponent
     ],
     imports: [
 	CommonModule,
