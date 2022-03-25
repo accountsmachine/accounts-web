@@ -11,11 +11,11 @@ import { FrontPageService } from '../front-page.service';
 })
 export class RegisterComponent implements OnInit {
 
-    username : string = "mark@accountsmachine.io";
-    password : string = "bunchy99!";
-    password2 : string = "bunchy99!";
-    phone : string = "+441242323323";
-    name : string = "Mark A";
+    username : string = "";
+    password : string = "";
+    password2 : string = "";
+    phone : string = "";
+    name : string = "";
 
     constructor(
 	private auth : AuthService,
