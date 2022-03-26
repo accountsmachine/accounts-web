@@ -49,6 +49,7 @@ export type Options = {
     vat? : Option,
     accounts? : Option,
     corptax? : Option,
+    vat_tax_rate? : number,
 };
 
 @Injectable({
@@ -75,9 +76,9 @@ export class CommerceService {
 
     }
 
-    get_options() : Observable<Options> {
+    get_offer() : Observable<Options> {
 
-	let url = "/api/commerce/options";
+	let url = "/api/commerce/offer";
 
 	return new Observable<Options>(obs => {
 

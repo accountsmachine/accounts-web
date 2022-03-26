@@ -16,11 +16,12 @@ export class CheckoutComponent implements OnInit {
 
     public form : FormGroup;
 
-    options : Options = {};
+    offer : Options = {};
     balance : Balance = { uid: "", email: "", credits: {
 	vat: 0, accounts: 0, corptax: 0
     }};
 
+    tax_applied : string = "";
     vat_price : number = 0;
     corptax_price : number = 0;
     accounts_price : number = 0;
@@ -42,8 +43,8 @@ export class CheckoutComponent implements OnInit {
 
     ngOnInit(): void {
 
-	this.commerceService.get_options().subscribe(o => {
-	    this.options = o;
+	this.commerceService.get_offer().subscribe(o => {
+	    this.offer = o;
 	});
 	this.commerceService.get_balance().subscribe(b => {
 	    this.balance = b;
@@ -59,24 +60,31 @@ export class CheckoutComponent implements OnInit {
 
     recalc() {
 	this.vat_price = this.corptax_price = this.accounts_price = 0;
-	if (this.options.vat)
-	    for (let item of this.options.vat.offer) {
+	if (this.offer.vat)
+	    for (let item of this.offer.vat.offer) {
 		if (this.form.value.vat == item.credits)
 		    this.vat_price = item.price;
 	    }
-	if (this.options.corptax)
-	    for (let item of this.options.corptax.offer) {
+	if (this.offer.corptax)
+	    for (let item of this.offer.corptax.offer) {
 		if (this.form.value.corptax == item.credits)
 		    this.corptax_price = item.price;
 	    }
-	if (this.options.accounts)
-	    for (let item of this.options.accounts.offer) {
+	if (this.offer.accounts)
+	    for (let item of this.offer.accounts.offer) {
 		if (this.form.value.accounts == item.credits)
 		    this.accounts_price = item.price;
 	    }
+
+	let tax_rate = this.offer.vat_tax_rate!;
+
+	this.tax_applied = "VAT @ " + Math.round(tax_rate * 100) + "%";
+	
 	this.subtotal_price =
 	    this.vat_price + this.corptax_price + this.accounts_price;
-	this.tax_price = 0.2 * Math.floor(this.subtotal_price);
+
+	this.tax_price = tax_rate * Math.floor(this.subtotal_price);
+
 	this.total_price = this.subtotal_price + this.tax_price;
     }
 

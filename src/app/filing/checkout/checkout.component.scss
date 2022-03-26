@@ -1,9 +1,51 @@
 
-table {
-    border-collapse: collapse;
+section {
+    padding: 1rem;
 }
 
-tr, td, th {
-    border: 1px solid black;
+div.breakdown {
+    display: grid;
+    max-width: 30rem;
+    grid-template-columns: [description] 3fr [quantity] 2fr [amount] 1fr;
+    grid-template-rows: repeat(auto, 1.2rem);
+    column-gap: 0.2rem;
+    row-gap: 0.2rem;
 }
 
+div.breakdown div {
+    border: 1px solid #e0e0e0;
+    padding: 0.2rem;
+    marind: 0.1rem;
+}
+
+div.description {
+    grid-column-start: description;
+}
+
+div.quantity {
+    grid-column-start: quantity;
+    text-align: right;
+}
+
+div.label {
+    grid-column-start: quantity;
+    text-align: right;
+}
+
+div.subtotal {
+    font-weight: bold;
+}
+
+div.total {
+    font-weight: bold;
+}
+
+div.amount {
+    grid-column-start: amount;
+    font-family: monospace;
+    text-align: right;
+}
+
+.header {
+    font-weight: bold;
+}
