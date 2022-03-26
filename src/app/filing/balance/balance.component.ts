@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CommerceService, Balance } from '../commerce.service';
+import { Balance } from '../commerce.model';
+import { CommerceService } from '../commerce.service';
 
 @Component({
   selector: 'balance',

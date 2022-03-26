@@ -4,9 +4,10 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { CheckoutService, Order } from '../checkout.service';
 import { Company } from '../../company/company.service';
-import { CommerceService, Option, Options, Balance } from '../commerce.service';
+import { Option, Options, Balance, Order } from '../commerce.model';
+import { CommerceService } from '../commerce.service';
+import { CheckoutService } from '../checkout.service';
 
 @Component({
     selector: 'checkout',

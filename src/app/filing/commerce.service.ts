@@ -11,45 +11,7 @@ import * as moment from 'moment';
 
 import { ApiService } from '../api.service';
 
-export type Transaction = {
-    id : string,
-    company : string,
-    uid : string,
-    email : string,
-    kind : string,
-    opened : string,
-    expires : string,
-    purchaser : string,
-    address : string[],
-    postcode : string,
-    country : string,
-    valid : boolean,
-    billing_country : string,
-    vat_rate : number,
-    vat_number : string,
-    status? : string,
-    provides : string[],
-};
-
-export type Balance = {
-    uid : string,
-    email : string,
-    credits : {
-	[kind : string] : number
-    }
-};
-
-export type Option = {
-    description : string,
-    permitted : number,
-    min_purchase : number,
-    offer : { quantity : number, price : number, discount : number }[],
-};
-
-export type Options = {
-    offer : { [kind : string]  : Option },
-    vat_rate? : number,
-};
+import { Balance, Option, Options, Transaction } from './commerce.model';
 
 @Injectable({
     providedIn: 'root'

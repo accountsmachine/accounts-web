@@ -14,7 +14,8 @@ import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';
 import { WorkingService } from '../../working.service';
-import { CommerceService, Balance } from '../commerce.service';
+import { Balance } from '../commerce.model';
+import { CommerceService } from '../commerce.service';
 
 @Component({
     selector: 'list',

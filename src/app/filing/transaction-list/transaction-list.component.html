@@ -8,12 +8,102 @@
     
     <mat-drawer-content class="main-content">
 
-      <p>transaction-list works!</p>
+      <div class="container mat-elevation-z8">
+	
+	<mat-table #table [dataSource]="data">
+
+	  <ng-container matColumnDef="time">
+	    <mat-header-cell mat-header-cell
+			     *matHeaderCellDef>Time</mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+	      {{row.time | date:'dd/MM/YYYY HH:mm'}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="transaction">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Tx
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+	      {{row.transaction}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="subtotal">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Subtotal
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+	      {{row.subtotal / 100 | currency}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="total">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Total
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+	      {{row.total / 100 | currency}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="v">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      VAT cred
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+	      {{row.v}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="c">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      CT cred
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+		{{row.c}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="a">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Acct cred
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+		{{row.a}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="filing">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Filing
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+		{{row.filing}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="id">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      ID
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+		{{row.id}}
+	    </mat-cell>
+	  </ng-container>
+
+	  <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+
+	  <mat-row *matRowDef="let row; columns: columns;">
+	  </mat-row>
+
+	</mat-table>
+
+      </div>
 
     </mat-drawer-content>
 
   </mat-drawer-container>
 
 </section>
-
 

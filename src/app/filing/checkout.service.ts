@@ -1,27 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, BehaviorSubject, combineLatest } from 'rxjs';
 
-import { CommerceService, Option, Options, Balance } from './commerce.service';
-
-export type ItemQuantities = {
-    [kind : string] : number
-};
-
-export type ItemLine = {
-    kind : string,
-    description : string,
-    quantity : number,
-    amount : number,
-    discount : number,
-};
-
-export class Order {
-    items : ItemLine[] = [];
-    subtotal : number = 0;
-    vat_rate : number = 0;
-    vat : number = 0;
-    total : number = 0;
-};
+import { Option, Options, Balance, Order, ItemLine, ItemQuantities
+       } from './commerce.model';
+import { CommerceService } from './commerce.service';
 
 @Injectable({
     providedIn: 'root'
