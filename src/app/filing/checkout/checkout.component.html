@@ -3,91 +3,147 @@
 
   <h1>Purchase more credits</h1>
 
-  Select credits below to see price, and purchase:
+  <p>Select credits below to see price, and purchase:</p>
+
+  <ul>
+    <li><b>VAT credit</b>: This covers the cost of submitting a single VAT
+      return.  For businesses submitting quarterly, 4 credits will cover
+      filing for one year.</li>
+    <li><b>Corporation tax credit</b>: This covers the cost of submitting a
+      single corporation tax return.  Most businesses will need to file
+      one return annually.  New businesses may need to submit two in their
+      first year.</li>
+    <li><b>Accounts filing credit</b>: This covers the cost of submitting a
+      single accounts filing to companies house.  Most businesses will file
+      a single set of accounts annually.</li>
+  </ul>
+
+  <p>A discount is applied to orders for multiple credits which
+    increases with the order size.</p>
+
+  <h1>Select credits</h1>
 
   <form [formGroup]="form">
 
     <div *ngIf="offer.vat" class="selection">
-      <div>VAT credits:</div>
-      <mat-button-toggle-group aria-label="VAT credits to purchase"
-			       (change)="recalc()" formControlName="vat">
-	<mat-button-toggle *ngFor="let c of offer.vat!.offer"
-			   [value]="c.credits">{{c.credits}}</mat-button-toggle>
-      </mat-button-toggle-group>
-      {{(vat_price / 100) | currency}}
+      <div class="selectlabel">VAT credits:</div>
+      <div class="choice">
+	<mat-button-toggle-group aria-label="VAT credits to purchase"
+				 (change)="recalc()" formControlName="vat">
+	  <mat-button-toggle *ngFor="let c of offer.vat!.offer"
+			     [value]="c.credits">
+	    {{c.credits}}
+	  </mat-button-toggle>
+	</mat-button-toggle-group>
+      </div>
+      <div class="price">
+	{{(vat_price / 100) | currency}}
+      </div>
     </div>
 
     <div *ngIf="offer.corptax" class="selection">
-      <div>Corptax credits:</div>
-      <mat-button-toggle-group aria-label="Corptax credits to purchase"
-			       (change)="recalc()" formControlName="corptax">
-	<mat-button-toggle *ngFor="let c of offer.corptax!.offer"
-			   [value]="c.credits">{{c.credits}}</mat-button-toggle>
-      </mat-button-toggle-group>
-      {{(corptax_price / 100) | currency}}
+      <div class="selectlabel">Corptax credits:</div>
+      <div class="choice">
+	<mat-button-toggle-group aria-label="Corptax credits to purchase"
+				 (change)="recalc()" formControlName="corptax">
+	  <mat-button-toggle *ngFor="let c of offer.corptax!.offer"
+			     [value]="c.credits">
+	    {{c.credits}}
+	  </mat-button-toggle>
+	</mat-button-toggle-group>
+      </div>
+      <div class="price">
+	{{(corptax_price / 100) | currency}}
+      </div>
     </div>
 
     <div *ngIf="offer.accounts" class="selection">
-      <div>Accounts filing credits:</div>
-      <mat-button-toggle-group aria-label="Corptax credits to purchase"
-			       (change)="recalc()" formControlName="accounts">
-	<mat-button-toggle *ngFor="let c of offer.accounts!.offer"
-			   [value]="c.credits">{{c.credits}}</mat-button-toggle>
-      </mat-button-toggle-group>
-      {{(accounts_price / 100) | currency}}
+      <div class="selectlabel">Accounts filing credits:</div>
+      <div class="choice">
+	<mat-button-toggle-group aria-label="Corptax credits to purchase"
+				 (change)="recalc()" formControlName="accounts">
+	  <mat-button-toggle *ngFor="let c of offer.accounts!.offer"
+			     [value]="c.credits">
+	    {{c.credits}}
+	  </mat-button-toggle>
+	</mat-button-toggle-group>
+      </div>
+      <div class="price">
+	{{(accounts_price / 100) | currency}}
+      </div>
+    </div>
+
+    <div *ngIf="offer.vat == null || offer.corptax == null || offer.accounts == null">
+      You have the maximum credits for {{full_credits()}}.
+      There are no more credits available to purchase.
     </div>
 
   </form>
 
 </section>
 
-<section>
+<section *ngIf="total_price > 0">
 
-  <div *ngIf="total_price > 0">
+  <h1>Place order</h1>
 
-    <div class="breakdown">
-      <div class="header description">Description</div>
-      <div class="header quantity">Quantity</div>
-      <div class="header amount">Amount</div>
-      <ng-container *ngIf="form.value.vat > 0">
-	<div class="item description">VAT credits</div>
-	<div class="item quantity">{{form.value.vat}} credits</div>
-	<div class="item amount">{{vat_price / 100 | currency}}</div>
-      </ng-container>
-      <ng-container *ngIf="form.value.corptax > 0">
-	<div class="item description">Corptax credits</div>
-	<div class="item quantity">{{form.value.corptax}} credits</div>
-	<div class="item amount">{{corptax_price / 100 | currency}}</div>
-      </ng-container>
-      <ng-container *ngIf="form.value.accounts > 0">
-	<div class="item description">Accounts filing credits</div>
-	<div class="item quantity">{{form.value.accounts}} credits</div>
-	<div class="item amount">{{accounts_price / 100 | currency}}</div>
-      </ng-container>
-      <ng-container>
-	<div class="subtotal label">Subtotal</div>
-	<div class="subtotal amount">{{subtotal_price / 100 | currency}}</div>
-      </ng-container>
-      <ng-container>
-	<div class="tax label">{{tax_applied}}</div>
-	<div class="tax amount">{{tax_price / 100 | currency}}</div>
-      </ng-container>
-      <ng-container>
-	<div class="total label">Total</div>
-	<div class="total amount">{{total_price / 100 | currency}}</div>
-      </ng-container>
-    </div>
+  <div class="breakdown">
+    <div class="header description">Description</div>
+    <div class="header quantity">Quantity</div>
+    <div class="header amount">Amount</div>
+    <ng-container *ngIf="form.value.vat > 0">
+      <div class="item description">
+	VAT credits
+	<ng-container *ngIf="vat_discount > 0">
+	  (discount {{vat_discount / 100 | currency}})
+	</ng-container>
+      </div>
+      <div class="item quantity">{{form.value.vat}} credits</div>
+      <div class="item amount">{{vat_price / 100 | currency}}</div>
+    </ng-container>
+    <ng-container *ngIf="form.value.corptax > 0">
+      <div class="item description">
+	Corptax credits
+	<ng-container *ngIf="corptax_discount > 0">
+	  (discount {{corptax_discount / 100 | currency}})
+	</ng-container>
+      </div>
+      <div class="item quantity">{{form.value.corptax}} credits</div>
+      <div class="item amount">{{corptax_price / 100 | currency}}</div>
+    </ng-container>
+    <ng-container *ngIf="form.value.accounts > 0">
+      <div class="item description">
+	Accounts filing credits
+	<ng-container *ngIf="accounts_discount > 0">
+	  (discount {{accounts_discount / 100 | currency}})
+	</ng-container>
+      </div>
+      <div class="item quantity">{{form.value.accounts}} credits</div>
+      <div class="item amount">{{accounts_price / 100 | currency}}</div>
+    </ng-container>
+    <ng-container>
+      <div class="subtotal label">Subtotal</div>
+      <div class="subtotal amount">{{subtotal_price / 100 | currency}}</div>
+    </ng-container>
+    <ng-container>
+      <div class="tax label">{{tax_applied}}</div>
+      <div class="tax amount">{{tax_price / 100 | currency}}</div>
+    </ng-container>
+    <ng-container>
+      <div class="total label">Total</div>
+      <div class="total amount">{{total_price / 100 | currency}}</div>
+    </ng-container>
+  </div>
 
-    <div>
-      <button mat-raised-button color="primary"
-	      (click)="place_order()" [disabled]="order_disabled()">
-	Place order
-      </button>
-      <button mat-raised-button color="basic" (click)="reset()">
-	Reset checkout
-      </button>
-    </div>
-
+  <div>
+    <button mat-raised-button color="primary"
+	    (click)="place_order()" [disabled]="order_disabled()">
+      <mat-icon>shopping_cart</mat-icon>&nbsp;
+      Place order
+    </button>
+    <button mat-raised-button color="basic" (click)="reset()">
+      <mat-icon>clear</mat-icon>&nbsp;
+      Reset checkout
+    </button>
   </div>
 
 </section>

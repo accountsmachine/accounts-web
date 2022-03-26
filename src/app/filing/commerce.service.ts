@@ -42,7 +42,7 @@ export type Balance = {
 export type Option = {
     permitted : number,
     min_purchase : number,
-    offer : { credits : number, price : number }[],
+    offer : { credits : number, price : number, discount : number }[],
 };
 
 export type Options = {

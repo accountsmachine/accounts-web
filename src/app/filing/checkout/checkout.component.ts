@@ -21,9 +21,15 @@ export class CheckoutComponent implements OnInit {
 
     tax_applied : string = "";
     tax_rate : number = 0;
+
     vat_price : number = 0;
     corptax_price : number = 0;
     accounts_price : number = 0;
+
+    vat_discount : number = 0;
+    corptax_discount : number = 0;
+    accounts_discount : number = 0;
+
     subtotal_price : number = 0;
     tax_price : number = 0;
     total_price : number = 0;
@@ -62,21 +68,31 @@ export class CheckoutComponent implements OnInit {
     }
 
     recalc() {
+
 	this.vat_price = this.corptax_price = this.accounts_price = 0;
-	if (this.offer.vat)
-	    for (let item of this.offer.vat.offer) {
-		if (this.form.value.vat == item.credits)
+	this.vat_discount = this.corptax_discount = this.accounts_discount = 0;
+
+	if (this.offer.vat) {
+	    for (let item of this.offer.vat.offer)
+		if (this.form.value.vat == item.credits) {
 		    this.vat_price = item.price;
+		    this.vat_discount = item.discount;
+		}
 	    }
+
 	if (this.offer.corptax)
 	    for (let item of this.offer.corptax.offer) {
-		if (this.form.value.corptax == item.credits)
+		if (this.form.value.corptax == item.credits) {
 		    this.corptax_price = item.price;
+		    this.corptax_discount = item.discount;
+		}
 	    }
 	if (this.offer.accounts)
 	    for (let item of this.offer.accounts.offer) {
-		if (this.form.value.accounts == item.credits)
+		if (this.form.value.accounts == item.credits) {
 		    this.accounts_price = item.price;
+		    this.accounts_discount = item.discount;
+		}
 	    }
 
 	this.tax_rate = this.offer.vat_tax_rate!;
@@ -141,6 +157,30 @@ export class CheckoutComponent implements OnInit {
 
     order_disabled() {
 	return (this.total_price < 1);
+    }
+
+    full_credits() {
+
+	let unavail = [];
+
+	if (!this.offer.vat) unavail.push("VAT");
+	if (!this.offer.corptax) unavail.push("corporation tax");
+	if (!this.offer.accounts) unavail.push("accounts filing");
+
+	if (unavail.length == 0) return "(nothing)";
+
+	let ret = "";
+
+	for (let i = 0; i < unavail.length; i++) {
+	    ret += unavail[i];
+	    if (i < (unavail.length - 2))
+		ret += ", ";
+	    else if (i < (unavail.length - 1))
+		ret += " and ";
+	}
+
+	return ret;
+
     }
 
 }
