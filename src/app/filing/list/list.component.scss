@@ -20,20 +20,32 @@ a {
     flex-wrap: wrap;
 }
 
-mat-card {
+mat-card.filing {
     min-width: 12rem;
     margin: 1rem;
     background-color: $light-background;
     color: $dark-primary-text;
 }
 
-mat-card * {
+mat-card.filing * {
     background-color: $light-background;
     color: $dark-primary-text;
 }
 
+.status {
+    margin: 1rem;
+}
+
 section {
     padding-top: 1rem;
+}
+
+.tick-true {
+    color: $affirm-text;
+}
+
+.tick-false {
+    color: $deny-text;
 }
 
 mat-icon {

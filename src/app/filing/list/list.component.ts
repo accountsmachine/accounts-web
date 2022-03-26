@@ -14,6 +14,7 @@ import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';
 import { WorkingService } from '../../working.service';
+import { CommerceService, Balance } from '../commerce.service';
 
 @Component({
     selector: 'list',
@@ -24,6 +25,8 @@ export class ListComponent implements OnInit {
 
     filingConfigs : FilingItem[] = [];
     companies : Companies = {};
+
+    balance : Balance | null = null;
 
     draft : FilingItem[] = [];
     pending : FilingItem[] = [];
@@ -39,7 +42,22 @@ export class ListComponent implements OnInit {
 	private profile : UserProfileService,
 	private dialog : MatDialog,
 	private working : WorkingService,
-    ) { }
+	private commerceService : CommerceService,
+    ) {
+	this.commerceService.onbalance().subscribe(
+	    b => this.balance = b
+	);
+    }
+
+    nocredits() : boolean {
+	if (!this.balance) return true;
+	if (this.balance.credits["vat"] == 0 &&
+	    this.balance.credits["corptax"] == 0 &&
+	    this.balance.credits["accounts"] == 0) {
+	    return true;
+	}
+	return false;
+    }
 
     empty = true;
 

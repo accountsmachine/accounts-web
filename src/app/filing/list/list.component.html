@@ -28,6 +28,15 @@
 
   </div>
 
+  <div *ngIf="nocredits()">
+    <mat-card class="status">
+      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+      You have no credits.  You can create filings, but you will not be
+      able to submit them online.  Use <b>Manage credits</b> to buy
+      credits when you are ready to submit a filing.
+    </mat-card>
+  </div>
+
   <ng-template #nodata>
     You need to create a company configuration before you can create any filings.
   </ng-template>
@@ -38,7 +47,7 @@
       <h2>Draft</h2>
       <div class="card-display">
 	<ng-container *ngFor="let config of draft">
-	  <mat-card>
+	  <mat-card class="filing">
 	    <mat-card-title>
 	      <mat-icon>drafts</mat-icon>
 	      &nbsp;
@@ -63,7 +72,7 @@
       <h2>Pending</h2>
       <div class="card-display">
 	<ng-container *ngFor="let config of pending">
-	  <mat-card class="pending">
+	  <mat-card class="filing pending">
 	    <mat-card-title>
 	      <mat-icon>pending</mat-icon>
 	      &nbsp;
@@ -85,7 +94,7 @@
       <h2>Errored</h2>
       <div class="card-display">
 	<ng-container *ngFor="let config of errored">
-	  <mat-card class="errored">
+	  <mat-card class="filing errored">
 	    <mat-card-title>
 	      <mat-icon>error</mat-icon>
 	      &nbsp;
@@ -110,7 +119,7 @@
       <h2>Published</h2>
       <div class="card-display">
 	<ng-container *ngFor="let config of published">
-	  <mat-card>
+	  <mat-card class="filing">
 	    <mat-card-title>
 	      <mat-icon>check_circle</mat-icon>
 	      &nbsp;
