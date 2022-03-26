@@ -27,9 +27,6 @@ import {
 } from './delete-confirmation/delete-confirmation.component';
 import { CommerceComponent } from './commerce/commerce.component';
 import { BalanceComponent } from './balance/balance.component';
-//import {
-//    SubscriptionsListComponent
-//} from './subscriptions-list/subscriptions-list.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 
 
@@ -39,7 +36,6 @@ import { CheckoutComponent } from './checkout/checkout.component';
 	DeleteConfirmationComponent,
 	CommerceComponent,
 	BalanceComponent,
-//        SubscriptionsListComponent,
         CheckoutComponent
     ],
     imports: [
