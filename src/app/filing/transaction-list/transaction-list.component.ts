@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -6,6 +7,7 @@ import { Transaction } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 
 type Row = {
+    id: string,
     time : Date,
     transaction? : string,
     subtotal? : number,
@@ -36,6 +38,7 @@ export class TransactionListComponent implements OnInit {
 
     constructor(
 	private commerce : CommerceService,
+	private router : Router,
     ) {
 
 	this.commerce.get_transactions().subscribe(txs => {
@@ -47,12 +50,13 @@ export class TransactionListComponent implements OnInit {
 		let tx = txs[txid];
 
 		let row : Row = {
-		    time : new Date(tx.time + "Z"),
-		    transaction : tx.transaction,
-		    subtotal : tx.order.subtotal,
-		    total : tx.order.total,
-		    company : tx.company,
-		    filing : tx.filing,
+		    id: txid,
+		    time: new Date(tx.time + "Z"),
+		    transaction: tx.transaction,
+		    subtotal: tx.order.subtotal,
+		    total: tx.order.total,
+		    company: tx.company,
+		    filing: tx.filing,
 		};
 
 		let v = 0, c = 0, a = 0;
@@ -76,8 +80,6 @@ export class TransactionListComponent implements OnInit {
 
 	    this.data.data = data;
 
-	    console.log(data);
-
 	});
 
     }
@@ -86,7 +88,7 @@ export class TransactionListComponent implements OnInit {
     }
 
     select(x : any) {
-	console.log(x);
+	this.router.navigate(["/filing/commerce/transaction/" + x.id]);
     }
 
 }
