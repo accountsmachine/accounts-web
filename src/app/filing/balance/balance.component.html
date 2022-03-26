@@ -1,29 +1,46 @@
+<section class="tab-contents">
 
-<div *ngIf="balance.uid; else na">
+  <mat-drawer-container class="drawer-container">
 
-  <mat-card>
-    <mat-card-title>VAT filing</mat-card-title>
-    <mat-card-content>
-      {{balance.credits["vat"]}} credits
-    </mat-card-content>
-  </mat-card>
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
 
-  <mat-card>
-    <mat-card-title>Corporation tax filing</mat-card-title>
-    <mat-card-content>
-      {{balance.credits["corptax"]}} credits
-    </mat-card-content>
-  </mat-card>
+      <div *ngIf="balance.uid; else na">
 
-  <mat-card>
-    <mat-card-title>Accounts filing</mat-card-title>
-    <mat-card-content>
-      {{balance.credits["accounts"]}} credits
-    </mat-card-content>
-  </mat-card>
+	<mat-card>
+	  <mat-card-title>VAT filing</mat-card-title>
+	  <mat-card-content>
+	    {{balance.credits["vat"]}} credits
+	  </mat-card-content>
+	</mat-card>
 
-</div>
+	<mat-card>
+	  <mat-card-title>Corporation tax filing</mat-card-title>
+	  <mat-card-content>
+	    {{balance.credits["corptax"]}} credits
+	  </mat-card-content>
+	</mat-card>
 
-<ng-template #na>
-  Balance not available.
-</ng-template>
+	<mat-card>
+	  <mat-card-title>Accounts filing</mat-card-title>
+	  <mat-card-content>
+	    {{balance.credits["accounts"]}} credits
+	  </mat-card-content>
+	</mat-card>
+
+      </div>
+
+      <ng-template #na>
+	Balance not available.
+      </ng-template>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+
+</section>
+
+

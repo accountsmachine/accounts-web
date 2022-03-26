@@ -1,11 +1,15 @@
 
-section {
-    padding: 1rem;
+mat-drawer {
+    width: auto;
+}
+
+mat-drawer-content {
+    min-height: 8rem;
 }
 
 div.breakdown {
     display: grid;
-    max-width: 30rem;
+    max-width: 40rem;
     grid-template-columns: [description] 4fr [quantity] 2fr [amount] 1fr;
     grid-template-rows: repeat(auto, 1.2rem);
     column-gap: 0.2rem;

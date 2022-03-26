@@ -1,99 +1,121 @@
+<section class="tab-contents">
 
-<section>
+  <mat-drawer-container class="drawer-container">
 
-  <h1>Purchase more credits</h1>
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
 
-  <p>Select credits below to see price, and purchase:</p>
+      <section>
 
-  <ul>
-    <li><b>VAT credit</b>: This covers the cost of submitting a single VAT
-      return.  For businesses submitting quarterly, 4 credits will cover
-      filing for one year.</li>
-    <li><b>Corporation tax credit</b>: This covers the cost of submitting a
-      single corporation tax return.  Most businesses will need to file
-      one return annually.  New businesses may need to submit two in their
-      first year.</li>
-    <li><b>Accounts filing credit</b>: This covers the cost of submitting a
-      single accounts filing to companies house.  Most businesses will file
-      a single set of accounts annually.</li>
-  </ul>
+	<h1>Purchase more credits</h1>
 
-  <p>A discount is applied to orders for multiple credits which
-    increases with the order size.</p>
+	<p>Select credits below to see price, and purchase:</p>
 
-  <h1>Select credits</h1>
+	<ul>
 
-  <form [formGroup]="form" *ngIf="offer.offer">
+	  <li><b>VAT credit</b>: This covers the cost of submitting a
+	    single VAT return.  For businesses submitting quarterly, 4
+	    credits will cover filing for one year.</li>
+	  <li><b>Corporation tax credit</b>: This covers the cost of
+	    submitting a single corporation tax return.  Most
+	    businesses will need to file one return annually.  New
+	    businesses may need to submit two in their first
+	    year.</li>
+	  <li><b>Accounts filing credit</b>: This covers the cost of
+	    submitting a single accounts filing to companies house.
+	    Most businesses will file a single set of accounts
+	    annually.</li>
+	</ul>
 
-    <div *ngFor="let kind of kinds" class="selection">
-      <div class="selectlabel">{{offer.offer[kind].description}}:</div>
-      <div class="choice">
-	<mat-button-toggle-group aria-label="VAT credits to purchase"
-				 (change)="recalc()"
-				 formControlName="{{kind}}">
-	  <mat-button-toggle *ngFor="let c of offer.offer[kind].offer"
-			     [value]="c.quantity">
-	    {{c.quantity}}
-	  </mat-button-toggle>
-	</mat-button-toggle-group>
-      </div>
-      <div class="price">
-	{{(value[kind] / 100) | currency}}
-      </div>
-    </div>
+	<p>A discount is applied to orders for multiple credits which
+	  increases with the order size.</p>
 
-    <div *ngIf="some_max()">
-      You have the maximum credits for {{full_credits()}}.
-      There are no more credits available to purchase.
-    </div>
+	<h1>Select credits</h1>
 
-  </form>
+	<form [formGroup]="form" *ngIf="offer.offer">
+
+	  <div *ngFor="let kind of kinds" class="selection">
+	    <div class="selectlabel">{{offer.offer[kind].description}}:</div>
+	    <div class="choice">
+	      <mat-button-toggle-group aria-label="VAT credits to purchase"
+				       (change)="recalc()"
+				       formControlName="{{kind}}">
+		<mat-button-toggle *ngFor="let c of offer.offer[kind].offer"
+				   [value]="c.quantity">
+		  {{c.quantity}}
+		</mat-button-toggle>
+	      </mat-button-toggle-group>
+	    </div>
+	    <div class="price">
+	      {{(value[kind] / 100) | currency}}
+	    </div>
+	  </div>
+
+	  <div *ngIf="some_max()">
+	    You have the maximum credits for {{full_credits()}}.
+	    There are no more credits available to purchase.
+	  </div>
+
+	</form>
+
+      </section>
+
+      <section *ngIf="order.total > 0">
+
+	<h1>Place order</h1>
+
+	<div class="breakdown">
+	  <div class="header description">Description</div>
+	  <div class="header quantity">Quantity</div>
+	  <div class="header amount">Amount</div>
+
+	  <ng-container *ngFor="let item of order.items">
+	    <div class="item description">
+	      {{item.description}}
+	      <ng-container *ngIf="item.discount > 0">
+		(discount {{item.discount / 100 | currency}})
+	      </ng-container>
+	    </div>
+	    <div class="item quantity">{{item.quantity}} credits</div>
+	    <div class="item amount">{{item.amount / 100 | currency}}</div>
+	  </ng-container>
+	  <ng-container>
+	    <div class="subtotal label">Subtotal</div>
+	    <div class="subtotal amount">
+	      {{order.subtotal / 100 | currency}}
+	    </div>
+	  </ng-container>
+	  <ng-container>
+	    <div class="tax label">VAT @ {{vat_rate()}}%</div>
+	    <div class="tax amount">{{order.vat / 100 | currency}}</div>
+	  </ng-container>
+	  <ng-container>
+	    <div class="total label">Total</div>
+	    <div class="total amount">{{order.total / 100 | currency}}</div>
+	  </ng-container>
+	</div>
+
+	<div>
+	  <button mat-raised-button color="primary"
+		  (click)="place_order()" [disabled]="order_disabled()">
+	    <mat-icon>shopping_cart</mat-icon>&nbsp;
+	    Place order
+	  </button>
+	  <button mat-raised-button color="basic" (click)="reset()">
+	    <mat-icon>clear</mat-icon>&nbsp;
+	    Reset checkout
+	  </button>
+	</div>
+
+      </section>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
 
 </section>
 
-<section *ngIf="order.total > 0">
 
-  <h1>Place order</h1>
-
-  <div class="breakdown">
-    <div class="header description">Description</div>
-    <div class="header quantity">Quantity</div>
-    <div class="header amount">Amount</div>
-
-    <ng-container *ngFor="let item of order.items">
-      <div class="item description">
-	{{item.description}}
-	<ng-container *ngIf="item.discount > 0">
-	  (discount {{item.discount / 100 | currency}})
-	</ng-container>
-      </div>
-      <div class="item quantity">{{item.quantity}} credits</div>
-      <div class="item amount">{{item.amount / 100 | currency}}</div>
-    </ng-container>
-    <ng-container>
-      <div class="subtotal label">Subtotal</div>
-      <div class="subtotal amount">{{order.subtotal / 100 | currency}}</div>
-    </ng-container>
-    <ng-container>
-      <div class="tax label">VAT @ {{vat_rate()}}%</div>
-      <div class="tax amount">{{order.vat / 100 | currency}}</div>
-    </ng-container>
-    <ng-container>
-      <div class="total label">Total</div>
-      <div class="total amount">{{order.total / 100 | currency}}</div>
-    </ng-container>
-  </div>
-
-  <div>
-    <button mat-raised-button color="primary"
-	    (click)="place_order()" [disabled]="order_disabled()">
-      <mat-icon>shopping_cart</mat-icon>&nbsp;
-      Place order
-    </button>
-    <button mat-raised-button color="basic" (click)="reset()">
-      <mat-icon>clear</mat-icon>&nbsp;
-      Reset checkout
-    </button>
-  </div>
-
-</section>

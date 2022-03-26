@@ -1,0 +1,16 @@
+
+@import '../../../theme.scss';
+
+a {
+    padding-left: 0;
+    padding-right: 0;
+    width: 8rem;
+}
+
+div {
+    margin: 2px;
+}
+
+.active {
+    background: $light-background;
+}

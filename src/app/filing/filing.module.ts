@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -28,7 +29,9 @@ import {
 import { CommerceComponent } from './commerce/commerce.component';
 import { BalanceComponent } from './balance/balance.component';
 import { CheckoutComponent } from './checkout/checkout.component';
-
+import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { TransactionComponent } from './transaction/transaction.component';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
     declarations: [
@@ -36,7 +39,10 @@ import { CheckoutComponent } from './checkout/checkout.component';
 	DeleteConfirmationComponent,
 	CommerceComponent,
 	BalanceComponent,
-        CheckoutComponent
+        CheckoutComponent,
+        TransactionListComponent,
+        TransactionComponent,
+        NavComponent
     ],
     imports: [
 	CommonModule,
@@ -46,6 +52,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 	MatButtonToggleModule,
 	MatDialogModule,
 	MatTableModule,
+	MatSidenavModule,
 	MatSnackBarModule,
 	RouterModule,
 	FilingRoutingModule,
