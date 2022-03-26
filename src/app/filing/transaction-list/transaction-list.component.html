@@ -49,28 +49,43 @@
 
 	  <ng-container matColumnDef="v">
 	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      VAT cred
+	      VAT
 	    </mat-header-cell>
 	    <mat-cell mat-cell *matCellDef="let row">
-	      {{row.v}}
+	      <span class="{{row.v < 0 ? 'debit' : 'credit'}}">
+		{{row.v != 0 ? row.v : ''}}
+	      </span>
 	    </mat-cell>
 	  </ng-container>
 
 	  <ng-container matColumnDef="c">
 	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      CT cred
+	      Corp Tax
 	    </mat-header-cell>
 	    <mat-cell mat-cell *matCellDef="let row">
-		{{row.c}}
+	      <span class="{{row.c < 0 ? 'debit' : 'credit'}}">
+		{{row.c != 0 ? row.c : ''}}
+	      </span>
 	    </mat-cell>
 	  </ng-container>
 
 	  <ng-container matColumnDef="a">
 	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Acct cred
+	      Acct
 	    </mat-header-cell>
 	    <mat-cell mat-cell *matCellDef="let row">
-		{{row.a}}
+	      <span class="{{row.a < 0 ? 'debit' : 'credit'}}">
+		{{row.a != 0 ? row.a : ''}}
+	      </span>
+	    </mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="company">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Company
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+		{{row.company}}
 	    </mat-cell>
 	  </ng-container>
 
@@ -83,18 +98,11 @@
 	    </mat-cell>
 	  </ng-container>
 
-	  <ng-container matColumnDef="id">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      ID
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-		{{row.id}}
-	    </mat-cell>
-	  </ng-container>
+	  <mat-header-row *matHeaderRowDef="columns; sticky: true">
+	  </mat-header-row>
 
-	  <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
-
-	  <mat-row *matRowDef="let row; columns: columns;">
+	  <mat-row *matRowDef="let row; columns: columns;"
+		   (click)="select(row)">
 	  </mat-row>
 
 	</mat-table>

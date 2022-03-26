@@ -13,8 +13,8 @@ type Row = {
     v? : number,
     c? : number,
     a? : number,
-    filing? : string,
-    id? : string
+    company? : string,
+    filing? : string
 };
 
 @Component({
@@ -28,7 +28,7 @@ export class TransactionListComponent implements OnInit {
 
     columns = [
 	"time", "transaction", "subtotal", "total",
-	"v", "c", "a", "filing", "id"
+	"v", "c", "a", "company", "filing"
     ];
 
     data : MatTableDataSource<Row> =
@@ -51,6 +51,8 @@ export class TransactionListComponent implements OnInit {
 		    transaction : tx.transaction,
 		    subtotal : tx.order.subtotal,
 		    total : tx.order.total,
+		    company : tx.company,
+		    filing : tx.filing,
 		};
 
 		let v = 0, c = 0, a = 0;
@@ -83,4 +85,9 @@ export class TransactionListComponent implements OnInit {
     ngOnInit(): void {
     }
 
+    select(x : any) {
+	console.log(x);
+    }
+
 }
+

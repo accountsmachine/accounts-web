@@ -54,4 +54,6 @@ export type Transaction = {
     vat_rate : number,
     vat_number : string,
     order : Order,
+    company : string,
+    filing : string,
 };

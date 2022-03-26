@@ -1,4 +1,6 @@
 
+@import "../../../theme.scss";
+
 mat-drawer {
     width: auto;
 }
@@ -6,3 +8,78 @@ mat-drawer {
 mat-drawer-content {
     min-height: 8rem;
 }
+
+.container {
+    overflow: auto;
+    width: 90%;
+}
+
+mat-table {
+}
+
+mat-cell {
+    white-space: nowrap;
+}
+
+.mat-column-time {
+    flex: 8rem;
+    min-width: 8rem;
+}
+
+.mat-column-transaction {
+    flex: 5px;
+    min-width: 5rem;
+}
+
+.mat-column-subtotal {
+    flex: 3rem;
+    min-width: 3rem;
+}
+
+.mat-column-subtotal {
+    flex: 5rem;
+    min-width: 5rem;
+}
+
+.mat-column-total {
+    flex: 5rem;
+    min-width: 5rem;
+}
+
+.mat-column-v {
+    flex: 3rem;
+    min-width: 3rem;
+}
+
+.mat-column-c {
+    flex: 3rem;
+    min-width: 3rem;
+}
+
+.mat-column-a {
+    flex: 3rem;
+    min-width: 3rem;
+}
+
+.mat-column-company {
+    flex: 12rem;
+    min-width: 12rem;
+}
+
+.mat-column-filing {
+    flex: 14rem;
+    min-width: 14rem;
+}
+
+.debit {
+    color: $deny-text;
+}
+
+.credit {
+    color: $affirm-text;
+}
+
+mat-row:hover {
+    background-color: $pale-background;
+}
+
