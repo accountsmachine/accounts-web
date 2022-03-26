@@ -1,18 +1,84 @@
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject, combineLatest } from 'rxjs';
 
 import { CommerceService, Option, Options, Balance } from './commerce.service';
+
+export type ItemQuantities = {
+    [kind : string] : number
+};
+
+export type ItemLine = {
+    kind : string,
+    description : string,
+    quantity : number,
+    amount : number,
+    discount : number,
+};
+
+export class Order {
+    items : ItemLine[] = [];
+    subtotal : number = 0;
+    vat_rate : number = 0;
+    vat : number = 0;
+    total : number = 0;
+};
 
 @Injectable({
     providedIn: 'root'
 })
 export class CheckoutService {
 
-    offer : Options = {};
+    _quantities : ItemQuantities = {};
+    _offer : Options = { offer: {} };
+    _order : Order = new Order();
 
-    vat_count = 0;
-    corptax_count = 0;
-    accounts_count = 0;
+    quantity_subject = new BehaviorSubject<ItemQuantities>(this._quantities);
+    offer_subject = new BehaviorSubject<Options>(this._offer);
+    order_subject = new BehaviorSubject<Order>(this._order);
+
+    set_quantity(kind : string, quantity : number) {
+	this._quantities[kind] = quantity;
+	this.quantity_subject.next(this._quantities);
+    }
+
+    onquantities() {
+	return this.quantity_subject;
+    }
+
+    onoffer() {
+	return this.offer_subject;
+    }
+
+    onorder() {
+	return this.order_subject;
+    }
+
+    constructor(
+	private commerce : CommerceService,
+    ) {
+
+	this.reload();
+
+	combineLatest({
+	    offer: this.offer_subject,
+	    q: this.quantity_subject,
+	}).subscribe(
+	    ev => {
+		this.recalc();
+		this.order_subject.next(this._order);
+	    }
+	);
+
+    }
+
+    reload() {
+	this.commerce.get_offer().subscribe(
+	    o => {
+		this._offer = o;
+		this.offer_subject.next(o);
+	    }
+	);
+    }
 
     tax_applied : string = "";
     tax_rate : number = 0;
@@ -29,103 +95,89 @@ export class CheckoutService {
     tax_price : number = 0;
     total_price : number = 0;
 
-    constructor(
-	private commerce : CommerceService,
-    ) {
-        this.reload();
-    }
-
-    reload() {
-
-	this.commerce.get_offer().subscribe(o => {
-	    this.offer = o;
-	});
-
-	this.reset();
-
-    }
-
-    reset() {
-	this.vat_count = 0;
-	this.corptax_count = 0;
-	this.accounts_count = 0;
-	this.recalc();
-    }
-
     recalc() {
 
-	this.vat_price = this.corptax_price = this.accounts_price = 0;
-	this.vat_discount = this.corptax_discount = this.accounts_discount = 0;
+	if (!this._offer) {
+//	    console.log("Can't recalculate with no offer");
+	    return;
+	}
 
-	if (this.offer.vat) {
-	    for (let item of this.offer.vat.offer)
-		if (this.vat_count == item.credits) {
-		    this.vat_price = item.price;
-		    this.vat_discount = item.discount;
+	let items : ItemLine[] = [];
+
+	let subtotal = 0;
+
+	for (let kind in this._quantities) {
+
+	    if (this._quantities[kind] == 0) continue;
+
+	    if (! this._offer.offer[kind]) {
+		//console.log("Can't recalculate for an item not in offer.");
+		return;
+	    }
+
+	    let item : ItemLine = {
+		kind: kind,
+		description: this._offer.offer[kind].description,
+		quantity: this._quantities[kind],
+		amount: 0,
+		discount: 0,
+	    };
+
+	    let price;
+	    let discount;
+
+	    for (let o of this._offer.offer[kind].offer) {
+		if (o.quantity == this._quantities[kind]) {
+		    price = o.price;
+		    discount = o.discount;
 		}
 	    }
 
-	if (this.offer.corptax)
-	    for (let item of this.offer.corptax.offer) {
-		if (this.corptax_count == item.credits) {
-		    this.corptax_price = item.price;
-		    this.corptax_discount = item.discount;
-		}
-	    }
-	if (this.offer.accounts)
-	    for (let item of this.offer.accounts.offer) {
-		if (this.accounts_count == item.credits) {
-		    this.accounts_price = item.price;
-		    this.accounts_discount = item.discount;
-		}
+	    if (price == undefined) {
+//		console.log("Wasn't offered a price for this quantity.")
+		return;
 	    }
 
-	this.tax_rate = this.offer.vat_tax_rate!;
+	    if (price)
+		item.amount = price;
 
-	this.tax_applied = "VAT @ " + Math.round(this.tax_rate * 100) + "%";
-	
-	this.subtotal_price =
-	    this.vat_price + this.corptax_price + this.accounts_price;
+	    if (discount)
+		item.discount = discount;
 
-	this.tax_price = Math.round(this.tax_rate * this.subtotal_price);
+	    items.push(item);
 
-	this.total_price = this.subtotal_price + this.tax_price;
+	    subtotal += price;
+
+	}
+
+	if (this._offer.vat_rate == undefined) {
+//	    console.log("No VAT rate");
+	    return;
+	}
+	    
+	let vat = Math.round(subtotal * this._offer.vat_rate);
+	let total = subtotal + vat;
+
+	this._order = {
+	    items: items,
+	    subtotal: subtotal,
+	    vat: vat,
+	    vat_rate: this._offer.vat_rate,
+	    total: total,
+	};
+
+	this.order_subject.next(this._order);
+
     }
 
     place_order() : Observable<Balance> {
 
-	let items = [];
-
-	if (this.vat_count) {
-	    items.push({
-		kind: "vat", quantity: this.vat_count,
-		amount: this.vat_price })
-	}
-
-	if (this.corptax_count) {
-	    items.push({
-		kind: "corptax", quantity: this.corptax_count,
-		amount: this.corptax_price })
-	}
-
-	if (this.accounts_count) {
-	    items.push({
-		kind: "accounts", quantity: this.accounts_count,
-		amount: this.accounts_price })
-	}
-
-	let order = {
-	    items: items,
-	    subtotal: this.subtotal_price,
-	    tax: this.tax_price,
-	    total: this.total_price,
-	    vat_rate: this.tax_rate,
-	}
-
 	return new Observable<Balance>(obs => {
 
-	    this.commerce.place_order(order).subscribe(
+	    this.commerce.place_order(this._order).subscribe(
 		b => {
+
+		    // Re-fetch offer.
 		    this.reload();
 		    obs.next(b);
 		}

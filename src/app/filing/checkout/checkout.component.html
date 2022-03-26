@@ -23,57 +23,26 @@
 
   <h1>Select credits</h1>
 
-  <form [formGroup]="form">
+  <form [formGroup]="form" *ngIf="offer.offer">
 
-    <div *ngIf="offer.vat" class="selection">
-      <div class="selectlabel">VAT credits:</div>
+    <div *ngFor="let kind of kinds" class="selection">
+      <div class="selectlabel">{{offer.offer[kind].description}}:</div>
       <div class="choice">
 	<mat-button-toggle-group aria-label="VAT credits to purchase"
-				 (change)="recalc()" formControlName="vat">
-	  <mat-button-toggle *ngFor="let c of offer.vat!.offer"
-			     [value]="c.credits">
-	    {{c.credits}}
+				 (change)="recalc()"
+				 formControlName="{{kind}}">
+	  <mat-button-toggle *ngFor="let c of offer.offer[kind].offer"
+			     [value]="c.quantity">
+	    {{c.quantity}}
 	  </mat-button-toggle>
 	</mat-button-toggle-group>
       </div>
       <div class="price">
-	{{(vat_price / 100) | currency}}
+	{{(value[kind] / 100) | currency}}
       </div>
     </div>
 
-    <div *ngIf="offer.corptax" class="selection">
-      <div class="selectlabel">Corptax credits:</div>
-      <div class="choice">
-	<mat-button-toggle-group aria-label="Corptax credits to purchase"
-				 (change)="recalc()" formControlName="corptax">
-	  <mat-button-toggle *ngFor="let c of offer.corptax!.offer"
-			     [value]="c.credits">
-	    {{c.credits}}
-	  </mat-button-toggle>
-	</mat-button-toggle-group>
-      </div>
-      <div class="price">
-	{{(corptax_price / 100) | currency}}
-      </div>
-    </div>
-
-    <div *ngIf="offer.accounts" class="selection">
-      <div class="selectlabel">Accounts filing credits:</div>
-      <div class="choice">
-	<mat-button-toggle-group aria-label="Corptax credits to purchase"
-				 (change)="recalc()" formControlName="accounts">
-	  <mat-button-toggle *ngFor="let c of offer.accounts!.offer"
-			     [value]="c.credits">
-	    {{c.credits}}
-	  </mat-button-toggle>
-	</mat-button-toggle-group>
-      </div>
-      <div class="price">
-	{{(accounts_price / 100) | currency}}
-      </div>
-    </div>
-
-    <div *ngIf="offer.vat == null || offer.corptax == null || offer.accounts == null">
+    <div *ngIf="some_max()">
       You have the maximum credits for {{full_credits()}}.
       There are no more credits available to purchase.
     </div>
@@ -82,7 +51,7 @@
 
 </section>
 
-<section *ngIf="total_price > 0">
+<section *ngIf="order.total > 0">
 
   <h1>Place order</h1>
 
@@ -90,47 +59,28 @@
     <div class="header description">Description</div>
     <div class="header quantity">Quantity</div>
     <div class="header amount">Amount</div>
-    <ng-container *ngIf="form.value.vat > 0">
+
+    <ng-container *ngFor="let item of order.items">
       <div class="item description">
-	VAT credits
-	<ng-container *ngIf="vat_discount > 0">
-	  (discount {{vat_discount / 100 | currency}})
+	{{item.description}}
+	<ng-container *ngIf="item.discount > 0">
+	  (discount {{item.discount / 100 | currency}})
 	</ng-container>
       </div>
-      <div class="item quantity">{{form.value.vat}} credits</div>
-      <div class="item amount">{{vat_price / 100 | currency}}</div>
-    </ng-container>
-    <ng-container *ngIf="form.value.corptax > 0">
-      <div class="item description">
-	Corptax credits
-	<ng-container *ngIf="corptax_discount > 0">
-	  (discount {{corptax_discount / 100 | currency}})
-	</ng-container>
-      </div>
-      <div class="item quantity">{{form.value.corptax}} credits</div>
-      <div class="item amount">{{corptax_price / 100 | currency}}</div>
-    </ng-container>
-    <ng-container *ngIf="form.value.accounts > 0">
-      <div class="item description">
-	Accounts filing credits
-	<ng-container *ngIf="accounts_discount > 0">
-	  (discount {{accounts_discount / 100 | currency}})
-	</ng-container>
-      </div>
-      <div class="item quantity">{{form.value.accounts}} credits</div>
-      <div class="item amount">{{accounts_price / 100 | currency}}</div>
+      <div class="item quantity">{{item.quantity}} credits</div>
+      <div class="item amount">{{item.amount / 100 | currency}}</div>
     </ng-container>
     <ng-container>
       <div class="subtotal label">Subtotal</div>
-      <div class="subtotal amount">{{subtotal_price / 100 | currency}}</div>
+      <div class="subtotal amount">{{order.subtotal / 100 | currency}}</div>
     </ng-container>
     <ng-container>
-      <div class="tax label">{{tax_applied}}</div>
-      <div class="tax amount">{{tax_price / 100 | currency}}</div>
+      <div class="tax label">VAT @ {{vat_rate()}}%</div>
+      <div class="tax amount">{{order.vat / 100 | currency}}</div>
     </ng-container>
     <ng-container>
       <div class="total label">Total</div>
-      <div class="total amount">{{total_price / 100 | currency}}</div>
+      <div class="total amount">{{order.total / 100 | currency}}</div>
     </ng-container>
   </div>
 

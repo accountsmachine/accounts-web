@@ -40,16 +40,15 @@ export type Balance = {
 };
 
 export type Option = {
+    description : string,
     permitted : number,
     min_purchase : number,
-    offer : { credits : number, price : number, discount : number }[],
+    offer : { quantity : number, price : number, discount : number }[],
 };
 
 export type Options = {
-    vat? : Option,
-    accounts? : Option,
-    corptax? : Option,
-    vat_tax_rate? : number,
+    offer : { [kind : string]  : Option },
+    vat_rate? : number,
 };
 
 @Injectable({
