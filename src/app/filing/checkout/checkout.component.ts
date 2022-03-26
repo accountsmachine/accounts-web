@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CheckoutService } from '../checkout.service';
 import { Company } from '../../company/company.service';
@@ -17,11 +18,9 @@ export class CheckoutComponent implements OnInit {
     public form : FormGroup;
 
     offer : Options = {};
-    balance : Balance = { uid: "", email: "", credits: {
-	vat: 0, accounts: 0, corptax: 0
-    }};
 
     tax_applied : string = "";
+    tax_rate : number = 0;
     vat_price : number = 0;
     corptax_price : number = 0;
     accounts_price : number = 0;
@@ -33,6 +32,7 @@ export class CheckoutComponent implements OnInit {
 	private service : CheckoutService,
 	private commerceService : CommerceService,
 	private formBuilder: FormBuilder,
+	private snackBar: MatSnackBar,
     ) {
 	this.form = this.formBuilder.group({
 	    vat: [0],
@@ -42,13 +42,16 @@ export class CheckoutComponent implements OnInit {
     }
 
     ngOnInit(): void {
+	this.reload();
+    }
+
+    reload() {
 
 	this.commerceService.get_offer().subscribe(o => {
 	    this.offer = o;
 	});
-	this.commerceService.get_balance().subscribe(b => {
-	    this.balance = b;
-	});
+
+	this.reset();
 
     }
 
@@ -76,19 +79,68 @@ export class CheckoutComponent implements OnInit {
 		    this.accounts_price = item.price;
 	    }
 
-	let tax_rate = this.offer.vat_tax_rate!;
+	this.tax_rate = this.offer.vat_tax_rate!;
 
-	this.tax_applied = "VAT @ " + Math.round(tax_rate * 100) + "%";
+	this.tax_applied = "VAT @ " + Math.round(this.tax_rate * 100) + "%";
 	
 	this.subtotal_price =
 	    this.vat_price + this.corptax_price + this.accounts_price;
 
-	this.tax_price = tax_rate * Math.floor(this.subtotal_price);
+	this.tax_price = Math.round(this.tax_rate * this.subtotal_price);
 
 	this.total_price = this.subtotal_price + this.tax_price;
     }
 
-    checkout() {
+    place_order() {
+
+	let items = [];
+
+	if (this.form.value.vat) {
+	    items.push({
+		kind: "vat", quantity: this.form.value.vat,
+		amount: this.vat_price })
+	}
+
+	if (this.form.value.corptax) {
+	    items.push({
+		kind: "corptax", quantity: this.form.value.corptax,
+		amount: this.corptax_price })
+	}
+
+	if (this.form.value.accounts) {
+	    items.push({
+		kind: "accounts", quantity: this.form.value.accounts,
+		amount: this.accounts_price })
+	}
+
+	let order = {
+	    items: items,
+	    subtotal: this.subtotal_price,
+	    tax: this.tax_price,
+	    total: this.total_price,
+	    vat_rate: this.tax_rate,
+	}
+
+	this.commerceService.place_order(order).subscribe(
+	    b => {
+		console.log(b);
+		this.reload();
+		this.snackBar.open("Purchased complete", "dismiss",
+				   { duration: 5000 });
+	    }
+	);
+
+    }
+
+    reset() {
+	this.form.patchValue({
+	    vat: 0, corptax: 0, accounts: 0
+	});
+	this.recalc();
+    }
+
+    order_disabled() {
+	return (this.total_price < 1);
     }
 
 }

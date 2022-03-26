@@ -19,7 +19,7 @@ export class BalanceComponent implements OnInit {
 	    email: "", uid: "", credits: { vat: 0, corptax: 0, accounts: 0 }
 	};
 	
-	this.commerce.get_balance().subscribe(b => {
+	this.commerce.onbalance().subscribe(b => {
 	    this.balance = b;
 	});
     }

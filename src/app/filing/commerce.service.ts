@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import {
     HttpClient, HttpErrorResponse, HttpHeaders
 } from '@angular/common/http';
-import { Observable, Subject, throwError, map, of } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, map, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
@@ -57,9 +57,24 @@ export type Options = {
 })
 export class CommerceService {
 
+    balance_subject = new BehaviorSubject<Balance>({
+	uid: "",
+	email : "",
+	credits: {}
+    });
+
     constructor(
 	private api : ApiService,
     ) {
+	this.update_balance();
+    }
+
+    update_balance() {
+	let url = "/api/commerce/balance";
+
+	this.api.get<Balance>(url).subscribe((b : Balance) =>
+	    this.balance_subject.next(b)
+	);
     }
 
     get_transactions() : Observable<Transaction[]> {
@@ -90,29 +105,24 @@ export class CommerceService {
 
     }
 
-    get_balance() : Observable<Balance> {
+    onbalance() : Observable<Balance> {
 
-	let url = "/api/commerce/balance";
-
-	return new Observable<Balance>(obs => {
-
-	    this.api.get<Balance>(url).subscribe(
-		tx => obs.next(tx)
-	    )
-
+	return new Observable(obs => {
+	    this.balance_subject.subscribe(b => obs.next(b));
 	});
 
     }
 
-    purchase(kind : string, count : number) : Observable<Balance> {
+    place_order(order : any) : Observable<Balance> {
 
-	let url = "/api/commerce/purchase/" + kind;
+	let url = "/api/commerce/place-order";
 
 	return new Observable<Balance>(obs => {
 
-	    this.api.post<Balance>(url, { count: count }).subscribe(
-		tx => obs.next(tx)
-	    )
+	    this.api.post<Balance>(url, order).subscribe(b => {
+		this.balance_subject.next(b);
+		obs.next(b);
+	    });
 
 	});
 

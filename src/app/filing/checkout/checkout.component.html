@@ -7,7 +7,7 @@
 
   <form [formGroup]="form">
 
-    <div *ngIf="offer.vat">
+    <div *ngIf="offer.vat" class="selection">
       <div>VAT credits:</div>
       <mat-button-toggle-group aria-label="VAT credits to purchase"
 			       (change)="recalc()" formControlName="vat">
@@ -17,7 +17,7 @@
       {{(vat_price / 100) | currency}}
     </div>
 
-    <div *ngIf="offer.corptax">
+    <div *ngIf="offer.corptax" class="selection">
       <div>Corptax credits:</div>
       <mat-button-toggle-group aria-label="Corptax credits to purchase"
 			       (change)="recalc()" formControlName="corptax">
@@ -27,7 +27,7 @@
       {{(corptax_price / 100) | currency}}
     </div>
 
-    <div *ngIf="offer.accounts">
+    <div *ngIf="offer.accounts" class="selection">
       <div>Accounts filing credits:</div>
       <mat-button-toggle-group aria-label="Corptax credits to purchase"
 			       (change)="recalc()" formControlName="accounts">
@@ -78,7 +78,16 @@
       </ng-container>
     </div>
 
+    <div>
+      <button mat-raised-button color="primary"
+	      (click)="place_order()" [disabled]="order_disabled()">
+	Place order
+      </button>
+      <button mat-raised-button color="basic" (click)="reset()">
+	Reset checkout
+      </button>
+    </div>
+
   </div>
 
 </section>
-
