@@ -1,90 +1,71 @@
-<!--
-
 <form [formGroup]="form">
-  <div>
-    VAT:
+
+  <div *ngIf="options.vat">
+    <div>VAT credits:</div>
     <mat-button-toggle-group aria-label="VAT credits to purchase"
-			     (change)="configure()" formControlName="vat">
-	  <mat-button-toggle [value]="0">none</mat-button-toggle>
-	  <mat-button-toggle [value]="6">6 months</mat-button-toggle>
-	  <mat-button-toggle [value]="12">1 year</mat-button-toggle>
-	  <mat-button-toggle [value]="24">2 years</mat-button-toggle>
-	</mat-button-toggle-group>
-      </div>
-      <div>
-	Corptax:
-	<mat-button-toggle-group aria-label="Corptax"
-				 (change)="doit()" formControlName="corptax">
-	  <mat-button-toggle [value]="0">none</mat-button-toggle>
-	  <mat-button-toggle [value]="6">6 months</mat-button-toggle>
-	  <mat-button-toggle [value]="12">1 year</mat-button-toggle>
-	  <mat-button-toggle [value]="24">2 years</mat-button-toggle>
-	</mat-button-toggle-group>
-      </div>
-      <div>
-	Accounts:
-	<mat-button-toggle-group aria-label="Accounts"
-				 (change)="doit()" formControlName="accounts">
-	  <mat-button-toggle [value]="0">none</mat-button-toggle>
-	  <mat-button-toggle [value]="6">6 months</mat-button-toggle>
-	  <mat-button-toggle [value]="12">1 year</mat-button-toggle>
-	  <mat-button-toggle [value]="24">2 years</mat-button-toggle>
-	</mat-button-toggle-group>
-      </div>
-    </form>
+			     (change)="recalc()" formControlName="vat">
+      <mat-button-toggle *ngFor="let c of options.vat!.offer"
+			 [value]="c.credits">{{c.credits}}</mat-button-toggle>
+    </mat-button-toggle-group>
+    {{(vat_price / 100) | currency}}
   </div>
 
-  <div>
-    <div>
-      <div class="timelinelabel">VAT</div>
-      <div class="timeline">
-      <div *ngFor="let month of months()"
-	    class="period {{month < form.value.vat ? 'on' : 'off'}}">
-	&nbsp;
-      </div>
-      </div>
-    </div>
-    <div>
-      <div class="timelinelabel">Corptax</div>
-      <div class="timeline">
-      <div *ngFor="let month of months()"
-	    class="period {{month < form.value.corptax ? 'on' : 'off'}}">
-	&nbsp;
-      </div>
-      </div>
-    </div>
-    <div>
-      <div class="timelinelabel">Accounts</div>
-      <div class="timeline">
-      <div *ngFor="let month of months()"
-	    class="period {{month < form.value.accounts ? 'on' : 'off'}}">
-	&nbsp;
-      </div>
-      </div>
-    </div>
+  <div *ngIf="options.corptax">
+    <div>Corptax credits:</div>
+    <mat-button-toggle-group aria-label="Corptax credits to purchase"
+			     (change)="recalc()" formControlName="corptax">
+      <mat-button-toggle *ngFor="let c of options.corptax!.offer"
+			 [value]="c.credits">{{c.credits}}</mat-button-toggle>
+    </mat-button-toggle-group>
+    {{(corptax_price / 100) | currency}}
   </div>
 
-
-</ng-container>
-
-<ng-container
-  *ngIf="state == 'subscription' && company != null && selected_subscription != null">
-  <h1>Subscription</h1>
-  <div>Company: {{company.company_name}}</div>
-  <div>Company: {{company.company_number}}</div>
-  <div>Valid from: {{selected_subscription.opened | date}}</div>
-  <div>Valid to: {{selected_subscription.expires | date}}</div>
-  <div>Covers:
-    <span *ngFor="let p of selected_subscription.provides">{{p}}, </span>
+  <div *ngIf="options.accounts">
+    <div>Accounts filing credits:</div>
+    <mat-button-toggle-group aria-label="Corptax credits to purchase"
+			     (change)="recalc()" formControlName="accounts">
+      <mat-button-toggle *ngFor="let c of options.accounts!.offer"
+			 [value]="c.credits">{{c.credits}}</mat-button-toggle>
+    </mat-button-toggle-group>
+    {{(accounts_price / 100) | currency}}
   </div>
-  <button mat-button (click)="checkout()">
-    Add to basket
-  </button>
-  <button mat-button (click)="checkout()">
-    Checkout
-  </button>
-  <button mat-button (click)="back()">
-    Back
-  </button>
-</ng-container>
--->
+
+</form>
+
+<div *ngIf="total_price > 0">
+
+  <table>
+    <tr *ngIf="form.value.vat > 0">
+      <td>VAT credits</td>
+      <td>{{form.value.vat}}</td>
+      <td>{{vat_price / 100 | currency}}
+    </tr>
+    <tr *ngIf="form.value.corptax > 0">
+      <td>Corptax credits</td>
+      <td>{{form.value.corptax}}</td>
+      <td>{{corptax_price / 100 | currency}}
+    </tr>
+    <tr *ngIf="form.value.accounts > 0">
+      <td>Accounts filing credits</td>
+      <td>{{form.value.accounts}}</td>
+      <td>{{accounts_price / 100 | currency}}
+    </tr>
+    <tr>
+      <td></td>
+      <td>Subtotal</td>
+      <td>{{subtotal_price / 100 | currency}}</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>VAT added @ 20%</td>
+      <td>{{tax_price / 100 | currency}}</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Total</td>
+      <td>{{total_price / 100 | currency}}</td>
+    </tr>
+  </table>
+
+</div>
+

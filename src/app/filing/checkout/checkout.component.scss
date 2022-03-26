@@ -1,23 +1,9 @@
 
-.timeline {
-    display: flex;
+table {
+    border-collapse: collapse;
 }
 
-.period {
-    width: 1rem;
-    height: 1rem;
-    margin: 2px;
-    padding: 0;
+tr, td, th {
+    border: 1px solid black;
 }
 
-.on {
-    background-color: #c00000;
-}
-
-.off {
-    background-color: black;
-}
-
-.timelinelabel {
-    width: 8rem;
-}

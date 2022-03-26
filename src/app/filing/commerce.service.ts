@@ -40,6 +40,15 @@ export type Balance = {
 };
 
 export type Option = {
+    permitted : number,
+    min_purchase : number,
+    offer : { credits : number, price : number }[],
+};
+
+export type Options = {
+    vat? : Option,
+    accounts? : Option,
+    corptax? : Option,
 };
 
 @Injectable({
@@ -66,13 +75,13 @@ export class CommerceService {
 
     }
 
-    get_options() : Observable<Option[]> {
+    get_options() : Observable<Options> {
 
 	let url = "/api/commerce/options";
 
-	return new Observable<Option[]>(obs => {
+	return new Observable<Options>(obs => {
 
-	    this.api.get<Option[]>(url).subscribe(
+	    this.api.get<Options>(url).subscribe(
 		tx => obs.next(tx)
 	    )
 
