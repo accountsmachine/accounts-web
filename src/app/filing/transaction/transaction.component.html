@@ -1,1 +1,83 @@
-<p>transaction works!</p>
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
+
+      <div class="transaction">
+
+	<div class="label">ID</div>
+	<div class="value">{{id}}</div>
+
+	<div class="label">Filing</div>
+	<div class="value">{{tx.filing}}</div>
+
+	<div class="label">Company</div>
+	<div class="value">{{tx.company}}</div>
+
+	<div class="label">Time</div>
+	<div class="value">{{tx.time | date:'dd/MM/YYYY HH:mm' }}</div>
+
+	<div class="label">Transaction</div>
+	<div class="value">{{tx.transaction}}</div>
+
+	<div class="label">Name</div>
+	<div class="value">{{tx.name}}</div>
+
+	<div class="label">Address</div>
+	<div class="value">{{tx.address[0]}}<br>
+	  {{tx.address[1]}}<br>
+	  {{tx.address[2]}}, </div>
+
+	<div class="label">Postcode</div>
+	<div class="value">{{tx.postcode}}</div>
+
+	<div class="label">Country</div>
+	<div class="value">{{tx.country}}</div>
+
+	<div class="label">Billing country</div>
+	<div class="value">{{tx.billing_country}}</div>
+
+	<div class="label">UID</div>
+	<div class="value">{{tx.uid}}</div>
+
+	<div class="label">Email</div>
+	<div class="value">{{tx.email}}</div>
+	<div class="label">Order</div>
+	<div class="value">
+	  <div *ngFor="let item of tx.order.items">
+	    {{item.kind}}: {{item.quantity}} ({{item.amount / 100 | currency}})
+	  </div>
+	</div>
+
+	<div class="label">Subtotal</div>
+	<div class="value">{{tx.order.subtotal / 100 | currency}}</div>
+
+	<div class="label">VAT</div>
+	<div class="value">
+	  {{tx.order.vat / 100 | currency}}
+	  (VAT @ {{tx.order.vat_rate * 100}}%)
+	</div>
+
+	<div class="label">Total</div>
+	<div class="value">{{tx.order.total / 100 | currency}}</div>
+
+	<div class="label">Valid</div>
+	<div class="value">{{tx.valid}}</div>
+
+	<div class="label">VAT number</div>
+	<div class="value">{{tx.vat_number}}</div>
+
+      </div>
+
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+
+</section>
+
+

@@ -8,14 +8,19 @@ import { BalanceComponent } from './balance/balance.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { TransactionListComponent
        } from './transaction-list/transaction-list.component';
+import { TransactionComponent
+       } from './transaction/transaction.component';
 
 const routes: Routes = [
     { path: "", component: ListComponent },
     { path: "commerce", children: [
-	  { path: "", redirectTo: 'balance', pathMatch: 'full' },
-	  { path: "balance", component: BalanceComponent },
-	  { path: "purchase", component: CheckoutComponent },
-	  { path: "transactions", component: TransactionListComponent },
+	{ path: "", redirectTo: 'balance', pathMatch: 'full' },
+	{ path: "balance", component: BalanceComponent },
+	{ path: "purchase", component: CheckoutComponent },
+	{ path: "transactions", component: TransactionListComponent },
+	{ path: "transaction", children: [
+	    { path: ":id", component: TransactionComponent },
+	] },
     ]},
 ];
 
