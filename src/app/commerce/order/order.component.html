@@ -1,0 +1,34 @@
+
+<div class="breakdown">
+  <div class="header description">Description</div>
+  <div class="header quantity">Quantity</div>
+  <div class="header amount">Amount</div>
+
+  <ng-container *ngFor="let item of order.items">
+    <div class="item description">
+      {{item.description}}
+      <ng-container *ngIf="item.discount > 0">
+	(discount {{item.discount / 100 | currency}})
+      </ng-container>
+    </div>
+    <div class="item quantity">{{item.quantity}} credits</div>
+    <div class="item amount">{{item.amount / 100 | currency}}</div>
+  </ng-container>
+  <ng-container>
+    <div class="subtotal label">Subtotal</div>
+    <div class="subtotal amount">
+      {{order.subtotal / 100 | currency}}
+    </div>
+  </ng-container>
+  <ng-container>
+    <div class="tax label">VAT @ {{vat_rate()}}%</div>
+    <div class="tax amount">{{order.vat / 100 | currency}}</div>
+  </ng-container>
+  <ng-container>
+    <div class="total label">Total</div>
+    <div class="total amount">{{order.total / 100 | currency}}</div>
+  </ng-container>
+</div>
+
+
+

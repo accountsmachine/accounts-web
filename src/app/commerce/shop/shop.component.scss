@@ -1,0 +1,36 @@
+
+mat-drawer {
+    width: auto;
+}
+
+mat-drawer-content {
+    min-height: 8rem;
+}
+
+button {
+    margin: 1rem;
+}
+
+.selection {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.selectlabel {
+    width: 10rem;
+}
+
+.choice {
+    width: 27rem;
+}
+
+.price {
+    font-family: monospace;
+}
+
+section {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

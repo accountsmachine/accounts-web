@@ -17,11 +17,11 @@ import { StripeElementsOptions, PaymentIntent
        } from '@stripe/stripe-js';
 
 @Component({
-    selector: 'checkout',
-    templateUrl: './checkout.component.html',
-    styleUrls: ['./checkout.component.scss']
+    selector: 'shop',
+    templateUrl: './shop.component.html',
+    styleUrls: ['./shop.component.scss']
 })
-export class CheckoutComponent implements OnInit {
+export class ShopComponent implements OnInit {
 
     @ViewChild(StripePaymentElementComponent)
     paymentElement? : StripePaymentElementComponent = undefined;
