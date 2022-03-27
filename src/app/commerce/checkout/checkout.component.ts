@@ -1,4 +1,5 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, ViewChild, OnInit, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
@@ -10,7 +11,10 @@ import { Option, Options, Balance, Order } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 import { CheckoutService } from '../checkout.service';
 
-import { StripeService } from 'ngx-stripe';
+import { StripeService, StripePaymentElementComponent } from 'ngx-stripe';
+
+import { StripeElementsOptions, PaymentIntent
+       } from '@stripe/stripe-js';
 
 @Component({
     selector: 'checkout',
@@ -18,6 +22,9 @@ import { StripeService } from 'ngx-stripe';
     styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
+
+    @ViewChild(StripePaymentElementComponent)
+    paymentElement? : StripePaymentElementComponent = undefined;
 
     public form : FormGroup;
 
@@ -27,8 +34,10 @@ export class CheckoutComponent implements OnInit {
     value : { [kind : string] : number } = {};
     descriptions : { [kind : string] : string } = {};
 
-//    selections = {};
-    
+    elementsOptions: StripeElementsOptions = {
+	locale: 'en'
+    };
+
     order : Order = new Order();
 
     constructor(
@@ -88,6 +97,14 @@ export class CheckoutComponent implements OnInit {
 	this.service.set_quantity("accounts", this.form.value.accounts);
     }
 
+    create_payment_intent() : Observable<PaymentIntent> {
+	return new Observable<PaymentIntent>((obs : any) => {
+	    this.service.place_order().subscribe(
+		ev => obs.next(ev)
+	    );
+	});
+    }
+
     place_order() {/*
 
 	this.service.place_order().subscribe(b => {
@@ -98,12 +115,34 @@ export class CheckoutComponent implements OnInit {
 	});
 	*/
 
+	/*
 	this.service.place_order().pipe(
 	    switchMap(id => {
 		return this.stripeService.redirectToCheckout({sessionId: id})
 	    })
 	).subscribe(result => {
 		console.log(result);
+		});*/
+
+	console.log("PLACE ORDER");
+	this.create_payment_intent().subscribe(pi => {
+	    if (pi == null) return;
+	    if (!pi.client_secret) return;
+	    console.log("PI>", pi);
+	    this.elementsOptions.clientSecret = pi.client_secret;
+	    this.stripeService.confirmPayment({
+		elements: this.paymentElement!.elements,
+		confirmParams: {
+		    payment_method_data: {
+			billing_details: {
+			    name: "accountsmachine.io",
+			}
+		    }
+		},
+		redirect: 'if_required',
+	    }).subscribe(result => {
+		console.log(result);
+	    });
 	});
 
     }

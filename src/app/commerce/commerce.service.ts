@@ -88,13 +88,13 @@ export class CommerceService {
 
     }
 
-    place_order(order : any) : Observable<string> {
+    place_order(order : any) : Observable<any> {
 
 	let url = "/api/commerce/place-order";
 
-	return new Observable<string>(obs => {
+	return new Observable<any>(obs => {
 
-	    this.api.post<string>(url, order).subscribe(b => {
+	    this.api.post<any>(url, order).subscribe(b => {
 //		this.balance_subject.next(b);
 		obs.next(b);
 	    });
