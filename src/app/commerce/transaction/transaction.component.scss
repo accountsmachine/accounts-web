@@ -9,6 +9,7 @@ mat-drawer-content {
     min-height: 8rem;
 }
 
+/*
 .transaction {
     display: grid;
     max-width: 40rem;
@@ -16,7 +17,7 @@ mat-drawer-content {
     grid-template-rows: repeat(auto, 1.2rem);
     column-gap: 0.8rem;
     row-gap: 0.2rem;
-}
+}*/
 
 .label {
     grid-column-start: label;
@@ -25,4 +26,27 @@ mat-drawer-content {
 
 .value {
     grid-column-start: value;
+}
+
+.container {
+    overflow: auto;
+    width: 50rem;
+}
+
+mat-table {
+    width: 100%;
+}
+
+mat-cell {
+    white-space: nowrap;
+}
+
+.mat-column-label {
+    flex: 12rem;
+    min-width: 12rem;
+}
+
+.mat-column-value {
+    flex: 30rem;
+    min-width: 30rem;
 }

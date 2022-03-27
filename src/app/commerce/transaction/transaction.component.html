@@ -8,101 +8,32 @@
     
     <mat-drawer-content class="main-content">
 
-      <div class="transaction" *ngIf="tx">
+      <div class="transaction container mat-elevation-z8" *ngIf="tx">
 
-	<div class="label">ID</div>
-	<div class="value">{{id}}</div>
+	<mat-table #table [dataSource]="data">
 
-	<ng-container *ngIf="tx.filing">
-	  <div class="label">Filing</div>
-	  <div class="value">{{tx.filing}}</div>
-	</ng-container>
-
-	<ng-container *ngIf="tx.company">
-	  <div class="label">Company</div>
-	  <div class="value">{{tx.company}}</div>
-	</ng-container>
-
-	<div class="label">Time</div>
-	<div class="value">{{tx.time | date:'dd/MM/YYYY HH:mm' }}</div>
-
-	<div class="label">Transaction</div>
-	<div class="value">{{tx.transaction}}</div>
-
-	<ng-container *ngIf="tx.name">
-	  <div class="label">Name</div>
-	  <div class="value">{{tx.name}}</div>
-	</ng-container>
-
-	<ng-container *ngIf="tx.address">
-	  <div class="label">Address</div>
-	  <div class="value">
-	    {{tx.address[0]}}<br>
-	    {{tx.address[1]}}<br>
-	    {{tx.address[2]}},
-	  </div>
-	</ng-container>
-
-	<ng-container *ngIf="tx.postcode">
-	  <div class="label">Postcode</div>
-	  <div class="value">{{tx.postcode}}</div>
-	</ng-container>
-
-	<ng-container *ngIf="tx.country">
-	  <div class="label">Country</div>
-	  <div class="value">{{tx.country}}</div>
-	</ng-container>
-
-	<ng-container *ngIf="tx.billing_country">
-	  <div class="label">Billing country</div>
-	  <div class="value">{{tx.billing_country}}</div>
-	</ng-container>
-
-	<div class="label">UID</div>
-	<div class="value">{{tx.uid}}</div>
-
-	<div class="label">Email</div>
-	<div class="value">{{tx.email}}</div>
-
-	<ng-container *ngIf="tx.order">
-
-	  <div class="label">Order</div>
-	  <div class="value">
-	    <div *ngFor="let item of tx.order.items">
-	      {{item.kind}}: {{item.quantity}}
-	      <span *ngIf="item.amount">
-		({{item.amount / 100 | currency}})
-	      </span>
-	    </div>
-	  </div>
-
-	  <ng-container *ngIf="tx.order.subtotal">
-	    <div class="label">Subtotal</div>
-	    <div class="value">{{tx.order.subtotal / 100 | currency}}</div>
+	  <ng-container matColumnDef="label">
+	    <mat-header-cell mat-header-cell
+			     *matHeaderCellDef>Key</mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">{{row.label}}</mat-cell>
 	  </ng-container>
 
-	  <ng-container *ngIf="tx.order.vat">
-	    <div class="label">VAT</div>
-	    <div class="value">
-	      {{tx.order.vat / 100 | currency}}
-	      (VAT @ {{tx.order.vat_rate * 100}}%)
-	    </div>
+	  <ng-container matColumnDef="value">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Value
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+	      {{row.value}}
+	    </mat-cell>
 	  </ng-container>
 
-	  <ng-container *ngIf="tx.order.total">
-	    <div class="label">Total</div>
-	    <div class="value">{{tx.order.total / 100 | currency}}</div>
-	  </ng-container>
+	  <mat-header-row *matHeaderRowDef="columns; sticky: true">
+	  </mat-header-row>
 
-	</ng-container>
+	  <mat-row *matRowDef="let row; columns: columns;">
+	  </mat-row>
 
-	<div class="label">Valid</div>
-	<div class="value">{{tx.valid}}</div>
-
-	<ng-container *ngIf="tx.vat_number">
-	  <div class="label">VAT number</div>
-	  <div class="value">{{tx.vat_number}}</div>
-	</ng-container>
+	</mat-table>
 
       </div>
 
