@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
+import { switchMap } from 'rxjs/operators';
 
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -8,6 +9,8 @@ import { Company } from '../../company/company.service';
 import { Option, Options, Balance, Order } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 import { CheckoutService } from '../checkout.service';
+
+import { StripeService } from 'ngx-stripe';
 
 @Component({
     selector: 'checkout',
@@ -33,6 +36,7 @@ export class CheckoutComponent implements OnInit {
 	private commerceService : CommerceService,
 	private formBuilder: FormBuilder,
 	private snackBar: MatSnackBar,
+	private stripeService : StripeService,
     ) {
 	this.form = this.formBuilder.group({
 	    vat: [0],
@@ -84,13 +88,24 @@ export class CheckoutComponent implements OnInit {
 	this.service.set_quantity("accounts", this.form.value.accounts);
     }
 
-    place_order() {
+    place_order() {/*
+
 	this.service.place_order().subscribe(b => {
 
 	    // I feel the reset information should come from the checkout
 	    // service.
 	    this.reload();
 	});
+	*/
+
+	this.service.place_order().pipe(
+	    switchMap(id => {
+		return this.stripeService.redirectToCheckout({sessionId: id})
+	    })
+	).subscribe(result => {
+		console.log(result);
+	});
+
     }
 
     reset() {

@@ -152,9 +152,9 @@ export class CheckoutService {
 
     }
 
-    place_order() : Observable<Balance> {
+    place_order() : Observable<string> {
 
-	return new Observable<Balance>(obs => {
+	return new Observable<string>(obs => {
 
 	    this.commerce.place_order(this._order).subscribe(
 		b => {
