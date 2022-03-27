@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubscriptionsListComponent } from './subscriptions-list.component';
+import { DeleteConfirmationComponent } from './delete-confirmation.component';
 
-describe('SubscriptionsListComponent', () => {
-  let component: SubscriptionsListComponent;
-  let fixture: ComponentFixture<SubscriptionsListComponent>;
+describe('DeleteConfirmationComponent', () => {
+  let component: DeleteConfirmationComponent;
+  let fixture: ComponentFixture<DeleteConfirmationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SubscriptionsListComponent ]
+      declarations: [ DeleteConfirmationComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SubscriptionsListComponent);
+    fixture = TestBed.createComponent(DeleteConfirmationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

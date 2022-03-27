@@ -56,6 +56,11 @@ const routes: Routes = [
 	  './filing/filing.module'
       ).then(m => m.FilingModule)
     },
+    { path: "commerce",
+      loadChildren: () => import(
+	  './commerce/commerce.module'
+      ).then(m => m.CommerceModule)
+    },
     { path: "corptax",
       loadChildren: () => import(
 	  './corptax/corptax.module'

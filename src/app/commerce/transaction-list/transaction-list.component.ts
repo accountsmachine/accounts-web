@@ -88,7 +88,7 @@ export class TransactionListComponent implements OnInit {
     }
 
     select(x : any) {
-	this.router.navigate(["/filing/commerce/transaction/" + x.id]);
+	this.router.navigate(["/commerce/transaction/" + x.id]);
     }
 
 }

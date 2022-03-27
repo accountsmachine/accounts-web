@@ -14,8 +14,8 @@ import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';
 import { WorkingService } from '../../working.service';
-import { Balance } from '../commerce.model';
-import { CommerceService } from '../commerce.service';
+import { Balance } from '../../commerce/commerce.model';
+import { CommerceService } from '../../commerce/commerce.service';
 
 @Component({
     selector: 'list',
@@ -152,7 +152,7 @@ export class ListComponent implements OnInit {
     }
 
     commerce() {
-	this.router.navigate(["/filing/commerce"]);
+	this.router.navigate(["/commerce"]);
     }
 
     delete(config : any) {

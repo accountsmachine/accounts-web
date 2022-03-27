@@ -21,16 +21,26 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
 import { DATE_FORMATS } from '../date-formats';
 
-import { FilingRoutingModule } from './filing-routing.module';
-import { ListComponent } from './list/list.component';
+import { CommerceRoutingModule } from './commerce-routing.module';
 import {
     DeleteConfirmationComponent
 } from './delete-confirmation/delete-confirmation.component';
+import { CommerceComponent } from './commerce/commerce.component';
+import { BalanceComponent } from './balance/balance.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { TransactionComponent } from './transaction/transaction.component';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
     declarations: [
-	ListComponent,
 	DeleteConfirmationComponent,
+	CommerceComponent,
+	BalanceComponent,
+        CheckoutComponent,
+        TransactionListComponent,
+        TransactionComponent,
+        NavComponent
     ],
     imports: [
 	CommonModule,
@@ -43,7 +53,7 @@ import {
 	MatSidenavModule,
 	MatSnackBarModule,
 	RouterModule,
-	FilingRoutingModule,
+	CommerceRoutingModule,
 	FormsModule,
 	MatFormFieldModule,
 	ReactiveFormsModule,
@@ -58,4 +68,4 @@ import {
 	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
     ],
 })
-export class FilingModule { }
+export class CommerceModule { }

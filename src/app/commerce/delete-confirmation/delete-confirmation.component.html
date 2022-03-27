@@ -1,0 +1,36 @@
+
+<h1 mat-dialog-title>Delete filing configuration</h1>
+
+<div mat-dialog-content>
+  <p>
+    This operation will delete the filing configuration:
+  </p>
+  <p>
+    <b>{{data.config.label}}</b> ({{data.config.kind | uppercase}})
+    <ng-container *ngIf="data.company">
+      <br>for company <b>{{data.company.company_name}}</b>
+    </ng-container>
+  </p>
+  <p>
+    This will delete the filing configuration.
+    <ng-container *ngIf="data.config.state != 'draft'">
+      Because this filing has been submitted, this will also delete all
+      records of the submission.
+    </ng-container>
+  </p>
+  <p>
+    Are you sure you want to delete this configuration?
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="no()" cdkFocusInitial>
+    No
+  </button>
+  <button mat-raised-button color="warn"
+	  [mat-dialog-close]="{proceed: true, config: data.config}">
+    Yes
+  </button>
+</div>
+
+

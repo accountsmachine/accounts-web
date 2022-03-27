@@ -22,10 +22,9 @@ export class TransactionComponent implements OnInit {
     {
 	this.commerce.get_transactions().subscribe(txs => {
 	    this.txs = txs;
-//	    console.log(this.txs);
+	    console.log(this.txs);
 	    if (this.txs[this.id]) {
 		this.tx = this.txs[this.id];
-			console.log(this.tx);
 	    }
 	});
 	this.route.params.subscribe(
