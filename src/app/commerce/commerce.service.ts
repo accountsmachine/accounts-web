@@ -52,6 +52,20 @@ export class CommerceService {
 
     }
 
+    get_transaction(id : string) : Observable<Transaction> {
+
+	let url = "/api/commerce/transaction/" + id;
+
+	return new Observable<Transaction>(obs => {
+
+	    this.api.get<Transaction>(url).subscribe(
+		tx => obs.next(tx)
+	    )
+
+	});
+
+    }
+
     get_offer() : Observable<Options> {
 
 	let url = "/api/commerce/offer";

@@ -12,15 +12,13 @@ type Row = {
 };
 
 @Component({
-    selector: 'app-transaction',
+    selector: 'transaction',
     templateUrl: './transaction.component.html',
     styleUrls: ['./transaction.component.scss']
 })
 export class TransactionComponent implements OnInit {
 
-    txs : any = {};
     id = "";
-    tx : any = {};
 
     data : MatTableDataSource<Row> =
 	new MatTableDataSource<Row>([]);
@@ -32,30 +30,23 @@ export class TransactionComponent implements OnInit {
 	private commerce : CommerceService,
     )
     {
-	this.commerce.get_transactions().subscribe(txs => {
-	    this.txs = txs;
-	    console.log(this.txs);
-	    if (this.txs[this.id]) {
-		this.load(this.txs[this.id]);
-	    }
-	});
 	this.route.params.subscribe(
 	    params => {
 		if (params["id"]) {
 		    this.id = params["id"];
-		    if (this.txs[this.id]) {
-			this.load(this.txs[this.id]);
-		    }
+		    this.commerce.get_transaction(this.id).subscribe(tx => {
+			this.load(tx);
+		    });
 		}
 	    }
 	);
-
     }
 
     ngOnInit(): void {
     }
 
     load(tx : Transaction) {
+
 	let data : Row[] = [];
 
 	data.push({ "label": "ID", "value": this.id });
