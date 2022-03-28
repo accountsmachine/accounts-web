@@ -88,6 +88,8 @@ export class CommerceService {
 
     }
 
+    tx_id? : string;
+
     create_order(order : any) : Observable<any> {
 
 	let url = "/api/commerce/create-order";
@@ -95,7 +97,20 @@ export class CommerceService {
 	return new Observable<any>(obs => {
 
 	    this.api.post<any>(url, order).subscribe(b => {
-//		this.balance_subject.next(b);
+		obs.next(b);
+	    });
+
+	});
+
+    }
+
+    update_order(id : string, order : any) : Observable<any> {
+
+	let url = "/api/commerce/update-order/" + id;
+
+	return new Observable<any>(obs => {
+
+	    this.api.post<any>(url, order).subscribe(b => {
 		obs.next(b);
 	    });
 
@@ -112,7 +127,7 @@ export class CommerceService {
 	    this.api.post<any>(url, {
 		"id": id
 	    }).subscribe(b => {
-//		this.balance_subject.next(b);
+		// FIXME: Good place to update balance.
 		obs.next(b);
 	    });
 
