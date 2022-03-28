@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CheckoutService } from '../checkout.service';
-import { StripePaymentService } from '../stripe.service';
+import { PaymentService } from '../stripe.service';
 
 import { StripePaymentElementComponent } from 'ngx-stripe';
 import { PaymentIntent } from '@stripe/stripe-js';
@@ -24,7 +24,7 @@ export class CheckoutComponent implements OnInit {
 	private service : CheckoutService,
 	private router : Router,
 	private snackBar: MatSnackBar,
-	public payments : StripePaymentService,
+	public payments : PaymentService,
     ) { }
 
     ngOnInit(): void {

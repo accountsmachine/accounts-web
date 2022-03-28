@@ -11,7 +11,7 @@ import { CheckoutService } from './checkout.service';
 @Injectable({
     providedIn: 'any'
 })
-export class StripePaymentService {
+export class PaymentService {
 
     elementsOptions: StripeElementsOptions = {
 	locale: 'en',

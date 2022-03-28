@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AuthService, AuthState } from '../auth.service';
 import { UserProfileService } from '../user-profile.service';
@@ -18,6 +19,7 @@ export class ProfileComponent implements OnInit {
 	private auth : AuthService,
 	private frontPageService : FrontPageService,
 	private userProfile : UserProfileService,
+	private router : Router,
     ) { }
 
     ngOnInit(): void {
@@ -39,6 +41,7 @@ export class ProfileComponent implements OnInit {
 
     logout() {
 	this.auth.logout();
+	this.router.navigate(["/"]);
     }
 
 }
