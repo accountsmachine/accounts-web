@@ -42,9 +42,8 @@ export class CheckoutComponent implements OnInit {
 
     place_order() {
 	this.payments.confirm(this.paymentElement).subscribe(pid => {
-	    this.service.complete_payment(pid).subscribe(res => {
-		console.log("PAYMENT COMPLETE");
-		console.log(res);
+	    this.service.complete_payment(pid).subscribe(bal => {
+		this.router.navigate(["/commerce/complete"]);
 	    });
 	});
     }
@@ -60,7 +59,6 @@ export class CheckoutComponent implements OnInit {
 	    })
 	});
     }
-
 
 }
 

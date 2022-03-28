@@ -124,10 +124,8 @@ export class CommerceService {
 	return new Observable<any>(obs => {
 
 	    this.api.post<any>(url, {}).subscribe(b => {
-
-		// FIXME: Some reset action would be appropriate.
+		this.update_balance();
 		obs.next(b);
-
 	    });
 
 	});
