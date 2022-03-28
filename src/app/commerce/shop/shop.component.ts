@@ -95,6 +95,10 @@ export class ShopComponent implements OnInit {
 	this.service.set_quantity("vat", this.form.value.vat);
 	this.service.set_quantity("corptax", this.form.value.corptax);
 	this.service.set_quantity("accounts", this.form.value.accounts);
+	this.create_payment_intent().subscribe(pi => {
+	    if (pi && pi.client_secret)
+		this.elementsOptions.clientSecret = pi.client_secret;
+	});
     }
 
     create_payment_intent() : Observable<PaymentIntent> {
