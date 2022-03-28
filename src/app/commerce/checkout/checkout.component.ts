@@ -2,16 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { Company } from '../../company/company.service';
-import { Option, Options, Balance, Order } from '../commerce.model';
-import { CommerceService } from '../commerce.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { CheckoutService } from '../checkout.service';
 import { StripePaymentService } from '../stripe.service';
 
-import { StripeService, StripePaymentElementComponent
-       } from 'ngx-stripe';
-import { StripeElementsOptions, PaymentIntent
-       } from '@stripe/stripe-js';
+import { StripePaymentElementComponent } from 'ngx-stripe';
+import { PaymentIntent } from '@stripe/stripe-js';
 
 @Component({
     selector: 'app-checkout',
@@ -25,12 +22,10 @@ export class CheckoutComponent implements OnInit {
 
     constructor(
 	private service : CheckoutService,
-	private stripeService : StripeService,
 	private router : Router,
+	private snackBar: MatSnackBar,
 	public payments : StripePaymentService,
     ) { }
-
-    payment_intent : PaymentIntent | null = null;
 
     ngOnInit(): void {
 	this.service.create_order().subscribe(txid => {
@@ -41,23 +36,59 @@ export class CheckoutComponent implements OnInit {
     }
 
     place_order() {
-	this.payments.confirm(this.paymentElement).subscribe(pid => {
-	    this.service.complete_payment(pid).subscribe(bal => {
-		this.router.navigate(["/commerce/complete"]);
-	    });
+
+	let cmp = this;
+
+	this.payments.confirm(this.paymentElement).subscribe({
+	    next(pid) {
+
+		cmp.service.complete_payment(pid).subscribe({
+		    next(bal) {
+			cmp.router.navigate(["/commerce/complete"]);
+		    },
+		    error(err) {
+			cmp.error(err);
+		    },
+		    complete() {}
+		});
+
+	    },
+	    error(err) { cmp.error(err); },
+	    complete() {}
 	});
+
     }
 
     back() {
-	this.router.navigate(["/commerce/shop"]);
+	this.router.navigate(["/commerce/purchase"]);
     }
 
     create_payment() : Observable<PaymentIntent> {
+
+	let cmp = this;
+
 	return new Observable<PaymentIntent>((obs : any) => {
-	    this.service.create_order().subscribe(ev => {
-		obs.next(ev);
-	    })
+
+	    this.service.create_order().subscribe({
+		next(ev) { obs.next(ev); },
+		error(err) { cmp.error(err); },
+		complete() {}
+	    });
+
 	});
+
+    }
+
+    error(err : any) {
+	console.log(err);
+	if (err.error) {
+	    if (err.error.message) {
+		this.snackBar.open(err.error.message,
+				   "dismiss", { duration: 5000 });
+		return;
+	    }
+	}
+	this.snackBar.open("An error occured", "dismiss", { duration: 5000 });
     }
 
 }

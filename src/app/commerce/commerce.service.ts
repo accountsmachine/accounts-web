@@ -42,13 +42,7 @@ export class CommerceService {
 
 	let url = "/api/commerce/transactions";
 
-	return new Observable<Transaction[]>(obs => {
-
-	    this.api.get<Transaction[]>(url).subscribe(
-		tx => obs.next(tx)
-	    )
-
-	});
+	return this.api.get<Transaction[]>(url);
 
     }
 
@@ -56,13 +50,7 @@ export class CommerceService {
 
 	let url = "/api/commerce/transaction/" + id;
 
-	return new Observable<Transaction>(obs => {
-
-	    this.api.get<Transaction>(url).subscribe(
-		tx => obs.next(tx)
-	    )
-
-	});
+	return this.api.get<Transaction>(url);
 
     }
 
@@ -70,13 +58,7 @@ export class CommerceService {
 
 	let url = "/api/commerce/offer";
 
-	return new Observable<Options>(obs => {
-
-	    this.api.get<Options>(url).subscribe(
-		tx => obs.next(tx)
-	    )
-
-	});
+	return this.api.get<Options>(url);
 
     }
 
@@ -92,30 +74,9 @@ export class CommerceService {
 
 	let url = "/api/commerce/create-order";
 
-	return new Observable<any>(obs => {
-
-	    this.api.post<any>(url, order).subscribe(b => {
-		obs.next(b);
-	    });
-
-	});
+	return this.api.post<any>(url, order);
 
     }
-/*
-    update_order(id : string, order : any) : Observable<any> {
-
-	let url = "/api/commerce/update-order/" + id;
-
-	return new Observable<any>(obs => {
-
-	    this.api.post<any>(url, order).subscribe(b => {
-		obs.next(b);
-	    });
-
-	});
-
-    }
-*/
 
     complete_order(id : string) : Observable<any> {
 
@@ -135,11 +96,8 @@ export class CommerceService {
     create_payment(id : string) : Observable<any> {
 	let url = "/api/commerce/create-payment/" + id;
 
-	return new Observable<any>(obs => {
-	    this.api.post<any>(url, {}).subscribe(b => {
-		obs.next(b);
-	    });
-	});
+	return this.api.post<any>(url, {});
+
     }
 
 }

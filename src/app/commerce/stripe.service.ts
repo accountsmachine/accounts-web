@@ -41,29 +41,35 @@ export class StripePaymentService {
 		    }
 		},
 		redirect: 'if_required',
-	    }).subscribe(result => {
-		console.log(result);
-		if (result && result.paymentIntent) {
-		    let status = result.paymentIntent.status;
-		    console.log("Status>", status);
-		    
-		    let id = result.paymentIntent.id;
-		    
-		    if (status != "succeeded") {
-			console.log("FIXME: Payment failed");
-			return;
-		    }
+	    }).subscribe({
+		next(result) {
+		    if (result && result.paymentIntent) {
 
-		    if (id) {
-			console.log("ID>", id);
-			obs.next(id);
-			console.log("Complete order!");
-			return;
-		    }
-		
-		    console.log("Client secret is NULL?!!");
+			let status = result.paymentIntent.status;
+		    
+			if (status != "succeeded") {
+			    obs.error(result);
+			    return;
+			}
+		    
+			let id = result.paymentIntent.id;
 
-		}
+			if (id) {
+			    obs.next(id);
+			    return;
+			}
+
+			console.log("Client secret is null?");
+
+		    } else
+			obs.error(result);
+
+		},
+
+		error(err) {
+		    obs.error(err);
+		},
+		complete() { obs.complete() }
 	    });
 	});
 

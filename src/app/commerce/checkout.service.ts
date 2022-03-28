@@ -163,16 +163,21 @@ export class CheckoutService {
 
     complete_payment(id: string) : Observable<string> {
 
+	let svc = this;
+
 	return new Observable<string>(obs => {
 
-	    this.commerce.complete_order(id).subscribe(
-		b => {
-
+	    this.commerce.complete_order(id).subscribe({
+		next(b) {
 		    // Re-fetch offer.
-		    this.reset();
+		    svc.reset();
 		    obs.next(b);
-		}
-	    );
+		},
+		error(err) {
+		    obs.error(err)
+		},
+		complete() { obs.complete() }
+	    });
 
 	});
 
