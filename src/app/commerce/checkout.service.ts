@@ -152,11 +152,28 @@ export class CheckoutService {
 
     }
 
-    place_order() : Observable<string> {
+    create_order() : Observable<string> {
 
 	return new Observable<string>(obs => {
 
-	    this.commerce.place_order(this._order).subscribe(
+	    this.commerce.create_order(this._order).subscribe(
+		b => {
+
+		    // Re-fetch offer.
+		    this.reload();
+		    obs.next(b);
+		}
+	    );
+
+	});
+
+    }
+
+    complete_order(id: string) : Observable<string> {
+
+	return new Observable<string>(obs => {
+
+	    this.commerce.complete_order(id).subscribe(
 		b => {
 
 		    // Re-fetch offer.

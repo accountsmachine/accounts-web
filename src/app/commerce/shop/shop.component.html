@@ -8,7 +8,7 @@
     
     <mat-drawer-content class="main-content">
 
-      <section>
+      <section class="content">
 
 	<h1>Purchase more credits</h1>
 
@@ -32,6 +32,9 @@
 
 	<p>A discount is applied to orders for multiple credits which
 	  increases with the order size.</p>
+
+      </section>
+      <section class="content">
 
 	<h1>Select credits</h1>
 
@@ -63,7 +66,7 @@
 
       </section>
 
-      <section *ngIf="order.total > 0">
+      <section class="content" *ngIf="order.total > 0">
 
 	<h1>Your order</h1>
 
@@ -71,9 +74,9 @@
 
 	<div>
 	  <button mat-raised-button color="primary"
-		  (click)="place_order()" [disabled]="order_disabled()">
+		  (click)="checkout()" [disabled]="order_disabled()">
 	    <mat-icon>shopping_cart</mat-icon>&nbsp;
-	    Place order
+	    Checkout
 	  </button>
 	  <button mat-raised-button color="basic" (click)="reset()">
 	    <mat-icon>clear</mat-icon>&nbsp;

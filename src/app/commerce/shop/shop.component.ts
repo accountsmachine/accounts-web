@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -12,7 +13,6 @@ import { CommerceService } from '../commerce.service';
 import { CheckoutService } from '../checkout.service';
 
 import { StripeService, StripePaymentElementComponent } from 'ngx-stripe';
-
 import { StripeElementsOptions, PaymentIntent
        } from '@stripe/stripe-js';
 
@@ -26,6 +26,10 @@ export class ShopComponent implements OnInit {
     @ViewChild(StripePaymentElementComponent)
     paymentElement? : StripePaymentElementComponent = undefined;
 
+    elementsOptions: StripeElementsOptions = {
+	locale: 'en'
+    };
+
     public form : FormGroup;
 
     offer : Options = { offer: {} };
@@ -33,10 +37,6 @@ export class ShopComponent implements OnInit {
 
     value : { [kind : string] : number } = {};
     descriptions : { [kind : string] : string } = {};
-
-    elementsOptions: StripeElementsOptions = {
-	locale: 'en'
-    };
 
     order : Order = new Order();
 
@@ -46,6 +46,7 @@ export class ShopComponent implements OnInit {
 	private formBuilder: FormBuilder,
 	private snackBar: MatSnackBar,
 	private stripeService : StripeService,
+	private router : Router,
     ) {
 	this.form = this.formBuilder.group({
 	    vat: [0],
@@ -95,21 +96,13 @@ export class ShopComponent implements OnInit {
 	this.service.set_quantity("vat", this.form.value.vat);
 	this.service.set_quantity("corptax", this.form.value.corptax);
 	this.service.set_quantity("accounts", this.form.value.accounts);
-	this.create_payment_intent().subscribe(pi => {
-	    if (pi && pi.client_secret)
-		this.elementsOptions.clientSecret = pi.client_secret;
-	});
     }
 
-    create_payment_intent() : Observable<PaymentIntent> {
-	return new Observable<PaymentIntent>((obs : any) => {
-	    this.service.place_order().subscribe(
-		ev => obs.next(ev)
-	    );
-	});
-    }
+    checkout() {
 
-    place_order() {/*
+	this.router.navigate(["/commerce/checkout"]);
+
+/*
 
 	this.service.place_order().subscribe(b => {
 
@@ -127,7 +120,7 @@ export class ShopComponent implements OnInit {
 	).subscribe(result => {
 		console.log(result);
 		});*/
-
+/*
 	console.log("PLACE ORDER");
 	this.create_payment_intent().subscribe(pi => {
 	    if (pi == null) return;
@@ -148,7 +141,7 @@ export class ShopComponent implements OnInit {
 		console.log(result);
 	    });
 	});
-
+*/
     }
 
     reset() {

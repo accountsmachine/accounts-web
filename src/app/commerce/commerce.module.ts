@@ -34,6 +34,7 @@ import { TransactionListComponent } from './transaction-list/transaction-list.co
 import { TransactionComponent } from './transaction/transaction.component';
 import { NavComponent } from './nav/nav.component';
 import { OrderComponent } from './order/order.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import { OrderComponent } from './order/order.component';
         TransactionListComponent,
         TransactionComponent,
         NavComponent,
-        OrderComponent
+        OrderComponent,
+        CheckoutComponent
     ],
     imports: [
 //        NgxStripeModule.forRoot("pk_test_51Khz14ImWys2SCctYBeX8uqlDHma6bHjO6mig7oHpaVTENa71keRcTiE1vDEpQewPc7UJWMX31CTJU6B2ycamnZa00PuWMDZPX"),
