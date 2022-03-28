@@ -2,53 +2,82 @@
 <div id="home-content">
 
   <h1>accountsmachine.io</h1>
-<!--
-  <mat-card>
-    <mat-card-title>Completing a VAT submission</mat-card-title>
-    <mat-card-content>
-      Preperation:
+
+  <div class="front">
+
+    <mat-card class="k1">
+      <mat-card-title>Welcome!</mat-card-title>
+      <mat-card-subtitle>to accountsmachine.io</mat-card-subtitle>
+      <img src="/assets/accountsmachine.png">
+    </mat-card>
+
+    <mat-card class="k2">
+      <mat-card-title>Support!</mat-card-title>
+      For support, please just jump on the Discord server and head to the
+      #support channel.  You'll be very welcome!
+      <div>
+	<a mat-button href="https://discord.gg/3cAvPASS6p">https://discord.gg/3cAvPASS6p</a>
+      </div>
+    </mat-card>
+
+    <mat-card class="k1">
+      <mat-card-title>Status</mat-card-title>
+      The <code>accountsmachine.io</code> service is in an early Beta
+      phase.  The features you see have been trialled with a small number of
+      early adopters prior to large-scale launch.  You can use
+      <code>accountsmachine.io</code> to complete a VAT return up to the point
+      of submission for free.  This will help you work out if the system is
+      right for you.  You will be very welcome to join the Discord group, and
+      discuss whether the system is right for you, and give feedback.
+    </mat-card>
+    
+    <mat-card class="k3">
+      <mat-card-title>Roadmap</mat-card-title>
       <ul>
-	<li><p>Your business should be VAT registered, and you should know
-	your VRN.</p></li>
-	<li><p>You should have an HMRC account set up for your business
-	    with a Government Gateway ID and password.
-	</p></li>
-	<li><p>
-	    Your VAT account should be registered for
-	    <a href="https://www.gov.uk/vat-record-keeping/making-tax-digital-for-vat">MTD VAT</a> so that you can file using the VAT API.
-	  </p>
+	<li><b>VAT</b>: Operational.</li>
+	<li><b>Corporation tax</b>: In development.</li>
+	<li><b>Companies House accounts</b>: In development.</li>
+      </ul>
+    </mat-card>
+    
+    <mat-card class="k2">
+      <mat-card-title>Getting started</mat-card-title>
+      So you want to file VAT returns...?
+      <ul>
+	<li>Before you can do anything you need to create a
+	  <a [routerLink]="'/company/new'">company configuration</a>.  We've made
+	  this easy, you punch in your company number, and most of the information
+	  is extracted from Companies House.  For a VAT return, you don't
+	  need to complete the entire record.  You do need to go to the <b>Tax</b>
+	  section and fill in your VAT VRN.
+	</li>
+	<li>Next you need to link up <code>accountsmachine.io</code> with your
+	  HMRC VAT account.
+	  Go to the <a [routerLink]="'/status'">Status</a> page,
+	  click on <b>VAT</b> next to your company.  Clicking
+	  <b>Initiate setup</b> initiates the connection to HMRC.
+	</li>
+	<li>On the <a [routerLink]="'/status'">Status</a> page, you should be
+	  able to see your open VAT obligations at this point.</li>
+	<li>Next you need to go to the  <a [routerLink]="'/books'">Books</a> 
+	  page and upload your accounting books.  This should be a GnuCash
+	  file.
+	</li>
+	<li>You are now ready to create a VAT return on the
+	  <a [routerLink]="'/filing'">Filing</a> page.  Select 
+	  <b>Create VAT Filing</b>, and step through the workflow,
+	  selecting your company and VAT return period.
+	</li>
+	<li>When you are happy with your VAT return, you can go to the Filing
+	  page and select <b>Manage Credits</b>.  On the <b>Purchase</b> tab,
+	  you have the option to buy VAT return credits with a payment card.
+	  Once you have credits, go back to the Filing screen where you
+	  can open your VAT filing and submit it.
 	</li>
       </ul>
-      Set up your company:
-      <ul>
-	<li>
-	  <p>Go to the
-	    <a [routerLink]="'/company'">Company</a> tab
-	  </p>
-	</li>
-	<li>
-	  <p>Click
-	    <a [routerLink]="'/company/new'">Create company configuration</a>
-	    for your company.  You will need to know your
-	    company number - you can
-	    <a href="https://www.gov.uk/get-information-about-a-company"
-	       target="_blank">
-	      search
-	    </a>
-	    Companies House if you need to find out.
-	  </p>
-	</li>
-	<li><p>Fill in all the details about your company pressing
-	    Save at each step.</p></li>
-	<li><p>Go to the <a [routerLink]="'/status'">status</a> tab and
-	    press the icon in the VAT column against your company.
-	</p></li>
-	<li><p>Click <b>Initiate setup</b> to connect your accountsmachine.io
-	    to your company HMRC VAT account.
-	</p></li>
-      </ul>
-    </mat-card-content>
-  </mat-card>
--->  
+    </mat-card>
+
+  </div>
+
 </div>
 
