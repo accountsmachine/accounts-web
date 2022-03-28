@@ -20,7 +20,7 @@
 	<h1>Payment details</h1>
 
 	<div class="payment"
-		      *ngIf="elementsOptions?.clientSecret as clientSecret">
+		      *ngIf="payments.elementsOptions?.clientSecret as clientSecret">
 	  <ngx-stripe-payment [clientSecret]="clientSecret">
 	  </ngx-stripe-payment>
 	</div>
