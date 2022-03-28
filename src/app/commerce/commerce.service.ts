@@ -88,8 +88,6 @@ export class CommerceService {
 
     }
 
-    tx_id? : string;
-
     create_order(order : any) : Observable<any> {
 
 	let url = "/api/commerce/create-order";
@@ -103,7 +101,7 @@ export class CommerceService {
 	});
 
     }
-
+/*
     update_order(id : string, order : any) : Observable<any> {
 
 	let url = "/api/commerce/update-order/" + id;
@@ -117,22 +115,33 @@ export class CommerceService {
 	});
 
     }
+*/
 
     complete_order(id : string) : Observable<any> {
 
-	let url = "/api/commerce/complete-order";
+	let url = "/api/commerce/complete-order/" + id;
 
 	return new Observable<any>(obs => {
 
-	    this.api.post<any>(url, {
-		"id": id
-	    }).subscribe(b => {
-		// FIXME: Good place to update balance.
+	    this.api.post<any>(url, {}).subscribe(b => {
+
+		// FIXME: Some reset action would be appropriate.
 		obs.next(b);
+
 	    });
 
 	});
 
+    }
+
+    create_payment(id : string) : Observable<any> {
+	let url = "/api/commerce/create-payment/" + id;
+
+	return new Observable<any>(obs => {
+	    this.api.post<any>(url, {}).subscribe(b => {
+		obs.next(b);
+	    });
+	});
     }
 
 }

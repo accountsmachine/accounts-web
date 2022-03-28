@@ -10,6 +10,7 @@ import { CommerceService } from './commerce.service';
 })
 export class CheckoutService {
 
+    receipt_subject = new BehaviorSubject<string | null>(null);
     _quantities : ItemQuantities = {};
     _offer : Options = { offer: {} };
     _order : Order = new Order();
@@ -39,7 +40,7 @@ export class CheckoutService {
 	private commerce : CommerceService,
     ) {
 
-	this.reload();
+	this.reset();
 
 	combineLatest({
 	    offer: this.offer_subject,
@@ -53,7 +54,13 @@ export class CheckoutService {
 
     }
 
-    reload() {
+    reset() {
+        this._quantities = {};
+	this.quantity_subject.next(this._quantities);
+        this.reload_offer();
+    }
+
+    reload_offer() {
 	this.commerce.get_offer().subscribe(
 	    o => {
 		this._offer = o;
@@ -62,25 +69,10 @@ export class CheckoutService {
 	);
     }
 
-    tax_applied : string = "";
-    tax_rate : number = 0;
-
-    vat_price : number = 0;
-    corptax_price : number = 0;
-    accounts_price : number = 0;
-
-    vat_discount : number = 0;
-    corptax_discount : number = 0;
-    accounts_discount : number = 0;
-
-    subtotal_price : number = 0;
-    tax_price : number = 0;
-    total_price : number = 0;
 
     recalc() {
 
 	if (!this._offer) {
-//	    console.log("Can't recalculate with no offer");
 	    return;
 	}
 
@@ -152,24 +144,24 @@ export class CheckoutService {
 
     }
 
+    tx_id? : string;
+
     create_order() : Observable<string> {
-
 	return new Observable<string>(obs => {
-
 	    this.commerce.create_order(this._order).subscribe(
 		b => {
-
-		    // Re-fetch offer.
-		    this.reload();
+		    this.tx_id = b;
 		    obs.next(b);
 		}
 	    );
-
 	});
-
     }
 
-    complete_order(id: string) : Observable<string> {
+    create_payment(id : string) : Observable<string> {
+	return this.commerce.create_payment(id);
+    }
+
+    complete_payment(id: string) : Observable<string> {
 
 	return new Observable<string>(obs => {
 
@@ -177,7 +169,7 @@ export class CheckoutService {
 		b => {
 
 		    // Re-fetch offer.
-		    this.reload();
+		    this.reset();
 		    obs.next(b);
 		}
 	    );

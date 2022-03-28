@@ -6,6 +6,7 @@ import { Company } from '../../company/company.service';
 import { Option, Options, Balance, Order } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 import { CheckoutService } from '../checkout.service';
+import { StripePaymentService } from '../stripe.service';
 
 import { StripeService, StripePaymentElementComponent
        } from 'ngx-stripe';
@@ -36,11 +37,25 @@ export class CheckoutComponent implements OnInit {
 	private service : CheckoutService,
 	private stripeService : StripeService,
 	private router : Router,
+	private payments : StripePaymentService,
     ) { }
 
     payment_intent : PaymentIntent | null = null;
 
     ngOnInit(): void {
+
+	this.service.create_order().subscribe(txid => {
+	    this.service.create_payment(txid).subscribe(pid => {
+		this.elementsOptions.clientSecret = pid;
+	    });
+	});
+	    
+//	    this.elementsOptions.clientSecret = pi.client_secret;
+//	});
+
+//	this.payments.
+
+	/*
 	this.create_payment_intent().subscribe(pi => {
 	    if (pi && pi.client_secret) {
 		this.elementsOptions.clientSecret = pi.client_secret;
@@ -49,10 +64,10 @@ export class CheckoutComponent implements OnInit {
 		this.payment_intent = null;
 	    }
 	});
+*/
     }
 
     place_order() {
-
 	this.stripeService.confirmPayment({
 	    elements: this.paymentElement!.elements,
 	    confirmParams: {
@@ -69,7 +84,6 @@ export class CheckoutComponent implements OnInit {
 	    if (result && result.paymentIntent) {
 
 		let status = result.paymentIntent.status;
-
 		console.log("Status>", status);
 
 		let id = result.paymentIntent.id;
@@ -81,7 +95,7 @@ export class CheckoutComponent implements OnInit {
 
 		if (id) {
 		    console.log("ID>", id);
-		    this.service.complete_order(id).subscribe(res => {
+		    this.service.complete_payment(id).subscribe(res => {
 			console.log("Complete order is done.");
 			console.log(res);
 		    });
@@ -93,65 +107,27 @@ export class CheckoutComponent implements OnInit {
 	    }
 	});
 
-/*
-	this.update_payment_intent().subscribe(pi => {
-	    if (pi == null) return;
-	    if (!pi.client_secret) return;
-	    console.log("PI>", pi);
-	    this.elementsOptions.clientSecret = pi.client_secret;
-	    this.stripeService.confirmPayment({
-		elements: this.paymentElement!.elements,
-		confirmParams: {
-		    payment_method_data: {
-			billing_details: {
-			    name: "accountsmachine.io",
-			}
-		    }
-		},
-		redirect: 'if_required',
-	    }).subscribe(result => {
-		console.log(result);
-
-		if (result && result.paymentIntent) {
-
-		    let status = result.paymentIntent.status;
-
-		    console.log("Status>", status);
-
-		    let id = result.paymentIntent.id;
-
-		    if (status != "succeeded") {
-			console.log("FIXME: Payment failed");
-			return;
-		    }
-
-		    if (id) {
-			console.log("ID>", id);
-			this.service.complete_order(id).subscribe(res => {
-			    console.log("Complete order is done.");
-			    console.log(res);
-			});
-			return;
-		    }
-
-		    console.log("Client secret is NULL?!!");
-
-		}
-	    });
-	});
-*/
     }
 
     back() {
 	this.router.navigate(["/commerce/shop"]);
     }
-
+/*
     create_payment_intent() : Observable<PaymentIntent> {
 	return new Observable<PaymentIntent>((obs : any) => {
 	    this.service.create_order().subscribe(ev => {
 		obs.next(ev);
 	    })
 	});
+	}*/
+
+    create_payment() : Observable<PaymentIntent> {
+	return new Observable<PaymentIntent>((obs : any) => {
+	    this.service.create_order().subscribe(ev => {
+		obs.next(ev);
+	    })
+	});
     }
+
 
 }
