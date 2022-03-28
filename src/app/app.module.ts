@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -64,6 +65,7 @@ import { ProfileModule } from './profile/profile.module';
 	MatCardModule,
 	MatFormFieldModule,
 	MatButtonModule,
+	MatExpansionModule,
 	MatNativeDateModule,
 	MatInputModule,
 	MatProgressSpinnerModule,

@@ -33,48 +33,105 @@
     
     <mat-card class="k3">
       <mat-card-title>Roadmap</mat-card-title>
-      <ul>
-	<li><b>VAT</b>: Operational.</li>
-	<li><b>Corporation tax</b>: In development.</li>
-	<li><b>Companies House accounts</b>: In development.</li>
-      </ul>
+      <div><mat-icon>done</mat-icon> <b>VAT</b>: Operational.</div>
+      <div><mat-icon>directions_run</mat-icon> <b>Corporation tax</b>: In development.</div>
+      <div><mat-icon>directions_run</mat-icon> <b>Companies House accounts</b>: In development.</div>
     </mat-card>
     
     <mat-card class="k2">
       <mat-card-title>Getting started</mat-card-title>
-      So you want to file VAT returns...?
-      <ul>
-	<li>Before you can do anything you need to create a
+      <p>
+	So you want to file VAT returns...?
+      </p>
+
+      <mat-accordion>
+
+	<mat-expansion-panel hideToggle>
+	  <mat-expansion-panel-header>
+	    <mat-panel-title>
+	      <mat-icon>navigate_next</mat-icon>&nbsp;
+	      Create a company configuration
+	    </mat-panel-title>
+	  </mat-expansion-panel-header>
+	  Before you can do anything you need to create a
 	  <a [routerLink]="'/company/new'">company configuration</a>.  We've made
 	  this easy, you punch in your company number, and most of the information
 	  is extracted from Companies House.  For a VAT return, you don't
 	  need to complete the entire record.  You do need to go to the <b>Tax</b>
-	  section and fill in your VAT VRN.
-	</li>
-	<li>Next you need to link up <code>accountsmachine.io</code> with your
+	  section and fill in your <b>VAT VRN</b>.
+	</mat-expansion-panel>
+
+	<mat-expansion-panel hideToggle>
+	  <mat-expansion-panel-header>
+	    <mat-panel-title>
+	      <mat-icon>navigate_next</mat-icon>&nbsp;
+	      Link HMRC VAT account
+	    </mat-panel-title>
+	  </mat-expansion-panel-header>
+	  Next you need to link up Accounts Machine with your
 	  HMRC VAT account.
 	  Go to the <a [routerLink]="'/status'">Status</a> page,
-	  click on <b>VAT</b> next to your company.  Clicking
-	  <b>Initiate setup</b> initiates the connection to HMRC.
-	</li>
-	<li>On the <a [routerLink]="'/status'">Status</a> page, you should be
-	  able to see your open VAT obligations at this point.</li>
-	<li>Next you need to go to the  <a [routerLink]="'/books'">Books</a> 
+	  click on <b>VAT</b> in the table row for your company.  Clicking
+	  <b>Initiate setup</b> initiates the connection to HMRC.  You will be
+	  taken to the HMRC site and prompted to enter your Government Gateway ID,
+	  and then prompted to give Accounts Machine access to submit
+	  VAT returns for you.
+	</mat-expansion-panel>
+
+	<mat-expansion-panel hideToggle>
+	  <mat-expansion-panel-header>
+	    <mat-panel-title>
+	      <mat-icon>navigate_next</mat-icon>&nbsp;
+	      View VAT return status
+	    </mat-panel-title>
+	  </mat-expansion-panel-header>
+	  Once that is set up, you should be able to see the status of your
+	  VAT returns on the <a [routerLink]="'/status'">Status</a> page.
+	  In particular you will be able to to see your VAT obligation history
+	  and see any return periods which are open.
+	</mat-expansion-panel>
+
+	<mat-expansion-panel hideToggle>
+	  <mat-expansion-panel-header>
+	    <mat-panel-title>
+	      <mat-icon>navigate_next</mat-icon>&nbsp;
+	      Upload accounting books
+	    </mat-panel-title>
+	  </mat-expansion-panel-header>
+	  Next you need to go to the  <a [routerLink]="'/books'">Books</a> 
 	  page and upload your accounting books.  This should be a GnuCash
 	  file.
-	</li>
-	<li>You are now ready to create a VAT return on the
+	</mat-expansion-panel>
+
+	<mat-expansion-panel hideToggle>
+	  <mat-expansion-panel-header>
+	    <mat-panel-title>
+	      <mat-icon>navigate_next</mat-icon>&nbsp;
+	      Create VAT filing
+	    </mat-panel-title>
+	  </mat-expansion-panel-header>
+	  You are now ready to create a VAT return on the
 	  <a [routerLink]="'/filing'">Filing</a> page.  Select 
 	  <b>Create VAT Filing</b>, and step through the workflow,
 	  selecting your company and VAT return period.
-	</li>
-	<li>When you are happy with your VAT return, you can go to the Filing
+	</mat-expansion-panel>
+
+	<mat-expansion-panel hideToggle>
+	  <mat-expansion-panel-header>
+	    <mat-panel-title>
+	      <mat-icon>navigate_next</mat-icon>&nbsp;
+	      Submit VAT filing
+	    </mat-panel-title>
+	  </mat-expansion-panel-header>
+	  When you are happy with your VAT return, you can go to the Filing
 	  page and select <b>Manage Credits</b>.  On the <b>Purchase</b> tab,
 	  you have the option to buy VAT return credits with a payment card.
 	  Once you have credits, go back to the Filing screen where you
 	  can open your VAT filing and submit it.
-	</li>
-      </ul>
+	</mat-expansion-panel>
+
+      </mat-accordion>
+
     </mat-card>
 
   </div>
