@@ -12,7 +12,7 @@
       </mat-card-title>
       <mat-card-subtitle>to accountsmachine.io</mat-card-subtitle>
       <div class="image">
-	<img src="/assets/accountsmachine.png">
+	<img src="/assets/accountsmachine.png" alt="Accounts Machine logo">
       </div>
     </mat-card>
 
@@ -24,7 +24,7 @@
       For support, please just jump on the Discord server and head to the
       #support channel.  You'll be very welcome!
       <div>
-	<a mat-button href="https://discord.gg/3cAvPASS6p">https://discord.gg/3cAvPASS6p</a>
+	<a mat-raised-button color="basic" href="https://discord.gg/3cAvPASS6p">https://discord.gg/3cAvPASS6p</a>
       </div>
     </mat-card>
 
@@ -47,9 +47,9 @@
 	<mat-icon>pending_actions</mat-icon>
 	Roadmap
       </mat-card-title>
-      <div><mat-icon>done</mat-icon><b>VAT</b>: Operational.</div>
-      <div><mat-icon>directions_run</mat-icon><b>Corporation tax</b>: In development.</div>
-      <div><mat-icon>directions_run</mat-icon><b>Companies House accounts</b>: In development.</div>
+      <div><mat-icon>done</mat-icon><strong>VAT</strong>: Operational.</div>
+      <div><mat-icon>directions_run</mat-icon><strong>Corporation tax</strong>: In development.</div>
+      <div><mat-icon>directions_run</mat-icon><strong>Companies House accounts</strong>: In development.</div>
     </mat-card>
     
     <mat-card class="k2">
@@ -74,8 +74,8 @@
 	  <a [routerLink]="'/company/new'">company configuration</a>.  We've made
 	  this easy, you punch in your company number, and most of the information
 	  is extracted from Companies House.  For a VAT return, you don't
-	  need to complete the entire record.  You do need to go to the <b>Tax</b>
-	  section and fill in your <b>VAT VRN</b>.
+	  need to complete the entire record.  You do need to go to the <strong>Tax</strong>
+	  section and fill in your <strong>VAT VRN</strong>.
 	</mat-expansion-panel>
 
 	<mat-expansion-panel hideToggle>
@@ -88,8 +88,8 @@
 	  Next you need to link up Accounts Machine with your
 	  HMRC VAT account.
 	  Go to the <a [routerLink]="'/status'">Status</a> page,
-	  click on <b>VAT</b> in the table row for your company.  Clicking
-	  <b>Initiate setup</b> initiates the connection to HMRC.  You will be
+	  click on <strong>VAT</strong> in the table row for your company.  Clicking
+	  <strong>Initiate setup</strong> initiates the connection to HMRC.  You will be
 	  taken to the HMRC site and prompted to enter your Government Gateway ID,
 	  and then prompted to give Accounts Machine access to submit
 	  VAT returns for you.
@@ -129,7 +129,7 @@
 	  </mat-expansion-panel-header>
 	  You are now ready to create a VAT return on the
 	  <a [routerLink]="'/filing'">Filing</a> page.  Select 
-	  <b>Create VAT Filing</b>, and step through the workflow,
+	  <strong>Create VAT Filing</strong>, and step through the workflow,
 	  selecting your company and VAT return period.
 	</mat-expansion-panel>
 
@@ -141,7 +141,7 @@
 	    </mat-panel-title>
 	  </mat-expansion-panel-header>
 	  When you are happy with your VAT return, you can go to the Filing
-	  page and select <b>Manage Credits</b>.  On the <b>Purchase</b> tab,
+	  page and select <strong>Manage Credits</strong>.  On the <strong>Purchase</strong> tab,
 	  you have the option to buy VAT return credits with a payment card.
 	  Once you have credits, go back to the Filing screen where you
 	  can open your VAT filing and submit it.
