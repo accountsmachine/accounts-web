@@ -1,28 +1,44 @@
 
-VERSION=0.0.2
-
+VERSION=0.0.1
 DIST=dist
 
-all: stage
+all:
 
 stage: KIND=stage
 stage: build
 
-production: KIND=production
-production: build
+build: serve
+	rm -rf ${DIST}/${KIND}
+	mkdir -p ${DIST}/${KIND}
+	ng build -c ${KIND} --output-path ${DIST}/${KIND}
+	cp 404.html ${DIST}/${KIND}
 
-deploy-stage: KIND=stage
-deploy-stage: deploy
+serve: serve.go
+	go build serve.go
 
-deploy-production: KIND=production
-deploy-production: deploy
+NAME=accounts-web
+REPO=europe-west2-docker.pkg.dev/accounts-machine-dev/accounts-machine
+CONTAINER=${REPO}/${NAME}
 
-build:
-	rm -rf ${DIST}/${KIND}/public/
-	mkdir -p ${DIST}/${KIND}/public/
-	ng build -c ${KIND} --output-path ${DIST}/${KIND}/public/
-	cp 404.html ${DIST}/${KIND}/public
+container: all
+	podman build -f Containerfile -t ${CONTAINER}:${VERSION} \
+	    --format docker
 
-deploy:
-	(cd dist/${KIND} && firebase deploy --only hosting)
+login:
+	gcloud auth print-access-token | \
+	    podman login -u oauth2accesstoken --password-stdin \
+	        europe-west2-docker.pkg.dev
 
+push:
+	podman push --remove-signatures ${CONTAINER}:${VERSION}
+
+start:
+	podman run -d --name ${NAME} \
+	    -p 8080:8080 \
+	    ${CONTAINER}:${VERSION}
+
+stop:
+	podman rm -f ${NAME}
+
+clean:
+	rm -rf dist

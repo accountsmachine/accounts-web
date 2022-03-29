@@ -94,6 +94,8 @@ func main() {
 			r.URL.Scheme = scheme
 			r.Host = apiEndpoint
 
+			fmt.Println(path)
+
 			resp, err := http.DefaultTransport.RoundTrip(r)
 
 			if err != nil {
@@ -112,7 +114,7 @@ func main() {
 			return
 
 		}
-
+/*
 		if true {
 
 			path := r.URL.Path
@@ -139,7 +141,7 @@ func main() {
 			return
 
 		}
-
+*/
 		if m := cssPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/css")
 			filename := base + r.URL.Path[1:]
@@ -207,6 +209,7 @@ func main() {
 		if m := htmlPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/html; charset=utf-8")
 			filename := base + r.URL.Path[1:]
+			log.Printf(filename)
 			data, _ := ioutil.ReadFile(filename)
 			w.Write(data)
 			return
