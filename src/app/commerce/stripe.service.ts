@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { StripeService, StripePaymentElementComponent
+import { StripeFactoryService, StripeInstance, StripePaymentElementComponent
        } from 'ngx-stripe';
 import { StripeElementsOptions, PaymentIntent
        } from '@stripe/stripe-js';
 
+import { ApiService } from '../api.service';
 import { CheckoutService } from './checkout.service';
 
 @Injectable({
     providedIn: 'any'
 })
 export class PaymentService {
+
+    _strp? : StripeInstance;
 
     elementsOptions: StripeElementsOptions = {
 	locale: 'en',
@@ -23,15 +26,27 @@ export class PaymentService {
 
     };
 
+    get_stripe() { return this._strp!; }
+
     constructor(
-	private stripeService : StripeService,
+	private stripeFactory : StripeFactoryService,
+	private api : ApiService,
     )
     {
+	let url = "/api/commerce/payment-key";
+	this.api.get<any>(url).subscribe(resp => {
+	    let key = resp["key"];
+	    this._strp = this.stripeFactory.create(key);
+	});
     }
 
     confirm(element : any) {
 	return new Observable<string>(obs => {
-	    this.stripeService.confirmPayment({
+	    if (!this._strp) {
+		obs.error("Stripe is not initialised!");
+		return;
+	    }
+	    this._strp.confirmPayment({
 		elements: element!.elements,
 		confirmParams: {
 		    payment_method_data: {

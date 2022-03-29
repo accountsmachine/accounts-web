@@ -51,8 +51,7 @@ import { CompleteComponent } from './complete/complete.component';
         CompleteComponent
     ],
     imports: [
-//        NgxStripeModule.forRoot("pk_test_51Khz14ImWys2SCctYBeX8uqlDHma6bHjO6mig7oHpaVTENa71keRcTiE1vDEpQewPc7UJWMX31CTJU6B2ycamnZa00PuWMDZPX"),
-        NgxStripeModule.forChild("pk_test_51Khz14ImWys2SCctYBeX8uqlDHma6bHjO6mig7oHpaVTENa71keRcTiE1vDEpQewPc7UJWMX31CTJU6B2ycamnZa00PuWMDZPX"),
+        NgxStripeModule.forChild(),
 	CommonModule,
 	MatCardModule,
 	MatIconModule,

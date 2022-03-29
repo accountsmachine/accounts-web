@@ -35,6 +35,8 @@ export class CheckoutComponent implements OnInit {
 	});
     }
 
+    stripe() { return this.payments.get_stripe(); }
+
     place_order() {
 
 	let cmp = this;

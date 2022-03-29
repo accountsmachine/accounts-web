@@ -12,23 +12,12 @@ import { Option, Options, Balance, Order } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 import { CheckoutService } from '../checkout.service';
 
-import { StripeService, StripePaymentElementComponent } from 'ngx-stripe';
-import { StripeElementsOptions, PaymentIntent
-       } from '@stripe/stripe-js';
-
 @Component({
     selector: 'shop',
     templateUrl: './shop.component.html',
     styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
-
-    @ViewChild(StripePaymentElementComponent)
-    paymentElement? : StripePaymentElementComponent = undefined;
-
-    elementsOptions: StripeElementsOptions = {
-	locale: 'en'
-    };
 
     public form : FormGroup;
 
@@ -45,7 +34,6 @@ export class ShopComponent implements OnInit {
 	private commerceService : CommerceService,
 	private formBuilder: FormBuilder,
 	private snackBar: MatSnackBar,
-	private stripeService : StripeService,
 	private router : Router,
     ) {
 	this.form = this.formBuilder.group({
@@ -99,49 +87,7 @@ export class ShopComponent implements OnInit {
     }
 
     checkout() {
-
 	this.router.navigate(["/commerce/checkout"]);
-
-/*
-
-	this.service.place_order().subscribe(b => {
-
-	    // I feel the reset information should come from the checkout
-	    // service.
-	    this.reload();
-	});
-	*/
-
-	/*
-	this.service.place_order().pipe(
-	    switchMap(id => {
-		return this.stripeService.redirectToCheckout({sessionId: id})
-	    })
-	).subscribe(result => {
-		console.log(result);
-		});*/
-/*
-	console.log("PLACE ORDER");
-	this.create_payment_intent().subscribe(pi => {
-	    if (pi == null) return;
-	    if (!pi.client_secret) return;
-	    console.log("PI>", pi);
-	    this.elementsOptions.clientSecret = pi.client_secret;
-	    this.stripeService.confirmPayment({
-		elements: this.paymentElement!.elements,
-		confirmParams: {
-		    payment_method_data: {
-			billing_details: {
-			    name: "accountsmachine.io",
-			}
-		    }
-		},
-		redirect: 'if_required',
-	    }).subscribe(result => {
-		console.log(result);
-	    });
-	});
-*/
     }
 
     reset() {

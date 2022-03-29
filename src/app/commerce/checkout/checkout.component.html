@@ -21,7 +21,7 @@
 
 	<div class="payment"
 		      *ngIf="payments.elementsOptions?.clientSecret as clientSecret">
-	  <ngx-stripe-payment [clientSecret]="clientSecret">
+	  <ngx-stripe-payment [clientSecret]="clientSecret" [stripe]="stripe()">
 	  </ngx-stripe-payment>
 	</div>
 
