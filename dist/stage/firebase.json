@@ -1,17 +1,27 @@
 {
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  },
-  "storage": {
-    "rules": "storage.rules"
-  }
+    "firestore": {
+	"rules": "firestore.rules",
+	"indexes": "firestore.indexes.json"
+    },
+    "hosting": {
+	"public": "public",
+	"ignore": [
+	    "firebase.json",
+	    "**/.*",
+	    "**/node_modules/**"
+	],
+	"rewrites": [
+	    {
+		"source": "/api/(.*)",
+		"destination": "https://accounts-svc-3xisesr2uq-ew.a.run.app/"
+	    },
+	    {
+		"source": "/home",
+		"destination": "/"
+	    }
+	]
+    },
+    "storage": {
+	"rules": "storage.rules"
+    }
 }

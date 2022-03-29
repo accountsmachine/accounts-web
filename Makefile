@@ -1,10 +1,5 @@
 
-VERSION=0.0.1
-
-NAME=vat-test-service
-
-REPO=europe-west2-docker.pkg.dev/accounts-machine-dev/accounts-machine
-CONTAINER=${REPO}/vat-test-service
+VERSION=0.0.2
 
 DIST=dist
 
@@ -30,5 +25,4 @@ build:
 
 deploy:
 	(cd dist/${KIND} && firebase deploy --only hosting)
-
 
