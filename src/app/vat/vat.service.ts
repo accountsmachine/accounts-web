@@ -7,6 +7,7 @@ import {
 import { ApiService } from '../api.service';
 
 import { DeviceIdService } from './../device-id.service';
+import { client_version } from '../../version';
 
 export type Obligation = {
     status: string,
@@ -65,6 +66,7 @@ export class VatService {
 	    "X-Device-ID": this.device.get_id(),
 	    "X-Device-TZ": this.device.get_tz(),
 	    "X-Screen": this.device.get_screen_params(),
+	    "X-Client-Version": client_version,
 	})
     };
 

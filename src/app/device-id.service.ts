@@ -28,7 +28,7 @@ export class DeviceIdService {
 	
 	let n = new Date().getTimezoneOffset();
 
-	let s = "GMT";
+	let s = "UTC";
 
 	if (n < 0) {
 	    s += "-";
