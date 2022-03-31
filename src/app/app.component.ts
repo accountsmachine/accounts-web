@@ -16,7 +16,7 @@ import { FrontPageService, FrontState } from './profile/front-page.service';
 })
 export class AppComponent implements OnInit {
 
-    loading = false;
+    work = false;
 
     constructor(
 	private auth : AuthService,
@@ -30,8 +30,6 @@ export class AppComponent implements OnInit {
     {
     }
 
-    state : FrontState = FrontState.APPLICATION;
-
     front = false;
 
     get authenticated() {
@@ -43,12 +41,9 @@ export class AppComponent implements OnInit {
 	
 	this.working.onchange().subscribe(
 	    w => {
-		this.loading = w;
+		this.work = w;
 	    }
 	);
-
-	this.frontPageService.onchange().subscribe((s : FrontState) =>
-	    this.state = s);
 
         this.auth.onerr().subscribe(msg => {
 	    this.snackBar.open(msg, "dismiss", { duration: 10000 });
@@ -64,13 +59,15 @@ export class AppComponent implements OnInit {
 	    } else if (s == AuthState.UNAUTHENTICATED) {
 		this.frontPageService.login();
 	    } else if (s == AuthState.UNINITIALISED) {
-		this.frontPageService.application();
+		this.frontPageService.loading();
 		console.log("uninitialised");
 	    }
 
 	});
 
 	this.frontPageService.onchange().subscribe((s : FrontState) => {
+
+	    console.log("FRONT STATE", s);
 
 	    if (s == FrontState.APPLICATION) {
 		this.front = false;

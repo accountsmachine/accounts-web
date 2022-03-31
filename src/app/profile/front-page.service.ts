@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 export enum FrontState {
-    LOGIN,
-    REGISTERING,
-    FORGOTTEN_PASSWORD,
-    VERIFYING_EMAIL,
-    APPLICATION,
+    LOADING = 1,
+    LOGIN = 2,
+    REGISTERING = 3,
+    FORGOTTEN_PASSWORD = 4,
+    VERIFYING_EMAIL = 5,
+    APPLICATION = 6,
 };
 
 @Injectable({
@@ -15,7 +16,7 @@ export enum FrontState {
 })
 export class FrontPageService {
 
-    _subject = new BehaviorSubject<FrontState>(FrontState.APPLICATION);
+    _subject = new BehaviorSubject<FrontState>(FrontState.LOADING);
 
     onchange() : Observable<FrontState> {
 	return new Observable<FrontState>(obs => {
@@ -46,6 +47,10 @@ export class FrontPageService {
 
     application() {
 	this._subject.next(FrontState.APPLICATION);
+    }
+
+    loading() {
+	this._subject.next(FrontState.LOADING);
     }
 
 }
