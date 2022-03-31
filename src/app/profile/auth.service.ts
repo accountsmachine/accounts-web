@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-//import { Router } from '@angular/router';
 import {
     HttpClient, HttpErrorResponse, HttpHeaders
 } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 
+import { client_version, application_name, application_id } from '../../version';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
@@ -131,6 +131,12 @@ export class AuthService {
     create_user(user : string, password : string, phone : string,
 		name : string) {
 
+	let headers = new HttpHeaders({
+		"X-Client-Version": client_version,
+		"X-Application-Name": application_name,
+		"X-Application-ID": application_id,
+	});
+
 	return new Observable<void>(obs => {
 
 	    this.http.post("/api/user-account/register", {
@@ -138,7 +144,7 @@ export class AuthService {
 		password: password,
 		phone_number: phone,
 		display_name: name,
-	    }, {"responseType": "text"}).subscribe(e => {
+	    }, {"responseType": "text", headers: headers}).subscribe(e => {
 		obs.next();
 	    });
 
