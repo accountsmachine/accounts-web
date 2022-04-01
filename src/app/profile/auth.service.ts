@@ -131,11 +131,36 @@ export class AuthService {
 	    ).catch(
 		(error) => {
 
-		    if (error.code == "auth/invalid-email") {
+		    if (error.code == "auth/invalid-email")
 			this.onerr_subject.next("Invalid email address for login");
-		    } else {
+		    else if (error.code == "auth/app-not-authorized")
+			this.onerr_subject.next("Application is not authorised");
+		    else if (error.code == "auth/argument-error")
+			this.onerr_subject.next("Argument error");
+		    else if (error.code == "auth/invalid-api-key")
+			this.onerr_subject.next("Invalid API key");
+		    else if (error.code == "auth/invalid-user-token")
+			this.onerr_subject.next("Invalid user token");
+		    else if (error.code == "auth/invalid-tenant-id")
+			this.onerr_subject.next("Invalid tenant ID");
+		    else if (error.code == "auth/network-request-failed")
+			this.onerr_subject.next("Network request failed");
+		    else if (error.code == "auth/operation-not-allowed")
+			this.onerr_subject.next("Operation not allowed");
+		    else if (error.code == "auth/requires-recent-login")
+			this.onerr_subject.next("Requires recent login");
+		    else if (error.code == "auth/too-many-requests")
+			this.onerr_subject.next("Too many requests");
+		    else if (error.code == "auth/unauthorized-domain")
+			this.onerr_subject.next("Unauthorized domain");
+		    else if (error.code == "auth/user-disabled")
+			this.onerr_subject.next("User accounts has been deactivated");
+		    else if (error.code == "auth/user-token-expired")
+			this.onerr_subject.next("User token has expired");	
+		    else if (error.code == "auth/web-storage-unsupported")
+			this.onerr_subject.next("Web storage unsupported");	
+	    else
 			this.onerr_subject.next("ERROR NOT KNOWN " + error.code);
-		    }
 		    obs.error(error);
 		}
 	    );
