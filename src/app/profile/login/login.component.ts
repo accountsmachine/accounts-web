@@ -25,14 +25,20 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
+
 	this.working.start();
+
+	let cmp = this;
+
 	this.auth.login(
 	    this.username, this.password
-	).subscribe(
-	    (e : any) => {
-		this.working.stop();
-	    }
+	).subscribe({
+	    next(e : any) { cmp.working.stop(); },
+	    error(e : Error) { cmp.working.stop(); },
+	    complete() { }
+	}
 	);
+
     }
 
     forgotten_password() {

@@ -45,8 +45,13 @@ export class AuthService {
 	private http : HttpClient,
 	public fireAuth : AngularFireAuth,
     ) {
-	this.fireAuth.authState.subscribe((e : any) => {
-	    this.set_auth(e);
+
+	let svc = this;
+
+	this.fireAuth.authState.subscribe({
+	    next(e : any) { svc.set_auth(e); },
+	    error(err : any) { },
+	    complete() {}
 	});
     }
 
@@ -72,8 +77,10 @@ export class AuthService {
 
     onauth() : Observable<any> {
 	return new Observable<any>(obs => {
-	    this.onauth_subject.subscribe((e : any) => {
-		obs.next(e);
+	    this.onauth_subject.subscribe({
+		next(e : any) { obs.next(e); },
+		error(e : Error) { },
+		complete() {}
 	    });
 	});
     }
@@ -114,6 +121,7 @@ export class AuthService {
 
     login(user : string, password : string) {
 	return new Observable<any>(obs => {
+
 	    this.fireAuth.signInWithEmailAndPassword(
 		user, password
 	    ).then(
@@ -122,7 +130,13 @@ export class AuthService {
 		}
 	    ).catch(
 		(error) => {
-		    this.onerr_subject.next(error.message);
+
+		    if (error.code == "auth/invalid-email") {
+			this.onerr_subject.next("Invalid email address for login");
+		    } else {
+			this.onerr_subject.next("ERROR NOT KNOWN " + error.code);
+		    }
+		    obs.error(error);
 		}
 	    );
 	});

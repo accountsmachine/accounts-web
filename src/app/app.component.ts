@@ -67,8 +67,6 @@ export class AppComponent implements OnInit {
 
 	this.frontPageService.onchange().subscribe((s : FrontState) => {
 
-	    console.log("FRONT STATE", s);
-
 	    if (s == FrontState.APPLICATION) {
 		this.front = false;
 	    } else {
