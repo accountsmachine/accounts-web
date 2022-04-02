@@ -27,9 +27,6 @@ export class NewComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-	this.companyService.onload().subscribe((c : any) => {
-	    this.company = c;
-	});
     }
 
     cancel() {
@@ -51,24 +48,34 @@ export class NewComponent implements OnInit {
 				   { duration: 5000 });
 		this.router.navigate(["/company/" + this.number]);
 	    }
-
-	)
+	);
 
     }
 
     search() {
 	let cmp = this;
+
 	this.companyLookup.get(cmp.number).subscribe({
+
 	    next(f) {
 		cmp.lookup = f;
 		cmp.not_found = false;
-		cmp.companyService.load(cmp.number);
+		cmp.companyService.load(cmp.number).subscribe({
+		    next(c) {
+			cmp.company = c;
+		    },
+		    error(c) {
+			cmp.company = null;
+		    },
+		    complete() {}
+		});
 	    },
 	    error(err) {
 		cmp.lookup = null;
 		cmp.not_found = true;
 	    },
-	    complete() {}
+	    complete() {
+	    }
 	});
     }
 

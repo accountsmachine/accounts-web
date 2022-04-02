@@ -6,7 +6,8 @@ import { debounceTime } from 'rxjs/operators';
 import {
     HttpHeaders
 } from '@angular/common/http';
-import { Observable, Subject, of, BehaviorSubject, throwError, map } from 'rxjs';
+import { Observable, Subject, of, BehaviorSubject, throwError, map,
+	 pipe, OperatorFunction } from 'rxjs';
 import { catchError, retry, tap } from 'rxjs/operators';
 import { WorkingService } from '../working.service';
 
@@ -66,7 +67,16 @@ export class CompanyService {
 
     get_list() : Observable<Companies> {
 	let url = "/api/companies";
-	return this.api.get<Companies>(url);
+
+	let svc = this;
+	this.working.start();
+
+	return this.api.get<Companies>(url).pipe(
+	    tap({
+		error(err) { svc.working.stop(); },
+		complete() { svc.working.stop(); }
+	    })
+	);
     }
 
     subject : BehaviorSubject<Company | null> =
@@ -100,34 +110,40 @@ export class CompanyService {
 
     load(id : string) {
 
-	if (id == this.id) return;
+	if (id == this.id) return of(this.config);
 
 	let svc = this;
 
-	this.working.start();
+	return new Observable<Company>(obs => {
 
-	this.api.get<Company>(
-	    "/api/company/" + id
-	).subscribe({
-	    next(config) {
+	    this.working.start();
 
-		svc.working.stop();		
-		svc.config = config;
-		svc.id = id;
-		svc.subject.next(config);
-	    },
-	    error(err) {
-		svc.working.stop();		
-		svc.config = null;
-		svc.id = "";
-//		if (err && err.status && err.status == 404) {
-//		    svc.subject.next(new Company());
-		//		}
-		svc.subject.next(null);
-	    },
-	    complete() {
-		svc.working.stop();		
-	    }
+	    this.api.get<Company>(
+		"/api/company/" + id
+	    ).pipe(
+		tap({
+		    error(err) { svc.working.stop(); },
+		    complete() { svc.working.stop(); }
+		})
+	    ).subscribe({
+		next(config : Company) {
+		    svc.config = config;
+		    svc.id = id;
+		    svc.subject.next(config);
+		    obs.next(config);
+		},
+		error(err) {
+		    svc.config = null;
+		    svc.id = "";
+		    obs.error(err);
+		    //		if (err && err.status && err.status == 404) {
+		    //		    svc.subject.next(new Company());
+		    //		}
+		    svc.subject.next(null);
+		},
+		complete() { }
+	    });
+
 	});
 
     }
@@ -144,11 +160,18 @@ export class CompanyService {
 	    })
 	};
 
+	let svc = this;
+
 	this.working.start();
 
 	return this.api.put(
 	    "/api/company/" + this.id, this.config,
 	    httpOptions
+	).pipe(
+	    tap({
+		error(err) { svc.working.stop(); },
+		complete() { svc.working.stop(); }
+	    })
 	);
 
     }
@@ -166,8 +189,17 @@ export class CompanyService {
 		})
 	    };
 
+	    let svc = this;
+
+	    this.working.start();
+
 	    return this.api.put(
 		"/api/company/" + crn, c, httpOptions
+	    ).pipe(
+		tap({
+		    error(err) { svc.working.stop(); },
+		    complete() { svc.working.stop(); }
+		})
 	    ).subscribe((e : any) => {
 		subs.next(crn);
 	    });

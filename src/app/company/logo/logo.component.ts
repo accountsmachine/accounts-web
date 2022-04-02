@@ -44,9 +44,6 @@ export class LogoComponent implements OnInit {
 
     id : any = "";
 
-    load() {
-    }
-
     public image_url : any | null = null;
     
     createImageFromBlob(image: Blob) {
@@ -66,17 +63,14 @@ export class LogoComponent implements OnInit {
 	this.route.params.subscribe(
 	    params => {
 		if (params["id"]) {
-		    this.state.load(params["id"]);
-		    this.id = params["id"];
-		    this.update_logo();
+		    this.state.load(params["id"]).subscribe(c => {
+			if (c) {
+			    this.company = c;
+		    	    this.id = params["id"];
+			    this.update_logo();
+			}
+		    });
 		}
-	    }
-	);
-
-	this.state.onload().subscribe(
-	    (company : any) => {
-		this.company = company;
-		this.load();
 	    }
 	);
 

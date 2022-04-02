@@ -43,17 +43,16 @@ export class WebConfigComponent implements OnInit {
 	this.route.params.subscribe(
 	    params => {
 		if (params["id"]) {
-		    this.state.load(params["id"]);
+		    this.state.load(params["id"]).subscribe(c => {
+			if (c) {
+			    this.company = c;
+			    this.load();
+			}
+		    });
 		}
 	    }
 	);
 
-	this.state.onload().subscribe(
-	    (company : any) => {
-		this.company = company;
-		this.load();
-	    }
-	);	
     }
 
     public success() {

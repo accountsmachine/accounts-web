@@ -8,7 +8,6 @@ import { CompanyService, Company, Companies } from '../company.service';
 import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';
-import { WorkingService } from '../../working.service';
 
 @Component({
     selector: 'list',
@@ -23,7 +22,6 @@ export class ListComponent implements OnInit {
 	private router : Router,
 	private companyService : CompanyService,
 	private dialog : MatDialog,
-	public working : WorkingService,
     ) {
     }
 
@@ -32,14 +30,18 @@ export class ListComponent implements OnInit {
     }
 
     reload() {
-	this.working.start();
-	
-	this.companyService.get_list().subscribe(
-	    e => {
-		this.working.stop();
-		this.configs = e;
+
+	let cmp = this;
+
+	this.companyService.get_list().subscribe({
+	    next(e) {
+		cmp.configs = e;
+	    },
+	    error(e) {
+	    },
+	    complete() {
 	    }
-	);
+	});
 
     }
 

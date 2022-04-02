@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +24,7 @@ export class WorkingService {
 	    this.count += 1;
 	    this.onchange_subject.next(this.count > 0);
 	});
+	console.log("WORKING");
     }
 
     stop() {
@@ -30,6 +32,7 @@ export class WorkingService {
 	    this.count -= 1;
 	    this.onchange_subject.next(this.count > 0);
 	});
+	console.log("STOP");
     }
 
 }
