@@ -46,9 +46,11 @@ clean:
 SERVICE=accounts-web
 PROJECT=accounts-machine-dev
 REGION=europe-west1
+TAG=v$(subst .,-,${VERSION})
 
 deploy:
 	gcloud run services update ${SERVICE} \
 	    --project ${PROJECT} --region ${REGION} \
-	    --image ${CONTAINER}:${VERSION}
+	    --image ${CONTAINER}:${VERSION} \
+	    --tag ${TAG}
 
