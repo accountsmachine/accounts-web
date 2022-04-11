@@ -1,11 +1,11 @@
 
-VERSION=0.0.3
+VERSION=0.9.1
 DIST=dist
 
 all:
 
-stage: KIND=stage
-stage: build
+dev: KIND=dev
+dev: build
 
 build: serve
 	rm -rf ${DIST}/${KIND}
@@ -42,3 +42,13 @@ stop:
 
 clean:
 	rm -rf dist
+
+SERVICE=accounts-web
+PROJECT=accounts-machine-dev
+REGION=europe-west1
+
+deploy:
+	gcloud run services update ${SERVICE} \
+	    --project ${PROJECT} --region ${REGION} \
+	    --image ${CONTAINER}:${VERSION}
+
