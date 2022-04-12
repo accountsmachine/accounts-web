@@ -11,8 +11,9 @@ export class AccountsSelectionComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    all : string[] = [];
-    selected : Set<string> = new Set<string>();
+    line : string;
+    all : string[];
+    selected : Set<string>;
 
     constructor(
 	public dialogRef: MatDialogRef<AccountsSelectionComponent>,
@@ -23,6 +24,7 @@ export class AccountsSelectionComponent implements OnInit {
 	    selected : string[],
 	},
     ) {
+	this.line = this.data.line;
         this.all = this.data.accounts;
 	this.selected = new Set<string>(this.data.selected);
     }

@@ -16,21 +16,21 @@ button {
 
 mat-table {
     height: 100%;
-    width: 50rem;
+    width: 100%;
 }
 
 mat-cell {
     white-space: nowrap;
 }
 
-.mat-column-account {
-    flex: 0 0 70% !important;
-    width: 70% !important;
+.mat-column-line {
+    flex: 0 0 30% !important;
+    width: 30% !important;
 }
 
-.mat-column-balance {
-    flex: 0 0 20% !important;
-    width: 20% !important;
+.mat-column-accounts {
+    flex: 0 0 70% !important;
+    width: 70% !important;
 }
 
 mat-form-field {
