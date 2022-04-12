@@ -16,6 +16,10 @@ export class AccountBalance {
     balance : number = 0;
 }
 
+export class Mapping {
+    [account : string] : string[];
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -30,6 +34,10 @@ export class BooksService {
     
     get_books_detail(id : string) : Observable<AccountBalance[]>{
 	return this.api.get<AccountBalance[]>("/api/books/" + id + "/summary");
+    }
+
+    get_mapping(id : string) : Observable<Mapping>{
+	return this.api.get<Mapping>("/api/books/" + id + "/mapping");
     }
 
     subject : Subject<boolean> = new Subject<boolean>();

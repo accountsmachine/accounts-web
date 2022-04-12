@@ -6,24 +6,31 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
-import { AccountBalance, BooksService } from '../books.service';
+import { AccountBalance, BooksService, Mapping } from '../books.service';
+
+class Row {
+    line : string = "";
+    accounts : string[] = [];
+};
 
 @Component({
-    selector: 'detail',
-    templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss']
+    selector: 'mapping',
+    templateUrl: './mapping.component.html',
+    styleUrls: ['./mapping.component.scss']
 })
-export class DetailComponent implements OnInit, AfterViewInit {
+export class MappingComponent implements OnInit, AfterViewInit {
 
-    summary : MatTableDataSource<AccountBalance> =
-	new MatTableDataSource<AccountBalance>([]);
+    mapping : MatTableDataSource<Row> =
+	new MatTableDataSource<Row>([]);
 
     id : string = "";
+
+    accounts : AccountBalance[] = [];
 
     @ViewChild(MatPaginator) paginator? : MatPaginator;
     @ViewChild(MatSort) sort? : MatSort;
 
-    columns = ['account', 'balance'];
+    columns = ['line', 'accounts'];
 
     constructor(
 	private route : ActivatedRoute,
@@ -36,8 +43,8 @@ export class DetailComponent implements OnInit, AfterViewInit {
     ngOnInit() {}
 
     configure() {
-	this.summary!.paginator = this.paginator!;
-	this.summary!.sort = this.sort!;
+	this.mapping!.paginator = this.paginator!;
+	this.mapping!.sort = this.sort!;
     }
 
     ngAfterViewInit(): void {
@@ -51,9 +58,30 @@ export class DetailComponent implements OnInit, AfterViewInit {
 		    let id = params["id"];
 		    this.id = id;
 
+		    this.booksService.get_mapping(id).subscribe(
+			(mapping : Mapping) => {
+
+			    let data : Row[] = [];
+
+			    for (let key in mapping) {
+
+				let r = new Row();
+
+				r.line = key;
+				r.accounts = mapping[key];
+
+				data.push(r);
+
+			    }
+
+			    this.mapping.data = data;
+
+			}
+		    );
+
 		    this.booksService.get_books_detail(id).subscribe(
 			(e : AccountBalance[]) => {
-			    this.summary.data = e;
+			    this.accounts = e;
 			}
 		    );
 
@@ -65,7 +93,11 @@ export class DetailComponent implements OnInit, AfterViewInit {
 
     apply_filter(f : any) {
 	let filt = f!.value.trim().toLowerCase();
-	this.summary.filter = filt;
+	this.mapping.filter = filt;
+    }
+
+    select(row : any) {
+	console.log(row);
     }
 
 }

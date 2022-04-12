@@ -19,12 +19,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatRippleModule } from '@angular/material/core';
 
 import { BooksRoutingModule } from './books-routing.module';
 import { ListComponent } from './list/list.component';
 import { UploadComponent } from './upload/upload.component';
 import { DetailComponent } from './detail/detail.component';
 import { DeleteConfirmationComponent } from './delete-confirmation/delete-confirmation.component';
+import { MappingComponent } from './mapping/mapping.component';
 
 @NgModule({
     declarations: [
@@ -32,6 +34,7 @@ import { DeleteConfirmationComponent } from './delete-confirmation/delete-confir
 	UploadComponent,
 	DetailComponent,
 	DeleteConfirmationComponent,
+        MappingComponent,
     ],
     imports: [
 	CommonModule,
@@ -45,6 +48,7 @@ import { DeleteConfirmationComponent } from './delete-confirmation/delete-confir
 	MatTableModule,
 	MatSortModule,
 	MatDialogModule,
+	MatRippleModule,
 	MatPaginatorModule,
 	MatProgressSpinnerModule,
 	FormsModule,

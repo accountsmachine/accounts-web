@@ -1,0 +1,45 @@
+
+<section class="tab-contents">
+
+  <h1>Accounting books mapping</h1>
+
+  <div class="container mat-elevation-z8">
+
+    <mat-form-field>
+      <input matInput (keyup)="apply_filter($event.target)"
+	     placeholder="Filter">
+    </mat-form-field>
+
+    <mat-table #table [dataSource]="mapping" matSort>
+
+      <ng-container matColumnDef="line">
+	<mat-header-cell mat-sort-header *matHeaderCellDef>
+	  Accounting line
+	</mat-header-cell>
+	<mat-cell *matCellDef="let row">{{row.line}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="accounts">
+	<mat-header-cell class="header-right" mat-sort-header *matHeaderCellDef>
+	  Mapped accounts
+	</mat-header-cell>
+	<mat-cell *matCellDef="let row">
+	  <div *ngFor="let a of row.accounts" style="padding-right: 1rem">
+	    {{a}}, 
+	  </div>
+	</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+      <mat-row matRipple *matRowDef="let row; columns: columns;"
+	       (click)="select(row)">
+      </mat-row>
+
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+
+  </div>
+
+</section>

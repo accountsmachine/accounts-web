@@ -129,5 +129,9 @@ export class ListComponent implements OnInit {
 	this.router.navigate(["/books/" + c.number + "/detail"])
     }
 
+    mapping(c : any) {
+	this.router.navigate(["/books/" + c.number + "/mapping"])
+    }
+
 }
 

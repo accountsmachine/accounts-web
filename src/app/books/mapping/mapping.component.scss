@@ -1,0 +1,42 @@
+
+@import '../../../theme.scss';
+
+button {
+    margin: 1rem;
+    background-color: $dark-background;
+    color: $light-primary-text;
+}
+
+.tab-contents {
+    padding: 1rem;
+}
+
+.container {
+}
+
+mat-table {
+    height: 100%;
+    width: 50rem;
+}
+
+mat-cell {
+    white-space: nowrap;
+}
+
+.mat-column-account {
+    flex: 0 0 70% !important;
+    width: 70% !important;
+}
+
+.mat-column-balance {
+    flex: 0 0 20% !important;
+    width: 20% !important;
+}
+
+mat-form-field {
+    padding: 1rem;
+}
+
+mat-row:hover {
+    background: #f8f8f8;
+}

@@ -46,6 +46,9 @@
 	  <button mat-button (click)="info(row)">
 	    <mat-icon>info</mat-icon>
 	  </button>
+	  <button mat-button (click)="mapping(row)">
+	    <mat-icon>link</mat-icon>
+	  </button>
 	  <button mat-button [matMenuTriggerFor]="menu"
 		  [matMenuTriggerData]="{row:row}">
 	    <mat-icon>more_vert</mat-icon>
@@ -64,6 +67,7 @@
       <ng-template matMenuContent let-row="row">
 	<button (click)="upload(row)" mat-menu-item>Upload</button>
 	<button (click)="info(row)" mat-menu-item>Show detail</button>
+	<button (click)="mapping(row)" mat-menu-item>Edit mapping</button>
 	<button (click)="delete(row)" mat-menu-item>Delete accounts</button>
       </ng-template>
     </mat-menu>
