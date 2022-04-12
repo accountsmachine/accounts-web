@@ -18,6 +18,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatRippleModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -51,6 +52,7 @@ import { AccountsSelectionComponent } from './accounts-selection/accounts-select
 	MatTableModule,
 	MatSortModule,
 	MatDialogModule,
+	MatSnackBarModule,
 	MatCheckboxModule,
 	MatRippleModule,
 	MatPaginatorModule,

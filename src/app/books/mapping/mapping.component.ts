@@ -8,6 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AccountBalance, BooksService, Mapping } from '../books.service';
 
@@ -42,6 +43,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
     constructor(
 	private route : ActivatedRoute,
 	private router : Router,
+	private snackBar : MatSnackBar,
 	private dialog : MatDialog,
 	private booksService : BooksService,
     )
@@ -138,7 +140,9 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 		    this.booksService.put_mapping(this.id, m).subscribe(
 			() => {
-			    console.log("SAVED");
+			    this.snackBar.open(
+				"Mapping updated", "dismiss",
+				{ duration: 2000 });
 			}
 		    );
 
