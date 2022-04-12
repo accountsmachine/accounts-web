@@ -20,6 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatRippleModule } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { BooksRoutingModule } from './books-routing.module';
 import { ListComponent } from './list/list.component';
@@ -27,6 +28,7 @@ import { UploadComponent } from './upload/upload.component';
 import { DetailComponent } from './detail/detail.component';
 import { DeleteConfirmationComponent } from './delete-confirmation/delete-confirmation.component';
 import { MappingComponent } from './mapping/mapping.component';
+import { AccountsSelectionComponent } from './accounts-selection/accounts-selection.component';
 
 @NgModule({
     declarations: [
@@ -35,6 +37,7 @@ import { MappingComponent } from './mapping/mapping.component';
 	DetailComponent,
 	DeleteConfirmationComponent,
         MappingComponent,
+	AccountsSelectionComponent,
     ],
     imports: [
 	CommonModule,
@@ -48,6 +51,7 @@ import { MappingComponent } from './mapping/mapping.component';
 	MatTableModule,
 	MatSortModule,
 	MatDialogModule,
+	MatCheckboxModule,
 	MatRippleModule,
 	MatPaginatorModule,
 	MatProgressSpinnerModule,

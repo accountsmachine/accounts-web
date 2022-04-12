@@ -1,0 +1,30 @@
+
+<h1 mat-dialog-title>Delete accounts</h1>
+
+<div mat-dialog-content>
+  <p>
+    This operation will blah...
+  </p>
+  <p *ngFor="let acc of all">
+    <span *ngIf="selected.has(acc)">
+      <mat-checkbox [checked]="true"
+		    (change)="unset(acc)">
+	<strong>{{acc}}</strong>
+      </mat-checkbox>
+    </span>
+    <span *ngIf="!selected.has(acc)">
+      <mat-checkbox (change)="set(acc)"
+		    [checked]="false">{{acc}}</mat-checkbox>
+    </span>
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="basic" (click)="no()" cdkFocusInitial>
+    Cancel
+  </button>
+  <button mat-raised-button color="primary"
+	  [mat-dialog-close]="yes()">
+    Update
+  </button>
+</div>

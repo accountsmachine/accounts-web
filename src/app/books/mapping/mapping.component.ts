@@ -5,8 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import {
+    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 
 import { AccountBalance, BooksService, Mapping } from '../books.service';
+
+import {
+    AccountsSelectionComponent
+} from '../accounts-selection/accounts-selection.component';
 
 class Row {
     line : string = "";
@@ -35,6 +42,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
     constructor(
 	private route : ActivatedRoute,
 	private router : Router,
+	private dialog : MatDialog,
 	private booksService : BooksService,
     )
     {
@@ -97,7 +105,33 @@ export class MappingComponent implements OnInit, AfterViewInit {
     }
 
     select(row : any) {
-	console.log(row);
+	let thing = this.accounts.map((a) => a.account );
+	const dialogRef = this.dialog.open(
+	    AccountsSelectionComponent, {
+		width: '450px',
+		data: {
+		    proceed: false,
+		    line: row.line,
+		    selected: row.accounts,
+		    accounts: this.accounts.map((a) => a.account)
+		},
+	    }
+	);
+	dialogRef.afterClosed().subscribe((result : any) => {
+
+	    if (result) {
+
+		if (result.proceed) {
+
+		    for(let row of this.mapping.data) {
+			if (row.line == result.line) {
+			    row.accounts = Array.from(result.selected.values());
+			}
+		    }
+
+		}
+	    }
+	});
     }
 
 }
