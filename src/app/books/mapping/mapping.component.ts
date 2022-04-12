@@ -117,6 +117,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		},
 	    }
 	);
+
 	dialogRef.afterClosed().subscribe((result : any) => {
 
 	    if (result) {
@@ -128,6 +129,18 @@ export class MappingComponent implements OnInit, AfterViewInit {
 			    row.accounts = Array.from(result.selected.values());
 			}
 		    }
+
+		    let m = new Mapping();
+
+		    for (let row of this.mapping.data) {
+			m[row.line] = row.accounts;
+		    }
+
+		    this.booksService.put_mapping(this.id, m).subscribe(
+			() => {
+			    console.log("SAVED");
+			}
+		    );
 
 		}
 	    }

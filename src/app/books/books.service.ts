@@ -40,6 +40,10 @@ export class BooksService {
 	return this.api.get<Mapping>("/api/books/" + id + "/mapping");
     }
 
+    put_mapping(id : string, mapping : Mapping) : Observable<Mapping>{
+	return this.api.put("/api/books/" + id + "/mapping", mapping);
+    }
+
     subject : Subject<boolean> = new Subject<boolean>();
 
     subscribe(f : any) {
