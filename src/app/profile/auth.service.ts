@@ -132,35 +132,35 @@ export class AuthService {
 		(error) => {
 
 		    if (error.code == "auth/invalid-email")
-			this.onerr_subject.next("Invalid email address for login");
+			this.error("Invalid email address for login");
 		    else if (error.code == "auth/app-not-authorized")
-			this.onerr_subject.next("Application is not authorised");
+			this.error("Application is not authorised");
 		    else if (error.code == "auth/argument-error")
-			this.onerr_subject.next("Argument error");
+			this.error("Argument error");
 		    else if (error.code == "auth/invalid-api-key")
-			this.onerr_subject.next("Invalid API key");
+			this.error("Invalid API key");
 		    else if (error.code == "auth/invalid-user-token")
-			this.onerr_subject.next("Invalid user token");
+			this.error("Invalid user token");
 		    else if (error.code == "auth/invalid-tenant-id")
-			this.onerr_subject.next("Invalid tenant ID");
+			this.error("Invalid tenant ID");
 		    else if (error.code == "auth/network-request-failed")
-			this.onerr_subject.next("Network request failed");
+			this.error("Network request failed");
 		    else if (error.code == "auth/operation-not-allowed")
-			this.onerr_subject.next("Operation not allowed");
+			this.error("Operation not allowed");
 		    else if (error.code == "auth/requires-recent-login")
-			this.onerr_subject.next("Requires recent login");
+			this.error("Requires recent login");
 		    else if (error.code == "auth/too-many-requests")
-			this.onerr_subject.next("Too many requests");
+			this.error("Too many requests");
 		    else if (error.code == "auth/unauthorized-domain")
-			this.onerr_subject.next("Unauthorized domain");
+			this.error("Unauthorized domain");
 		    else if (error.code == "auth/user-disabled")
-			this.onerr_subject.next("User accounts has been deactivated");
+			this.error("User accounts has been deactivated");
 		    else if (error.code == "auth/user-token-expired")
-			this.onerr_subject.next("User token has expired");	
+			this.error("User token has expired");	
 		    else if (error.code == "auth/web-storage-unsupported")
-			this.onerr_subject.next("Web storage unsupported");	
-	    else
-			this.onerr_subject.next("ERROR NOT KNOWN " + error.code);
+			this.error("Web storage unsupported");	
+		    else
+			this.error("ERROR NOT KNOWN " + error.code);
 		    obs.error(error);
 		}
 	    );
@@ -183,8 +183,23 @@ export class AuthService {
 		password: password,
 		phone_number: phone,
 		display_name: name,
-	    }, {"responseType": "text", headers: headers}).subscribe(e => {
-		obs.next();
+	    }, {"responseType": "text", headers: headers}).subscribe({
+		next: () => obs.next(),
+		error: (e) => {
+		    console.log(e);
+		    try {
+			let err = JSON.parse(e.error);
+			console.log("err>>", err);
+		        this.error(err.message);
+		        obs.error(err.message);
+			return;
+		    } catch (e) {
+			console.log("NO");
+		    }
+		    this.error(e.error);
+		    obs.error(e.error);
+		},
+		complete: () => obs.complete()
 	    });
 
 	});
@@ -211,14 +226,16 @@ export class AuthService {
 		user
 	    ).then(
 		(t : any) => {
-		    this.onerr_subject.next(
+		    this.error(
 			"A password reset email has been emailed to you."
 		    );
-		    obs.next()
+		    obs.next();
+		    obs.complete();
 		}
 	    ).catch(
 		(error : any) => {
 		    obs.error(error.message);
+		    this.error(error.message);
 		}
 	    )
 	});
@@ -232,7 +249,7 @@ export class AuthService {
 
 		    ).then(
 			(t : any) => {
-			    this.onerr_subject.next(
+			    this.error(
 				"Profile saved"
 			    );
 			    obs.next()
@@ -254,7 +271,7 @@ export class AuthService {
 			email
 		    ).then(
 			(t : any) => {
-			    this.onerr_subject.next(
+			    this.error(
 				"Profile saved"
 			    );
 			    obs.next()
@@ -275,7 +292,7 @@ export class AuthService {
 		    res!.sendEmailVerification(
 		    ).then(
 			(t : any) => {
-			    this.onerr_subject.next(
+			    this.error(
 				"Verification sent"
 			    );
 			    obs.next()
@@ -297,7 +314,7 @@ export class AuthService {
 		    password
 		    ).then(
 			(t : any) => {
-			    this.onerr_subject.next(
+			    this.error(
 				"Password set"
 			    );
 			    obs.next()
@@ -318,7 +335,7 @@ export class AuthService {
 		res!.delete(
 		    ).then(
 			(t : any) => {
-			    this.onerr_subject.next(
+			    this.error(
 				"Account is deleted"
 			    );
 			    obs.next()

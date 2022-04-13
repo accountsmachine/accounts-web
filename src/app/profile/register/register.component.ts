@@ -37,6 +37,7 @@ export class RegisterComponent implements OnInit {
 
 	if (this.password != this.password2) {
 	    this.auth.error("Passwords do not match.");
+	    return;
 	}
 
 	this.working.start();

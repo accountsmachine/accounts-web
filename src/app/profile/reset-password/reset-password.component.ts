@@ -30,11 +30,12 @@ export class ResetPasswordComponent implements OnInit {
     reset() {
 	this.auth.email_reset(
 	    this.username
-	).subscribe(
-	    (e : any) => {
-		this.working.stop();
-	    }
-	);
+	).subscribe({
+	    next: () => this.working.stop(),
+	    error: err => this.working.stop(),
+	    complete: () => {},
+	});
     }
 
 }
+
