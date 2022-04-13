@@ -28,6 +28,8 @@ export class RegisterComponent implements OnInit {
 
     register() {
 
+	let svc = this;
+
 	if (this.password.length < 9) {
 	    this.auth.error("Password is too short.");
 	    return;
@@ -38,20 +40,40 @@ export class RegisterComponent implements OnInit {
 	}
 
 	this.working.start();
+
 	this.auth.create_user(
 	    this.username, this.password, this.phone, this.name
-	).subscribe(
-	    () => {
+	).subscribe({
+	    next() {
 
-		this.working.stop();
+		svc.working.stop();
 
 		// Login, should take us to the email verification step.
-		this.auth.login(this.username, this.password).subscribe(
-		    () => {}
-		);
+		svc.auth.login(svc.username, svc.password).subscribe({
 
-	    }
-	);
+		    next() {
+		    },
+
+		    error(e) {
+			console.log(e);
+		    },
+
+		    complete() {
+		    },
+
+		});
+
+	    },
+
+	    error(e) {
+		console.log(e);
+		svc.working.stop();
+	    },
+
+	    complete() {
+	    },
+
+	});
     }
 
     login() {

@@ -27,8 +27,8 @@ import { DATE_FORMATS } from './date-formats';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppInitService } from './initialise';
-import { ErrorInterceptor } from './error-interceptor';
-import { AuthHeaderInterceptor } from './auth-header-interceptor';
+//import { ErrorInterceptor } from './error-interceptor';
+//import { AuthHeaderInterceptor } from './auth-header-interceptor';
 
 import { environment } from "src/environments/environment";
 
