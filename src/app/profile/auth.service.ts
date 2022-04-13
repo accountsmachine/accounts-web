@@ -186,15 +186,12 @@ export class AuthService {
 	    }, {"responseType": "text", headers: headers}).subscribe({
 		next: () => obs.next(),
 		error: (e) => {
-		    console.log(e);
 		    try {
 			let err = JSON.parse(e.error);
-			console.log("err>>", err);
 		        this.error(err.message);
 		        obs.error(err.message);
 			return;
 		    } catch (e) {
-			console.log("NO");
 		    }
 		    this.error(e.error);
 		    obs.error(e.error);
