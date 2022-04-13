@@ -41,7 +41,6 @@ export class AppComponent implements OnInit {
 	
 	this.working.onchange().subscribe(
 	    w => {
-	    console.log(w);
 		this.work = w;
 	    }
 	);
@@ -61,7 +60,6 @@ export class AppComponent implements OnInit {
 		this.frontPageService.login();
 	    } else if (s == AuthState.UNINITIALISED) {
 		this.frontPageService.loading();
-		console.log("uninitialised");
 	    }
 
 	});

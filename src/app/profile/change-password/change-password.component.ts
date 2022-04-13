@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthService, AuthState } from '../auth.service';
-import { FrontPageService, FrontState } from '../front-page.service';
+import { WorkingService } from '../../working.service';
 
 @Component({
     selector: 'change-password',
@@ -15,7 +15,7 @@ export class ChangePasswordComponent implements OnInit {
 
     constructor(
 	private auth : AuthService,
-	private frontPageService : FrontPageService,
+	public working : WorkingService,
     ) {
     }
 
@@ -23,6 +23,29 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     change() {
+
+	if (this.password.length < 9) {
+	    this.auth.error("Password is too short.");
+	    return;
+	}
+
+	if (this.password != this.password2) {
+	    this.auth.error("Passwords do not match.");
+	    return;
+	}
+
+	this.working.start();
+
+	this.auth.change_password(this.password).subscribe({
+
+	    next: () => this.working.stop(),
+
+	    error: (e) => this.working.stop(),
+
+	    complete: () => {}
+
+	});
+
     }
 
 }

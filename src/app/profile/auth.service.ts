@@ -130,7 +130,6 @@ export class AuthService {
 		}
 	    ).catch(
 		(error) => {
-
 		    if (error.code == "auth/invalid-email")
 			this.error("Invalid email address for login");
 		    else if (error.code == "auth/app-not-authorized")
@@ -307,20 +306,20 @@ export class AuthService {
     change_password(password : string) : Observable<void> {
 	return new Observable<void>(obs => {
 	    this.fireAuth.currentUser.then(res =>
-		res!.updatePassword(
-		    password
-		    ).then(
-			(t : any) => {
-			    this.error(
-				"Password set"
-			    );
-			    obs.next()
-			}
-		    ).catch(
-			(error : any) => {
-			    obs.error(error.message);
-			}
-		    )
+
+		res!.updatePassword(password).then(
+		    (t : any) => {
+			this.error(
+			    "Password set"
+			);
+			obs.next()
+		    }
+		).catch(
+		    (error : any) => {
+			obs.error(error.message);
+		    }
+		)
+
 	    )
 	});
 

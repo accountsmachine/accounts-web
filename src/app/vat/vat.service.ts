@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of, Subject } from 'rxjs';
+import { debounceTime, take, tap } from 'rxjs/operators';
 import {
     HttpHeaders
 } from '@angular/common/http';
@@ -47,15 +48,40 @@ export type Return = {
     totalAcquisitionsExVAT: number,
 };
 
+export type Criteria = {
+    cid : string,
+    start : string,
+    end : string,
+};
+
 @Injectable({
     providedIn: 'root'
 })
 export class VatService {
 
+    subj2 : Subject<Criteria> = new Subject<Criteria>();
+
     constructor(
 	private api : ApiService,
 	private device : DeviceIdService,
     ) {
+
+	this.subj2.pipe(debounceTime(100)).subscribe((c : Criteria) => {
+
+	    let url = "/api/vat/status/" + c.cid;
+	    url = url + "?start=" + c.start;
+	    url = url + "&end=" + c.end;
+
+    	    this.api.get<any>(url, this.options).subscribe({
+		next: s => {
+		    this.subject.next(s);
+		},
+		error: e => { console.log(e); },
+		complete: () => {}
+	    });
+
+	});
+
     }
 
     code = "";
@@ -72,18 +98,29 @@ export class VatService {
 	})
     };
 
+    cid  = "";
+    start = "";
+    end = "";
+    status : any = {};
+
+    subject : Subject<any> = new Subject<any>();
+
+    getStatus(cid : string, start : string, end : string) : Observable<any> {
+
+	let c : Criteria = { cid: cid, start: start, end: end };
+
+	this.subj2.next(c);
+
+	return this.subject.pipe(take(1));
+
+    }
+
     getObligations(
 	cid : string, start : string, end : string
     ) : Observable<Obligation[]> {
-
-	let url = "/api/vat/obligations/" + cid;
-	url = url + "?start=" + start;
-	url = url + "&end=" + end;
-
-    	return this.api.get<Obligation[]>(
-	    url, this.options
+	return this.getStatus(cid, start, end).pipe(
+	    map(e => e.obligations)
 	);
-
     }
 
     getOpenObligations(cid : string) : Observable<Obligation[]> {
@@ -99,24 +136,16 @@ export class VatService {
     getPayments(
 	cid : string, start : string, end : string
     ) : Observable<Payment[]> {
-	let url = "/api/vat/payments/" + cid;
-	url = url + "?start=" + start;
-	url = url + "&end=" + end;
-
-    	return this.api.get<Payment[]>(
-	    url, this.options
+	return this.getStatus(cid, start, end).pipe(
+	    map(e => e.payments)
 	);
     }
 
     getLiabilities(
 	cid : string, start : string, end : string
     ) : Observable<Liability[]> {
-	let url = "/api/vat/liabilities/" + cid;
-	url = url + "?start=" + start;
-	url = url + "&end=" + end;
-
-    	return this.api.get<Liability[]>(
-	    url, this.options
+	return this.getStatus(cid, start, end).pipe(
+	    map(e => e.liabilities)
 	);
     }
 
@@ -130,7 +159,7 @@ export class VatService {
     	return this.api.get<Return[]>(
 	    url, this.options
 	);
-     }
+    }
 
     receiveToken(code : any, state : any) {
 	this.code = code;

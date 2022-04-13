@@ -24,7 +24,7 @@ export class WorkingService {
 	    this.count += 1;
 	    this.onchange_subject.next(this.count > 0);
 	});
-	console.log("WORKING");
+//	console.log("WORKING");
     }
 
     stop() {
@@ -32,7 +32,7 @@ export class WorkingService {
 	    this.count -= 1;
 	    this.onchange_subject.next(this.count > 0);
 	});
-	console.log("STOP");
+//	console.log("STOP");
     }
 
 }
