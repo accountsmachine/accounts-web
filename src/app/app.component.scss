@@ -1,13 +1,13 @@
 
 @import "../theme.scss";
 
-#working {
+.spinner {
+    display: flex;
     position: absolute;
     width: 100%;
     height: 100%;
-    border: 1px solid black;
-    background: #e0e0e020;
-    z-index: 999;
+    background: rgba(240, 240, 240, 0.2);
+    z-index: 99;
 }
 
 mat-spinner {
@@ -17,6 +17,7 @@ mat-spinner {
     left: 50%;
     margin-left: -50px;
     margin-top: -50px;
+    z-index: 999;
 }
 
 .centerbox {

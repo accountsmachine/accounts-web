@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
 	
 	this.working.onchange().subscribe(
 	    w => {
+	    console.log(w);
 		this.work = w;
 	    }
 	);
