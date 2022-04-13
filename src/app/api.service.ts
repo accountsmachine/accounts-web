@@ -42,26 +42,39 @@ export class ApiService {
 
     get<T>(url: string, options? : any): Observable<T> {
 
+	let svc = this;
+
 	return new Observable<T>(obs => {
 
-	    this.auth.get_token().subscribe(token => {
+	    let subs = this.auth.get_token().subscribe({
 
-		if (token == null) {
-		    obs.error("Not authentication token");
-		    return;
-		}
+		next(token) {
 
-		let opts = this.options(options, token);
+		    if (token == null) {
+			obs.error("Not authentication token");
+			obs.complete();
+			return;
+		    }
 
-		this.http.get<T>(url, opts).subscribe({
-		    next(e : any) { obs.next(e); },
-		    error(e : any) { obs.error(e); },
-		    complete() { obs.complete(); },
-		})
+		    let opts = svc.options(options, token);
+
+		    svc.http.get<T>(url, opts).subscribe({
+			next(e : any) { obs.next(e); },
+			error(e : any) { obs.error(e); },
+			complete() { obs.complete(); },
+		    })
+
+		    subs.unsubscribe();
+
+		},
+
+		error(e) { obs.error(e); subs.unsubscribe(); },
+
+		complete() { obs.complete(); subs.unsubscribe(); }
 
 	    });
 
-	});
+	})
 
     }
 
@@ -83,76 +96,115 @@ export class ApiService {
 
     put<T>(url: string, data : any, options? : any): Observable<T> {
 
+	let svc = this;
+
 	return new Observable<T>(obs => {
 
-	    this.auth.get_token().subscribe(token => {
+	    let subs = this.auth.get_token().subscribe({
 
-		if (token == null) {
-		    obs.error("Not authentication token");
-		    return;
-		}
+		next(token) {
 
-		let opts = this.options(options, token);
+		    if (token == null) {
+			obs.error("Not authentication token");
+			obs.complete();
+			return;
+		    }
 
-		this.http.put<T>(url, data, opts).subscribe({
-		    next(e : any) { obs.next(e); },
-		    error(e : any) { obs.error(e); },
-		    complete() { obs.complete(); },
-		})
+		    let opts = svc.options(options, token);
+
+		    svc.http.put<T>(url, data, opts).subscribe({
+			next(e : any) { obs.next(e); },
+			error(e : any) { obs.error(e); },
+			complete() { obs.complete(); },
+		    })
+
+		    subs.unsubscribe();
+
+		},
+
+		error(e) { obs.error(e); subs.unsubscribe(); },
+
+		complete() { obs.complete(); subs.unsubscribe(); }
 
 	    });
 
-	});
+	})
 
     }
 
     post<T>(url: string, data : any, options? : any): Observable<T> {
 
+	let svc = this;
+
 	return new Observable<T>(obs => {
 
-	    this.auth.get_token().subscribe(token => {
+	    let subs = this.auth.get_token().subscribe({
 
-		if (token == null) {
-		    obs.error("Not authentication token");
-		    return;
-		}
+		next(token) {
 
-		let opts = this.options(options, token);
+		    if (token == null) {
+			obs.error("Not authentication token");
+			obs.complete();
+			return;
+		    }
 
-		this.http.post<T>(url, data, opts).subscribe({
-		    next(e : any) { obs.next(e); },
-		    error(e : any) { obs.error(e); },
-		    complete() { obs.complete(); },
-		})
+		    let opts = svc.options(options, token);
+
+		    svc.http.post<T>(url, data, opts).subscribe({
+			next(e : any) { obs.next(e); },
+			error(e : any) { obs.error(e); },
+			complete() { obs.complete(); },
+		    })
+
+		    subs.unsubscribe();
+
+		},
+
+		error(e) { obs.error(e); subs.unsubscribe(); },
+
+		complete() { obs.complete(); subs.unsubscribe(); }
 
 	    });
 
-	});
+	})
 
     }
 
     delete<T>(url: string, options? : any): Observable<T> {
 
+	let svc = this;
+
 	return new Observable<T>(obs => {
 
-	    this.auth.get_token().subscribe(token => {
+	    let subs = this.auth.get_token().subscribe({
 
-		if (token == null) {
-		    obs.error("Not authentication token");
-		    return;
-		}
+		next(token) {
 
-		let opts = this.options(options, token);
+		    if (token == null) {
+			obs.error("Not authentication token");
+			obs.complete();
+			return;
+		    }
 
-		this.http.delete<T>(url, opts).subscribe({
-		    next(e : any) { obs.next(e); },
-		    error(e : any) { obs.error(e); },
-		    complete() { obs.complete(); },
-		})
+		    let opts = svc.options(options, token);
+
+		    svc.http.delete<T>(url, opts).subscribe({
+			next(e : any) { obs.next(e); },
+			error(e : any) { obs.error(e); },
+			complete() { obs.complete(); },
+		    })
+
+		    subs.unsubscribe();
+
+		},
+
+		error(e) { obs.error(e); subs.unsubscribe(); },
+
+		complete() { obs.complete(); subs.unsubscribe(); }
 
 	    });
 
-	});
+	})
 
     }
 
