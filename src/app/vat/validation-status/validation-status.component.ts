@@ -43,6 +43,7 @@ export class ValidationStatusComponent implements OnInit {
 
     select(row : ValidationError) {
 	this.router.navigate([row.href]);
+	return false;
     }
 
 }
