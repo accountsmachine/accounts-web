@@ -43,10 +43,21 @@
 	<mat-cell mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="action">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">
+	  <button mat-button color="basic" (click)="select(row)"
+		  *ngIf="row.href">
+	    <mat-icon>build</mat-icon>
+	    Fix
+	  </button>
+	</mat-cell>
+      </ng-container>
+
       <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
 
-      <mat-row *matRowDef="let row; columns: columns;"
-	       (click)="select(row)">
+      <mat-row *matRowDef="let row; columns: columns;">
       </mat-row>
 
     </mat-table>
@@ -60,5 +71,4 @@
   </ng-template>
 
 </section>
-
 

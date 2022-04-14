@@ -40,7 +40,6 @@ export class ValidationService {
 		"VAL-3",
 		"Company not defined.",
 		"INFO",
-		"/vat/09f6f85f-5570-4c60-aa84-2e06cc3b3f60/company",
 	    ),
 	    new ValidationError(
 		"VAL-4",

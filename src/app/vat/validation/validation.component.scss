@@ -29,8 +29,13 @@ mat-cell {
 }
 
 .mat-column-description {
-    flex: 0 0 65% !important;
-    width: 65% !important;
+    flex: 0 0 55% !important;
+    width: 55% !important;
+}
+
+.mat-column-action {
+    flex: 0 0 10% !important;
+    width: 10% !important;
 }
 
 .kind-error {
@@ -47,9 +52,5 @@ mat-cell {
 
 .icon {
     padding-right: 0.3rem;
-}
-
-mat-row:hover {
-    background: #f8f8f8;
 }
 

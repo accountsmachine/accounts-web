@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { ValidationService, ValidationError } from '../validation.service';
@@ -16,11 +16,12 @@ export class ValidationComponent implements OnInit {
     errors : MatTableDataSource<ValidationError> =
 	new MatTableDataSource<ValidationError>([]);
 
-    columns = [ "id", "kind", "description" ];
+    columns = [ "id", "kind", "description", "action" ];
 
     constructor(
 	private validation : ValidationService,
 	private route : ActivatedRoute,
+	private router : Router,
     ) {
 	this.validation.onupdate().subscribe(
 	    (errs : ValidationError[]) => {
@@ -41,7 +42,7 @@ export class ValidationComponent implements OnInit {
     }
 
     select(row : ValidationError) {
-	console.log(row.href);
+	this.router.navigate([row.href]);
     }
 
 }
