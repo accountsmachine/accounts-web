@@ -11,7 +11,7 @@ import { Balance } from '../commerce/commerce.model';
 import { StatusService } from '../status/status.service';
 import { BooksService } from '../books/books.service';
 
-export class ValidationError {
+export class Check {
     constructor(
 	public id : string,
 	public description : string,
@@ -21,14 +21,21 @@ export class ValidationError {
     }
 };
 
+export class Checklist {
+    pending : boolean = false;
+    list : Check[] = [];
+};
+
 // FIXME: Lots of events, debounce?
 
 @Injectable({
     providedIn: 'root'
 })
-export class ValidationService {
+export class ChecklistService {
 
-    errors : ValidationError[] = [];
+//    errors : ValidationError[] = [];
+    pending : number = 0;
+    checklist : Checklist = new Checklist();
 
     id : string = "";
     config : any = {};
@@ -51,7 +58,7 @@ export class ValidationService {
 
     load(id : string) {
 
-	this.errors = [];
+	this.checklist.list = [];
 
 	this.id = id;
 
@@ -116,12 +123,12 @@ export class ValidationService {
 
     validate() {
 
-	let errors = [];
+	let list : Check[] = [];
 
 	if (this.balance && this.balance.credits &&
 	    this.balance.credits["vat"] < 1) {
-	    errors.push(
-		new ValidationError(
+	    list.push(
+		new Check(
 		    "COMM",
 		    "You have no VAT filing credits - " +
 			"purchase credits to file this return",
@@ -132,8 +139,8 @@ export class ValidationService {
 	}
 
 	if (!this.config.company) {
-	    errors.push(
-		new ValidationError(
+	    list.push(
+		new Check(
 		    "CNAME",
 		    "You must select a company to file for",
 		    "ERROR",
@@ -143,8 +150,8 @@ export class ValidationService {
 	} else {
 
 	    if (this.company && !this.company.company_name) {
-		errors.push(
-		    new ValidationError(
+		list.push(
+		    new Check(
 			"CNAME",
 			"The company configuration does not define a " +
 			    "company name",
@@ -155,8 +162,8 @@ export class ValidationService {
 	    }
 
 	    if (this.company && !this.company.vrn) {
-		errors.push(
-		    new ValidationError(
+		list.push(
+		    new Check(
 			"VRN",
 			"You must provide a company VAT registration number",
 			"ERROR",
@@ -167,8 +174,8 @@ export class ValidationService {
 	    }
 
 	    if (this.company && !this.books_info.time) {
-		errors.push(
-		    new ValidationError(
+		list.push(
+		    new Check(
 			"BOOK",
 			"You must upload accounting books for your company",
 			"ERROR",
@@ -181,8 +188,8 @@ export class ValidationService {
 	}
 
 	if (!this.config.due) {
-	    errors.push(
-		new ValidationError(
+	    list.push(
+		new Check(
 		    "PERD",
 		    "You must specify a VAT period",
 		    "ERROR",
@@ -192,8 +199,8 @@ export class ValidationService {
 	}
 
 	if (this.status && ! this.status.vat) {
-	    errors.push(
-		new ValidationError(
+	    list.push(
+		new Check(
 		    "CONN",
 		    "You must configure the connection to HMRC using " +
 			"VAT credentials for your company",
@@ -203,14 +210,14 @@ export class ValidationService {
 	    );
 	}
 
-	this.errors = errors;
+	this.checklist.list = list;
 	
-	this.subject.next(this.errors);
+	this.subject.next(this.checklist);
     }
 
-    subject = new Subject<ValidationError[]>();
+    subject = new Subject<Checklist>();
 
-    onupdate() : Observable<ValidationError[]> {
+    onupdate() : Observable<Checklist> {
 	return this.subject.pipe(debounceTime(500));
     }
 
