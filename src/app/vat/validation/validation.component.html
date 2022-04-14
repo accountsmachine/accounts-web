@@ -1,0 +1,64 @@
+
+<section class="tab-contents">
+  
+  <h1>Validation errors</h1>
+
+  <div class="container mat-elevation-z8"
+       *ngIf="errors.data.length > -12; else nodata">
+
+    <mat-table #table [dataSource]="errors">
+
+      <ng-container matColumnDef="id">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  ID
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">
+	  {{row.id}}
+	</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="kind">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Type
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row"
+		  class="kind-{{row.kind | lowercase}}">
+	  <div *ngIf="row.kind == 'ERROR'" class="icon kind-error">
+	    <mat-icon>error</mat-icon>
+	  </div>
+	  <div *ngIf="row.kind == 'WARNING'" class="icon kind-warning">
+	    <mat-icon>warning</mat-icon>
+	  </div>
+	  <div *ngIf="row.kind == 'INFO'" class="icon kind-info">
+	    <mat-icon>info</mat-icon>
+	  </div>
+	  {{row.kind}}
+	</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+	<mat-header-cell mat-header-cell *matHeaderCellDef>
+	  Description
+	</mat-header-cell>
+	<mat-cell mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: columns;"
+	       (click)="select(row)">
+      </mat-row>
+
+    </mat-table>
+
+  </div>
+
+  <ng-template #nodata>
+    <div>
+      Nothing to display.
+    </div>
+  </ng-template>
+
+</section>
+
+

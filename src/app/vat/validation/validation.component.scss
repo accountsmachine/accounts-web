@@ -1,0 +1,55 @@
+
+@import "../../../theme.scss";
+
+section {
+    margin-top: 1rem;
+}
+
+.container {
+    width: 100%;
+    overflow: auto;
+}
+
+mat-table {
+    width: 100%;
+}
+
+mat-cell {
+    white-space: nowrap;
+}
+
+.mat-column-id {
+    flex: 0 0 12% !important;
+    width: 12% !important;
+}
+
+.mat-column-kind {
+    flex: 0 0 12% !important;
+    width: 12% !important;
+}
+
+.mat-column-description {
+    flex: 0 0 65% !important;
+    width: 65% !important;
+}
+
+.kind-error {
+    color: $warn-text;
+}
+
+.kind-warning {
+    color: $warn-text;
+}
+
+.kind-info {
+    color: $primary-text;
+}
+
+.icon {
+    padding-right: 0.3rem;
+}
+
+mat-row:hover {
+    background: #f8f8f8;
+}
+

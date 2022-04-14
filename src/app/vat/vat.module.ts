@@ -39,6 +39,7 @@ import { RecordComponent } from './record/record.component';
 import { LabelComponent } from './label/label.component';
 
 import { SharedModule } from '../shared/shared.module';
+import { ValidationComponent } from './validation/validation.component';
 
 @NgModule({
     declarations: [
@@ -53,6 +54,7 @@ import { SharedModule } from '../shared/shared.module';
         DataComponent,
         RecordComponent,
         LabelComponent,
+        ValidationComponent,
     ],
     exports: [
 	NewComponent,
