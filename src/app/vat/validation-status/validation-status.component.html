@@ -1,10 +1,14 @@
 
-<section class="tab-contents">
+<div class="tab-contents" *ngIf="errors.data.length > 0; else nodata">
   
   <h1>Validation errors</h1>
 
-  <div class="container mat-elevation-z8"
-       *ngIf="errors.data.length > -12; else nodata">
+  <p>
+    <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+    Further information is needed to be able to submit this filing.
+  </p>
+
+  <div class="container mat-elevation-z8">
 
     <mat-table #table [dataSource]="errors">
 
@@ -64,11 +68,20 @@
 
   </div>
 
-  <ng-template #nodata>
-    <div>
-      Nothing to display.
-    </div>
-  </ng-template>
+</div>
 
-</section>
+<ng-template #nodata>
+
+  <section>
+
+    <h1>Validation complete</h1>
+
+    <div>
+      <mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
+      This return is complete and ready to file.
+    </div>
+
+  </section>
+    
+</ng-template>
 

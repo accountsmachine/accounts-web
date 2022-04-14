@@ -54,3 +54,14 @@ mat-cell {
     padding-right: 0.3rem;
 }
 
+mat-icon {
+    vertical-align: middle;
+}
+
+.tick-true {
+    color: $affirm-text;
+}
+
+.tick-false {
+    color: $deny-text;
+}

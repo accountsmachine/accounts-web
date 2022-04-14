@@ -8,6 +8,7 @@ import { Company, CompanyService } from '../company/company.service';
 import { CommerceService } from '../commerce/commerce.service';
 import { Balance } from '../commerce/commerce.model';
 import { StatusService } from '../status/status.service';
+import { BooksService } from '../books/books.service';
 
 export class ValidationError {
     constructor(
@@ -33,12 +34,14 @@ export class ValidationService {
     company : any = {};
     balance : Balance;
     status : any;
+    books_info : any = {};
 
     constructor(
 	private filing : VatConfigService,
 	private companyService : CompanyService,
 	private commerce : CommerceService,
 	private statusService : StatusService,
+	private books : BooksService,
     ) {
  	this.balance = {
 	    email: "", uid: "", credits: { vat: 0, corptax: 0, accounts: 0 }
@@ -49,25 +52,56 @@ export class ValidationService {
 
 	this.id = id;
 
+	this.commerce.onbalance().subscribe({
+	    next: bal => { this.balance = bal; },
+	    error: e => {
+		this.balance = {
+		    email: "", uid: "",
+		    credits: { vat: 0, corptax: 0, accounts: 0 }
+		};
+	    }
+	});
+
+	this.commerce.update_balance();
+
 	this.filing.load(id).subscribe(e => {
 
 	    this.config = e.config;
 
 	    if ("company" in this.config) {
 		this.company = {};
-		this.companyService.load(this.config.company).subscribe(
-		    cmp => {
+		this.status = {};
+		this.books_info = {};
+		this.companyService.load(this.config.company).subscribe({
+		    next: cmp => {
 			this.company = cmp;
 			this.validate();
-		    }
-		);
-		this.statusService.get(this.config.company).subscribe(
-		    st => {
-			console.log(st);
-			this.status = st;
+		    },
+		    error: () => {
+			this.company = {};
 			this.validate();
 		    }
-		);
+		});
+		this.statusService.get(this.config.company).subscribe({
+		    next: st => {
+			this.status = st;
+			this.validate();
+		    },
+		    error: (e) => {
+			this.status = {};
+			this.validate();
+		    }
+		});
+		this.books.get_books_info(this.config.company).subscribe({
+		    next: info => {
+			this.books_info = info;
+			this.validate();
+		    },
+		    error: (e) => {
+			this.books_info = {};
+			this.validate();
+		    },
+		});
 	    } else {
 		this.company = {};
 	    }
@@ -94,40 +128,65 @@ export class ValidationService {
 	    );
 	}
 
-	if (this.company && !this.company.company_name) {
+	if (!this.config.company) {
 	    errors.push(
 		new ValidationError(
 		    "CNAME",
-		    "The company configuration does not define a company name",
+		    "You must select a company to file for",
 		    "ERROR",
-		    "/company/" + this.config.company + "/business"
+		    "/vat/" + this.id + "/company"
 		)
 	    );
-	}
+	} else {
 
-	if (this.company && !this.company.vrn) {
-	    errors.push(
-		new ValidationError(
-		    "VRN",
-		    "You must provide a company VAT registration number",
-		    "ERROR",
-		    "/company/" + this.config.company + "/tax"
-		)
-	    );
+	    if (this.company && !this.company.company_name) {
+		errors.push(
+		    new ValidationError(
+			"CNAME",
+			"The company configuration does not define a company name",
+			"ERROR",
+			"/company/" + this.config.company + "/business"
+		    )
+		);
+	    }
+
+	    if (this.company && !this.company.vrn) {
+		errors.push(
+		    new ValidationError(
+			"VRN",
+			"You must provide a company VAT registration number",
+			"ERROR",
+			"/company/" + this.config.company + "/tax"
+		    )
+		);
+
+	    }
+
+	    if (this.company && !this.books_info.time) {
+		errors.push(
+		    new ValidationError(
+			"BOOK",
+			"You must upload accounting books for your company",
+			"ERROR",
+			"/books"
+		    )
+		);
+
+	    }
+
 	}
 
 	if (!this.config.due) {
 	    errors.push(
 		new ValidationError(
 		    "PERD",
-		    "There is no period start date, specify a period",
+		    "You must specify a VAT period",
 		    "ERROR",
 		    "/vat/" + this.id + "/period"
 		)
 	    );
 	}
 
-	console.log(this.status);
 	if (this.status && ! this.status.vat) {
 	    errors.push(
 		new ValidationError(
