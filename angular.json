@@ -36,7 +36,7 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "prod": {
               "budgets": [
                 {
                   "type": "initial",
@@ -133,8 +133,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {
-              "browserTarget": "accounts-machine:build:production"
+            "prod": {
+              "browserTarget": "accounts-machine:build:prod"
             },
             "local": {
               "browserTarget": "accounts-machine:build:local"

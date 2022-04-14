@@ -1,5 +1,5 @@
 
-VERSION=0.9.1
+VERSION=0.9.2
 DIST=dist
 
 all: serve
@@ -13,7 +13,7 @@ dist-dev: build
 dist-stage: BUILD=stage
 dist-stage: build
 
-dist-prod: BUILD=production
+dist-prod: BUILD=prod
 dist-prod: build
 
 build:
@@ -30,13 +30,13 @@ REPO=europe-west2-docker.pkg.dev/accounts-machine-${KIND}/accounts-machine
 CONTAINER=${REPO}/${NAME}
 
 container-dev: KIND=dev
-container-dev: all dist-dev container
+container-dev: all container
 
 container-stage: KIND=stage
-container-stage: all dist-stage container
+container-stage: all container
 
 container-prod: KIND=prod
-container-prod: all dist-prod container
+container-prod: all container
 
 container: all
 	podman build -f Containerfile -t ${CONTAINER}:${VERSION} \
@@ -46,6 +46,15 @@ login:
 	gcloud auth print-access-token | \
 	    podman login -u oauth2accesstoken --password-stdin \
 	        europe-west2-docker.pkg.dev
+
+push-dev: KIND=dev
+push-dev: push
+
+push-stage: KIND=stage
+push-stage: push
+
+push-prod: KIND=prod
+push-prod: push
 
 push:
 	podman push --remove-signatures ${CONTAINER}:${VERSION}
@@ -62,11 +71,20 @@ clean:
 	rm -rf dist
 
 SERVICE=accounts-web
-PROJECT=accounts-machine-dev
+PROJECT=accounts-machine-${KIND}
 REGION=europe-west1
 TAG=v$(subst .,-,${VERSION})
 
-deploy:
+upgrade-dev: KIND=dev
+upgrade-dev: upgrade
+
+upgrade-stage: KIND=stage
+upgrade-stage: upgrade
+
+upgrade-prod: KIND=prod
+upgrade-prod: upgrade
+
+upgrade:
 	gcloud run services update ${SERVICE} \
 	    --project ${PROJECT} --region ${REGION} \
 	    --image ${CONTAINER}:${VERSION} \
