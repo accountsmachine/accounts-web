@@ -7,11 +7,11 @@ import { ValidationService, ValidationError } from '../validation.service';
 
 
 @Component({
-    selector: 'validation',
-    templateUrl: './validation.component.html',
-    styleUrls: ['./validation.component.scss']
+    selector: 'validation-status',
+    templateUrl: './validation-status.component.html',
+    styleUrls: ['./validation-status.component.scss']
 })
-export class ValidationComponent implements OnInit {
+export class ValidationStatusComponent implements OnInit {
 
     errors : MatTableDataSource<ValidationError> =
 	new MatTableDataSource<ValidationError>([]);
