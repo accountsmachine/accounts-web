@@ -1,90 +1,102 @@
 
-<div class="tab-contents" *ngIf="errors.data.length > 0; else nodata">
-  
-  <h1>Validation errors</h1>
+<section>
 
-  <p>
+  <ng-template #working>
+    <div class="working">
+      <div>
+	WORKING...
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #nodata>
+    <section>
+      <h1>Validation complete</h1>
+    </section>
+  </ng-template>
+  
+  <h1>Checklist</h1>
+
+  <p *ngIf="!checklist.complete">
     <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
     Further information is needed to be able to submit this filing.
   </p>
 
-  <div class="container mat-elevation-z8">
+  <p *ngIf="checklist.complete">
+    <mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
+    This return is complete and ready to file.
+  </p>
 
-    <mat-table #table [dataSource]="errors">
+  <ng-container *ngIf="!pending; else working">
 
-      <ng-container matColumnDef="id">
-	<mat-header-cell mat-header-cell *matHeaderCellDef>
-	  ID
-	</mat-header-cell>
-	<mat-cell mat-cell *matCellDef="let row">
-	  {{row.id}}
-	</mat-cell>
-      </ng-container>
+    <div class="tab-contents" *ngIf="errors.data.length > 0; else nodata">
 
-      <ng-container matColumnDef="kind">
-	<mat-header-cell mat-header-cell *matHeaderCellDef>
-	  Type
-	</mat-header-cell>
-	<mat-cell mat-cell *matCellDef="let row"
-		  class="kind-{{row.kind | lowercase}}">
-	  <div *ngIf="row.kind == 'ERROR'" class="icon kind-error">
-	    <mat-icon>error</mat-icon>
-	  </div>
-	  <div *ngIf="row.kind == 'WARNING'" class="icon kind-warning">
-	    <mat-icon>warning</mat-icon>
-	  </div>
-	  <div *ngIf="row.kind == 'INFO'" class="icon kind-info">
-	    <mat-icon>info</mat-icon>
-	  </div>
-	  <div *ngIf="row.kind == 'OK'" class="icon kind-ok">
-	    <mat-icon>check</mat-icon>
-	  </div>
-	  {{row.kind}}
-	</mat-cell>
-      </ng-container>
+      <div class="container mat-elevation-z8">
 
-      <ng-container matColumnDef="description">
-	<mat-header-cell mat-header-cell *matHeaderCellDef>
-	  Description
-	</mat-header-cell>
-	<mat-cell mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
-      </ng-container>
+	<mat-table #table [dataSource]="errors">
 
-      <ng-container matColumnDef="action">
-	<mat-header-cell mat-header-cell *matHeaderCellDef>
-	</mat-header-cell>
-	<mat-cell mat-cell *matCellDef="let row">
-	  <button mat-button color="basic" (click)="select(row)"
-		  *ngIf="row.href">
-	    <mat-icon>build</mat-icon>
-	    Fix
-	  </button>
-	</mat-cell>
-      </ng-container>
+	  <ng-container matColumnDef="id">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      ID
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+	      {{row.id}}
+	    </mat-cell>
+	  </ng-container>
 
-      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+	  <ng-container matColumnDef="kind">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Type
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row"
+		      class="kind-{{row.kind | lowercase}}">
+	      <div *ngIf="row.kind == 'ERROR'" class="icon kind-error">
+		<mat-icon>error</mat-icon>
+	      </div>
+	      <div *ngIf="row.kind == 'WARNING'" class="icon kind-warning">
+		<mat-icon>warning</mat-icon>
+	      </div>
+	      <div *ngIf="row.kind == 'INFO'" class="icon kind-info">
+		<mat-icon>info</mat-icon>
+	      </div>
+	      <div *ngIf="row.kind == 'OK'" class="icon kind-ok">
+		<mat-icon>check</mat-icon>
+	      </div>
+	      {{row.kind}}
+	    </mat-cell>
+	  </ng-container>
 
-      <mat-row *matRowDef="let row; columns: columns;">
-      </mat-row>
+	  <ng-container matColumnDef="description">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	      Description
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
+	  </ng-container>
 
-    </mat-table>
+	  <ng-container matColumnDef="action">
+	    <mat-header-cell mat-header-cell *matHeaderCellDef>
+	    </mat-header-cell>
+	    <mat-cell mat-cell *matCellDef="let row">
+	      <button mat-button color="basic" (click)="select(row)"
+		      *ngIf="row.href">
+		<mat-icon>build</mat-icon>
+		Fix
+	      </button>
+	    </mat-cell>
+	  </ng-container>
 
-  </div>
+	  <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
 
-</div>
+	  <mat-row *matRowDef="let row; columns: columns;">
+	  </mat-row>
 
-<ng-template #nodata>
+	</mat-table>
 
-  <section>
+      </div>
 
-    <h1>Validation complete</h1>
-
-    <div>
-      <mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
-      This return is complete and ready to file.
     </div>
 
-  </section>
-    
-</ng-template>
+  </ng-container>
+
+</section>
 

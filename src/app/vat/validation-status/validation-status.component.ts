@@ -16,6 +16,8 @@ export class ValidationStatusComponent implements OnInit {
     errors : MatTableDataSource<Check> =
 	new MatTableDataSource<Check>([]);
 
+    pending = false;
+
     checklist : Checklist = new Checklist();
 
     columns = [ "id", "kind", "description", "action" ];
@@ -25,12 +27,16 @@ export class ValidationStatusComponent implements OnInit {
 	private route : ActivatedRoute,
 	private router : Router,
     ) {
+
 	this.checklistSvc.onupdate().subscribe(
 	    (cl : Checklist) => {
 	        this.checklist = cl;
 		this.errors.data = cl.list;
+		this.pending = cl.pending;
 	    }
 	);
+
+	this.pending = true;
 
 	this.route.params.subscribe(
 	    params => {

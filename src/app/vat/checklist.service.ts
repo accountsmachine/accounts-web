@@ -23,19 +23,26 @@ export class Check {
 
 export class Checklist {
     pending : boolean = false;
+    complete : boolean = false;
     list : Check[] = [];
 };
-
-// FIXME: Lots of events, debounce?
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChecklistService {
 
-//    errors : ValidationError[] = [];
-    pending : number = 0;
-    checklist : Checklist = new Checklist();
+    checklist : Checklist;
+
+    _outstanding = 0;
+
+    get outstanding() {
+	return this._outstanding;
+    }
+
+    set outstanding(val : number) {
+	this._outstanding = val;
+    }
 
     id : string = "";
     config : any = {};
@@ -54,16 +61,22 @@ export class ChecklistService {
  	this.balance = {
 	    email: "", uid: "", credits: { vat: 0, corptax: 0, accounts: 0 }
 	};
+	this.checklist = new Checklist();
    }
 
     load(id : string) {
 
+	// This pushes the pending = true update.
 	this.checklist.list = [];
+	this.checklist.pending = true;
+	this.subject.next(this.checklist);
 
 	this.id = id;
 
 	this.commerce.onbalance().subscribe({
-	    next: bal => { this.balance = bal; },
+	    next: bal => {
+		this.balance = bal;
+	    },
 	    error: e => {
 		this.balance = {
 		    email: "", uid: "",
@@ -74,49 +87,75 @@ export class ChecklistService {
 
 	this.commerce.update_balance();
 
-	this.filing.load(id).subscribe(e => {
+	this.outstanding += 1;
+	this.filing.load(id).subscribe({
+	    next: e => {
 
-	    this.config = e.config;
+		this.config = e.config;
+		this.outstanding -= 1;
 
-	    if ("company" in this.config) {
+		if ("company" in this.config) {
+
+		    this.company = {};
+		    this.status = {};
+		    this.books_info = {};
+
+		    this.outstanding += 1;
+		    this.companyService.load(this.config.company).subscribe({
+			next: cmp => {
+			    this.company = cmp;
+			    this.outstanding -= 1;
+			    this.validate();
+			},
+			error: () => {
+			    this.company = {};
+			    this.outstanding -= 1;
+			    this.validate();
+			}
+		    });
+
+		    this.outstanding += 1;
+		    this.statusService.get(this.config.company).subscribe({
+			next: st => {
+			    this.status = st;
+			    this.outstanding -= 1;
+			    this.validate();
+			},
+			error: (e) => {
+			    this.status = {};
+			    this.outstanding -= 1;
+			    this.validate();
+			}
+		    });
+
+		    this.outstanding += 1;
+		    this.books.get_books_info(this.config.company).subscribe({
+			next: info => {
+			    this.books_info = info;
+			    this.outstanding -= 1;
+			    this.validate();
+			},
+			error: (e) => {
+			    this.books_info = {};
+			    this.outstanding -= 1;
+			    this.validate();
+			},
+		    });
+
+		} else {
+		    this.company = {};
+		}
+
+		this.validate();
+
+	    },
+
+	    error: (e) => {
 		this.company = {};
-		this.status = {};
-		this.books_info = {};
-		this.companyService.load(this.config.company).subscribe({
-		    next: cmp => {
-			this.company = cmp;
-			this.validate();
-		    },
-		    error: () => {
-			this.company = {};
-			this.validate();
-		    }
-		});
-		this.statusService.get(this.config.company).subscribe({
-		    next: st => {
-			this.status = st;
-			this.validate();
-		    },
-		    error: (e) => {
-			this.status = {};
-			this.validate();
-		    }
-		});
-		this.books.get_books_info(this.config.company).subscribe({
-		    next: info => {
-			this.books_info = info;
-			this.validate();
-		    },
-		    error: (e) => {
-			this.books_info = {};
-			this.validate();
-		    },
-		});
-	    } else {
-		this.company = {};
+		this.outstanding -= 1;
+		this.validate();
 	    }
 
-	    this.validate();
 	});
 
     }
@@ -262,7 +301,18 @@ export class ChecklistService {
 	    );
 	}
 
+	this.checklist.complete = true;
+	for(let elt of list) {
+	    if (elt.kind != "OK") {
+		this.checklist.complete = false;
+		break;
+	    }
+	}
+
 	this.checklist.list = list;
+
+
+	this.checklist.pending = this.outstanding > 0;
 	
 	this.subject.next(this.checklist);
     }

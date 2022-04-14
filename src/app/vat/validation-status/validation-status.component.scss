@@ -69,3 +69,13 @@ mat-icon {
 .tick-false {
     color: $deny-text;
 }
+
+.working {
+    display: flex;
+    width: 100%;
+    height: 10rem;
+}
+
+.working div {
+    font-size: xx-large;
+}
