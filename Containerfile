@@ -1,12 +1,15 @@
 
 FROM fedora:35
 
+ARG DIST=MISSING_ARG
+ARG PORT=8080
+
 RUN dnf update -y && dnf install -y libgo && dnf clean all
 
 ADD serve /usr/local/bin/serve
-ADD dist/dev /usr/local/web/
+ADD ${DIST} /usr/local/web/
 
 WORKDIR /usr/local/web/
-CMD /usr/local/bin/serve 0.0.0.0:8080 api.dev.accountsmachine.io https ./
-EXPOSE 8080
+CMD /usr/local/bin/serve 0.0.0.0:${PORT} api.dev.accountsmachine.io https ./
+EXPOSE ${PORT}
 

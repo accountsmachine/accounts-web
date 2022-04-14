@@ -2,27 +2,45 @@
 VERSION=0.9.1
 DIST=dist
 
-all:
+all: serve
 
-dev: KIND=dev
-dev: build
+BUILD=FIXME
+KIND=FIXMES
 
-build: serve
-	rm -rf ${DIST}/${KIND}
-	mkdir -p ${DIST}/${KIND}
-	ng build -c ${KIND} --output-path ${DIST}/${KIND}
-	cp 404.html ${DIST}/${KIND}
+dist-dev: BUILD=dev
+dist-dev: build
+
+dist-stage: BUILD=stage
+dist-stage: build
+
+dist-prod: BUILD=production
+dist-prod: build
+
+build:
+	rm -rf ${DIST}/${BUILD}
+	mkdir -p ${DIST}/${BUILD}
+	ng build -c ${BUILD} --output-path ${DIST}/${BUILD}
+	cp 404.html ${DIST}/${BUILD}
 
 serve: serve.go
 	go build serve.go
 
 NAME=accounts-web
-REPO=europe-west2-docker.pkg.dev/accounts-machine-dev/accounts-machine
+REPO=europe-west2-docker.pkg.dev/accounts-machine-${KIND}/accounts-machine
 CONTAINER=${REPO}/${NAME}
+
+container-dev: KIND=dev
+container-dev: all dist-dev container
+
+container-stage: KIND=stage
+container-stage: all dist-stage container
+
+container-prod: KIND=prod
+container-prod: all dist-prod container
 
 container: all
 	podman build -f Containerfile -t ${CONTAINER}:${VERSION} \
-	    --format docker
+	    --format docker --build-arg DIST=dist/${KIND}
 
 login:
 	gcloud auth print-access-token | \
