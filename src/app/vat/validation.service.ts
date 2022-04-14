@@ -7,6 +7,7 @@ import { VatConfigService } from './vat-config.service';
 import { Company, CompanyService } from '../company/company.service';
 import { CommerceService } from '../commerce/commerce.service';
 import { Balance } from '../commerce/commerce.model';
+import { StatusService } from '../status/status.service';
 
 export class ValidationError {
     constructor(
@@ -17,6 +18,8 @@ export class ValidationError {
     ) {
     }
 };
+
+// FIXME: Lots of events, debounce?
 
 @Injectable({
     providedIn: 'root'
@@ -29,11 +32,13 @@ export class ValidationService {
     config : any = {};
     company : any = {};
     balance : Balance;
+    status : any;
 
     constructor(
 	private filing : VatConfigService,
 	private companyService : CompanyService,
 	private commerce : CommerceService,
+	private statusService : StatusService,
     ) {
  	this.balance = {
 	    email: "", uid: "", credits: { vat: 0, corptax: 0, accounts: 0 }
@@ -46,14 +51,20 @@ export class ValidationService {
 
 	this.filing.load(id).subscribe(e => {
 
-
 	    this.config = e.config;
 
 	    if ("company" in this.config) {
 		this.company = {};
-		this.companyService.load(this.config["company"]).subscribe(
+		this.companyService.load(this.config.company).subscribe(
 		    cmp => {
 			this.company = cmp;
+			this.validate();
+		    }
+		);
+		this.statusService.get(this.config.company).subscribe(
+		    st => {
+			console.log(st);
+			this.status = st;
 			this.validate();
 		    }
 		);
@@ -74,7 +85,7 @@ export class ValidationService {
 	    this.balance.credits["vat"] < 1) {
 	    errors.push(
 		new ValidationError(
-		    "CREDS",
+		    "COMM",
 		    "You have no VAT filing credits - " +
 		    "purchase credits to file this return",
 		    "INFO",
@@ -105,10 +116,10 @@ export class ValidationService {
 	    );
 	}
 
-	if (!this.config.start) {
+	if (!this.config.due) {
 	    errors.push(
 		new ValidationError(
-		    "PERS",
+		    "PERD",
 		    "There is no period start date, specify a period",
 		    "ERROR",
 		    "/vat/" + this.id + "/period"
@@ -116,35 +127,18 @@ export class ValidationService {
 	    );
 	}
 
-//	this.
-
-/*
-	this.errors = [
-	    new ValidationError(
-		"VAL-1",
-		"The VAT record contains no accounts data.",
-		"ERROR",
-		"/vat/09f6f85f-5570-4c60-aa84-2e06cc3b3f60/company",
-	    ),
-	    new ValidationError(
-		"VAL-2",
-		"Company not defined.",
-		"ERROR",
-		"/vat/09f6f85f-5570-4c60-aa84-2e06cc3b3f60/company",
-	    ),
-	    new ValidationError(
-		"VAL-3",
-		"Company not defined.",
-		"INFO",
-	    ),
-	    new ValidationError(
-		"VAL-4",
-		"Company not defined.",
-		"WARNING",
-		"/vat/09f6f85f-5570-4c60-aa84-2e06cc3b3f60/company",
-	    ),
-	];
-*/
+	console.log(this.status);
+	if (this.status && ! this.status.vat) {
+	    errors.push(
+		new ValidationError(
+		    "CONN",
+		    "You must configure the connection to HMRC using " +
+			"VAT credentials for your company",
+		    "ERROR",
+		    "/status"
+		)
+	    );
+	}
 
 	this.errors = errors;
 	
