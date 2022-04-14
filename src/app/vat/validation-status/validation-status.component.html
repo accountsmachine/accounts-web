@@ -36,6 +36,9 @@
 	  <div *ngIf="row.kind == 'INFO'" class="icon kind-info">
 	    <mat-icon>info</mat-icon>
 	  </div>
+	  <div *ngIf="row.kind == 'OK'" class="icon kind-ok">
+	    <mat-icon>check</mat-icon>
+	  </div>
 	  {{row.kind}}
 	</mat-cell>
       </ng-container>

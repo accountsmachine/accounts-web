@@ -14,8 +14,8 @@ import { BooksService } from '../books/books.service';
 export class Check {
     constructor(
 	public id : string,
-	public description : string,
 	public kind : string,
+	public description? : string,
 	public href? : string,
     ) {
     }
@@ -126,85 +126,137 @@ export class ChecklistService {
 	let list : Check[] = [];
 
 	if (this.balance && this.balance.credits &&
-	    this.balance.credits["vat"] < 1) {
+	    this.balance.credits["vat"] > 0) {
 	    list.push(
 		new Check(
-		    "COMM",
+		    "PAY",
+		    "OK",
+		    "You have VAT filing credits available",
+		)
+	    );
+	} else {
+	    list.push(
+		new Check(
+		    "PAY",
+		    "INFO",
 		    "You have no VAT filing credits - " +
 			"purchase credits to file this return",
-		    "INFO",
 		    "/commerce/purchase",
 		)
 	    );
 	}
 
-	if (!this.config.company) {
+	if (this.config.company) {
 	    list.push(
 		new Check(
 		    "CNAME",
-		    "You must select a company to file for",
-		    "ERROR",
-		    "/vat/" + this.id + "/company"
+		    "OK",
+		    "Company selected."
 		)
 	    );
 	} else {
+	    list.push(
+		new Check(
+		    "CNAME",
+		    "ERROR",
+		    "You must select a company to file for",
+		    "/vat/" + this.id + "/company"
+		)
+	    );
+	};
 
-	    if (this.company && !this.company.company_name) {
-		list.push(
-		    new Check(
-			"CNAME",
-			"The company configuration does not define a " +
-			    "company name",
-			"ERROR",
-			"/company/" + this.config.company + "/business"
-		    )
-		);
-	    }
-
-	    if (this.company && !this.company.vrn) {
-		list.push(
-		    new Check(
-			"VRN",
-			"You must provide a company VAT registration number",
-			"ERROR",
-			"/company/" + this.config.company + "/tax"
-		    )
-		);
-
-	    }
-
-	    if (this.company && !this.books_info.time) {
-		list.push(
-		    new Check(
-			"BOOK",
-			"You must upload accounting books for your company",
-			"ERROR",
-			"/books"
-		    )
-		);
-
-	    }
-
+	if  (this.company && this.company.company_name) {
+	    list.push(
+		new Check(
+		    "CNAME",
+		    "OK",
+		    "The company name is specified."
+		)
+	    );
+	} else {
+	    list.push(
+		new Check(
+		    "CNAME",
+		    "ERROR",
+		    "The company configuration does not define a " +
+			"company name",
+		    "/company/" + this.config.company + "/business"
+		)
+	    );
 	}
 
-	if (!this.config.due) {
+	if (this.company && this.company.vrn) {
+	    list.push(
+		new Check(
+		    "VRN",
+		    "OK",
+		    "Company VRN specified",
+		)
+	    );
+	} else {
+	    list.push(
+		new Check(
+		    "VRN",
+		    "ERROR",
+		    "You must provide a company VAT registration number",
+		    "/company/" + this.config.company + "/tax"
+		)
+	    );
+	}	    
+
+	if (this.books_info.time) {
+	    list.push(
+		new Check(
+		    "BOOK",
+		    "OK",
+		    "Accounting books uploaded"
+		)
+	    );
+	} else {
+	    list.push(
+		new Check(
+		    "BOOK",
+		    "ERROR",
+		    "You must upload accounting books for your company",
+		    "/books"
+		)
+	    );
+	}
+
+	if (this.config.due) {
 	    list.push(
 		new Check(
 		    "PERD",
-		    "You must specify a VAT period",
+		    "OK",
+		    "VAT period specified"
+		)
+	    );
+	} else {
+	    list.push(
+		new Check(
+		    "PERD",
 		    "ERROR",
+		    "You must specify a VAT period",
 		    "/vat/" + this.id + "/period"
 		)
 	    );
 	}
 
-	if (this.status && ! this.status.vat) {
+	if (this.status && this.status.vat) {
 	    list.push(
 		new Check(
 		    "CONN",
+		    "OK",
+		    "The connection to HMRC VAT has been set up"
+		)
+	    );
+	} else {
+	    list.push(
+		new Check(
+		    "CONN",
+		    "ERROR",
 		    "You must configure the connection to HMRC using " +
 			"VAT credentials for your company",
-		    "ERROR",
 		    "/status"
 		)
 	    );
