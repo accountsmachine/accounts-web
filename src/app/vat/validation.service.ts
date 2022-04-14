@@ -1,6 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { VatConfig } from './vat-config';
 import { VatConfigService } from './vat-config.service';
@@ -49,6 +50,8 @@ export class ValidationService {
    }
 
     load(id : string) {
+
+	this.errors = [];
 
 	this.id = id;
 
@@ -121,7 +124,7 @@ export class ValidationService {
 		new ValidationError(
 		    "COMM",
 		    "You have no VAT filing credits - " +
-		    "purchase credits to file this return",
+			"purchase credits to file this return",
 		    "INFO",
 		    "/commerce/purchase",
 		)
@@ -143,7 +146,8 @@ export class ValidationService {
 		errors.push(
 		    new ValidationError(
 			"CNAME",
-			"The company configuration does not define a company name",
+			"The company configuration does not define a " +
+			    "company name",
 			"ERROR",
 			"/company/" + this.config.company + "/business"
 		    )
@@ -207,7 +211,7 @@ export class ValidationService {
     subject = new Subject<ValidationError[]>();
 
     onupdate() : Observable<ValidationError[]> {
-	return  this.subject;
+	return this.subject.pipe(debounceTime(500));
     }
 
 }
