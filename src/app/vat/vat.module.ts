@@ -42,6 +42,7 @@ import { SharedModule } from '../shared/shared.module';
 import {
     ValidationStatusComponent
 } from './validation-status/validation-status.component';
+import { ChecklistComponent } from './checklist/checklist.component';
 
 @NgModule({
     declarations: [
@@ -57,6 +58,7 @@ import {
         RecordComponent,
         LabelComponent,
         ValidationStatusComponent,
+        ChecklistComponent,
     ],
     exports: [
 	NewComponent,

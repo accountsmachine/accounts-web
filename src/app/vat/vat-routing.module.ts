@@ -5,6 +5,7 @@ import { NewComponent } from './new/new.component';
 import { LabelComponent } from './label/label.component';
 import { CompanyComponent } from './company/company.component';
 import { PeriodComponent } from './period/period.component';
+import { ChecklistComponent } from './checklist/checklist.component';
 import { PreviewComponent } from './preview/preview.component';
 import { SubmitComponent } from './submit/submit.component';
 import { ReportComponent } from './report/report.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
 	{ path: 'label', component: LabelComponent },
 	{ path: 'company', component: CompanyComponent },
 	{ path: 'period', component: PeriodComponent },
+	{ path: 'checklist', component: ChecklistComponent },
 	{ path: 'preview', component: PreviewComponent },
 	{ path: 'submit', component: SubmitComponent },
 	{ path: 'report', component: ReportComponent },

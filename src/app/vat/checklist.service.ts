@@ -243,6 +243,26 @@ export class ChecklistService {
 	    );
 	}	    
 
+	if (this.status && this.status.vat) {
+	    list.push(
+		new Check(
+		    "CONN",
+		    "OK",
+		    "The connection to HMRC VAT has been set up"
+		)
+	    );
+	} else {
+	    list.push(
+		new Check(
+		    "CONN",
+		    "ERROR",
+		    "You must configure the connection to HMRC using " +
+			"VAT credentials for your company",
+		    "/status"
+		)
+	    );
+	}
+
 	if (this.books_info.time) {
 	    list.push(
 		new Check(
@@ -277,26 +297,6 @@ export class ChecklistService {
 		    "ERROR",
 		    "You must specify a VAT period",
 		    "/vat/" + this.id + "/period"
-		)
-	    );
-	}
-
-	if (this.status && this.status.vat) {
-	    list.push(
-		new Check(
-		    "CONN",
-		    "OK",
-		    "The connection to HMRC VAT has been set up"
-		)
-	    );
-	} else {
-	    list.push(
-		new Check(
-		    "CONN",
-		    "ERROR",
-		    "You must configure the connection to HMRC using " +
-			"VAT credentials for your company",
-		    "/status"
 		)
 	    );
 	}
