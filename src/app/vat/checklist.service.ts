@@ -17,8 +17,6 @@ import { Check, Checklist } from '../checklist/checklist.model'
 })
 export class ChecklistService {
 
-    checklist : Checklist;
-
     _outstanding = 0;
 
     get outstanding() {
@@ -46,15 +44,15 @@ export class ChecklistService {
  	this.balance = {
 	    email: "", uid: "", credits: { vat: 0, corptax: 0, accounts: 0 }
 	};
-	this.checklist = new Checklist();
    }
 
     load(id : string) {
 
 	// This pushes the pending = true update.
-	this.checklist.list = [];
-	this.checklist.pending = true;
-	this.subject.next(this.checklist);
+	let cl = new Checklist();
+	cl.list = [];
+	cl.pending = true;
+	this.subject.next(cl);
 
 	this.id = id;
 
@@ -290,26 +288,27 @@ export class ChecklistService {
 	    );
 	}
 
-	this.checklist.complete = true;
+	let complete = true;
 	for(let elt of list) {
 	    if (elt.kind != "OK") {
-		this.checklist.complete = false;
+		complete = false;
 		break;
 	    }
 	}
 
-	this.checklist.list = list;
+	let cl = new Checklist();
+	cl.list = list;
+	cl.pending = this.outstanding > 0;
+	cl.complete = complete;
 
+	this.subject.next(cl);
 
-	this.checklist.pending = this.outstanding > 0;
-	
-	this.subject.next(this.checklist);
     }
 
     subject = new Subject<Checklist>();
 
     onupdate() : Observable<Checklist> {
-	return this.subject.pipe(debounceTime(500));
+	return this.subject.pipe(debounceTime(100));
     }
 
 }

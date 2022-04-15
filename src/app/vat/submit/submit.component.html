@@ -14,7 +14,8 @@
       <div class="submission" *ngIf="record">
 
 	<h2>
-	  VAT period {{record.PeriodStart | date}} to
+	  {{company.company_name}} - 
+	  {{record.PeriodStart | date}} to
 	  {{record.PeriodEnd | date}}
 	</h2>
 

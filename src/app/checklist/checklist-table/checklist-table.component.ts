@@ -22,7 +22,7 @@ export class ChecklistTableComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes : any) {
     	this.pending = this.checklist.pending;
-	this.table.data = this.checklist.list
+	this.table.data = this.checklist.list;
     }
 
     columns = [ "kind", "description", "action" ];
