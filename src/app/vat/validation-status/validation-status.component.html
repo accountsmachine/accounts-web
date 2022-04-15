@@ -4,7 +4,8 @@
   <ng-template #working>
     <div class="working">
       <div>
-	WORKING...
+	<mat-icon>build</mat-icon>
+	Working...
       </div>
     </div>
   </ng-template>
@@ -12,8 +13,6 @@
   <ng-template #nodata>
     No data available...
   </ng-template>
-  
-  <h1>Checklist</h1>
 
   <p *ngIf="!checklist.complete">
     <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;

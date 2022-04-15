@@ -190,7 +190,7 @@ export class ChecklistService {
 		new Check(
 		    "CNAME",
 		    "OK",
-		    "Company selected."
+		    "Company selected"
 		)
 	    );
 	} else {
@@ -209,7 +209,7 @@ export class ChecklistService {
 		new Check(
 		    "CNAME",
 		    "OK",
-		    "The company name is specified."
+		    "The company name is specified"
 		)
 	    );
 	} else {

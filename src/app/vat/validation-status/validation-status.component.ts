@@ -20,7 +20,7 @@ export class ValidationStatusComponent implements OnInit {
 
     checklist : Checklist = new Checklist();
 
-    columns = [ "id", "kind", "description", "action" ];
+    columns = [ "kind", "description", "action" ];
 
     constructor(
 	private checklistSvc : ChecklistService,

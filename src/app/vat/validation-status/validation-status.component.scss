@@ -18,19 +18,14 @@ mat-cell {
     white-space: nowrap;
 }
 
-.mat-column-id {
-    flex: 0 0 12% !important;
-    width: 12% !important;
-}
-
 .mat-column-kind {
-    flex: 0 0 12% !important;
-    width: 12% !important;
+    flex: 0 0 15% !important;
+    width: 15% !important;
 }
 
 .mat-column-description {
-    flex: 0 0 55% !important;
-    width: 55% !important;
+    flex: 0 0 65% !important;
+    width: 65% !important;
 }
 
 .mat-column-action {
@@ -77,5 +72,5 @@ mat-icon {
 }
 
 .working div {
-    font-size: xx-large;
+    font-size: large;
 }
