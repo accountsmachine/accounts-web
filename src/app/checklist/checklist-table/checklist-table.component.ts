@@ -1,50 +1,36 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { ChecklistService } from '../../vat/checklist.service';
 import { Checklist, Check } from '../checklist.model';
-
 
 @Component({
     selector: 'checklist-table',
     templateUrl: './checklist-table.component.html',
     styleUrls: ['./checklist-table.component.scss']
 })
-export class ChecklistTableComponent implements OnInit {
+export class ChecklistTableComponent implements OnInit, OnChanges {
 
-    errors : MatTableDataSource<Check> =
+    table : MatTableDataSource<Check> =
 	new MatTableDataSource<Check>([]);
 
     pending = false;
 
+    @Input()
     checklist : Checklist = new Checklist();
+
+    ngOnChanges(changes : any) {
+    	this.pending = this.checklist.pending;
+	this.table.data = this.checklist.list
+    }
 
     columns = [ "kind", "description", "action" ];
 
     constructor(
-	private checklistSvc : ChecklistService,
-	private route : ActivatedRoute,
 	private router : Router,
     ) {
-
-	this.checklistSvc.onupdate().subscribe(
-	    (cl : Checklist) => {
-	        this.checklist = cl;
-		this.errors.data = cl.list;
-		this.pending = cl.pending;
-	    }
-	);
-
 	this.pending = true;
-
-	this.route.params.subscribe(
-	    params => {
-		this.checklistSvc.load(params["id"]);
-	    }
-	);
-
     }
 
     ngOnInit(): void {

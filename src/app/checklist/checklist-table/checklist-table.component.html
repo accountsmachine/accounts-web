@@ -26,11 +26,11 @@
 
   <ng-container *ngIf="!pending; else working">
 
-    <div class="tab-contents" *ngIf="errors.data.length > 0; else nodata">
+    <div class="tab-contents" *ngIf="table.data.length > 0; else nodata">
 
       <div class="container mat-elevation-z8">
 
-	<mat-table #table [dataSource]="errors">
+	<mat-table #checktable [dataSource]="table">
 
 	  <ng-container matColumnDef="id">
 	    <mat-header-cell mat-header-cell *matHeaderCellDef>

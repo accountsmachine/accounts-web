@@ -10,6 +10,7 @@ import { VatComputations, VatComputationsService }
     from '../vat-computations.service';
 import { VatService } from '../vat.service';
 import { VatLine } from '../vat-line';
+//import { CompanyService } from '../company/company.service';
 
 @Component({
     selector: 'vat-submit',
@@ -24,6 +25,8 @@ export class SubmitComponent implements OnInit {
 
     config : any = {};
 
+//    company : any = {};
+
     confirmed = false;
 
     record : VatComputations | null = null;
@@ -31,6 +34,7 @@ export class SubmitComponent implements OnInit {
     constructor(
 	private route : ActivatedRoute,
 	private filing : VatConfigService,
+//	private companyService : CompanyService,
 	private comps : VatComputationsService,
 	private vat : VatService,
 	private router : Router,

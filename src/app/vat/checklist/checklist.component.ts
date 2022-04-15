@@ -8,6 +8,8 @@ import { CompanyService, Company, Companies } from '../../company/company.servic
 
 import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
+import { ChecklistService } from '../checklist.service';
+import { Checklist } from '../../checklist/checklist.model';
 
 @Component({
     selector: 'vat-checklist',
@@ -18,9 +20,7 @@ export class ChecklistComponent implements OnInit {
 
     companies : Companies = {};
 
-    form = this.fb.group({
-    	company: ['', [Validators.required]],
-    });
+    checklist : Checklist = new Checklist();
 
     id = "";
     config : any = {};
@@ -29,61 +29,31 @@ export class ChecklistComponent implements OnInit {
 	private route : ActivatedRoute,
 	private router : Router,
 	private companyService : CompanyService,
-	private snackBar : MatSnackBar,
 	private filing : VatConfigService,
-	private fb : FormBuilder,
+	private checklistSvc : ChecklistService,
     ) {
 
-	this.route.params.subscribe(
-	    params => {
-		this.filing.load(params["id"]).subscribe(e => {
-		    this.id = params["id"];
-		    if (e.config.state != "draft")
-			this.router.navigate(["/vat/" + this.id + "/report"]);
-		    this.config = e.config;
-		    this.load();
-		});
+	this.checklistSvc.onupdate().subscribe(
+	    (cl : Checklist) => {
+	        this.checklist = cl;
 	    }
 	);
 
-	this.companyService.get_list().subscribe(
-	    e => {
-		this.companies = e;
-	    }
-	);
+       this.route.params.subscribe(
+           params => {
+               this.checklistSvc.load(params["id"]);
+	       this.filing.load(params["id"]).subscribe(e => {
+		   this.id = params["id"];
+		   if (e.config.state != "draft")
+		       this.router.navigate(["/vat/" + this.id + "/report"]);
+		   this.config = e.config;
+	       });
+           }
+       );
 
     }
 
     ngOnInit() : void {
-    }
-
-    to_date(d : any) {
-	return moment(d);
-    }
-
-    load() {
-	this.form.patchValue({
-	    company: this.config.company,
-	});
-    }
-
-    from_date(d : any) {
-	return d.format("YYYY-MM-DD");
-    }
-
-    submit() {
-
-	this.config.company = this.form.value.company;
-
-	this.filing.save().subscribe(
-	    e => {
-		this.snackBar.open("Configuration saved", "dismiss",
-				   { duration: 5000 });
-	    }
-	)
-    }
-
-    revert() {
     }
 
 }

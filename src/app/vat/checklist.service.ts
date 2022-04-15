@@ -129,6 +129,8 @@ export class ChecklistService {
 
 		} else {
 		    this.company = {};
+		    this.status = {};
+		    this.books_info = {};
 		}
 
 		this.validate();
@@ -137,6 +139,8 @@ export class ChecklistService {
 
 	    error: (e) => {
 		this.company = {};
+		this.status = {};
+		this.books_info = {};
 		this.outstanding -= 1;
 		this.validate();
 	    }
