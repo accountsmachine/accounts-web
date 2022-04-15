@@ -10,7 +10,7 @@ import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
 
 @Component({
-    selector: 'vat-company',
+    selector: 'vat-checklist',
     templateUrl: './checklist.component.html',
     styleUrls: ['./checklist.component.scss']
 })

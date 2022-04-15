@@ -3,15 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { ChecklistService, Checklist, Check } from '../checklist.service';
+import { ChecklistService } from '../../vat/checklist.service';
+import { Checklist, Check } from '../checklist.model';
 
 
 @Component({
-    selector: 'validation-status',
-    templateUrl: './validation-status.component.html',
-    styleUrls: ['./validation-status.component.scss']
+    selector: 'checklist-table',
+    templateUrl: './checklist-table.component.html',
+    styleUrls: ['./checklist-table.component.scss']
 })
-export class ValidationStatusComponent implements OnInit {
+export class ChecklistTableComponent implements OnInit {
 
     errors : MatTableDataSource<Check> =
 	new MatTableDataSource<Check>([]);

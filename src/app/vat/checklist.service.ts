@@ -10,22 +10,7 @@ import { CommerceService } from '../commerce/commerce.service';
 import { Balance } from '../commerce/commerce.model';
 import { StatusService } from '../status/status.service';
 import { BooksService } from '../books/books.service';
-
-export class Check {
-    constructor(
-	public id : string,
-	public kind : string,
-	public description? : string,
-	public href? : string,
-    ) {
-    }
-};
-
-export class Checklist {
-    pending : boolean = false;
-    complete : boolean = false;
-    list : Check[] = [];
-};
+import { Check, Checklist } from '../checklist/checklist.model'
 
 @Injectable({
     providedIn: 'root'

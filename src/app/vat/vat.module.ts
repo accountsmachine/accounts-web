@@ -32,17 +32,15 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatStepperModule } from '@angular/material/stepper'; 
 import { DATE_FORMATS } from '../date-formats';
 
+import { SharedModule } from '../shared/shared.module';
+import { ChecklistModule } from '../checklist/checklist.module';
+
+import { ChecklistComponent } from './checklist/checklist.component';
 import { ReportComponent } from './report/report.component';
 import { StatusComponent } from './status/status.component';
 import { DataComponent } from './data/data.component';
 import { RecordComponent } from './record/record.component';
 import { LabelComponent } from './label/label.component';
-
-import { SharedModule } from '../shared/shared.module';
-import {
-    ValidationStatusComponent
-} from './validation-status/validation-status.component';
-import { ChecklistComponent } from './checklist/checklist.component';
 
 @NgModule({
     declarations: [
@@ -57,7 +55,6 @@ import { ChecklistComponent } from './checklist/checklist.component';
         DataComponent,
         RecordComponent,
         LabelComponent,
-        ValidationStatusComponent,
         ChecklistComponent,
     ],
     exports: [
@@ -86,6 +83,7 @@ import { ChecklistComponent } from './checklist/checklist.component';
 	MatProgressSpinnerModule,
 	MatSnackBarModule,
 	SharedModule,
+	ChecklistModule,
     ],
     providers: [
 	{ provide: LOCALE_ID, useValue: "en-GB" },
