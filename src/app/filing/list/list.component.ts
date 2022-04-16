@@ -17,6 +17,8 @@ import { WorkingService } from '../../working.service';
 import { Balance } from '../../commerce/commerce.model';
 import { CommerceService } from '../../commerce/commerce.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
     selector: 'list',
     templateUrl: './list.component.html',
@@ -27,6 +29,8 @@ export class ListComponent implements OnInit {
     filingConfigs : FilingItem[] = [];
     companies : Companies = {};
 
+    features : Set<string> = new Set(environment.features);
+
     balance : Balance | null = null;
 
     draft : FilingItem[] = [];
@@ -34,7 +38,7 @@ export class ListComponent implements OnInit {
     errored : FilingItem[] = [];
     published : FilingItem[] = [];
 
-    features : Set<string> = new Set<string>();
+//    features : Set<string> = new Set<string>();
 
     constructor(
 	private router : Router,
@@ -75,9 +79,6 @@ export class ListComponent implements OnInit {
 		this.companies = e;
 		this.empty = this.is_empty(e);
 	    }
-	);
-	this.profile.onload().subscribe(
-	    profile => this.features = profile.features
 	);
 	this.reload();
     }

@@ -16,15 +16,19 @@
 
 	<ul>
 
-	  <li><strong>VAT credit</strong>: This covers the cost of submitting a
+	  <li *ngIf="feature('vat')">
+	    <strong>VAT credit</strong>: This covers the cost of submitting a
 	    single VAT return.  For businesses submitting quarterly, 4
 	    credits will cover filing for one year.</li>
-	  <li><strong>Corporation tax credit</strong>: This covers the cost of
+	  <li *ngIf="feature('corptax')">
+	    <strong>Corporation tax credit</strong>:
+	    This covers the cost of
 	    submitting a single corporation tax return.  Most
 	    businesses will need to file one return annually.  New
 	    businesses may need to submit two in their first
 	    year.</li>
-	  <li><strong>Accounts filing credit</strong>: This covers the cost of
+	  <li *ngIf="feature('accounts')">
+	    <strong>Accounts filing credit</strong>: This covers the cost of
 	    submitting a single accounts filing to companies house.
 	    Most businesses will file a single set of accounts
 	    annually.</li>
@@ -40,22 +44,24 @@
 
 	<form [formGroup]="form" *ngIf="offer.offer">
 
-	  <div *ngFor="let kind of kinds" class="selection">
-	    <div class="selectlabel">{{offer.offer[kind].description}}:</div>
-	    <div class="choice">
-	      <mat-button-toggle-group aria-label="VAT credits to purchase"
-				       (change)="recalc()"
-				       formControlName="{{kind}}">
-		<mat-button-toggle *ngFor="let c of offer.offer[kind].offer"
-				   [value]="c.quantity">
-		  {{c.quantity}}
-		</mat-button-toggle>
-	      </mat-button-toggle-group>
+	  <ng-container *ngFor="let kind of kinds">
+	    <div *ngIf="feature(kind)" class="selection">
+	      <div class="selectlabel">{{offer.offer[kind].description}}:</div>
+	      <div class="choice">
+		<mat-button-toggle-group aria-label="Credits to purchase"
+					 (change)="recalc()"
+					 formControlName="{{kind}}">
+		  <mat-button-toggle *ngFor="let c of offer.offer[kind].offer"
+				     [value]="c.quantity">
+		    {{c.quantity}}
+		  </mat-button-toggle>
+		</mat-button-toggle-group>
+	      </div>
+	      <div class="price">
+		{{(value[kind] / 100) | currency}}
+	      </div>
 	    </div>
-	    <div class="price">
-	      {{(value[kind] / 100) | currency}}
-	    </div>
-	  </div>
+	  </ng-container>
 
 	  <div *ngIf="some_max()">
 	    You have the maximum credits for {{full_credits()}}.

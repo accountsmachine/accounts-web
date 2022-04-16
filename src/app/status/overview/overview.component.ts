@@ -10,6 +10,8 @@ import { StatusService, Statuses } from '../status.service';
 import { CompanyService, Companies } from '../../company/company.service';
 import { WorkingService } from '../../working.service';
 
+import { environment } from '../../../environments/environment';
+
 class StatusItem {
     company? : string;
     number? : string;
@@ -25,10 +27,13 @@ class StatusItem {
 })
 export class OverviewComponent implements OnInit {
 
+    features = new Set<string>(environment.features);
+    feature(x : string) { return this.features.has(x); }
+
     status : MatTableDataSource<StatusItem> =
 	new MatTableDataSource<StatusItem>([]);
 
-    columns = [ "company", "number", "vat", "corptax", "accounts" ];
+    columns : Array<string>;
 
     constructor(
 	private router : Router,
@@ -36,7 +41,17 @@ export class OverviewComponent implements OnInit {
 	private companyService : CompanyService,
 	private dialog : MatDialog,
 	private working : WorkingService,
-    ) { }
+    ) {
+
+	this.columns = ["company", "number"];
+
+	if (this.feature("vat")) this.columns.push("vat");
+	if (this.feature("corptax")) this.columns.push("corptax");
+	if (this.feature("accounts")) this.columns.push("accounts");
+
+
+
+    }
 
     update(status: Statuses, companies : Companies) {
 

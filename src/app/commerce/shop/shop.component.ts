@@ -12,12 +12,17 @@ import { Option, Options, Balance, Order } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 import { CheckoutService } from '../checkout.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
     selector: 'shop',
     templateUrl: './shop.component.html',
     styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
+
+    features = new Set<string>(environment.features);
+    feature(x : string) { return this.features.has(x); }
 
     public form : FormGroup;
 
