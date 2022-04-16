@@ -60,14 +60,20 @@ export class OverviewComponent implements OnInit {
     ngOnInit(): void {
 
 	this.working.start();
+
 	combineLatest({
 	    status: this.statusService.get_list(),
 	    companies: this.companyService.get_list(),
-	}).subscribe(
-	    e => {
+	}).subscribe({
+	    next: e => {
 		this.update(e.status, e.companies);
 		this.working.stop();
-	    });
+	    },
+	    error: err => {
+		console.log(err);
+		this.working.stop();
+	    }
+	});
     }
 
 }

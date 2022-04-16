@@ -18,29 +18,23 @@ export type Statuses = {
 })
 export class StatusService {
 
-    onchange_subject = new BehaviorSubject<Statuses>({});
+//    onchange_subject = new BehaviorSubject<Statuses>({});
 
-    onchange() : Observable<Statuses> {
-	return this.onchange_subject;
-    }
+//    onchange() : Observable<Statuses> {
+//	return this.onchange_subject;
+//    }
 
     constructor(private api: ApiService) {
     }
 
     get_list() : Observable<Statuses> {
-
 	let url = "/api/status";
-
     	return this.api.get<any>(url);
-
     }
 
     get(id : string) : Observable<Status> {
-
 	let url = "/api/status/" + id;
-
     	return this.api.get<any>(url);
-
     }
 
 }

@@ -20,19 +20,19 @@ export class WorkingService {
     }
 
     start() {
+	this.count += 1;
+//        console.log("WORKING", this.count);
 	setTimeout(() => {
-	    this.count += 1;
 	    this.onchange_subject.next(this.count > 0);
 	});
-//	console.log("WORKING");
     }
 
     stop() {
+	this.count -= 1;
+//	console.log("STOP", this.count);
 	setTimeout(() => {
-	    this.count -= 1;
 	    this.onchange_subject.next(this.count > 0);
 	});
-//	console.log("STOP");
     }
 
 }

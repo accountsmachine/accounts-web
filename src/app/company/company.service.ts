@@ -9,7 +9,6 @@ import {
 import { Observable, Subject, of, BehaviorSubject, throwError, map,
 	 pipe, OperatorFunction } from 'rxjs';
 import { catchError, retry, tap } from 'rxjs/operators';
-import { WorkingService } from '../working.service';
 
 import { ApiService } from '../api.service';
 
@@ -69,12 +68,13 @@ export class CompanyService {
 	let url = "/api/companies";
 
 	let svc = this;
-	this.working.start();
 
 	return this.api.get<Companies>(url).pipe(
 	    tap({
-		error(err) { svc.working.stop(); },
-		complete() { svc.working.stop(); }
+		error(err) {
+		},
+		complete() {
+		}
 	    })
 	);
     }
@@ -93,7 +93,6 @@ export class CompanyService {
     }
 
     constructor(
-	private working : WorkingService,
 	private api : ApiService,
     ) {
 
@@ -112,36 +111,34 @@ export class CompanyService {
 
 	if (id == this.id) return of(this.config);
 
-	let svc = this;
-
 	return new Observable<Company>(obs => {
-
-	    this.working.start();
 
 	    this.api.get<Company>(
 		"/api/company/" + id
 	    ).pipe(
 		tap({
-		    error(err) { svc.working.stop(); },
-		    complete() { svc.working.stop(); }
+		    error: (err) => {
+		    },
+		    complete: () => {
+		    }
 		})
 	    ).subscribe({
-		next(config : Company) {
-		    svc.config = config;
-		    svc.id = id;
-		    svc.subject.next(config);
+		next: (config : Company) => {
+		    this.config = config;
+		    this.id = id;
+		    this.subject.next(config);
 		    obs.next(config);
 		},
-		error(err) {
-		    svc.config = null;
-		    svc.id = "";
+		error: (err) => {
+		    this.config = null;
+		    this.id = "";
 		    obs.error(err);
 		    //		if (err && err.status && err.status == 404) {
 		    //		    svc.subject.next(new Company());
 		    //		}
-		    svc.subject.next(null);
+		    this.subject.next(null);
 		},
-		complete() { }
+		complete: () => { }
 	    });
 
 	});
@@ -162,15 +159,15 @@ export class CompanyService {
 
 	let svc = this;
 
-	this.working.start();
-
 	return this.api.put(
 	    "/api/company/" + this.id, this.config,
 	    httpOptions
 	).pipe(
 	    tap({
-		error(err) { svc.working.stop(); },
-		complete() { svc.working.stop(); }
+		error: (err) => {
+		},
+		complete: () => {
+		}
 	    })
 	);
 
@@ -191,14 +188,14 @@ export class CompanyService {
 
 	    let svc = this;
 
-	    this.working.start();
-
 	    return this.api.put(
 		"/api/company/" + crn, c, httpOptions
 	    ).pipe(
 		tap({
-		    error(err) { svc.working.stop(); },
-		    complete() { svc.working.stop(); }
+		    error: (err) => {
+		    },
+		    complete: () => {
+		    }
 		})
 	    ).subscribe((e : any) => {
 		subs.next(crn);
