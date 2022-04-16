@@ -10,7 +10,12 @@ export const environment = {
 	messagingSenderId: "02398102313",
 	appId: "1:12312039:web:0102983102938",
 	measurementId: "G-ASDLJASD"
-    }
+    },
+    features: [
+	"vat",
+	"corptax",
+	"accounts"
+    ],
 };
 
 
