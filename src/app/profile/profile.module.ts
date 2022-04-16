@@ -41,6 +41,8 @@ import {
     DeleteConfirmationComponent
 } from './delete-confirmation/delete-confirmation.component';
 import { DeleteComponent } from './delete/delete.component';
+import { BillingDetailsComponent
+       } from './billing-details/billing-details.component';
 
 @NgModule({
     declarations: [
@@ -57,6 +59,7 @@ import { DeleteComponent } from './delete/delete.component';
 	OverviewComponent,
 	DeleteConfirmationComponent,
 	DeleteComponent,
+ BillingDetailsComponent,
     ],
     exports: [
 	ProfileComponent,

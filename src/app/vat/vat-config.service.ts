@@ -46,6 +46,7 @@ export class VatConfigService {
 	    })
 	);
     }
+
     save() { return this.filingConfigService.save(); }
     unload() { this.filingConfigService.unload(); }
     submit(id : string) { return this.vat.submit(id); }
@@ -89,7 +90,6 @@ export class VatConfigService {
     }
 
     updobl() {
-	console.log("DOIOT");
 
 	for(var ob of this.obligations) {
 	    if (ob.periodKey == this.config.period_key) {

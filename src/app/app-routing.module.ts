@@ -11,6 +11,8 @@ import { AuthGuardService as AuthGuard } from './auth-guard.service';
 import {
     ProfileComponent
 } from './profile/profile/profile.component';
+import { BillingDetailsComponent
+       } from './profile/billing-details/billing-details.component';
 import {
     ChangePasswordComponent
 } from './profile/change-password/change-password.component';
@@ -75,6 +77,7 @@ const routes: Routes = [
       children: [
 	  { path: '', redirectTo: 'overview', pathMatch: 'full' },
 	  { path: 'overview', component: ProfileComponent },
+	  { path: 'billing-details', component: BillingDetailsComponent },
 	  { path: 'password', component: ChangePasswordComponent },
 	  { path: 'update', component: UpdateProfileComponent },
 	  { path: 'email', component: ChangeEmailComponent },

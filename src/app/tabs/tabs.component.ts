@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserProfileService, UserProfile } from '../profile/user-profile.service';
 
 @Component({
     selector: 'tabs',
@@ -11,46 +10,38 @@ export class TabsComponent implements OnInit {
     links : { link : string, icon : string, label : string}[] = [];
 
     constructor(
-	private profile : UserProfileService,
     ) {
     }
 
     ngOnInit(): void {
+	
+	let links = [
+	    { label: "Home", icon: "home", link: "/home" },
+	];
+	
+	links.push(
+	    { label: "Company", icon : "business", link: "/company" }
+	);
 
-	this.profile.onload().subscribe((profile : UserProfile) => {
+	links.push(
+	    { label: "Status", icon : "search", link: "/status" }
+	);
 
-	    let links = [
-		{ label: "Home", icon: "home", link: "/home" },
-	    ];
+	links.push(
+	    { label: "Books", icon: "menu_book", link: "/books" }
+	);
 
-	    if (profile.has_feature("company"))
-		links.push(
-		    { label: "Company", icon : "business", link: "/company" }
-		);
+	links.push(
+	    { label: "Filing", icon: "assured_workload", link: "/filing" }
+	);
 
-	    links.push(
-		{ label: "Status", icon : "search", link: "/status" }
-	    );
+	links.push(
+	    { label: "My account", icon: "account_circle", link: "/profile" }
+	);
 
-	    if (profile.has_feature("books"))
-		links.push(
-		    { label: "Books", icon: "menu_book", link: "/books" }
-		);
-
-	    links.push(
-		{ label: "Filing", icon: "assured_workload", link: "/filing" }
-	    );
-
-	    links.push(
-		{ label: "My account", icon: "account_circle", link: "/profile" }
-	    );
-
-	    this.links = links;
-
-	});
+	this.links = links;
 
     }
 
 }
-
 
