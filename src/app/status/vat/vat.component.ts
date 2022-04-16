@@ -126,5 +126,10 @@ export class VatComponent implements OnInit {
 	this.year = this.form.value.year;
     }
 
+    fix_vrn() {
+        this.router.navigate(["/company/" + this.id + "/tax"]);
+
+    }
+
 }
 

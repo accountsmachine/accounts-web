@@ -1,14 +1,25 @@
 
 <section class="tab-contents">
   
-  <h1>VAT</h1>
+  <h1>VAT - {{company.company_name}}</h1>
+
+  <div *ngIf="!company.vrn">
+    <mat-card>
+      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+      The VAT registration number has not been entered for
+      {{company.company_name}}.
+      <button mat-button (click)="fix_vrn()">
+	<mat-icon>build</mat-icon> Fix
+      </button>
+    </mat-card>
+  </div>
 
   <div *ngIf="!setup">
 
-    <p>
+    <mat-card>
       <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
       VAT connection to HMRC has not been set up for {{company.company_name}}.
-    </p>
+    </mat-card>
 
     <p>
       This dialog will help you perform the setup.
