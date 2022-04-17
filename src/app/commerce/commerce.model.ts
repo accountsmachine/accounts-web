@@ -39,21 +39,23 @@ export class Order {
     total : number = 0;
 };
 
-export type Transaction = {
-    id : string,
-    transaction : string,
-    uid : string,
-    email : string,
-    time : string,
-    name : string,
-    address : string[],
-    postcode : string,
-    country : string,
-    billing_country : string,
-    valid : boolean,
-    vat_rate : number,
-    vat_number : string,
-    order : Order,
-    company : string,
-    filing : string,
+export class Transaction {
+    id : string = "";
+    transaction : string = "";
+    uid : string = "";
+    email : string = "";
+    tel? : string;
+    time : string = "";
+    name? : string;
+    address? : string[];
+    city? : string;
+    county? : string;
+    country? : string;
+    postcode? : string;
+    valid : boolean = false;
+    vat_rate? : number;
+    vat? : string;
+    order? : Order;
+    company? : string;
+    filing? : string;
 };

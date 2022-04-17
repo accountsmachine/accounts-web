@@ -42,10 +42,10 @@ export class TransactionListComponent implements OnInit {
     ) {
 
 	this.commerce.get_transactions().subscribe(txs => {
-
 	    let data : Row[] = [];
 
 	    for (let txid in txs) {
+/*
 
 		let tx = txs[txid];
 
@@ -73,13 +73,13 @@ export class TransactionListComponent implements OnInit {
 		row.a = a;
 
 		data.push(row);
+*/
 
 	    }
 
 	    data.sort((a : any, b : any) => b.time - a.time);
 
 	    this.data.data = data;
-
 	});
 
     }

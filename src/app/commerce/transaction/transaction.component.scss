@@ -9,44 +9,74 @@ mat-drawer-content {
     min-height: 8rem;
 }
 
-/*
-.transaction {
+.invoice {
     display: grid;
     max-width: 40rem;
-    grid-template-columns: [label] 14rem [value] 23rem;
+//    grid-template-columns: [description] 4fr [quantity] 2fr [amount] 1fr;
+    grid-template-columns: [start] 1fr [col2] 1fr [quant] 1fr [col4] 1fr [amt] 1fr [col6] 1fr [end];
     grid-template-rows: repeat(auto, 1.2rem);
-    column-gap: 0.8rem;
+    column-gap: 0.2rem;
     row-gap: 0.2rem;
-}*/
+}
 
-.label {
-    grid-column-start: label;
+div.logo {
+    grid-column-start: start;
+    grid-column-end: col2;
+    padding: 1rem;
+}
+
+
+div.seller {
+    grid-column-start: col2;
+    grid-column-end: quant;
+    padding: 1rem;
+}
+
+div.customer {
+    grid-column-start: quant;
+    grid-column-end: end;
+    padding: 1rem;
+}
+
+div.description {
+    grid-column-start: start;
+    grid-column-end: quant;
+}
+
+div.quantity {
+    grid-column-start: quant;
+    grid-column-end: amt;
+}
+
+div.amount {
+    grid-column-start: amt;
+    grid-column-end: end;
+}
+
+div.label {
+    grid-column-start: col4;
+    grid-column-end: amt;
     text-align: right;
+    padding-right: 1rem;
+    font-weight: bold;
 }
 
-.value {
-    grid-column-start: value;
+div.header {
+    padding-top: 1rem;
+    font-weight: bold;
+    border-bottom: 1px solid black;
 }
 
-.container {
-    overflow: auto;
-    width: 50rem;
+div.total {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
-mat-table {
-    width: 100%;
+div.subtotal {
+    border-top: 1px solid black;
 }
 
-mat-cell {
-    white-space: nowrap;
-}
-
-.mat-column-label {
-    flex: 12rem;
-    min-width: 12rem;
-}
-
-.mat-column-value {
-    flex: 30rem;
-    min-width: 30rem;
+div.transaction {
+    grid-column-start: start;
+    grid-column-end: end;
 }

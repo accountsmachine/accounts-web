@@ -5,8 +5,73 @@
     <mat-drawer mode="side" class="drawer-side" opened>
       <navigator></navigator>
     </mat-drawer>
-    
+
     <mat-drawer-content class="main-content">
+
+      <div class="invoice">
+
+	<div class="logo">
+	  <div>
+	  <strong>Seller:</strong>
+	  accountsmachine.io
+	  <img src="/assets/accountsmachine.png" width="100">
+	  </div>
+	</div>
+
+	<div class="seller">
+	</div>
+
+	<div class="customer">
+	  <strong>Invoice to:</strong>
+	  <div>{{tx.name}}</div>
+	  <div *ngFor="let line of tx.address">{{line}}</div>
+	  <div>{{tx.city}}</div>
+	  <div>{{tx.county}}</div>
+	  <div>{{tx.country}}</div>
+	  <div>Email: {{tx.email}}</div>
+	  <div>Tel: {{tx.tel}}</div>
+	  <div>VAT no.: {{tx.vat}}</div>
+	</div>
+
+	<div class="transaction">
+	  <div>Date: {{tx.time | date}}</div>
+	  <div>Customer ID: {{tx.uid}}</div>
+	  <div>Transaction ID: {{id}}</div>
+	</div>
+
+	<div class="header description">Description</div>
+	<div class="header quantity">Quantity</div>
+	<div class="header amount">Amount</div>
+
+	<ng-container *ngFor="let item of tx.order!.items">
+	  <div class="description">
+	    {{item.description}}
+	    <ng-container *ngIf="item.discount > 0">
+	      (discount {{item.discount / 100 | currency}})
+	    </ng-container>
+	  </div>
+	  <div class="quantity">{{item.quantity}}</div>
+	  <div class="amount">{{item.amount / 100 | currency}}</div>
+	</ng-container>
+
+	<div class="subtotal label">Subtotal</div>
+	<div class="subtotal amount">
+	  {{tx.order!.subtotal / 100 | currency}}
+	</div>
+
+	<div class="vat label">VAT @ {{tx.order!.vat_rate * 100}}%</div>
+	<div class="vat amount">
+	  {{tx.order!.vat / 100 | currency}}
+	</div>
+
+	<div class="total label">Total:</div>
+	<div class="total amount">
+	  {{tx.order!.total / 100 | currency}}
+	</div>
+
+      </div>
+
+      <!--
 
       <div class="transaction container mat-elevation-z8">
 
@@ -36,6 +101,8 @@
 	</mat-table>
 
       </div>
+
+-->
 
     </mat-drawer-content>
 

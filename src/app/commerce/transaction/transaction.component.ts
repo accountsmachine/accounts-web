@@ -20,6 +20,8 @@ export class TransactionComponent implements OnInit {
 
     id = "";
 
+    tx : Transaction = new Transaction();
+
     data : MatTableDataSource<Row> =
 	new MatTableDataSource<Row>([]);
 
@@ -46,6 +48,10 @@ export class TransactionComponent implements OnInit {
     }
 
     load(tx : Transaction) {
+
+this.tx = tx;
+
+/*
 
 	let data : Row[] = [];
 
@@ -130,6 +136,7 @@ export class TransactionComponent implements OnInit {
 	    data.push({ "label": "VAT no.", "value": tx.vat_number });
 
 	this.data.data = data;
+	*/
 
     }
 
