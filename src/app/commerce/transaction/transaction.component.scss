@@ -11,30 +11,24 @@ mat-drawer-content {
 
 .invoice {
     display: grid;
-    max-width: 40rem;
-//    grid-template-columns: [description] 4fr [quantity] 2fr [amount] 1fr;
-    grid-template-columns: [start] 1fr [col2] 1fr [quant] 1fr [col4] 1fr [amt] 1fr [col6] 1fr [end];
+    width: 50rem;
+    grid-template-columns:
+	[start] 1fr [col2] 1fr [quant] 0.4fr [col4] 0.6fr [amt] 0.8fr [col6] 0.4fr [end];
     grid-template-rows: repeat(auto, 1.2rem);
     column-gap: 0.2rem;
     row-gap: 0.2rem;
 }
 
-div.logo {
-    grid-column-start: start;
-    grid-column-end: col2;
-    padding: 1rem;
-}
-
-
 div.seller {
-    grid-column-start: col2;
+    grid-column-start: start;
     grid-column-end: quant;
-    padding: 1rem;
+    padding-bottom: 1rem;
 }
 
 div.customer {
     grid-column-start: quant;
     grid-column-end: end;
+    padding-bottom: 1rem;
     padding: 1rem;
 }
 
@@ -79,4 +73,23 @@ div.subtotal {
 div.transaction {
     grid-column-start: start;
     grid-column-end: end;
+}
+
+div.detaillabel {
+    grid-column-start: start;
+    grid-column-end: col2;
+    padding-right: 1rem;
+}
+
+div.detailvalue {
+    grid-column-start: col2;
+    grid-column-end: end;
+}
+
+div.title {
+    grid-column-start: start;
+    grid-column-end: end;
+    font-size: xx-large;
+    padding-bottom: 1rem;
+    font-weight: bold;
 }

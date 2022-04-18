@@ -58,4 +58,5 @@ export class Transaction {
     order? : Order;
     company? : string;
     filing? : string;
+    status? : string;
 };

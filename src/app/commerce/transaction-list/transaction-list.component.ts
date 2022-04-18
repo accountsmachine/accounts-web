@@ -45,7 +45,6 @@ export class TransactionListComponent implements OnInit {
 	    let data : Row[] = [];
 
 	    for (let txid in txs) {
-/*
 
 		let tx = txs[txid];
 
@@ -53,8 +52,8 @@ export class TransactionListComponent implements OnInit {
 		    id: txid,
 		    time: new Date(tx.time + "Z"),
 		    transaction: tx.transaction,
-		    subtotal: tx.order.subtotal,
-		    total: tx.order.total,
+		    subtotal: tx.order!.subtotal,
+		    total: tx.order!.total,
 		    company: tx.company,
 		    filing: tx.filing,
 		};
@@ -73,7 +72,6 @@ export class TransactionListComponent implements OnInit {
 		row.a = a;
 
 		data.push(row);
-*/
 
 	    }
 

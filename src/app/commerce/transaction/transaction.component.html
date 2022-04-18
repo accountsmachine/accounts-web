@@ -8,20 +8,23 @@
 
     <mat-drawer-content class="main-content">
 
-      <div class="invoice">
+      <div class="invoice" *ngIf="tx.transaction=='order'">
 
-	<div class="logo">
+	<div class="title">Order</div>
+
+	<div class="seller" *ngIf="tx.status == 'complete'">
 	  <div>
 	  <strong>Seller:</strong>
+	  </div>
+	  <div>
 	  accountsmachine.io
+	  </div>
+	  <div>
 	  <img src="/assets/accountsmachine.png" width="100">
 	  </div>
 	</div>
 
-	<div class="seller">
-	</div>
-
-	<div class="customer">
+	<div class="customer" *ngIf="tx.status == 'complete'">
 	  <strong>Invoice to:</strong>
 	  <div>{{tx.name}}</div>
 	  <div *ngFor="let line of tx.address">{{line}}</div>
@@ -33,10 +36,17 @@
 	  <div>VAT no.: {{tx.vat}}</div>
 	</div>
 
-	<div class="transaction">
-	  <div>Date: {{tx.time | date}}</div>
-	  <div>Customer ID: {{tx.uid}}</div>
-	  <div>Transaction ID: {{id}}</div>
+	<div class="detaillabel">Date:</div>
+	<div class="detailvalue">{{tx.time | date}}</div>
+	<div class="detaillabel">Customer ID:</div>
+	<div class="detailvalue">{{tx.uid}}</div>
+	<div class="detaillabel">Transaction ID:</div>
+	<div class="detailvalue">{{id}}</div>
+	<div class="detaillabel" *ngIf="tx.status != 'complete'">
+	  Order status:
+	</div>
+	<div class="detailvalue" *ngIf="tx.status != 'complete'">
+	  <strong>{{tx.status | uppercase}}</strong>
 	</div>
 
 	<div class="header description">Description</div>
@@ -71,38 +81,46 @@
 
       </div>
 
-      <!--
+      <div class="invoice" *ngIf="tx.transaction=='use'">
 
-      <div class="transaction container mat-elevation-z8">
+	<div class="title">Filing receipt</div>
 
-	<mat-table #table [dataSource]="data">
+	<div class="seller">
+	  <div>
+	  accountsmachine.io
+	  </div>
+	  <div>
+	  <img src="/assets/accountsmachine.png" width="100">
+	  </div>
+	</div>
 
-	  <ng-container matColumnDef="label">
-	    <mat-header-cell mat-header-cell
-			     *matHeaderCellDef>Key</mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">{{row.label}}</mat-cell>
-	  </ng-container>
+	<div class="customer">
+	  <strong>Receipt for:</strong>
+	  <div>Email: {{tx.email}}</div>
+	</div>
 
-	  <ng-container matColumnDef="value">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Value
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      {{row.value}}
-	    </mat-cell>
-	  </ng-container>
+	<div class="detaillabel">Date:</div>
+	<div class="detailvalue">{{tx.time | date}}</div>
+	<div class="detaillabel">Customer ID:</div>
+	<div class="detailvalue">{{tx.uid}}</div>
+	<div class="detaillabel">Transaction ID:</div>
+	<div class="detailvalue">{{id}}</div>
+	<div class="detaillabel">Company number:</div>
+	<div class="detailvalue">{{tx.company}}</div>
+	<div class="detaillabel">Filing:</div>
+	<div class="detailvalue">{{tx.filing}}</div>
 
-	  <mat-header-row *matHeaderRowDef="columns; sticky: true">
-	  </mat-header-row>
+	<div class="header description">Description</div>
+	<div class="header quantity">Quantity</div>
 
-	  <mat-row *matRowDef="let row; columns: columns;">
-	  </mat-row>
-
-	</mat-table>
+	<ng-container *ngFor="let item of tx.order!.items">
+	  <div class="description" *ngIf="item.kind=='vat'">
+	    VAT filing
+	  </div>
+	  <div class="quantity">{{-item.quantity}}</div>
+	</ng-container>
 
       </div>
-
--->
 
     </mat-drawer-content>
 
