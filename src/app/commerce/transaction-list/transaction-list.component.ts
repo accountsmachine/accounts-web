@@ -10,6 +10,7 @@ type Row = {
     id: string,
     time : Date,
     transaction? : string,
+    status? : string,
     subtotal? : number,
     total? : number,
     v? : number,
@@ -29,7 +30,7 @@ export class TransactionListComponent implements OnInit {
     txs : Transaction[] = [];
 
     columns = [
-	"time", "transaction", "subtotal", "total",
+	"time", "transaction", "status", "subtotal", "total",
 	"v", "c", "a", "company", "filing"
     ];
 
@@ -52,6 +53,7 @@ export class TransactionListComponent implements OnInit {
 		    id: txid,
 		    time: new Date(tx.time + "Z"),
 		    transaction: tx.transaction,
+		    status: tx.status,
 		    subtotal: tx.order!.subtotal,
 		    total: tx.order!.total,
 		    company: tx.company,

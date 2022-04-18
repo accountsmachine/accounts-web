@@ -10,7 +10,12 @@
 
       <div class="invoice" *ngIf="tx.transaction=='order'">
 
-	<div class="title">Order</div>
+	<div class="title" *ngIf="tx.status == 'complete'">
+	  Order
+	</div>
+	<div class="title" *ngIf="tx.status != 'complete'">
+	  Order - not completed
+	</div>
 
 	<div class="seller" *ngIf="tx.status == 'complete'">
 	  <div>
