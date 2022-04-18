@@ -8,7 +8,7 @@
 
     <mat-drawer-content class="main-content">
 
-      <div class="invoice" *ngIf="tx.transaction=='order'">
+      <div class="invoice" *ngIf="tx.type == 'order'">
 
 	<div class="title" *ngIf="tx.status == 'complete'">
 	  Order
@@ -92,7 +92,7 @@
 
       </div>
 
-      <div class="invoice" *ngIf="tx.transaction=='filing'">
+      <div class="invoice" *ngIf="tx.type == 'filing'">
 
 	<div class="title">Filing receipt</div>
 

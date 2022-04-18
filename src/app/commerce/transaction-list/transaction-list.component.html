@@ -8,8 +8,12 @@
     
     <mat-drawer-content class="main-content">
 
-      <div class="container mat-elevation-z8">
-	
+      <div *ngIf="data.data.length < 1">
+	No transaction records to display.
+      </div>
+
+      <div class="container mat-elevation-z8" *ngIf="data.data.length > 0">
+
 	<mat-table #table [dataSource]="data">
 
 	  <ng-container matColumnDef="time">
@@ -20,18 +24,18 @@
 	    </mat-cell>
 	  </ng-container>
 
-	  <ng-container matColumnDef="transaction">
+	  <ng-container matColumnDef="type">
 	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Tx
+	      Type
 	    </mat-header-cell>
 	    <mat-cell mat-cell *matCellDef="let row">
-	      {{row.transaction}}
+	      {{row.type}}
 	    </mat-cell>
 	  </ng-container>
 
 	  <ng-container matColumnDef="status">
 	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      St
+	      Stat
 	    </mat-header-cell>
 	    <mat-cell mat-cell *matCellDef="let row">
 	      {{row.status}}

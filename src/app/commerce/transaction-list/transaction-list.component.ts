@@ -9,7 +9,7 @@ import { CommerceService } from '../commerce.service';
 type Row = {
     id: string,
     time : Date,
-    transaction? : string,
+    type? : string,
     status? : string,
     subtotal? : number,
     total? : number,
@@ -30,7 +30,7 @@ export class TransactionListComponent implements OnInit {
     txs : Transaction[] = [];
 
     columns = [
-	"time", "transaction", "status", "subtotal", "total",
+	"time", "type", "status", "subtotal", "total",
 	"v", "c", "a", "company", "filing"
     ];
 
@@ -52,7 +52,7 @@ export class TransactionListComponent implements OnInit {
 		let row : Row = {
 		    id: txid,
 		    time: new Date(tx.time + "Z"),
-		    transaction: tx.transaction,
+		    type: tx.type,
 		    status: tx.status,
 		    subtotal: tx.order!.subtotal,
 		    total: tx.order!.total,
