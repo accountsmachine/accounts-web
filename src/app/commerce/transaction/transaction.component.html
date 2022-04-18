@@ -17,7 +17,10 @@
 	  <strong>Seller:</strong>
 	  </div>
 	  <div>
-	  accountsmachine.io
+	  {{tx.seller_name}}
+	  </div>
+	  <div>
+	  VAT registration: {{tx.seller_vat_number}}
 	  </div>
 	  <div>
 	  <img src="/assets/accountsmachine.png" width="100">
@@ -42,11 +45,14 @@
 	<div class="detailvalue">{{tx.uid}}</div>
 	<div class="detaillabel">Transaction ID:</div>
 	<div class="detailvalue">{{id}}</div>
-	<div class="detaillabel" *ngIf="tx.status != 'complete'">
+	<div class="detaillabel">
 	  Order status:
 	</div>
 	<div class="detailvalue" *ngIf="tx.status != 'complete'">
 	  <strong>{{tx.status | uppercase}}</strong>
+	</div>
+	<div class="detailvalue" *ngIf="tx.status == 'complete'">
+	  {{tx.status | uppercase}}
 	</div>
 
 	<div class="header description">Description</div>
@@ -81,7 +87,7 @@
 
       </div>
 
-      <div class="invoice" *ngIf="tx.transaction=='use'">
+      <div class="invoice" *ngIf="tx.transaction=='filing'">
 
 	<div class="title">Filing receipt</div>
 

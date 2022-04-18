@@ -59,4 +59,6 @@ export class Transaction {
     company? : string;
     filing? : string;
     status? : string;
+    seller_name? : string;
+    seller_vat_number? : string;
 };
