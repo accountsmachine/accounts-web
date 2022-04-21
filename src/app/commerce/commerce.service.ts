@@ -19,9 +19,7 @@ import { Balance, Option, Options, Transaction } from './commerce.model';
 export class CommerceService {
 
     balance_subject = new BehaviorSubject<Balance>({
-	uid: "",
-	email : "",
-	credits: {}
+        vat: 0, corptax: 0, accounts: 0,
     });
 
     constructor(

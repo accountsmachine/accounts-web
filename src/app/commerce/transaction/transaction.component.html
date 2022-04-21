@@ -41,7 +41,7 @@
 	  <div>{{tx.country}}</div>
 	  <div>Email: {{tx.email}}</div>
 	  <div>Tel: {{tx.tel}}</div>
-	  <div>VAT no.: {{tx.vat}}</div>
+	  <div>VAT no.: {{tx.vat_number}}</div>
 	</div>
 
 	<div class="detaillabel">Date:</div>
@@ -125,8 +125,8 @@
 	<div class="header quantity">Quantity</div>
 
 	<ng-container *ngFor="let item of tx.order!.items">
-	  <div class="description" *ngIf="item.kind=='vat'">
-	    VAT filing
+	  <div class="description">
+	    {{item.description}}
 	  </div>
 	  <div class="quantity">{{-item.quantity}}</div>
 	</ng-container>
@@ -138,5 +138,4 @@
   </mat-drawer-container>
 
 </section>
-
 

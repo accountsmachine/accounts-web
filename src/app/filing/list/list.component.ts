@@ -56,9 +56,9 @@ export class ListComponent implements OnInit {
 
     nocredits() : boolean {
 	if (!this.balance) return true;
-	if (this.balance.credits["vat"] == 0 &&
-	    this.balance.credits["corptax"] == 0 &&
-	    this.balance.credits["accounts"] == 0) {
+	if (this.balance.vat == 0 &&
+	    this.balance.corptax == 0 &&
+	    this.balance.accounts == 0) {
 	    return true;
 	}
 	return false;

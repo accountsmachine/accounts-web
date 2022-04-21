@@ -8,26 +8,26 @@
     
     <mat-drawer-content class="main-content">
 
-      <div *ngIf="balance.credits; else na">
+      <div *ngIf="balance; else na">
 
 	<mat-card *ngIf="feature('vat')">
 	  <mat-card-title>VAT filing</mat-card-title>
 	  <mat-card-content>
-	    {{balance.credits["vat"]}} credits
+	    {{balance.vat}} credits
 	  </mat-card-content>
 	</mat-card>
 
 	<mat-card *ngIf="feature('corptax')">
 	  <mat-card-title>Corporation tax filing</mat-card-title>
 	  <mat-card-content>
-	    {{balance.credits["corptax"]}} credits
+	    {{balance.corptax}} credits
 	  </mat-card-content>
 	</mat-card>
 
 	<mat-card *ngIf="feature('accounts')">
 	  <mat-card-title>Accounts filing</mat-card-title>
 	  <mat-card-content>
-	    {{balance.credits["accounts"]}} credits
+	    {{balance.accounts}} credits
 	  </mat-card-content>
 	</mat-card>
 

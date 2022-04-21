@@ -42,7 +42,7 @@ export class ChecklistService {
 	private books : BooksService,
     ) {
  	this.balance = {
-	    email: "", uid: "", credits: { vat: 0, corptax: 0, accounts: 0 }
+	    vat: 0, corptax: 0, accounts: 0
 	};
    }
 
@@ -61,10 +61,7 @@ export class ChecklistService {
 		this.balance = bal;
 	    },
 	    error: e => {
-		this.balance = {
-		    email: "", uid: "",
-		    credits: { vat: 0, corptax: 0, accounts: 0 }
-		};
+		this.balance = { vat: 0, corptax: 0, accounts: 0 };
 	    }
 	});
 
@@ -151,8 +148,7 @@ export class ChecklistService {
 
 	let list : Check[] = [];
 
-	if (this.balance && this.balance.credits &&
-	    this.balance.credits["vat"] > 0) {
+	if (this.balance && this.balance.vat > 0) {
 	    list.push(
 		new Check(
 		    "PAY",

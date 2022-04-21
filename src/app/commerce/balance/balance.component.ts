@@ -22,7 +22,7 @@ export class BalanceComponent implements OnInit {
     ) {
 
 	this.balance = {
-	    email: "", uid: "", credits: { vat: 0, corptax: 0, accounts: 0 }
+	    vat: 0, corptax: 0, accounts: 0
 	};
 	
 	this.commerce.onbalance().subscribe(b => {

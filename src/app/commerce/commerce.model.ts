@@ -1,10 +1,8 @@
 
 export type Balance = {
-    uid : string,
-    email : string,
-    credits : {
-	[kind : string] : number
-    }
+    vat : number,
+    corptax : number,
+    accounts : number,
 };
 
 export type Option = {
@@ -54,7 +52,7 @@ export class Transaction {
     postcode? : string;
     valid : boolean = false;
     vat_rate? : number;
-    vat? : string;
+    vat_number? : string;
     order? : Order;
     company? : string;
     filing? : string;
