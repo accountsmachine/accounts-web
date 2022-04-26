@@ -1,4 +1,6 @@
 
+@import '../../../theme.scss';
+
 mat-drawer {
     width: auto;
 }
@@ -29,3 +31,16 @@ button {
 .price {
     font-family: monospace;
 }
+
+.tick-true {
+    color: $affirm-text;
+}
+
+.tick-false {
+    color: $deny-text;
+}
+
+mat-icon {
+    vertical-align: middle;
+}
+

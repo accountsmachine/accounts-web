@@ -1,4 +1,6 @@
 
+@import '../../../theme.scss';
+
 mat-drawer {
     width: auto;
 }
@@ -19,4 +21,16 @@ mat-card {
 
 mat-card-content {
     margin-top: 1rem;
+}
+
+.tick-true {
+    color: $affirm-text;
+}
+
+.tick-false {
+    color: $deny-text;
+}
+
+mat-icon {
+    vertical-align: middle;
 }

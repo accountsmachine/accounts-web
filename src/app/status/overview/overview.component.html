@@ -3,6 +3,12 @@
   
   <h1>Status</h1>
 
+  <p *ngIf="features.size == 0">
+    <mat-icon class="tick-false">highlight_off</mat-icon>
+    No filing applications are available, currently.
+    You will not be able to set up connections to filing systems.
+  </p>
+
   <div class="container mat-elevation-z8"
        *ngIf="status.data.length > 0; else nodata">
 

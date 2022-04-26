@@ -3,6 +3,13 @@
   
   <h1>Filing</h1>
 
+  <p *ngIf="features.size == 0">
+    <mat-icon class="tick-false">highlight_off</mat-icon>
+    No filing applications are available in this application, currently.
+    You will not be able to create filing configurations until filing
+    applications are deployed.
+  </p>
+
   <div *ngIf="!empty; else nodata">
 
     <button mat-raised-button color="accent" (click)="commerce()">

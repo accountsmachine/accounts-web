@@ -42,6 +42,12 @@
 
 	<h1>Select credits</h1>
 
+	<p *ngIf="features.size == 0">
+	  <mat-icon class="tick-false">highlight_off</mat-icon>
+	  No filing applications are enabled in this application, currently.
+	  You will not be able to buy filing credits.
+	</p>
+
 	<form [formGroup]="form" *ngIf="offer.offer">
 
 	  <ng-container *ngFor="let kind of kinds">
