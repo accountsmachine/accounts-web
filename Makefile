@@ -1,5 +1,5 @@
 
-VERSION=0.9.4
+VERSION=0.9.5
 DIST=dist
 
 all: serve
