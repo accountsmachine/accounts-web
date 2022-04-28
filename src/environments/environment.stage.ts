@@ -3,13 +3,11 @@ export const environment = {
     production: true,
     useEmulators: false,
     firebase: {
-	apiKey: "AIzaSyA1m3XnFvLIZu7CWKHOjGv1N3o3pmRFtEY",
-	authDomain: "accounts-machine-dev.firebaseapp.com",
-	projectId: "accounts-machine-dev",
-	storageBucket: "accounts-machine-dev.appspot.com",
-	messagingSenderId: "305498129524",
-	appId: "1:305498129524:web:d11bef85b87f7632a1fd21",
-	measurementId: "G-CN6FHHTDLQ"
+        // Stage uses the prod backends and auth, but stage-hosted
+	// app and api.
+	apiKey: "AIzaSyBD9stQwa1BX3CIN1YjEktA",
+	authDomain: "accounts-machine-prod.firebaseapp.com",
+	projectId: "accounts-machine-prod",
     },
     features: [
 	"vat",
