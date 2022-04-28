@@ -76,6 +76,10 @@ SERVICE_ACCOUNT_FULL=${SERVICE_ACCOUNT}@${PROJECT}.iam.gserviceaccount.com
 CONFIG=${PROJECT}
 ACCOUNT=mark@accountsmachine.io
 
+GCLOUD_OPTS=\
+    --configuration=${CONFIG} \
+    --project=${PROJECT}
+
 create-service-account:
 	gcloud ${GCLOUD_OPTS} iam service-accounts create \
 	    --description 'Accounts web' \
@@ -85,7 +89,7 @@ create-service-account:
 SERVICE=accounts-web
 REGION=europe-west1
 TAG=v$(subst .,-,${VERSION})
-DOMAIN=api.${KIND}.accountsmachine.io
+DOMAIN=app.${KIND}.accountsmachine.io
 
 run-list:
 	gcloud \
@@ -116,9 +120,10 @@ run-deploy:
 run-domain:
 	gcloud \
 	    ${GCLOUD_OPTS} \
-	    run domain-mappings create \
+	    beta run domain-mappings create \
 	        --service=${SERVICE} \
-		--domain=${DOMAIN}
+		--domain=${DOMAIN} \
+	        --region=${REGION}
 
 run-upgrade:
 	gcloud run services update ${SERVICE} \
