@@ -114,7 +114,7 @@ func main() {
 			return
 
 		}
-
+/*
 		if true {
 
 			path := r.URL.Path
@@ -141,7 +141,7 @@ func main() {
 			return
 
 		}
-
+*/
 		if m := cssPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/css")
 			filename := base + r.URL.Path[1:]
