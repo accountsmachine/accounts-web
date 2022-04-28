@@ -115,7 +115,9 @@ run-deploy:
 	    --memory=256Mi \
 	    --min-instances=0 \
 	    --max-instances=1 \
-	    --region=${REGION}
+	    --region=${REGION} \
+	   --command='/usr/local/bin/serve' \
+	   --args='0.0.0.0:8080,api.${KIND}.accountsmachine.io,https,./'
 
 run-domain:
 	gcloud \
