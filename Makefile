@@ -70,23 +70,58 @@ stop:
 clean:
 	rm -rf dist
 
-SERVICE=accounts-web
 PROJECT=accounts-machine-${KIND}
+SERVICE_ACCOUNT=accounts-web
+SERVICE_ACCOUNT_FULL=${SERVICE_ACCOUNT}@${PROJECT}.iam.gserviceaccount.com
+CONFIG=${PROJECT}
+ACCOUNT=mark@accountsmachine.io
+
+create-service-account:
+	gcloud ${GCLOUD_OPTS} iam service-accounts create \
+	    --description 'Accounts web' \
+	    --display-name 'Accounts web' \
+	    ${SERVICE_ACCOUNT}
+
+SERVICE=accounts-web
 REGION=europe-west1
 TAG=v$(subst .,-,${VERSION})
+DOMAIN=api.${KIND}.accountsmachine.io
 
-upgrade-dev: KIND=dev
-upgrade-dev: upgrade
+run-list:
+	gcloud \
+	    --configuration=${CONFIG} \
+	    --project ${PROJECT} \
+	    run services list
 
-upgrade-stage: KIND=stage
-upgrade-stage: upgrade
+gcloud-setup:
+	-gcloud config configurations delete ${CONFIG}
+	gcloud config configurations create ${CONFIG} \
+	    --account ${ACCOUNT} --project ${PROJECT}
+	gcloud --configuration=${CONFIG} auth login 
 
-upgrade-prod: KIND=prod
-upgrade-prod: upgrade
+run-deploy:
+	gcloud \
+	    ${GCLOUD_OPTS} \
+	    run deploy ${SERVICE} \
+	    --image=${CONTAINER}:${VERSION} \
+	    --allow-unauthenticated \
+	    --service-account=${SERVICE_ACCOUNT_FULL} \
+	    --concurrency=80 \
+	    --cpu=1 \
+	    --memory=256Mi \
+	    --min-instances=0 \
+	    --max-instances=1 \
+	    --region=${REGION}
 
-upgrade:
+run-domain:
+	gcloud \
+	    ${GCLOUD_OPTS} \
+	    run domain-mappings create \
+	        --service=${SERVICE} \
+		--domain=${DOMAIN}
+
+run-upgrade:
 	gcloud run services update ${SERVICE} \
 	    --project ${PROJECT} --region ${REGION} \
 	    --image ${CONTAINER}:${VERSION} \
 	    --tag ${TAG}
-
