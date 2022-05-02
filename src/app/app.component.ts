@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
 
     private freshdesk : FreshdeskService = new FreshdeskService({
 	widgetId: 101000004796,
-	locale: 'en_GB',
+	locale: 'en-GB',
 	callback(widget : any) {
 	}
     });
@@ -71,6 +71,21 @@ export class AppComponent implements OnInit {
 		this.frontPageService.loading();
 	    }
 
+	});
+
+	// Pass name and email through to freshdesk widget on auth.
+	// Blank out on logout.
+	this.auth.onauth().subscribe((s : any) => {
+	    let name = "";
+	    let email = "";
+	    if (s) {
+		if (s.displayName) name = s.displayName;
+		if (s.email) email = s.email;
+	    }
+	    this.freshdesk.FreshworksWidget("identify", "ticketForm", {
+		"name": name,
+		"email": email,
+	    });
 	});
 
 	this.frontPageService.onchange().subscribe((s : FrontState) => {
