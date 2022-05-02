@@ -1,5 +1,5 @@
 
-VERSION=0.10.2
+VERSION=0.10.3
 DIST=dist
 
 all: serve
@@ -15,6 +15,24 @@ dist-stage: build
 
 dist-prod: BUILD=prod
 dist-prod: build
+
+everything-dev:
+	make dist-dev
+	make container-dev
+	make push-dev
+	make run-upgrade KIND=dev
+
+everything-stage:
+	make dist-stage
+	make container-stage
+	make push-stage
+	make run-upgrade KIND=stage
+
+everything-prod:
+	make dist-prod
+	make container-prod
+	make push-prod
+	make run-upgrade KIND=prod
 
 build:
 	rm -rf ${DIST}/${BUILD}
