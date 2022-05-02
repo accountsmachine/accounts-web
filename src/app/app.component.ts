@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
     private freshdesk : FreshdeskService = new FreshdeskService({
 	widgetId: 101000004796,
 	locale: 'en_GB',
-	callback(widget) {
+	callback(widget : any) {
 	}
     });
 
