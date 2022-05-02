@@ -9,6 +9,8 @@ import { UserProfileService } from './profile/user-profile.service';
 import { WorkingService } from './working.service';
 import { FrontPageService, FrontState } from './profile/front-page.service';
 
+import { FreshdeskService } from './freshdesk.service';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -17,6 +19,13 @@ import { FrontPageService, FrontState } from './profile/front-page.service';
 export class AppComponent implements OnInit {
 
     work = false;
+
+    private freshdesk : FreshdeskService = new FreshdeskService({
+	widgetId: 101000004796,
+	locale: 'en_GB',
+	callback(widget) {
+	}
+    });
 
     constructor(
 	private auth : AuthService,
