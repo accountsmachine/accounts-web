@@ -15,6 +15,9 @@ export const environment = {
 	"vat",
 	"corptax",
 	"accounts"
+	"vat-submit",
+	"corptax-submit",
+	"accounts-submit",
     ],
 };
 

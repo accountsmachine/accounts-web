@@ -5,12 +5,20 @@ import { Router } from '@angular/router';
 import { CorptaxConfig } from '../corptax-config';
 import { CorptaxConfigService } from '../corptax-config.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
     selector: 'corptax-submit',
     templateUrl: './submit.component.html',
     styleUrls: ['./submit.component.scss']
 })
 export class SubmitComponent implements OnInit {
+
+    features : Set<string> = new Set(environment.features);
+
+    feature(x : string) {
+	return this.features.has(x);
+    }
 
     id : string = "";
     config : CorptaxConfig = {};

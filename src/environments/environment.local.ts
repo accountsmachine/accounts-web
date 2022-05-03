@@ -16,8 +16,11 @@ export const environment = {
     },
     features: [
 	"vat",
-	"corptax",
-	"accounts"
+//	"corptax",
+//	"accounts",
+//	"vat-submit",
+//	"corptax-submit",
+//	"accounts-submit",
     ],
 };
 

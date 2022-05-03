@@ -1,4 +1,6 @@
 
+@import '../../../theme.scss';
+
 mat-drawer-content {
     min-height: 20rem;
 }
@@ -67,4 +69,16 @@ table {
 
 h2 {
     text-align: center;
+}
+
+.tick-true {
+    color: $affirm-text;
+}
+
+.tick-false {
+    color: $deny-text;
+}
+
+mat-icon {
+    vertical-align: middle;
 }

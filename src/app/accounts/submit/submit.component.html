@@ -13,29 +13,34 @@
 
       <div class="submission">
 
-      <div class="warn">
-	When you submit this information you are making a legal
-	declaration that the information is true and complete. A false
-	declaration can result in prosecution.
-      </div>
+	<div class="warn">
+	  When you submit this information you are making a legal
+	  declaration that the information is true and complete. A false
+	  declaration can result in prosecution.
+	</div>
 
-      <div class="confirm">
-	<mat-slide-toggle color="warn" class="config-field"
-			  [(ngModel)]="confirmed"
-			  name="confirmed">
-	  I confirm that the information is true and complete.
-	</mat-slide-toggle>
-      </div>
+	<div class="confirm" *ngIf="feature('accounts-submit')">
+	  <mat-slide-toggle color="warn" class="config-field"
+			    [(ngModel)]="confirmed"
+			    name="confirmed">
+	    I confirm that the information is true and complete.
+	  </mat-slide-toggle>
+	</div>
 
-      <div class="buttons">
-	<button mat-raised-button color="warn"
-		[disabled]="!confirmed" (click)="submit()">
-	  Submit
-	</button>
-	<button mat-raised-button color="basic" (click)="cancel()">
-	  Revert
-	</button>
-      </div>
+	<div class="buttons" *ngIf="feature('accounts-submit')">
+	  <button mat-raised-button color="warn"
+		  [disabled]="!confirmed" (click)="submit()">
+	    Submit
+	  </button>
+	  <button mat-raised-button color="basic" (click)="cancel()">
+	    Revert
+	  </button>
+	</div>
+
+	<div *ngIf="!feature('accounts-submit')">
+	  <mat-icon class="tick-false">highlight_off</mat-icon>
+	  Accounts submission is not enabled in this application.
+	</div>
 
       </div>
 

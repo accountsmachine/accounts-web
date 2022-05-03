@@ -19,7 +19,7 @@
 	  declaration can result in prosecution.
 	</div>
 
-	<div class="confirm">
+	<div class="confirm" *ngIf="feature('corptax-submit')">
 	  <mat-slide-toggle color="warn" class="config-field"
 			    [(ngModel)]="confirmed"
 			    name="confirmed">
@@ -27,7 +27,7 @@
 	  </mat-slide-toggle>
 	</div>
 
-	<div class="buttons">
+	<div class="buttons" *ngIf="feature('corptax-submit')">
 	  <button mat-raised-button color="warn"
 		  [disabled]="!confirmed" (click)="submit()">
 	    Submit
@@ -35,6 +35,11 @@
 	  <button mat-raised-button color="basic" (click)="cancel()">
 	    Revert
 	  </button>
+	</div>
+
+	<div *ngIf="!feature('corptax-submit')">
+	  <mat-icon class="tick-false">highlight_off</mat-icon>
+	  Corporation tax submission is not enabled in this application.
 	</div>
 
       </div>
