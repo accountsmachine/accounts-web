@@ -48,7 +48,7 @@ func main() {
 	var woffPath = regexp.MustCompile("^/.*\\.woff2$")
 	var svgPath = regexp.MustCompile("^/.*\\.svg$")
 	var apiPath = regexp.MustCompile("^/api/")
-	var refPath = regexp.MustCompile("^/ref/")
+//	var refPath = regexp.MustCompile("^/ref/")
 
 	// Catch all that path navigation junk that spews to the logs
 	var sketchy = regexp.MustCompile("\\.\\.")
@@ -85,7 +85,7 @@ func main() {
 		}
 
 		fmt.Println(r.URL.Path)
-
+/*
 		if m := refPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/html; charset=utf-8")
 			filename := base + r.URL.Path[1:]
@@ -94,7 +94,7 @@ func main() {
 			w.Write(data)
 			return
 		}
-
+*/
 		if m := apiPath.FindStringSubmatch(r.URL.Path); m != nil {
 
 			path := r.URL.Path[4:]
