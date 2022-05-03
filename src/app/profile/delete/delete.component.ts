@@ -40,7 +40,8 @@ export class DeleteComponent implements OnInit {
 	dialogRef.afterClosed().subscribe((result : any) => {
 	    if (result) {
 		if (result.proceed) {
-		    console.log("FIXME: should delete");
+		    console.log("Proceeding with delete.");
+		    this.auth.delete_user();
 		}
 	    }
 	});

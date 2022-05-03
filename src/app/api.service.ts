@@ -18,11 +18,6 @@ export class ApiService {
     ) {
     }
 
-    OLDheaders(token : string) {
-	const headers = new HttpHeaders();
-	return headers.set("Authorization", `Bearer ${token}`);
-    }
-
     headers(headers : any, token : string) {
 	if (headers == null) headers = new HttpHeaders();
 

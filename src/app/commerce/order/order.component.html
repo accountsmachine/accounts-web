@@ -6,6 +6,9 @@
   <ng-container *ngFor="let item of order.items">
     <div class="item description">
       {{item.description}}
+      <ng-container *ngIf="item.adjustment">
+	({{item.adjustment}})
+      </ng-container>
       <ng-container *ngIf="item.discount > 0">
 	(discount {{item.discount / 100 | currency}})
       </ng-container>

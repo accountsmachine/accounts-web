@@ -7,9 +7,14 @@ export type Balance = {
 
 export type Option = {
     description : string,
+    adjustment? : string,
     permitted : number,
     min_purchase : number,
-    offer : { quantity : number, price : number, discount : number }[],
+    offer : {
+	quantity : number,
+	price : number,
+	discount : number
+    }[],
 };
 
 export type Options = {
@@ -24,6 +29,7 @@ export type ItemQuantities = {
 export type ItemLine = {
     kind : string,
     description : string,
+    adjustment? : string,
     quantity : number,
     amount : number,
     discount : number,

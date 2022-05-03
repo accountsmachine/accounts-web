@@ -97,6 +97,10 @@ export class CheckoutService {
 		discount: 0,
 	    };
 
+	    if (this._offer.offer[kind].adjustment) {
+		item.adjustment = this._offer.offer[kind].adjustment;
+	    }
+
 	    let price;
 	    let discount;
 

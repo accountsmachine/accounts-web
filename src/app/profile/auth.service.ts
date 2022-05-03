@@ -5,13 +5,15 @@ import {
 } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 
-import { client_version, application_name, application_id } from '../../version';
-
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import {
     onAuthStateChanged
 } from 'firebase/auth';
+
+import {
+    client_version, application_name, application_id
+} from '../../version';
 
 export enum AuthState {
     UNINITIALISED,
@@ -19,7 +21,6 @@ export enum AuthState {
     UNVERIFIED,
     AUTHENTICATED,
 }
-    
 
 @Injectable({
     providedIn: 'root'
@@ -325,23 +326,54 @@ export class AuthService {
 
     }
     
-    delete_user() : Observable<void> {
-	return new Observable<void>(obs => {
-	    this.fireAuth.currentUser.then(res =>
-		res!.delete(
-		    ).then(
-			(t : any) => {
-			    this.error(
-				"Account is deleted"
-			    );
-			    obs.next()
-			}
-		    ).catch(
-			(error : any) => {
-			    obs.error(error.message);
-			}
-		    )
-	    )
+    delete_user() {
+
+	console.log("DELETE");
+
+	let subs = this.get_token().subscribe({
+	
+	    next: (token : string | null) => {
+
+		if (token == null) {
+		    console.log("Delete user: No authentication token");
+		    return;
+		}
+
+		let headers = new HttpHeaders({
+		    "Authorization": `Bearer ${token}`,
+		});
+
+		this.http.post(
+		    "/api/user-account/delete", {}, {headers: headers}
+		).subscribe({
+
+		    next: (e : any) => {
+			console.log("User deletion successful.");
+			this.logout();
+		    },
+
+		    error: (e : any) => {
+			console.log(e);
+		    },
+
+		    complete: () => {
+		    }
+
+		});
+
+		subs.unsubscribe();
+
+	    },
+
+	    error: (e : any) => {
+		console.log(e);
+	    	subs.unsubscribe();
+	    },
+
+	    complete: () => {
+		subs.unsubscribe();
+	    },
+
 	});
 
     }
