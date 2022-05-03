@@ -46,6 +46,7 @@ export class Order {
 export class Transaction {
     id : string = "";
     type : string = "";
+    description? : string;
     uid : string = "";
     email : string = "";
     tel? : string;

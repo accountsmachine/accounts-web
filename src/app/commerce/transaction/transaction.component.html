@@ -133,6 +133,45 @@
 
       </div>
 
+      <div class="invoice" *ngIf="tx.type == 'credit'">
+
+	<div class="title">Credit receipt</div>
+
+	<div class="seller">
+	  <div>
+	  accountsmachine.io
+	  </div>
+	  <div>
+	  <img src="/assets/accountsmachine.png" width="100">
+	  </div>
+	</div>
+
+	<div class="customer">
+	  <strong>Receipt for:</strong>
+	  <div>Email: {{tx.email}}</div>
+	</div>
+
+	<div class="detaillabel">Description:</div>
+	<div class="detailvalue">{{tx.description}}</div>
+	<div class="detaillabel">Date:</div>
+	<div class="detailvalue">{{tx.time | date}}</div>
+	<div class="detaillabel">Customer ID:</div>
+	<div class="detailvalue">{{tx.uid}}</div>
+	<div class="detaillabel">Transaction ID:</div>
+	<div class="detailvalue">{{id}}</div>
+
+	<div class="header description">Description</div>
+	<div class="header quantity">Quantity</div>
+
+	<ng-container *ngFor="let item of tx.order!.items">
+	  <div class="description">
+	    {{item.description}}
+	  </div>
+	  <div class="quantity">{{item.quantity}}</div>
+	</ng-container>
+
+      </div>
+
     </mat-drawer-content>
 
   </mat-drawer-container>
