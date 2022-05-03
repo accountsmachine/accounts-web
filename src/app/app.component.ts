@@ -1,15 +1,22 @@
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterStateSnapshot } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
+import {
+    ActivatedRoute, Router, NavigationStart
+} from '@angular/router';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthService, AuthState } from './profile/auth.service';
 import { UserProfileService } from './profile/user-profile.service';
 import { WorkingService } from './working.service';
-import { FrontPageService, FrontState } from './profile/front-page.service';
+import {
+    FrontPageService, FrontState
+} from './profile/front-page.service';
 
 import { FreshdeskService } from './freshdesk.service';
+
+import { ReferrerService } from './referrer.service';
 
 @Component({
     selector: 'app-root',
@@ -35,6 +42,7 @@ export class AppComponent implements OnInit {
 	private snackBar : MatSnackBar,
 	private userProfile : UserProfileService,
 	private working : WorkingService,
+	private referrer : ReferrerService,
     )
     {
     }
@@ -45,14 +53,31 @@ export class AppComponent implements OnInit {
         return this.auth.authenticated();
     }
 
+    ref_token = "";
+
     public ngOnInit(
     ) {
+
+	this.referrer.onchange().subscribe(e => {
+	    this.ref_token = e;
+	    if (e != "")
+		this.frontPageService.registering();
+	});
 	
 	this.working.onchange().subscribe(
 	    w => {
 		this.work = w;
 	    }
 	);
+
+	// NavigationStart?
+	this.router.events.subscribe(e => {
+	    if (e instanceof NavigationStart) {
+		if (e.url.startsWith("/ref/")) {
+		    this.referrer.publish(e.url.substring(5));
+		}
+	    }
+	});
 
         this.auth.onerr().subscribe(msg => {
 	    this.snackBar.open(msg, "dismiss", { duration: 10000 });
@@ -66,6 +91,13 @@ export class AppComponent implements OnInit {
 	    } else if (s == AuthState.UNVERIFIED) {
 		this.frontPageService.verifying_email();
 	    } else if (s == AuthState.UNAUTHENTICATED) {
+
+		// If we have a referrer token, go to register page.
+		if (this.ref_token != "") {
+		    this.frontPageService.registering();
+		    return;
+		}
+
 		this.frontPageService.login();
 	    } else if (s == AuthState.UNINITIALISED) {
 		this.frontPageService.loading();

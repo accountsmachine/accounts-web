@@ -47,6 +47,14 @@
       </mat-form-field>
     </div>
 
+    <div *ngIf="ref != ''">
+      <mat-form-field appearance="fill">
+	<mat-label>Referrer token</mat-label>
+	<input matInput [(ngModel)]="ref" name="ref" readonly="true">
+	<mat-hint>Referrer token provided to you</mat-hint>
+      </mat-form-field>
+    </div>
+
     <div class="center">
       <button mat-raised-button color="primary" (click)="register()">
 	Register

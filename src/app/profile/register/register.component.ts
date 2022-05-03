@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { WorkingService } from '../../working.service';
 import { FrontPageService } from '../front-page.service';
+import { ReferrerService } from '../../referrer.service';
 
 @Component({
     selector: 'register',
@@ -16,19 +17,22 @@ export class RegisterComponent implements OnInit {
     password2 : string = "";
     phone : string = "";
     name : string = "";
+    ref = "";
 
     constructor(
 	private auth : AuthService,
 	private state : FrontPageService,
 	public working : WorkingService,
+	private referrer : ReferrerService,
     ) { }
 
     ngOnInit(): void {
+	this.referrer.onchange().subscribe(e => {
+	    this.ref = e;
+	});
     }
 
     register() {
-
-	let svc = this;
 
 	if (this.password.length < 9) {
 	    this.auth.error("Password is too short.");
@@ -42,15 +46,27 @@ export class RegisterComponent implements OnInit {
 
 	this.working.start();
 
-	this.auth.create_user(
-	    this.username, this.password, this.phone, this.name
-	).subscribe({
-	    next() {
+	let obs;
 
-		svc.working.stop();
+	if (this.ref == "") {
+	    obs = this.auth.create_user(
+		this.username, this.password, this.phone, this.name
+	    );
+	} else {
+	    obs = this.auth.create_user(
+		this.username, this.password, this.phone, this.name, this.ref
+	    );
+	}
+
+	obs.subscribe({
+	    next: () => {
+
+		this.working.stop();
+
+		this.referrer.publish("");
 
 		// Login, should take us to the email verification step.
-		svc.auth.login(svc.username, svc.password).subscribe({
+		this.auth.login(this.username, this.password).subscribe({
 
 		    next() {
 		    },
@@ -66,12 +82,12 @@ export class RegisterComponent implements OnInit {
 
 	    },
 
-	    error(e) {
+	    error: (e) => {
 		console.log(e);
-		svc.working.stop();
+		this.working.stop();
 	    },
 
-	    complete() {
+	    complete: () => {
 	    },
 
 	});

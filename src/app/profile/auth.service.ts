@@ -168,7 +168,7 @@ export class AuthService {
     }
 
     create_user(user : string, password : string, phone : string,
-		name : string) {
+		name : string, ref? : string) {
 
 	let headers = new HttpHeaders({
 		"X-Client-Version": client_version,
@@ -176,14 +176,21 @@ export class AuthService {
 		"X-Application-ID": application_id,
 	});
 
+	let reg : any = {
+	    email: user,
+	    password: password,
+	    phone_number: phone,
+	    display_name: name,
+	};
+
+	if (ref) reg["ref"] = ref;
+
 	return new Observable<void>(obs => {
 
-	    this.http.post("/api/user-account/register", {
-		email: user,
-		password: password,
-		phone_number: phone,
-		display_name: name,
-	    }, {"responseType": "text", headers: headers}).subscribe({
+	    this.http.post(
+		"/api/user-account/register", reg,
+		{ "responseType": "text", headers: headers }
+	    ).subscribe({
 		next: () => obs.next(),
 		error: (e) => {
 		    try {
@@ -327,8 +334,6 @@ export class AuthService {
     }
     
     delete_user() {
-
-	console.log("DELETE");
 
 	let subs = this.get_token().subscribe({
 	
