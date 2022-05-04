@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ProgressBarMode } from '@angular/material/progress-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { BooksService } from '../books.service';
 
@@ -37,6 +38,7 @@ export class UploadComponent implements OnInit {
 	private route : ActivatedRoute,
 	private router : Router,
 	private books : BooksService,
+	private snackBar: MatSnackBar,
     ) {
     }
 
@@ -82,6 +84,25 @@ export class UploadComponent implements OnInit {
 	this.router.navigate(["/books/" + this.id + "/detail"]);
     }
 
+    onError(err : any) {
+
+	this.mode = 'determinate';
+	this.status = 'complete';
+	this.uploadSub = null;
+
+	console.log(err);
+
+	var errmsg = "";
+	if (err.error) {
+	    errmsg = err.error;
+	} else {
+	    errmsg = err.toString();
+	}
+
+	this.snackBar.open(errmsg, "dismiss", { duration: 5000 });
+
+    }
+
     onFileSelected(event : any) {
 
 	this.mode = 'determinate';
@@ -92,13 +113,12 @@ export class UploadComponent implements OnInit {
 	    
             this.filename = file.name;
 
-	    let cmp = this;
-
 	    this.uploadSub = this.books.upload(
 		this.id, file, "gnucash-sqlite"
 	    ).subscribe({
-		next(obs : number) { cmp.onProgress(obs); },
-		complete() { cmp.onComplete(); }
+		next: (obs : number) => { this.onProgress(obs); },
+		error: (err : Error) => { this.onError(err); }, 
+		complete: () => { this.onComplete(); },
 	    });
 
 	}

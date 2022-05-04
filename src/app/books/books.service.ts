@@ -68,17 +68,20 @@ export class BooksService {
 		this.api.post(url, formData, {
 		    reportProgress: true,
 		    observe: 'events'
-		}).subscribe(
-		    (event : any) => {
+		}).subscribe({
+		    next: (event : any) => {
 			if (event.type == HttpEventType.UploadProgress) {
 			    subs.next(this.progress(event));
 			} else if (event.type == HttpEventType.Response) {
 			    subs.complete();
 			    this.subject.next(true);
 			}
-		    }
-		);
-	    });
+		    },
+		    error: (e) => { subs.error(e); },
+		    complete: () => { subs.complete(); }
+		});
+	    }
+	);
 	
     }
 
