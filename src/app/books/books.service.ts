@@ -55,10 +55,11 @@ export class BooksService {
 	return val;
     }
 
-    upload(id : string, name : string, file : File) : Observable<number> {
+    upload(id : string, file : File, kind : string) : Observable<number> {
 
         const formData = new FormData();
-        formData.append(name, file);
+        formData.append("books", file);
+        formData.append("kind", kind);
 
 	let url = "/api/books/" + id + "/upload";
 	

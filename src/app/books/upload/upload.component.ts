@@ -95,7 +95,7 @@ export class UploadComponent implements OnInit {
 	    let cmp = this;
 
 	    this.uploadSub = this.books.upload(
-		this.id, "books", file
+		this.id, file, "gnucash-sqlite"
 	    ).subscribe({
 		next(obs : number) { cmp.onProgress(obs); },
 		complete() { cmp.onComplete(); }
