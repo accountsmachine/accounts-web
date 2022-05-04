@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import {
     DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
@@ -43,6 +44,7 @@ import { AccountsSelectionComponent } from './accounts-selection/accounts-select
     imports: [
 	CommonModule,
 	MatButtonModule,
+	MatRadioModule,
 	MatCardModule,
 	BooksRoutingModule,
 	MatIconModule,

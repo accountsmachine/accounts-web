@@ -17,6 +17,7 @@ export class UploadComponent implements OnInit {
     file = "";
     filename = "";
     status = "idle";
+    kind = "gnucash-sqlite"
     
     books_info : any = null;
 
@@ -114,7 +115,7 @@ export class UploadComponent implements OnInit {
             this.filename = file.name;
 
 	    this.uploadSub = this.books.upload(
-		this.id, file, "gnucash-sqlite"
+		this.id, file, this.kind
 	    ).subscribe({
 		next: (obs : number) => { this.onProgress(obs); },
 		error: (err : Error) => { this.onError(err); }, 

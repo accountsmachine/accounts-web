@@ -17,12 +17,23 @@ section {
     padding-right: 2rem;
 }
 
+.kind {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+mat-radio-button {
+    display: block;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
 .progress {
     padding: 1rem;
     width: 18rem;
 }
 
 .status {
-    padding-top: 3rem;
+    padding-top: 2rem;
 }
 

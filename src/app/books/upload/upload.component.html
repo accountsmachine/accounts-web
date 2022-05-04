@@ -18,6 +18,21 @@
 	Upload acccounting file
       </button>
     </div>
+
+    <div class="kind">
+      <label id="accounts-kind-label">
+	Select an account file kind
+      </label>      
+      <mat-radio-group aria-labelledby="accounts-kind-label"
+		       [(ngModel)]="kind">
+	<mat-radio-button value="gnucash-sqlite">
+	  GnuCash Sqlite format
+	</mat-radio-button>
+	<mat-radio-button value="csv">
+	  CSV format
+	</mat-radio-button>
+      </mat-radio-group>
+    </div>
     
     <div class="progress" *ngIf="status != 'idle'">
       <label>{{status}}</label>
