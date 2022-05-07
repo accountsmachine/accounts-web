@@ -37,6 +37,11 @@ export class ApiService {
 	return { headers: this.headers(null, token) };
     }
 
+    error(thing : Error) {
+	// FIXME: Error handling here.
+	return thing;
+    }
+
     get<T>(url: string, options? : any): Observable<T> {
 
 	return new Observable<T>(obs => {
@@ -55,7 +60,7 @@ export class ApiService {
 
 		    this.http.get<T>(url, opts).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { obs.error(e); },
+			error: (e : any) => { return obs.error(this.error(e)); },
 			complete: () => { obs.complete(); },
 		    })
 
@@ -107,7 +112,7 @@ export class ApiService {
 
 		    this.http.put<T>(url, data, opts).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { obs.error(e); },
+			error: (e : any) => { return obs.error(this.error(e)); },
 			complete: () => { obs.complete(); },
 		    })
 
@@ -117,7 +122,7 @@ export class ApiService {
 
 		error: (e) => { obs.error(e); subs.unsubscribe(); },
 
-		complete() { obs.complete(); subs.unsubscribe(); }
+		complete: () => { obs.complete(); subs.unsubscribe(); }
 
 	    });
 
@@ -143,7 +148,7 @@ export class ApiService {
 
 		    this.http.post<T>(url, data, opts).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { obs.error(e); },
+			error: (e : any) => { return obs.error(this.error(e)); },
 			complete: () => { obs.complete(); },
 		    })
 
@@ -153,7 +158,7 @@ export class ApiService {
 
 		error: (e) => { obs.error(e); subs.unsubscribe(); },
 
-		complete() { obs.complete(); subs.unsubscribe(); }
+		complete: () => { obs.complete(); subs.unsubscribe(); }
 
 	    });
 
@@ -179,8 +184,8 @@ export class ApiService {
 
 		    this.http.delete<T>(url, opts).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { obs.error(e); },
-			complete() { obs.complete(); },
+			error: (e : any) => { return obs.error(this.error(e)); },
+			complete: () => { obs.complete(); },
 		    })
 
 		    subs.unsubscribe();
