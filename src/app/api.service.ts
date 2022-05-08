@@ -1,4 +1,9 @@
 
+// All authenticated API requests go through this service.
+// Unauthenticated requests do NOT.
+
+// Thus, any auth error can be treated as a need to re-auth.
+
 import { Injectable } from '@angular/core';
 import {
     Observable, tap, throwError, map, catchError, ObservableInput, retryWhen,
@@ -79,6 +84,8 @@ export class ApiService {
 
     private handle_error(error: HttpErrorResponse) {
 
+	console.log("Error", error);
+
 	if (error.status === 0) {
 	    // A client-side or network error
 	    return throwError(() => error);
@@ -87,11 +94,15 @@ export class ApiService {
 	// If 401 or 403 error, just logout
         if ([401, 403].includes(error.status) && this.auth.authenticated()) {
 
+	    console.log("401/403 error case");
+
             // auto logout if 401 or 403 response returned from api
 	    this.auth.error("You have been logged out");
             this.auth.logout();
 
 	}
+
+	console.log("API error>>");
 
 	// The backend returned an unsuccessful response code.
 	return throwError(() => error);
