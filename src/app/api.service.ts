@@ -37,21 +37,6 @@ export class ApiService {
 	return { headers: this.headers(null, token) };
     }
 
-    error(thing : Error) {
-
-	// If 401 or 403 error, just logout
-	if (thing instanceof HttpErrorResponse) {
-            if ([401, 403].includes(thing.status) &&
-		this.auth.authenticated()) {
-                // auto logout if 401 or 403 response returned from api
-		this.auth.error("You have been logged out");
-                this.auth.logout();
-            }
-	}
-
-	return thing;
-    }
-
     get<T>(url: string, options? : any): Observable<T> {
 
 	return new Observable<T>(obs => {
@@ -68,9 +53,11 @@ export class ApiService {
 
 		    let opts = this.options(options, token);
 
-		    this.http.get<T>(url, opts).subscribe({
+		    this.http.get<T>(url, opts).pipe(
+			catchError(this.handle_error)
+		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { return obs.error(this.error(e)); },
+			error: (e : any) => { obs.error(e); },
 			complete: () => { obs.complete(); },
 		    })
 
@@ -88,20 +75,29 @@ export class ApiService {
 
     }
 
-    private handleError(error: HttpErrorResponse) {
+    private handle_error(error: HttpErrorResponse) {
+
+	console.log(">>>", error);
+
+	console.log("THIS", this);
+
 	if (error.status === 0) {
 	    // A client-side or network error
-	    console.error('An error occurred:', error.error);
-	} else {
-	    // The backend returned an unsuccessful response code.
-	    console.error(
-		`Backend returned code ${error.status}, body was: `,
-		error.error);
+	    return throwError(() => error);
 	}
 
-	// Return an observable with a user-facing error message.
-	return throwError(() =>
-	    new Error('Something bad happened; please try again later.'));
+	// If 401 or 403 error, just logout
+        if ([401, 403].includes(error.status) && this.auth.authenticated()) {
+
+            // auto logout if 401 or 403 response returned from api
+	    this.auth.error("You have been logged out");
+            this.auth.logout();
+
+	}
+
+	// The backend returned an unsuccessful response code.
+	return throwError(() => error);
+
     }
 
     put<T>(url: string, data : any, options? : any): Observable<T> {
@@ -120,9 +116,11 @@ export class ApiService {
 
 		    let opts = this.options(options, token);
 
-		    this.http.put<T>(url, data, opts).subscribe({
+		    this.http.put<T>(url, data, opts).pipe(
+			catchError(this.handle_error)
+		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { return obs.error(this.error(e)); },
+			error: (e : any) => { obs.error(e); },
 			complete: () => { obs.complete(); },
 		    })
 
@@ -156,9 +154,11 @@ export class ApiService {
 
 		    let opts = this.options(options, token);
 
-		    this.http.post<T>(url, data, opts).subscribe({
+		    this.http.post<T>(url, data, opts).pipe(
+			catchError(this.handle_error)
+		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { return obs.error(this.error(e)); },
+			error: (e : any) => { obs.error(e); },
 			complete: () => { obs.complete(); },
 		    })
 
@@ -192,9 +192,11 @@ export class ApiService {
 
 		    let opts = this.options(options, token);
 
-		    this.http.delete<T>(url, opts).subscribe({
+		    this.http.delete<T>(url, opts).pipe(
+			catchError((err) => this.handle_error(err))
+		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { return obs.error(this.error(e)); },
+			error: (e : any) => { obs.error(e); },
 			complete: () => { obs.complete(); },
 		    })
 
