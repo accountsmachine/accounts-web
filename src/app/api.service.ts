@@ -38,7 +38,17 @@ export class ApiService {
     }
 
     error(thing : Error) {
-	// FIXME: Error handling here.
+
+	// If 401 or 403 error, just logout
+	if (thing instanceof HttpErrorResponse) {
+            if ([401, 403].includes(thing.status) &&
+		this.auth.authenticated()) {
+                // auto logout if 401 or 403 response returned from api
+		this.auth.error("You have been logged out");
+                this.auth.logout();
+            }
+	}
+
 	return thing;
     }
 
