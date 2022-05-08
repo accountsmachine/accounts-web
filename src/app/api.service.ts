@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import {
     Observable, tap, throwError, map, catchError, ObservableInput, retryWhen,
+    take, delay
 } from 'rxjs';
 import {
     HttpClient, HttpErrorResponse, HttpHeaders
@@ -54,7 +55,8 @@ export class ApiService {
 		    let opts = this.options(options, token);
 
 		    this.http.get<T>(url, opts).pipe(
-			catchError(this.handle_error)
+			catchError((err) => this.handle_error(err)),
+			retryWhen(err => err.pipe(delay(250), take(3))),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
 			error: (e : any) => { obs.error(e); },
@@ -76,10 +78,6 @@ export class ApiService {
     }
 
     private handle_error(error: HttpErrorResponse) {
-
-	console.log(">>>", error);
-
-	console.log("THIS", this);
 
 	if (error.status === 0) {
 	    // A client-side or network error
@@ -117,7 +115,8 @@ export class ApiService {
 		    let opts = this.options(options, token);
 
 		    this.http.put<T>(url, data, opts).pipe(
-			catchError(this.handle_error)
+			catchError((err) => this.handle_error(err)),
+			retryWhen(err => err.pipe(delay(250), take(3))),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
 			error: (e : any) => { obs.error(e); },
@@ -155,7 +154,8 @@ export class ApiService {
 		    let opts = this.options(options, token);
 
 		    this.http.post<T>(url, data, opts).pipe(
-			catchError(this.handle_error)
+			catchError((err) => this.handle_error(err)),
+			retryWhen(err => err.pipe(delay(250), take(3))),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
 			error: (e : any) => { obs.error(e); },
@@ -193,7 +193,8 @@ export class ApiService {
 		    let opts = this.options(options, token);
 
 		    this.http.delete<T>(url, opts).pipe(
-			catchError((err) => this.handle_error(err))
+			catchError((err) => this.handle_error(err)),
+			retryWhen(err => err.pipe(delay(250), take(3))),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
 			error: (e : any) => { obs.error(e); },
