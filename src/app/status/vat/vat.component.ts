@@ -9,6 +9,7 @@ import {
 } from '@angular/material/dialog';
 
 import { StatusService, Statuses } from '../status.service';
+import { WorkingService } from '../../working.service';
 import { CompanyService, Companies, Company } from '../../company/company.service';
 import { VatService } from '../../vat/vat.service';
 import {
@@ -41,6 +42,7 @@ export class VatComponent implements OnInit {
 	private vat : VatService,
 	private dialog : MatDialog,
 	private formBuilder: FormBuilder,
+	private working : WorkingService,
     ) {
 
 	let now = new Date();
@@ -71,8 +73,9 @@ export class VatComponent implements OnInit {
 
     ngOnInit(): void {
 
-	this.route.params.subscribe(
-	    params => {
+	// FIXME: No spinner, combineLatest complicates things.
+	this.route.params.subscribe({
+	    next: (params) => {
 		let id = params["id"];
 		this.id = id;
 		combineLatest({
@@ -87,8 +90,12 @@ export class VatComponent implements OnInit {
 		    this.company =
 			id in e.companies ? e.companies[id] : new Company();
 		});
-	    }
-	);
+	    },
+	    error: (err) => {
+	    },
+	    complete: () => {
+	    },
+	});
 
     }
 

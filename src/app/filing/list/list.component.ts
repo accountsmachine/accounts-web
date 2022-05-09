@@ -46,8 +46,8 @@ export class ListComponent implements OnInit {
 	private companyService : CompanyService,
 	private profile : UserProfileService,
 	private dialog : MatDialog,
-	private working : WorkingService,
 	private commerceService : CommerceService,
+	private working : WorkingService,
     ) {
 
 	// This isn't a one-off, multiple events come back.
