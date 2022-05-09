@@ -21,7 +21,9 @@ export class AddressConfigComponent implements OnInit {
 	contact_address1: [''],
 	contact_address2: [''],
 	contact_city: ['', [Validators.required]],
-	contact_county: ['', [Validators.required]],
+
+	// County is considered optional in addresses
+	contact_county: ['', []],
 	contact_country: ['', [Validators.required]],
 	contact_postcode: ['', [Validators.required]],
     });
