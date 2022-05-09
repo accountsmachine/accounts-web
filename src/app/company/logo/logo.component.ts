@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 
 import { CompanyService, Company } from '../company.service';
 import { LogoService } from '../logo.service';
+import { WorkingService } from '../../working.service';
 
 class Uploader {
     svc : any;
@@ -36,6 +37,7 @@ export class LogoComponent implements OnInit {
 	private route : ActivatedRoute,
 	private state: CompanyService,
 	private logoService : LogoService,
+	private working : WorkingService,
     ) {
 	this.company = new Company();
     }
@@ -63,12 +65,20 @@ export class LogoComponent implements OnInit {
 	this.route.params.subscribe(
 	    params => {
 		if (params["id"]) {
-		    this.state.load(params["id"]).subscribe(c => {
-			if (c) {
-			    this.company = c;
-		    	    this.id = params["id"];
-			    this.update_logo();
-			}
+		    this.working.start();
+		    this.state.load(params["id"]).subscribe({
+			next: (c) => {
+			    this.working.stop();
+			    if (c) { 
+				this.company = c;
+		    		this.id = params["id"];
+				this.update_logo();
+			    }
+			},
+			error: (e) => {
+			    this.working.stop();
+			},
+			complete: () => {},
 		    });
 		}
 	    }
@@ -80,9 +90,13 @@ export class LogoComponent implements OnInit {
 
     }
 
+    // Don't need spinner here because there's a progress bar.
     update_logo() {
-	this.logoService.get(this.id).subscribe((img : any) => {
-	    this.createImageFromBlob(img);
+	this.logoService.get(this.id).subscribe({
+	    next: (img : any) => {
+		this.createImageFromBlob(img);
+	    },
+	    error: (e) => {},
 	});
     }
 
