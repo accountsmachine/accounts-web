@@ -49,9 +49,14 @@ export class ListComponent implements OnInit {
 	private working : WorkingService,
 	private commerceService : CommerceService,
     ) {
-	this.commerceService.onbalance().subscribe(
-	    b => this.balance = b
-	);
+
+	// This isn't a one-off, multiple events come back.
+	this.commerceService.onbalance().subscribe({
+	    next: (b) => { this.balance = b; },
+	    error: (e) => { },
+	    complete: () => { },
+	});
+
     }
 
     nocredits() : boolean {
@@ -74,23 +79,31 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-	this.companyService.get_list().subscribe(
-	    e => {
+	this.working.start();
+	this.companyService.get_list().subscribe({
+	    next: (e) => {
+		this.working.stop();
 		this.companies = e;
 		this.empty = this.is_empty(e);
-	    }
-	);
+	    },
+	    error: (e) => { this.working.stop(); },
+	    complete: () => {},
+	});
 	this.reload();
     }
 
     reload() {
 	this.working.start();
-	this.filingConfigService.list().subscribe(
-	    e => {
-		this.filingConfigs = e; this.load();
+	this.filingConfigService.list().subscribe({
+	    next: (e) => {
 		this.working.stop();
-	    }
-	);
+		this.filingConfigs = e; this.load();
+	    },
+	    error: (e) => {
+		this.working.stop();
+	    },
+	    complete: () => {},
+	});
     }
 
     feature(x : string) {
@@ -141,10 +154,13 @@ export class ListComponent implements OnInit {
     }
 
     move_draft(config : any) {
+	this.working.start();
 	this.filingConfigService.move_draft(
 	    config.id
-	).subscribe(() => {
-	    this.reload();
+	).subscribe({
+	    next: () => { this.working.stop(); this.reload(); },
+	    error: (e) => { this.working.stop(); },
+	    complete: () => {},
 	});
     }
 
@@ -169,17 +185,28 @@ export class ListComponent implements OnInit {
 		},
 	    }
 	);
-	dialogRef.afterClosed().subscribe((result : any) => {
-	    if (result) {
-		if (result.proceed) {
-		    this.filingConfigService.delete(
-			result.config.id
-		    ).subscribe(() => {
-			this.reload();
-		    });
+	dialogRef.afterClosed().subscribe({
+	    next: (result : any) => {
+		if (result) {
+		    if (result.proceed) {
+			this.working.start();
+			this.filingConfigService.delete(
+			    result.config.id
+			).subscribe({
+			    next: () => {
+				this.working.stop();
+				this.reload();
+			    },
+			    error: (err) => {
+				this.working.stop();
+			    },
+			    complete: () => {},
+			});
+		    }
 		}
-	    }
+	    },
 	});
+
     }
 
 }
