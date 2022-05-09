@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
 import { CompanyService, Company } from '../company.service';
+import { WorkingService } from '../../working.service';
 
 @Component({
     selector: 'tax-config',
@@ -34,6 +35,7 @@ export class TaxConfigComponent implements OnInit {
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
 	private fb: FormBuilder,
+	private working : WorkingService,
     ) {
 	this.company = new Company();
     }
@@ -52,10 +54,17 @@ export class TaxConfigComponent implements OnInit {
 	this.route.params.subscribe(
 	    params => {
 		if (params["id"]) {
-		    this.state.load(params["id"]).subscribe(c => {
-			if (c) {
-			    this.company = c;
-			    this.load();
+		    this.working.start();
+		    this.state.load(params["id"]).subscribe({
+			next: (c) => {
+			    this.working.stop();
+			    if (c) {
+		    		this.company = c;
+				this.load();
+			    }
+			},
+			error: (e) => {
+			    this.working.stop();
 			}
 		    });
 		}
@@ -73,9 +82,14 @@ export class TaxConfigComponent implements OnInit {
 	this.company.vrn = this.form.value.vrn;
 	this.company.vat_registration = this.form.value.vat_registration;
 
-	this.state.save().subscribe(
-	    e => this.success()
-	);
+	this.working.start();
+
+	this.state.save().subscribe({
+	    next: (e) => { this.working.stop(); this.success(); },
+	    error: (e) => { this.working.stop(); },
+	    complete: () => {},
+	});
+
     }
 
     get utr() { return this.form.get('utr'); }

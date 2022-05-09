@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
 import { CompanyService, Company } from '../company.service';
+import { WorkingService } from '../../working.service';
 
 @Component({
   selector: 'web-config',
@@ -26,6 +27,7 @@ export class WebConfigComponent implements OnInit {
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
 	private fb: FormBuilder,
+	private working : WorkingService,
     ) {
 	this.company = new Company();
     }
@@ -43,16 +45,22 @@ export class WebConfigComponent implements OnInit {
 	this.route.params.subscribe(
 	    params => {
 		if (params["id"]) {
-		    this.state.load(params["id"]).subscribe(c => {
-			if (c) {
-			    this.company = c;
-			    this.load();
+		    this.working.start();
+		    this.state.load(params["id"]).subscribe({
+			next: (c) => {
+			    this.working.stop();
+			    if (c) {
+		    		this.company = c;
+				this.load();
+			    }
+			},
+			error: (e) => {
+			    this.working.stop();
 			}
 		    });
 		}
 	    }
 	);
-
     }
 
     public success() {
@@ -64,9 +72,13 @@ export class WebConfigComponent implements OnInit {
 	this.company.web_description = this.form.value.web_description;
 	this.company.web_url = this.form.value.web_url;
 
-	this.state.save().subscribe(
-	    e => this.success()
-	);
+	this.working.start();
+
+	this.state.save().subscribe({
+	    next: (e) => { this.working.stop(); this.success(); },
+	    error: (e) => { this.working.stop(); },
+	    complete: () => {},
+	});
 
     }
 

@@ -5,6 +5,7 @@ import {
 } from '@angular/material/dialog';
 
 import { CompanyService, Company, Companies } from '../company.service';
+import { WorkingService } from '../../working.service';
 import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';
@@ -22,6 +23,7 @@ export class ListComponent implements OnInit {
 	private router : Router,
 	private companyService : CompanyService,
 	private dialog : MatDialog,
+	private working : WorkingService,
     ) {
     }
 
@@ -33,13 +35,17 @@ export class ListComponent implements OnInit {
 
 	let cmp = this;
 
+	this.working.start();
+
 	this.companyService.get_list().subscribe({
-	    next(e) {
+	    next: (e) => {
 		cmp.configs = e;
+		this.working.stop();
 	    },
-	    error(e) {
+	    error: (e) => {
+		this.working.stop();
 	    },
-	    complete() {
+	    complete: () => {
 	    }
 	});
 
@@ -75,10 +81,13 @@ export class ListComponent implements OnInit {
 	dialogRef.afterClosed().subscribe((result : any) => {
 	    if (result) {
 		if (result.proceed) {
+		    this.working.start();
 		    this.companyService.delete(
 			company.company_number
-		    ).subscribe(() => {
-			this.reload();
+		    ).subscribe({
+			next: () => {  this.working.stop(); this.reload(); },
+			error: () => { this.working.stop(); },
+			complete: () => {}
 		    });
 		}
 	    }

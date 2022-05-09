@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
 import { CompanyService, Company } from '../company.service';
+import { WorkingService } from '../../working.service';
 
 @Component({
     selector: 'activities-config',
@@ -29,6 +30,7 @@ export class ActivitiesConfigComponent implements OnInit {
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
 	private fb: FormBuilder,
+	private working : WorkingService,
     ) {
 	this.company = new Company();
     }
@@ -50,16 +52,22 @@ export class ActivitiesConfigComponent implements OnInit {
 	this.route.params.subscribe(
 	    params => {
 		if (params["id"]) {
-		    this.state.load(params["id"]).subscribe(c => {
-			if (c) {
-			    this.company = c;
-			    this.load();
+		    this.working.start();
+		    this.state.load(params["id"]).subscribe({
+			next: (c) => {
+			    this.working.stop();
+			    if (c) {
+		    		this.company = c;
+				this.load();
+			    }
+			},
+			error: (e) => {
+			    this.working.stop();
 			}
 		    });
 		}
 	    }
 	);
-
     }
 
     public success() {
@@ -72,9 +80,14 @@ export class ActivitiesConfigComponent implements OnInit {
 	this.company.activities = this.form.value.activities;
 	this.company.sic_codes = this.sic_codes.value;
 
-	this.state.save().subscribe(
-	    e => this.success()
-	);
+	this.working.start();
+
+	this.state.save().subscribe({
+	    next: (e) => { this.working.stop(); this.success(); },
+	    error: (e) => { this.working.stop(); },
+	    complete: () => {},
+	});
+
     }
 
     public revert() {
