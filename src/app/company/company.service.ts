@@ -58,7 +58,7 @@ export class CompanyService {
     id : string | null = "";
     config : Company | null = null;
 
-    reset() {
+    unload() {
 	this.config = null;
 	this.id = "";
 	this.subject.next(this.config);
@@ -290,7 +290,12 @@ export class CompanyService {
     }
 
     delete(cid : string) {
-	return this.api.delete("/api/company/" + cid);
+	return this.api.delete("/api/company/" + cid).pipe(
+	    tap(() => {
+		// Company is deleted, 'unload' the current company.
+		this.unload();
+	    })
+	);
     }
 
     change() {
