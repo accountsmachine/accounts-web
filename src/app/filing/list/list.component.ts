@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { take, repeatWhen, delay } from 'rxjs/operators';
+
 import { FilingConfigService, FilingItem } from '../filing-config.service';
 import { get_kind_label } from '../../kinds';
 import {
@@ -87,21 +89,63 @@ export class ListComponent implements OnInit {
 	    error: (e) => { this.working.stop(); },
 	    complete: () => {},
 	});
+
 	this.reload();
+
     }
 
+    ngOnDestroy(): void {
+	if (this.reload_subs) {
+	    this.reload_subs.unsubscribe();
+	}
+    }
+
+    reload_subs : any = null;
+    reload_working = false;
+
     reload() {
-	this.working.start();
-	this.filingConfigService.list().subscribe({
+
+	if (!this.reload_working) {
+	    this.reload_working = true;
+	    this.working.start();
+	}
+
+	if (this.reload_subs) {
+	    this.reload_subs.unsubscribe();
+	    this.reload_subs = null;
+	}
+
+	this.reload_subs = this.filingConfigService.list().pipe(
+
+	    // reload every 5 seconds.
+	    repeatWhen((n) => n.pipe(delay(5000)))
+
+	).subscribe({
+
 	    next: (e) => {
-		this.working.stop();
+
+		if (this.reload_working) {
+		    this.reload_working = false;
+		    this.working.stop();
+		}
+
 		this.filingConfigs = e; this.load();
+
 	    },
+
 	    error: (e) => {
-		this.working.stop();
+		if (this.reload_working) {
+		    this.reload_working = false;
+		    this.working.stop();
+		}
 	    },
-	    complete: () => {},
+
+	    complete: () => {
+		this.reload_subs.unsubscribe();
+	    },
+
 	});
+
     }
 
     feature(x : string) {

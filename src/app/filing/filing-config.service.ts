@@ -50,7 +50,7 @@ export class FilingConfigService {
 	this.onunload_subject.next();
     }
 
-    // FIXME: Cache filings.
+    // FIXME: Cache filings?
 
     list() : Observable<FilingItem[]> {
 	let url = "/api/filings";
