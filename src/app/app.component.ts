@@ -7,7 +7,7 @@ import {
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { AuthService, AuthState } from './profile/auth.service';
+import { AuthService, AuthState } from './auth.service';
 import { UserProfileService } from './profile/user-profile.service';
 import { WorkingService } from './working.service';
 import {

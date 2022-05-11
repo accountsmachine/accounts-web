@@ -13,7 +13,7 @@ import {
 
 import {
     client_version, application_name, application_id
-} from '../../version';
+} from '../version';
 
 export enum AuthState {
     UNINITIALISED,

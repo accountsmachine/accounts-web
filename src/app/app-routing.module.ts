@@ -26,7 +26,7 @@ import { DeleteComponent } from './profile/delete/delete.component';
 
 const routes: Routes = [
 
-    { path: "vat-token", canActivate: [AuthGuard],
+    { path: "vat-token", canActivate: [ AuthGuard ],
       loadChildren: () => import(
 	  './auth/auth.module'
       ).then(m => m.AuthModule)

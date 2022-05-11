@@ -4,7 +4,7 @@ import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
-import { AuthService, AuthState } from '../auth.service';
+import { AuthService, AuthState } from '../../auth.service';
 import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';

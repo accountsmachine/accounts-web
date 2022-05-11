@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService, AuthState } from '../auth.service';
+import { AuthService, AuthState } from '../../auth.service';
 import { UserProfileService } from '../user-profile.service';
 import { FrontPageService, FrontState } from '../front-page.service';
 
