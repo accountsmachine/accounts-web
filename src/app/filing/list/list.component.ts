@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { take, repeatWhen, delay, tap } from 'rxjs/operators';
+import { interval } from 'rxjs';
 
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
@@ -20,11 +21,6 @@ import { Balance } from '../../commerce/commerce.model';
 import { CommerceService } from '../../commerce/commerce.service';
 
 import { environment } from '../../../environments/environment';
-
-enum ReloadState {
-    YES,
-    DONE,
-};
 
 @Component({
     selector: 'list',
@@ -95,7 +91,7 @@ export class ListComponent implements OnInit {
 	    complete: () => {},
 	});
 
-	this.reload();
+	this.reload(true);
 
     }
 
@@ -117,14 +113,11 @@ export class ListComponent implements OnInit {
     reload_subs : any = null;
     reload_working = true;
 
-    reload_state : ReloadState = ReloadState.DONE;
-
-    reload() {
+    reload(quick : boolean = false) {
 
 	if (!this.reload_working) {
 	    this.reload_working = true;
 	    this.working.start();
-	    console.log("START");
 	}
 
 	if (this.reload_subs) {
@@ -132,42 +125,31 @@ export class ListComponent implements OnInit {
 	    this.reload_subs = null;
 	}
 
-	this.reload_state = ReloadState.YES;
-
 	this.reload_subs = this.filingConfigService.list().pipe(
-
-	    tap(n => {
-
-		if (this.reload_state == ReloadState.DONE) {
-		    console.log("UNSUB");
-		    this.reload_subs.unsubscribe();
-		    return;
-		}
-		
-		if (!this.maybe_changing(n)) {
-		    console.log("CONT");
-		    this.reload_state = ReloadState.DONE;
-		}
-		
-	    })
-
-	).pipe(
-
-	    // reload every 5 seconds.
-	    repeatWhen(n => n.pipe(delay(4000)))
-
+	    take(1)
 	).subscribe({
 
 	    next: (e) => {
+
 		if (this.reload_working) {
 		    this.reload_working = false;
 		    this.working.stop();
 		}
 
-		console.log("UPDATE");
-
 		this.filingConfigs = e; this.load();
 
+		if (quick) {
+		    interval(250).pipe(take(1)).subscribe(
+			e => this.reload()
+		    );
+		} else {
+		    if (this.maybe_changing(e)) {
+			interval(5000).pipe(take(1)).subscribe(
+			    e => this.reload()
+			);
+		    }
+		}
+		
 	    },
 
 	    error: (e) => {
@@ -183,10 +165,6 @@ export class ListComponent implements OnInit {
 
 	});
 
-    }
-
-    reload_again() : void {
-	this.reload();
     }
 
     feature(x : string) {
@@ -241,7 +219,7 @@ export class ListComponent implements OnInit {
 	this.filingConfigService.move_draft(
 	    config.id
 	).subscribe({
-	    next: () => { this.working.stop(); this.reload_again(); },
+	    next: () => { this.working.stop(); this.reload(true); },
 	    error: (e) => { this.working.stop(); },
 	    complete: () => {},
 	});
@@ -278,7 +256,7 @@ export class ListComponent implements OnInit {
 			).subscribe({
 			    next: () => {
 				this.working.stop();
-				this.reload_again();
+				this.reload(true);
 			    },
 			    error: (err) => {
 				this.working.stop();
