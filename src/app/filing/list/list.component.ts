@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { take, repeatWhen, delay } from 'rxjs/operators';
+import { take, repeatWhen, delay, tap } from 'rxjs/operators';
 
-import { FilingConfigService, FilingItem } from '../filing-config.service';
-import { get_kind_label } from '../../kinds';
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
+import { FilingConfigService, FilingItem } from '../filing-config.service';
+import { get_kind_label } from '../../kinds';
 import { CompanyService, Companies } from '../../company/company.service';
 import {
     UserProfileService, UserProfile
@@ -20,6 +20,11 @@ import { Balance } from '../../commerce/commerce.model';
 import { CommerceService } from '../../commerce/commerce.service';
 
 import { environment } from '../../../environments/environment';
+
+enum ReloadState {
+    YES,
+    DONE,
+};
 
 @Component({
     selector: 'list',
@@ -100,14 +105,26 @@ export class ListComponent implements OnInit {
 	}
     }
 
+    maybe_changing(x : any) {
+
+	let pending = this.filingConfigs.filter(e => e.state == "pending");
+	if (pending.length > 0) return true;
+
+	return false;
+
+    }
+
     reload_subs : any = null;
-    reload_working = false;
+    reload_working = true;
+
+    reload_state : ReloadState = ReloadState.DONE;
 
     reload() {
 
 	if (!this.reload_working) {
 	    this.reload_working = true;
 	    this.working.start();
+	    console.log("START");
 	}
 
 	if (this.reload_subs) {
@@ -115,19 +132,39 @@ export class ListComponent implements OnInit {
 	    this.reload_subs = null;
 	}
 
+	this.reload_state = ReloadState.YES;
+
 	this.reload_subs = this.filingConfigService.list().pipe(
 
+	    tap(n => {
+
+		if (this.reload_state == ReloadState.DONE) {
+		    console.log("UNSUB");
+		    this.reload_subs.unsubscribe();
+		    return;
+		}
+		
+		if (!this.maybe_changing(n)) {
+		    console.log("CONT");
+		    this.reload_state = ReloadState.DONE;
+		}
+		
+	    })
+
+	).pipe(
+
 	    // reload every 5 seconds.
-	    repeatWhen((n) => n.pipe(delay(5000)))
+	    repeatWhen(n => n.pipe(delay(4000)))
 
 	).subscribe({
 
 	    next: (e) => {
-
 		if (this.reload_working) {
 		    this.reload_working = false;
 		    this.working.stop();
 		}
+
+		console.log("UPDATE");
 
 		this.filingConfigs = e; this.load();
 
@@ -146,6 +183,10 @@ export class ListComponent implements OnInit {
 
 	});
 
+    }
+
+    reload_again() : void {
+	this.reload();
     }
 
     feature(x : string) {
@@ -200,7 +241,7 @@ export class ListComponent implements OnInit {
 	this.filingConfigService.move_draft(
 	    config.id
 	).subscribe({
-	    next: () => { this.working.stop(); this.reload(); },
+	    next: () => { this.working.stop(); this.reload_again(); },
 	    error: (e) => { this.working.stop(); },
 	    complete: () => {},
 	});
@@ -237,7 +278,7 @@ export class ListComponent implements OnInit {
 			).subscribe({
 			    next: () => {
 				this.working.stop();
-				this.reload();
+				this.reload_again();
 			    },
 			    error: (err) => {
 				this.working.stop();
