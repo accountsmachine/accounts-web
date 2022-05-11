@@ -23,6 +23,24 @@ export class ChangeEmailComponent implements OnInit {
     }
 
     change() {
+
+        if (this.username != this.username2) {
+    	    this.auth.error("Email addresses do not match");
+	    return;
+	}
+
+	this.auth.change_email(this.username).subscribe(
+	    {
+		next: () => {
+		    this.auth.logout();
+		},
+		error: () => {
+		},
+		complete: () => {}
+	    }
+	);
+
     }
 
 }
+

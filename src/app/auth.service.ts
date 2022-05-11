@@ -276,7 +276,7 @@ export class AuthService {
 		    ).then(
 			(t : any) => {
 			    this.error(
-				"Profile saved"
+				"Email address updated.  An email has been sent to the new address."
 			    );
 			    obs.next()
 			}

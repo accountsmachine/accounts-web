@@ -38,8 +38,6 @@ export class ListComponent implements OnInit {
     errored : FilingItem[] = [];
     published : FilingItem[] = [];
 
-//    features : Set<string> = new Set<string>();
-
     constructor(
 	private router : Router,
 	private filingConfigService : FilingConfigService,
