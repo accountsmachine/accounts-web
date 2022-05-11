@@ -84,6 +84,7 @@ export class ApiService {
 
     private handle_error(error: HttpErrorResponse) {
 
+    	// FIXME: Remove all this logging.
 	console.log("Error", error);
 
 	if (error.status === 0) {
@@ -102,7 +103,7 @@ export class ApiService {
 
 	}
 
-	console.log("API error>>");
+	console.log("API error");
 
 	// The backend returned an unsuccessful response code.
 	return throwError(() => error);
