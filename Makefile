@@ -153,4 +153,4 @@ run-upgrade:
 	gcloud run services update ${SERVICE} \
 	    --project ${PROJECT} --region ${REGION} \
 	    --image ${CONTAINER}:${VERSION} \
-	    --tag ${TAG}
+	    --update-labels version=${TAG}
