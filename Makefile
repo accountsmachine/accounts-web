@@ -1,5 +1,5 @@
 
-VERSION=0.13.0
+VERSION=$(shell git describe | sed 's/^v//')
 DIST=dist
 
 all: serve
@@ -37,6 +37,7 @@ everything-prod:
 build:
 	rm -rf ${DIST}/${BUILD}
 	mkdir -p ${DIST}/${BUILD}
+	cat src/version.ts | sed 's/1.0.0/${VERSION}/' > src/version.${BUILD}.ts
 	ng build -c ${BUILD} --output-path ${DIST}/${BUILD}
 	cp 404.html ${DIST}/${BUILD}
 
