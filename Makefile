@@ -44,6 +44,9 @@ build:
 serve: serve.go
 	go build serve.go
 
+local:
+	ng serve -c local
+
 NAME=accounts-web
 REPO=europe-west2-docker.pkg.dev/accounts-machine-${KIND}/accounts-machine
 CONTAINER=${REPO}/${NAME}
