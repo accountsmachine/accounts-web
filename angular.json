@@ -81,7 +81,7 @@
                 },
                 {
                   "replace": "src/version.ts",
-                  "with": "src/version.prod.stage.ts"
+                  "with": "src/version.stage.ts"
                 }
               ],
               "outputHashing": "all"
