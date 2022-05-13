@@ -34,7 +34,9 @@ import { TransactionListComponent } from './transaction-list/transaction-list.co
 import { TransactionComponent } from './transaction/transaction.component';
 import { NavComponent } from './nav/nav.component';
 import { OrderComponent } from './order/order.component';
-import { CheckoutComponent } from './checkout/checkout.component';
+import {
+    CreditCardCheckoutComponent
+} from './credit-card-checkout/credit-card-checkout.component';
 import { CompleteComponent } from './complete/complete.component';
 
 @NgModule({
@@ -47,7 +49,7 @@ import { CompleteComponent } from './complete/complete.component';
         TransactionComponent,
         NavComponent,
         OrderComponent,
-        CheckoutComponent,
+        CreditCardCheckoutComponent,
         CompleteComponent
     ],
     imports: [
