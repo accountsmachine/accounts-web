@@ -177,7 +177,7 @@ export class CheckoutService {
 		    svc.reset();
 		    obs.next(b);
 		},
-		error(err) {
+		error(err : Error) {
 		    obs.error(err)
 		},
 		complete() { obs.complete() }
@@ -185,6 +185,21 @@ export class CheckoutService {
 
 	});
 
+    }
+
+    get_crypto_currencies() {
+	return this.commerce.get_currencies();
+    }
+
+    // FIXME: Define type.
+    get_crypto_estimate(cur : string) : Observable<any> {
+	return new Observable<any>(obs => {
+	    this.commerce.get_crypto_estimate(this._order, cur).subscribe(
+	    	e => {
+		    obs.next(e);
+		}
+	    );
+	});
     }
 
 }

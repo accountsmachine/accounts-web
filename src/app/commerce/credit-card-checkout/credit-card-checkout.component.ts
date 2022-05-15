@@ -39,24 +39,23 @@ export class CreditCardCheckoutComponent implements OnInit {
 
     place_order() {
 
-	let cmp = this;
-
 	this.payments.confirm(this.paymentElement).subscribe({
-	    next(pid) {
 
-		cmp.service.complete_payment(pid).subscribe({
-		    next(bal) {
-			cmp.router.navigate(["/commerce/complete"]);
+	    next: (pid) => {
+
+		this.service.complete_payment(pid).subscribe({
+		    next: (bal) => {
+			this.router.navigate(["/commerce/complete"]);
 		    },
-		    error(err) {
-			cmp.error(err);
+		    error: (err) => {
+			this.error(err);
 		    },
-		    complete() {}
+		    complete: () => {}
 		});
-
+		
 	    },
-	    error(err) { cmp.error(err); },
-	    complete() {}
+	    error: (err) => { this.error(err); },
+	    complete: () => {}
 	});
 
     }

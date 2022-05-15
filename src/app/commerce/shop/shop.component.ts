@@ -95,6 +95,10 @@ export class ShopComponent implements OnInit {
 	this.router.navigate(["/commerce/cc-checkout"]);
     }
 
+    crypto_checkout() {
+	this.router.navigate(["/commerce/crypto-checkout"]);
+    }
+
     reset() {
 	this.form.patchValue({
 	    vat: 0, corptax: 0, accounts: 0

@@ -8,6 +8,9 @@ import { ShopComponent } from './shop/shop.component';
 import {
     CreditCardCheckoutComponent
 } from './credit-card-checkout/credit-card-checkout.component';
+import {
+    CryptoCheckoutComponent
+} from './crypto-checkout/crypto-checkout.component';
 import { CompleteComponent } from './complete/complete.component';
 import { TransactionListComponent
        } from './transaction-list/transaction-list.component';
@@ -19,6 +22,7 @@ const routes: Routes = [
     { path: "balance", component: BalanceComponent },
     { path: "purchase", component: ShopComponent },
     { path: "cc-checkout", component: CreditCardCheckoutComponent },
+    { path: "crypto-checkout", component: CryptoCheckoutComponent },
     { path: "complete", component: CompleteComponent },
     { path: "transactions", component: TransactionListComponent },
     { path: "transaction", children: [

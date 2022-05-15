@@ -12,6 +12,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import {
@@ -37,6 +38,9 @@ import { OrderComponent } from './order/order.component';
 import {
     CreditCardCheckoutComponent
 } from './credit-card-checkout/credit-card-checkout.component';
+import {
+    CryptoCheckoutComponent
+} from './crypto-checkout/crypto-checkout.component';
 import { CompleteComponent } from './complete/complete.component';
 
 @NgModule({
@@ -50,11 +54,13 @@ import { CompleteComponent } from './complete/complete.component';
         NavComponent,
         OrderComponent,
         CreditCardCheckoutComponent,
+	CryptoCheckoutComponent,
         CompleteComponent
     ],
     imports: [
         NgxStripeModule.forChild(),
 	CommonModule,
+	RouterModule,
 	MatCardModule,
 	MatIconModule,
 	MatButtonModule,
@@ -63,7 +69,7 @@ import { CompleteComponent } from './complete/complete.component';
 	MatTableModule,
 	MatSidenavModule,
 	MatSnackBarModule,
-	RouterModule,
+	MatSelectModule,
 	CommerceRoutingModule,
 	FormsModule,
 	MatFormFieldModule,

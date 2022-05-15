@@ -11,7 +11,7 @@ import * as moment from 'moment';
 
 import { ApiService } from '../api.service';
 
-import { Balance, Option, Options, Transaction } from './commerce.model';
+import { Balance, Option, Options, Order, Transaction } from './commerce.model';
 
 @Injectable({
     providedIn: 'root'
@@ -95,6 +95,28 @@ export class CommerceService {
 	let url = "/api/commerce/create-payment/" + id;
 
 	return this.api.post<any>(url, {});
+
+    }
+
+    get_currencies() : Observable<string[]> {
+
+	let url = "/api/crypto/currencies";
+
+	return this.api.get<string[]>(url);
+
+    }
+
+    get_crypto_estimate(order : Order, cur : string) : Observable<string[]> {
+
+	let url = "/api/crypto/currencies";
+
+	return this.api.post<any>(
+	    url,
+	    {
+		order: order,
+		currency : cur,
+	    }
+	);
 
     }
 
