@@ -108,7 +108,7 @@ export class CommerceService {
 
     get_crypto_estimate(order : Order, cur : string) : Observable<string[]> {
 
-	let url = "/api/crypto/currencies";
+	let url = "/api/crypto/estimate";
 
 	return this.api.post<any>(
 	    url,

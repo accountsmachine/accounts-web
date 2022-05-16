@@ -1,0 +1,64 @@
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
+
+      <section class="content">
+
+	<h1>Your order</h1>
+
+	<order></order>
+
+      </section>
+
+      <section>
+	<h1>Payment details</h1>
+
+	<form [formGroup]="form">
+
+	  <div>
+	    <mat-form-field id="currency" appearance="fill">
+	      <mat-label>Currency</mat-label>
+	      <mat-select (selectionChange)="change()"
+			  formControlName="currency" name="currency">
+		<mat-option *ngFor="let c of currencies" [value]="c">
+		  {{c | uppercase}}
+		</mat-option>
+	      </mat-select>
+	      <mat-hint>Currency</mat-hint>
+	    </mat-form-field>
+	  </div>
+
+	</form>
+
+	<div class="estimate">
+	  Estimated payment value:
+	  {{estimate}} {{form.value.currency | uppercase}}
+	  if you choose to proceed.
+	</div>
+
+	<div>
+	  <button mat-raised-button color="primary"
+		  (click)="place_order()">
+	    <mat-icon>shopping_cart</mat-icon>&nbsp;
+	    Place order
+	  </button>
+	  <button mat-raised-button color="basic" (click)="back()">
+	    <mat-icon>arrow_back</mat-icon>&nbsp;
+	    Back to shop
+	  </button>
+	</div>
+
+      </section>
+      
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+
+</section>
+

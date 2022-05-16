@@ -194,11 +194,14 @@ export class CheckoutService {
     // FIXME: Define type.
     get_crypto_estimate(cur : string) : Observable<any> {
 	return new Observable<any>(obs => {
-	    this.commerce.get_crypto_estimate(this._order, cur).subscribe(
-	    	e => {
-		    obs.next(e);
-		}
-	    );
+	    this.commerce.get_crypto_estimate(this._order, cur).subscribe({
+		next: (e) => { obs.next(e); },
+		error: (err) => {
+		    console.log("ERR", err);
+		    obs.error(err);
+		},
+		complete: () => {},
+	    });
 	});
     }
 
