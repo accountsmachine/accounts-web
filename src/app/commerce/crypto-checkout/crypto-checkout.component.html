@@ -133,9 +133,17 @@
 
 	<ng-container
 	  *ngIf="payment_status == 'partially_paid'">
-	  <h1>Payment partially received</h1>
+	  <h1>Partial payment received</h1>
 	  <div>
-	    Payment processing has received a partial amount.
+	    Payment processing has not received the complete amount
+	    from you.
+	  </div>
+	  <div>
+	    Value received: <span class="amount">{{actually_paid}}</span>
+	  </div>
+	  <div>
+	    Required to complete:
+	    <span class="amount">{{pay_amount! - actually_paid!}}</span>
 	  </div>
 	</ng-container>
 

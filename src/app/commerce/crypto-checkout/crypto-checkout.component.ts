@@ -76,6 +76,7 @@ export class CryptoCheckoutComponent implements OnInit {
     }
 
     pay_amount? : number;
+    actually_paid? : number;
     pay_address? : string;
     payment_id? : string;
     pay_currency? : string;
@@ -91,6 +92,7 @@ export class CryptoCheckoutComponent implements OnInit {
 		console.log(e);
 		this.pay_address = e["pay_address"];
 		this.pay_amount = e["pay_amount"];
+		this.actually_paid = e["actually_paid"];
 		this.payment_id = e["payment_id"];
 		this.pay_currency = e["pay_currency"];
 		this.order_id = e["order_id"];
