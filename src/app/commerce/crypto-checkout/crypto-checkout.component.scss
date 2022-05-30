@@ -19,7 +19,28 @@ button {
     padding: 1rem;
 }
 
-//section.content {
-//    margin-top: 1rem;
-//    margin-bottom: 1rem;
-//}
+.amount {
+    font-family: monospace;
+}
+
+.ident {
+    font-family: monospace;
+}
+
+.address {
+    font-family: monospace;
+}
+
+tr td, tr th {
+    border: 1px solid black;
+    padding: 4px;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 1rem;
+}
+
+h1 {
+    margin-top: 0.8rem;
+}
