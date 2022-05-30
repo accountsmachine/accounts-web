@@ -60,6 +60,15 @@
 	  {{tx.status | uppercase}}
 	</div>
 
+	<ng-container *ngIf="tx.crypto">
+	  <div class="detaillabel">Crypto currency:</div>
+	  <div class="detailvalue">{{tx.currency | uppercase}}</div>
+	  <div class="detaillabel">Crypto amount:</div>
+	  <div class="detailvalue amount">{{tx.paid_amount}}</div>
+	  <div class="detaillabel">Crypto payment ID:</div>
+	  <div class="detailvalue amount">{{tx.payment_id}}</div>
+	</ng-container>
+
 	<div class="header description">Description</div>
 	<div class="header quantity">Quantity</div>
 	<div class="header amount">Amount</div>

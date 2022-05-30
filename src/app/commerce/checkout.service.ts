@@ -177,7 +177,7 @@ export class CheckoutService {
 		    svc.reset();
 		    obs.next(b);
 		},
-		error(err) {
+		error(err : Error) {
 		    obs.error(err)
 		},
 		complete() { obs.complete() }
@@ -185,6 +185,56 @@ export class CheckoutService {
 
 	});
 
+    }
+
+    get_crypto_currencies() {
+	return this.commerce.get_currencies();
+    }
+
+    // FIXME: Define type.
+    get_crypto_estimate(cur : string) : Observable<any> {
+	return new Observable<any>(obs => {
+	    this.commerce.get_crypto_estimate(this._order, cur).subscribe({
+		next: (e) => { obs.next(e); },
+		error: (err) => {
+		    console.log("ERR", err);
+		    obs.error(err);
+		},
+		complete: () => {},
+	    });
+	});
+    }
+
+    // FIXME: Define type.
+    create_crypto_payment(cur : string) : Observable<any> {
+	return new Observable<any>(obs => {
+	    this.commerce.create_crypto_payment(this._order, cur).subscribe({
+		next: (e) => { obs.next(e); },
+		error: (err) => {
+		    console.log("ERR", err);
+		    obs.error(err);
+		},
+		complete: () => {},
+	    });
+	});
+    }
+
+    // FIXME: Define type.
+    get_crypto_payment_status(id : string) : Observable<any> {
+	return new Observable<any>(obs => {
+	    this.commerce.get_crypto_payment_status(id).subscribe({
+		next: (e) => { obs.next(e); },
+		error: (err) => {
+		    console.log("ERR", err);
+		    obs.error(err);
+		},
+		complete: () => {},
+	    });
+	});
+    }
+
+    update_balance() {
+	return this.commerce.update_balance();
     }
 
 }

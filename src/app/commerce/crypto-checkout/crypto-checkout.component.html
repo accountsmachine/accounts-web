@@ -1,0 +1,228 @@
+<section class="tab-contents">
+
+  <mat-drawer-container class="drawer-container">
+
+    <mat-drawer mode="side" class="drawer-side" opened>
+      <navigator></navigator>
+    </mat-drawer>
+    
+    <mat-drawer-content class="main-content">
+
+      <section class="content">
+
+	<h1>Your order</h1>
+
+	<order></order>
+
+      </section>
+
+      <section>
+
+	<ng-container *ngIf="!payment_status">
+
+	  <h1>Currency selection</h1>
+
+	  <form [formGroup]="form">
+
+	    <div>
+	      <mat-form-field id="currency" appearance="fill">
+		<mat-label>Currency</mat-label>
+		<mat-select (selectionChange)="change()"
+			    formControlName="currency" name="currency">
+		  <mat-option *ngFor="let c of currencies" [value]="c">
+		    {{c | uppercase}}
+		  </mat-option>
+		</mat-select>
+		<mat-hint>Currency</mat-hint>
+	      </mat-form-field>
+	  </div>
+
+	  </form>
+
+	  <div class="estimate">
+	    Estimated payment value:
+	    <span class="amount">{{estimate}}</span>
+	    {{form.value.currency | uppercase}}
+	    if you choose to proceed.
+	  </div>
+
+	  <div>
+	    <button mat-raised-button color="primary"
+		    (click)="place_order()">
+	      <mat-icon>shopping_cart</mat-icon>&nbsp;
+	      Place order
+	    </button>
+	    <button mat-raised-button color="basic" (click)="back()">
+	      <mat-icon>arrow_back</mat-icon>&nbsp;
+	      Back to shop
+	    </button>
+	  </div>
+
+	  <div class="info">
+	    We use <strong>nowpayments.io</strong> for cryptocurrency
+	    payments.  This a third-party exchange service which
+	    brokers payments between different cryptocurrency
+	    networks.  The transaction fees charged by nowpayments.io
+	    are included in the payment price that will be shown to
+	    you.  Apart from network processing fees, there are no
+	    extra charges on top of the price shown.
+	  </div>
+	  <div class="info">
+	    To place an order, select the cryptocurrency you wish to use
+	    for the payment.  The estimated payment amount will be shown
+	    to you.  Please note that the final payment rate
+	    may deviate from the estimate as cryptocurrencies fluctuate
+	    over time.
+	  </div>
+	  <div class="info">
+	    When you click <strong>place order</strong> a
+	    transaction will be created locking in the exchange rate.
+	    You will then be shown a quantity of coin to transfer, and a
+	    wallet address which is unique for this transaction.
+	    To complete the transaction, transfer the required
+	    quantity to the provided wallet address.
+	  </div>
+	  <div class="info">
+	    Please be <strong>very careful</strong>:
+	    <ul>
+	      <li>
+		Check that you are using the correct cryptocurrency for your
+		wallet as payments made on the wrong network will not be
+		recoverable.
+	      </li>
+	      <li>
+		Check that the amount you transfer is exactly as shown,
+		partial payments will require a second transfer which
+		will cost extra network fees for you.  Over-payments
+		may not be recoverable.
+	      </li>
+	    </ul>
+	  </div>
+	  <div class="info">
+	    The full processing time is of 2-3 minutes, depending on
+	    the network.  You can track progress status on this page,
+	    or check the status of the transaction on the transaction list
+	    later.
+	  </div>
+	  <div class="info">
+	    If you have any concerns or questions please make use of the
+	    support button on this page.
+	    <strong>Never</strong> share your wallet
+	    passphrase or private key with anyone, it should be known only
+	    to you.
+	  </div>
+
+	</ng-container>
+
+	<ng-container *ngIf="payment_status">
+	  <h1>Payment details</h1>
+	  <div>
+	    If you wish to proceed, please transfer as follows.  Please
+	    ensure you use the correct currency, payments transferred on
+	    the wrong network may not be recoverable.
+	  </div>
+	  <table>
+	    <tr>
+	      <td>Amount</td>
+	      <td class="amount">{{pay_amount}}</td>
+	    </tr>
+	    <tr>
+	      <td>Currency</td>
+	      <td>{{pay_currency | uppercase}}</td>
+	    </tr>
+	    <tr>
+	      <td>Payment address</td>
+	      <td class="address">{{pay_address}}</td>
+	    </tr>
+	    <tr>
+	      <td>Payment ID</td>
+	      <td class="ident">{{payment_id}}</td>
+	    </tr>
+	    <tr>
+	      <td>Order ID</td>
+	      <td class="ident">{{order_id}}</td>
+	    </tr>
+	  </table>
+	</ng-container>
+
+	<div *ngIf="payment_status">
+
+	  <h1>Payment status</h1>
+
+	  <table>
+
+	    <tr>
+	      <td>Transaction</td>
+	      <td>
+		<span *ngIf="payment_status == 'waiting'">
+		  Waiting...
+		</span>
+		<span *ngIf="payment_status == 'expired'" class="error">
+		  Payment has expired
+		</span>
+		<span *ngIf="payment_status == 'refunded'" class="error">
+		  Payment has been refunded
+		</span>
+		<span *ngIf="payment_status == 'confirming' || payment_status == 'confirmed' || payment_status == 'sending' || payment_status == 'failed' || payment_status == 'partially_paid' || payment_status == 'finished'" class="affirm">
+		  Created
+		</span>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <td>Blockchain</td>
+	      <td>
+		<span *ngIf="payment_status == 'confirming'">
+		  Confirming...
+		</span>
+		<span *ngIf="payment_status == 'confirmed' || payment_status == 'sending' || payment_status == 'failed' || payment_status == 'partially_paid' || payment_status == 'finished'" class="affirm">
+		  Confirmed
+		</span>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <td>Payment processing</td>
+	      <td>
+		<span *ngIf="payment_status == 'confirmed'">
+		  Preparing transfer...
+		</span>
+		<span *ngIf="payment_status == 'sending'">
+		  Sending to accountsmachine.io...
+		</span>
+		<span *ngIf="payment_status == 'partially_paid'" class="error">
+		  Awaiting remaining funds...
+		</span>
+		<span *ngIf="payment_status == 'finished'" class="affirm">
+		  Payment complete
+		</span>
+	      </td>
+	    </tr>
+
+	  </table>
+	</div>
+
+	<ng-container
+	  *ngIf="payment_status == 'partially_paid'">
+	  <h1>Partial payment received</h1>
+	  <div>
+	    Payment processing has not received the complete amount
+	    from you.
+	  </div>
+	  <div>
+	    Value received: <span class="amount">{{actually_paid}}</span>
+	  </div>
+	  <div>
+	    Required to complete:
+	    <span class="amount">{{pay_amount! - actually_paid!}}</span>
+	  </div>
+	</ng-container>
+
+      </section>
+      
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+
+</section>
+

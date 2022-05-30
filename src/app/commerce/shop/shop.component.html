@@ -86,9 +86,15 @@
 
 	<div>
 	  <button mat-raised-button color="primary"
-		  (click)="checkout()" [disabled]="order_disabled()">
-	    <mat-icon>shopping_cart</mat-icon>&nbsp;
-	    Checkout
+		  (click)="cc_checkout()" [disabled]="order_disabled()">
+	    <mat-icon>credit_card</mat-icon>&nbsp;
+	    Pay with credit card
+	  </button>
+	  <button mat-raised-button color="primary"
+		  *ngIf="feature('crypto')"
+		  (click)="crypto_checkout()" [disabled]="order_disabled()">
+	    <mat-icon>currency_bitcoin</mat-icon>&nbsp;
+	    Pay with cryptocurrency
 	  </button>
 	  <button mat-raised-button color="basic" (click)="reset()">
 	    <mat-icon>clear</mat-icon>&nbsp;

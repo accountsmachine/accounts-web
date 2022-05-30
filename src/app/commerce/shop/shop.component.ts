@@ -91,8 +91,12 @@ export class ShopComponent implements OnInit {
 	this.service.set_quantity("accounts", this.form.value.accounts);
     }
 
-    checkout() {
-	this.router.navigate(["/commerce/checkout"]);
+    cc_checkout() {
+	this.router.navigate(["/commerce/cc-checkout"]);
+    }
+
+    crypto_checkout() {
+	this.router.navigate(["/commerce/crypto-checkout"]);
     }
 
     reset() {

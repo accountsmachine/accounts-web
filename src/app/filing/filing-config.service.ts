@@ -6,7 +6,6 @@ import { debounceTime } from 'rxjs/operators';
 
 import { v4 as uuid } from 'uuid';
 
-import { WorkingService } from '../working.service';
 import { ApiService } from '../api.service';
 
 export type ConfigEvent = {
@@ -32,7 +31,6 @@ export class FilingConfigService {
 
     constructor(
 	private api: ApiService,
-	private working : WorkingService,
     ) {
 
 	// All changes are announced on this subject.  Could be a lot of
@@ -52,26 +50,29 @@ export class FilingConfigService {
 	this.onunload_subject.next();
     }
 
-    // FIXME: Cache filings.
+    // FIXME: Cache filings?
 
     list() : Observable<FilingItem[]> {
 	let url = "/api/filings";
 
-	this.working.start();
-
 	return new Observable<FilingItem[]>(obs => {
 
-	    this.api.get<any[]>(url).subscribe(res => {
+	    this.api.get<any[]>(url).subscribe({
 
-		this.working.stop();
+		next: (res) => {
 
-		let f : FilingItem[] = [];
-		for (var id in res) {
-		    f.push(res[id]);
-		    res[id]["id"] = id;
-		}
+		    let f : FilingItem[] = [];
+		    for (var id in res) {
+			f.push(res[id]);
+			res[id]["id"] = id;
+		    }
 
-		obs.next(f);
+		    obs.next(f);
+
+		},
+
+		error: (e) => { obs.error(); },
+		complete: () => { obs.complete(); },
 
 	    });
 
@@ -127,12 +128,9 @@ export class FilingConfigService {
 
 	let url = "/api/filing/" + id;
 
-	this.working.start();
-
 	return new Observable(obs => {
 
 	    this.api.get<any>(url).subscribe(config => {
-		this.working.stop();
 		this.id = id;
 		this.config = config;
 		this.onload_subject.next({id: this.id, config: this.config});
@@ -148,11 +146,8 @@ export class FilingConfigService {
 	let url = "/api/filing/" + this.id;
 
 	return new Observable<void>(obs => {
-
-	    this.working.start();
 	    
 	    return this.api.put<any>(url, this.config).subscribe(e => {
-		this.working.stop();
 		    this.onsave_subject.next({id: this.id, config: this.config});
 		    obs.next();
 		}
@@ -170,10 +165,7 @@ export class FilingConfigService {
 		this.id = uuid();
 		this.config = config;
 
-		this.working.start();
-
 		this.save().subscribe(e => {
-		    this.working.stop();
 		    obs.next(this.id);
 		});
 

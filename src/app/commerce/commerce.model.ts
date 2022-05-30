@@ -66,4 +66,11 @@ export class Transaction {
     status? : string;
     seller_name? : string;
     seller_vat_number? : string;
+
+    // For crypto payments
+    crypto? : boolean;
+    currency? : string;
+    paid_amount? : number;
+    payment_id? : string;
+
 };

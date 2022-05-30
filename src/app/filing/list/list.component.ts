@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FilingConfigService, FilingItem } from '../filing-config.service';
-import { get_kind_label } from '../../kinds';
+import { take, repeatWhen, tap } from 'rxjs/operators';
+import { interval } from 'rxjs';
+
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
+import { FilingConfigService, FilingItem } from '../filing-config.service';
+import { get_kind_label } from '../../kinds';
 import { CompanyService, Companies } from '../../company/company.service';
 import {
     UserProfileService, UserProfile
@@ -87,21 +90,81 @@ export class ListComponent implements OnInit {
 	    error: (e) => { this.working.stop(); },
 	    complete: () => {},
 	});
-	this.reload();
+
+	this.reload(true);
+
     }
 
-    reload() {
-	this.working.start();
-	this.filingConfigService.list().subscribe({
+    ngOnDestroy(): void {
+	if (this.reload_subs) {
+	    this.reload_subs.unsubscribe();
+	}
+    }
+
+    maybe_changing(x : any) {
+
+	let pending = this.filingConfigs.filter(e => e.state == "pending");
+	if (pending.length > 0) return true;
+
+	return false;
+
+    }
+
+    reload_subs : any = null;
+    reload_working = true;
+
+    reload(quick : boolean = false) {
+
+	if (!this.reload_working) {
+	    this.reload_working = true;
+	    this.working.start();
+	}
+
+	if (this.reload_subs) {
+	    this.reload_subs.unsubscribe();
+	    this.reload_subs = null;
+	}
+
+	this.reload_subs = this.filingConfigService.list().pipe(
+	    take(1)
+	).subscribe({
+
 	    next: (e) => {
-		this.working.stop();
+
+		if (this.reload_working) {
+		    this.reload_working = false;
+		    this.working.stop();
+		}
+
 		this.filingConfigs = e; this.load();
+
+		if (quick) {
+		    interval(250).pipe(take(1)).subscribe(
+			e => this.reload()
+		    );
+		} else {
+		    if (this.maybe_changing(e)) {
+			interval(5000).pipe(take(1)).subscribe(
+			    e => this.reload()
+			);
+		    }
+		}
+		
 	    },
+
 	    error: (e) => {
-		this.working.stop();
+		if (this.reload_working) {
+		    this.reload_working = false;
+		    this.working.stop();
+		}
 	    },
-	    complete: () => {},
+
+	    complete: () => {
+		this.reload_subs.unsubscribe();
+	    },
+
 	});
+
     }
 
     feature(x : string) {
@@ -156,7 +219,7 @@ export class ListComponent implements OnInit {
 	this.filingConfigService.move_draft(
 	    config.id
 	).subscribe({
-	    next: () => { this.working.stop(); this.reload(); },
+	    next: () => { this.working.stop(); this.reload(true); },
 	    error: (e) => { this.working.stop(); },
 	    complete: () => {},
 	});
@@ -193,7 +256,7 @@ export class ListComponent implements OnInit {
 			).subscribe({
 			    next: () => {
 				this.working.stop();
-				this.reload();
+				this.reload(true);
 			    },
 			    error: (err) => {
 				this.working.stop();

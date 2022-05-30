@@ -1,5 +1,5 @@
 
-VERSION=0.12.0
+VERSION=$(shell git describe | sed 's/^v//')
 DIST=dist
 
 all: serve
@@ -37,11 +37,15 @@ everything-prod:
 build:
 	rm -rf ${DIST}/${BUILD}
 	mkdir -p ${DIST}/${BUILD}
+	cat src/version.ts | sed 's/1.0.0/${VERSION}/' > src/version.${BUILD}.ts
 	ng build -c ${BUILD} --output-path ${DIST}/${BUILD}
 	cp 404.html ${DIST}/${BUILD}
 
 serve: serve.go
 	go build serve.go
+
+local:
+	ng serve -c local
 
 NAME=accounts-web
 REPO=europe-west2-docker.pkg.dev/accounts-machine-${KIND}/accounts-machine
@@ -149,4 +153,4 @@ run-upgrade:
 	gcloud run services update ${SERVICE} \
 	    --project ${PROJECT} --region ${REGION} \
 	    --image ${CONTAINER}:${VERSION} \
-	    --tag ${TAG}
+	    --update-labels version=${TAG}
