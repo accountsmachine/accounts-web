@@ -63,10 +63,11 @@ export class CryptoCheckoutComponent implements OnInit {
 			    (e : any) => {
 				this.payment_status = e["payment_status"];
 				this.actually_paid = e["actually_paid"];
+				if (e["payment_status"] == "finished") {
+				    this.service.update_balance();
+				}
 			    }
 			)
-		    } else {
-			this.service.update_balance();
 		    }
 		}
 	    }
@@ -74,7 +75,7 @@ export class CryptoCheckoutComponent implements OnInit {
 
 	this.service.get_crypto_currencies().subscribe({
 	    next: (c : any) => {
-		this.currencies = c.currencies;
+		this.currencies = c.currencies.sort();
 	    },
 	    error: (err) => {
 	    },

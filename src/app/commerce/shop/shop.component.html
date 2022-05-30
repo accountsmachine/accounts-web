@@ -91,6 +91,7 @@
 	    Pay with credit card
 	  </button>
 	  <button mat-raised-button color="primary"
+		  *ngIf="feature('crypto')"
 		  (click)="crypto_checkout()" [disabled]="order_disabled()">
 	    <mat-icon>currency_bitcoin</mat-icon>&nbsp;
 	    Pay with cryptocurrency

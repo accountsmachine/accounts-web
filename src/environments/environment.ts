@@ -17,7 +17,8 @@ export const environment = {
     features: [
 	"vat",
 	"corptax",
-	"accounts"
+	"accounts",
+	"crypto"
     ],
 };
 

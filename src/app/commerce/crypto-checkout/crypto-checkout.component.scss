@@ -1,4 +1,6 @@
 
+@import "../../../theme.scss";
+
 mat-drawer {
     width: auto;
 }
@@ -44,3 +46,17 @@ table {
 h1 {
     margin-top: 0.8rem;
 }
+
+.info {
+    max-width: 40rem;
+    margin: 0.8rem;
+}
+
+.affirm {
+    color: $affirm-text;
+}
+
+.error {
+    color: $deny-text;
+}
+

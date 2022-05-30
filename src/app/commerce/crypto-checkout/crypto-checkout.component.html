@@ -58,6 +58,60 @@
 	    </button>
 	  </div>
 
+	  <div class="info">
+	    We use <strong>nowpayments.io</strong> for cryptocurrency
+	    payments.  This a third-party exchange service which
+	    brokers payments between different cryptocurrency
+	    networks.  The transaction fees charged by nowpayments.io
+	    are included in the payment price that will be shown to
+	    you.  Apart from network processing fees, there are no
+	    extra charges on top of the price shown.
+	  </div>
+	  <div class="info">
+	    To place an order, select the cryptocurrency you wish to use
+	    for the payment.  The estimated payment amount will be shown
+	    to you.  Please note that the final payment rate
+	    may deviate from the estimate as cryptocurrencies fluctuate
+	    over time.
+	  </div>
+	  <div class="info">
+	    When you click <strong>place order</strong> a
+	    transaction will be created locking in the exchange rate.
+	    You will then be shown a quantity of coin to transfer, and a
+	    wallet address which is unique for this transaction.
+	    To complete the transaction, transfer the required
+	    quantity to the provided wallet address.
+	  </div>
+	  <div class="info">
+	    Please be <strong>very careful</strong>:
+	    <ul>
+	      <li>
+		Check that you are using the correct cryptocurrency for your
+		wallet as payments made on the wrong network will not be
+		recoverable.
+	      </li>
+	      <li>
+		Check that the amount you transfer is exactly as shown,
+		partial payments will require a second transfer which
+		will cost extra network fees for you.  Over-payments
+		may not be recoverable.
+	      </li>
+	    </ul>
+	  </div>
+	  <div class="info">
+	    The full processing time is of 2-3 minutes, depending on
+	    the network.  You can track progress status on this page,
+	    or check the status of the transaction on the transaction list
+	    later.
+	  </div>
+	  <div class="info">
+	    If you have any concerns or questions please make use of the
+	    support button on this page.
+	    <strong>Never</strong> share your wallet
+	    passphrase or private key with anyone, it should be known only
+	    to you.
+	  </div>
+
 	</ng-container>
 
 	<ng-container *ngIf="payment_status">
@@ -103,13 +157,13 @@
 		<span *ngIf="payment_status == 'waiting'">
 		  Waiting...
 		</span>
-		<span *ngIf="payment_status == 'expired'">
+		<span *ngIf="payment_status == 'expired'" class="error">
 		  Payment has expired
 		</span>
-		<span *ngIf="payment_status == 'refunded'">
+		<span *ngIf="payment_status == 'refunded'" class="error">
 		  Payment has been refunded
 		</span>
-		<span *ngIf="payment_status == 'confirming' || payment_status == 'confirmed' || payment_status == 'sending' || payment_status == 'failed' || payment_status == 'partially_paid' || payment_status == 'finished'">
+		<span *ngIf="payment_status == 'confirming' || payment_status == 'confirmed' || payment_status == 'sending' || payment_status == 'failed' || payment_status == 'partially_paid' || payment_status == 'finished'" class="affirm">
 		  Created
 		</span>
 	      </td>
@@ -121,7 +175,7 @@
 		<span *ngIf="payment_status == 'confirming'">
 		  Confirming...
 		</span>
-		<span *ngIf="payment_status == 'confirmed' || payment_status == 'sending' || payment_status == 'failed' || payment_status == 'partially_paid' || payment_status == 'finished'">
+		<span *ngIf="payment_status == 'confirmed' || payment_status == 'sending' || payment_status == 'failed' || payment_status == 'partially_paid' || payment_status == 'finished'" class="affirm">
 		  Confirmed
 		</span>
 	      </td>
@@ -136,10 +190,10 @@
 		<span *ngIf="payment_status == 'sending'">
 		  Sending to accountsmachine.io...
 		</span>
-		<span *ngIf="payment_status == 'partially_paid'">
+		<span *ngIf="payment_status == 'partially_paid'" class="error">
 		  Awaiting remaining funds...
 		</span>
-		<span *ngIf="payment_status == 'finished'">
+		<span *ngIf="payment_status == 'finished'" class="affirm">
 		  Payment complete
 		</span>
 	      </td>
