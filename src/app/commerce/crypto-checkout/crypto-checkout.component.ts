@@ -52,6 +52,7 @@ export class CryptoCheckoutComponent implements OnInit {
 			).subscribe(
 			    (e : any) => {
 				this.payment_status = e["payment_status"];
+				this.actually_paid = e["actually_paid"];
 			    }
 			)
 		    }
@@ -89,7 +90,6 @@ export class CryptoCheckoutComponent implements OnInit {
 
 	this.service.create_crypto_payment(currency).subscribe({
 	    next: (e : any) => {
-		console.log(e);
 		this.pay_address = e["pay_address"];
 		this.pay_amount = e["pay_amount"];
 		this.actually_paid = e["actually_paid"];
