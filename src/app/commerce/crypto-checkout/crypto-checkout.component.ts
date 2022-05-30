@@ -1,16 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CheckoutService } from '../checkout.service';
 import { Order } from '../commerce.model';
-
-//import { PaymentService } from '../stripe.service';
-//import { StripePaymentElementComponent } from 'ngx-stripe';
-//import { PaymentIntent } from '@stripe/stripe-js';
 
 @Component({
     selector: 'app-checkout',
@@ -19,9 +15,6 @@ import { Order } from '../commerce.model';
 })
 export class CryptoCheckoutComponent implements OnInit {
 
-//    @ViewChild(StripePaymentElementComponent)
-//    paymentElement? : StripePaymentElementComponent = undefined;
-
     public form : FormGroup;
 
     constructor(
@@ -29,7 +22,6 @@ export class CryptoCheckoutComponent implements OnInit {
 	private router : Router,
 	private snackBar: MatSnackBar,
 	private formBuilder: FormBuilder,
-//	public payments : PaymentService,
     ) {
 	this.form = this.formBuilder.group({
 	    currency: ["eth"],
@@ -42,12 +34,31 @@ export class CryptoCheckoutComponent implements OnInit {
     order : Order  = new Order();
 
     ngOnInit(): void {
-	/*
-	this.service.create_order().subscribe(txid => {
-	    this.service.create_payment(txid).subscribe(pid => {
-		this.payments.set_payment_id(pid);
-	    });
-	});*/
+
+	interval(10000).subscribe(
+	    (e: any) => {
+		if (!this.pay_address) {
+		    this.adjust_estimate();
+		}
+	    }
+	);
+
+	interval(2500).subscribe(
+	    (e: any) => {
+		if (this.payment_id) {
+		    if (this.payment_status != "finished") {
+			this.service.get_crypto_payment_status(
+			    this.payment_id
+			).subscribe(
+			    (e : any) => {
+				this.payment_status = e["payment_status"];
+			    }
+			)
+		    }
+		}
+	    }
+	);
+
 	this.service.get_crypto_currencies().subscribe({
 	    next: (c : any) => {
 		this.currencies = c.currencies;
@@ -64,30 +75,33 @@ export class CryptoCheckoutComponent implements OnInit {
 
     }
 
-//    stripe() { return this.payments.get_stripe(); }
+    pay_amount? : number;
+    pay_address? : string;
+    payment_id? : string;
+    pay_currency? : string;
+    order_id? : string;
+    payment_status? : string;
 
     place_order() {
 
-/*
-	this.payments.confirm(this.paymentElement).subscribe({
+	let currency = this.form.value.currency;
 
-	    next(pid) {
-
-		cmp.service.complete_payment(pid).subscribe({
-		    next(bal) {
-			cmp.router.navigate(["/commerce/complete"]);
-		    },
-		    error(err) {
-			cmp.error(err);
-		    },
-		    complete() {}
-		});
-
+	this.service.create_crypto_payment(currency).subscribe({
+	    next: (e : any) => {
+		console.log(e);
+		this.pay_address = e["pay_address"];
+		this.pay_amount = e["pay_amount"];
+		this.payment_id = e["payment_id"];
+		this.pay_currency = e["pay_currency"];
+		this.order_id = e["order_id"];
+		this.payment_status = e["payment_status"];
 	    },
-	    error(err) { cmp.error(err); },
-	    complete() {}
+	    error: (err) => {
+		this.error(err)
+	    },
+	    complete: () => {},
 	});
-*/
+
     }
 
     back() {
@@ -115,24 +129,6 @@ export class CryptoCheckoutComponent implements OnInit {
 	});
 
 
-    }
-
-    create_payment() {
-//    create_payment() : Observable<void> {
-/*
-	let cmp = this;
-
-	return new Observable<PaymentIntent>((obs : any) => {
-
-	    this.service.create_order().subscribe({
-		next(ev) { obs.next(ev); },
-		error(err) { cmp.error(err); },
-		complete() {}
-	    });
-
-	});
-*/
-	throw "Not implemetned";
     }
 
     error(err : any) {

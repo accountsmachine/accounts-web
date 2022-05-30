@@ -17,7 +17,7 @@
       </section>
 
       <section>
-	<h1>Payment details</h1>
+	<h1>Currency selection</h1>
 
 	<form [formGroup]="form">
 
@@ -53,6 +53,97 @@
 	    Back to shop
 	  </button>
 	</div>
+
+	<ng-container *ngIf="payment_status == 'waiting'">
+	  <h1>Payment details</h1>
+	  <div>
+	    A cryptocurrency payment has been created.
+	    If you wish to proceed, please transfer as follows.  Please
+	    ensure you use the correct currency.
+	  </div>
+	  <table>
+	    <tr>
+	      <td>Amount</td>
+	      <td>{{pay_amount}}</td>
+	    </tr>
+	    <tr>
+	      <td>Currency</td>
+	      <td>{{pay_currency | uppercase}}</td>
+	    </tr>
+	    <tr>
+	      <td>Payment address</td>
+	      <td>{{pay_address}}</td>
+	    </tr>
+	    <tr>
+	      <td>
+		Status
+	      </td>
+	      <td>
+		Waiting for transaction to appear on the blockchain
+	      </td>
+	    </tr>
+	  </table>
+	  <div>
+	    Payment status:
+	    <span class="status">{{payment_status | uppercase}}</span>
+	  </div>
+	</ng-container>
+
+	<ng-container *ngIf="payment_status == 'confirming'">
+	  <h1>Payment processing</h1>
+	  <div>
+	    The transaction has been observed, waiting for blockchain
+	    confirmation.
+	  </div>
+	</ng-container>
+
+	<ng-container
+	  *ngIf="payment_status == 'confirmed' || payment_status == 'sending'">
+	  <h1>Payment processing</h1>
+	  <div>
+	    Payment processor is forwarding funds to accountsmachine.io.
+	  </div>
+	</ng-container>
+
+	<ng-container
+	  *ngIf="payment_status == 'failed'">
+	  <h1>Payment failed</h1>
+	  <div>
+	    Payment processing has failed at the payment processor.
+	  </div>
+	</ng-container>
+
+	<ng-container
+	  *ngIf="payment_status == 'refunded'">
+	  <h1>Payment refunded</h1>
+	  <div>
+	    Payment processing has reversed the transaction and refunded
+	    funds to your wallet address.
+	  </div>
+	</ng-container>
+
+	<ng-container
+	  *ngIf="payment_status == 'partially_paid'">
+	  <h1>Payment partially received</h1>
+	  <div>
+	    Payment processing has received a partial amount.
+	  </div>
+	</ng-container>
+
+	<ng-container *ngIf="payment_status == 'finished'">
+	  <h1>Payment complete</h1>
+	  <div>
+	    Your payment of {{pay_amount}} {{pay_currency | uppercase}}
+	    has been received.  Thankyou!
+	  </div>
+	</ng-container>
+
+	<ng-container *ngIf="payment_status == 'expired'">
+	  <h1>Payment expired</h1>
+	  <div>
+	    The payment was not completed within the expiry period.
+	  </div>
+	</ng-container>
 
       </section>
       

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { take, repeatWhen, delay, tap } from 'rxjs/operators';
+import { take, repeatWhen, tap } from 'rxjs/operators';
 import { interval } from 'rxjs';
 
 import {

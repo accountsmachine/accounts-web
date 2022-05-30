@@ -120,5 +120,27 @@ export class CommerceService {
 
     }
 
+    create_crypto_payment(order : Order, cur : string) : Observable<string[]> {
+
+	let url = "/api/crypto/payment";
+
+	return this.api.post<any>(
+	    url,
+	    {
+		order: order,
+		currency : cur,
+	    }
+	);
+
+    }
+
+    get_crypto_payment_status(id : string) : Observable<string[]> {
+
+	let url = "/api/crypto/payment/" + id;
+
+	return this.api.get<any>(url);
+
+    }
+
 }
 
