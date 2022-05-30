@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, interval } from 'rxjs';
+import { Observable, interval, catchError } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -33,9 +33,19 @@ export class CryptoCheckoutComponent implements OnInit {
 
     order : Order  = new Order();
 
+    est_subs : any = null;
+    status_subs : any = null;
+
+    ngOnDestroy() : void {
+	if (this.est_subs)
+	    this.est_subs.unsubscribe();
+	if (this.status_subs)
+	    this.status_subs.unsubscribe();
+    }
+
     ngOnInit(): void {
 
-	interval(10000).subscribe(
+	this.est_subs = interval(30000).subscribe(
 	    (e: any) => {
 		if (!this.pay_address) {
 		    this.adjust_estimate();
@@ -43,7 +53,7 @@ export class CryptoCheckoutComponent implements OnInit {
 	    }
 	);
 
-	interval(2500).subscribe(
+	this.status_subs = interval(5000).subscribe(
 	    (e: any) => {
 		if (this.payment_id) {
 		    if (this.payment_status != "finished") {
@@ -55,6 +65,8 @@ export class CryptoCheckoutComponent implements OnInit {
 				this.actually_paid = e["actually_paid"];
 			    }
 			)
+		    } else {
+			this.service.update_balance();
 		    }
 		}
 	    }
@@ -88,7 +100,13 @@ export class CryptoCheckoutComponent implements OnInit {
 
 	let currency = this.form.value.currency;
 
-	this.service.create_crypto_payment(currency).subscribe({
+	this.service.create_crypto_payment(currency).pipe(
+	    catchError((e : any) => {
+		// FIXME Errors not handled properly here.
+		console.log("ERR>", e);
+		return e;
+	    })
+	).subscribe({
 	    next: (e : any) => {
 		this.pay_address = e["pay_address"];
 		this.pay_amount = e["pay_amount"];
@@ -135,7 +153,6 @@ export class CryptoCheckoutComponent implements OnInit {
 
     error(err : any) {
 	console.log(err);
-	console.log("BUNCHY");
 	if (err && err.error) {
 	    if (err.error.message) {
 		this.snackBar.open(err.error.message,
@@ -143,7 +160,6 @@ export class CryptoCheckoutComponent implements OnInit {
 		return;
 	    }
 	}
-	console.log("BUNCHY2");
 	this.snackBar.open(err.toString(), "dismiss", { duration: 5000 });
     }
 

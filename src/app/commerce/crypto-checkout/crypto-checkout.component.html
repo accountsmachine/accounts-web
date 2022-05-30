@@ -91,45 +91,62 @@
 	  </table>
 	</ng-container>
 
-	<ng-container *ngIf="payment_status == 'waiting'">
-	  <h1>Waiting for payment</h1>
-	  <div>
-	    Waiting for payment processor to receive payment.
-	  </div>
-	</ng-container>
+	<div *ngIf="payment_status">
 
-	<ng-container *ngIf="payment_status == 'confirming'">
-	  <h1>Payment processing</h1>
-	  <div>
-	    The transaction has been observed, waiting for blockchain
-	    confirmation.
-	  </div>
-	</ng-container>
+	  <h1>Payment status</h1>
 
-	<ng-container
-	  *ngIf="payment_status == 'confirmed' || payment_status == 'sending'">
-	  <h1>Payment processing</h1>
-	  <div>
-	    Payment processor is forwarding funds to accountsmachine.io.
-	  </div>
-	</ng-container>
+	  <table>
 
-	<ng-container
-	  *ngIf="payment_status == 'failed'">
-	  <h1>Payment failed</h1>
-	  <div>
-	    Payment processing has failed at the payment processor.
-	  </div>
-	</ng-container>
+	    <tr>
+	      <td>Transaction</td>
+	      <td>
+		<span *ngIf="payment_status == 'waiting'">
+		  Waiting...
+		</span>
+		<span *ngIf="payment_status == 'expired'">
+		  Payment has expired
+		</span>
+		<span *ngIf="payment_status == 'refunded'">
+		  Payment has been refunded
+		</span>
+		<span *ngIf="payment_status == 'confirming' || payment_status == 'confirmed' || payment_status == 'sending' || payment_status == 'failed' || payment_status == 'partially_paid' || payment_status == 'finished'">
+		  Created
+		</span>
+	      </td>
+	    </tr>
 
-	<ng-container
-	  *ngIf="payment_status == 'refunded'">
-	  <h1>Payment refunded</h1>
-	  <div>
-	    Payment processing has reversed the transaction and refunded
-	    funds to your wallet address.
-	  </div>
-	</ng-container>
+	    <tr>
+	      <td>Blockchain</td>
+	      <td>
+		<span *ngIf="payment_status == 'confirming'">
+		  Confirming...
+		</span>
+		<span *ngIf="payment_status == 'confirmed' || payment_status == 'sending' || payment_status == 'failed' || payment_status == 'partially_paid' || payment_status == 'finished'">
+		  Confirmed
+		</span>
+	      </td>
+	    </tr>
+
+	    <tr>
+	      <td>Payment processing</td>
+	      <td>
+		<span *ngIf="payment_status == 'confirmed'">
+		  Preparing transfer...
+		</span>
+		<span *ngIf="payment_status == 'sending'">
+		  Sending to accountsmachine.io...
+		</span>
+		<span *ngIf="payment_status == 'partially_paid'">
+		  Awaiting remaining funds...
+		</span>
+		<span *ngIf="payment_status == 'finished'">
+		  Payment complete
+		</span>
+	      </td>
+	    </tr>
+
+	  </table>
+	</div>
 
 	<ng-container
 	  *ngIf="payment_status == 'partially_paid'">
@@ -144,21 +161,6 @@
 	  <div>
 	    Required to complete:
 	    <span class="amount">{{pay_amount! - actually_paid!}}</span>
-	  </div>
-	</ng-container>
-
-	<ng-container *ngIf="payment_status == 'finished'">
-	  <h1>Payment complete</h1>
-	  <div>
-	    Your payment of {{pay_amount}} {{pay_currency | uppercase}}
-	    has been received.  Thankyou!
-	  </div>
-	</ng-container>
-
-	<ng-container *ngIf="payment_status == 'expired'">
-	  <h1>Payment expired</h1>
-	  <div>
-	    The payment was not completed within the expiry period.
 	  </div>
 	</ng-container>
 
