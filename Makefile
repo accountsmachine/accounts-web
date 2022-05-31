@@ -16,6 +16,11 @@ dist-stage: build
 dist-prod: BUILD=prod
 dist-prod: build
 
+everything:
+	make everything-dev
+	make everything-stage
+	make everything-prod
+
 everything-dev:
 	make dist-dev
 	make container-dev
