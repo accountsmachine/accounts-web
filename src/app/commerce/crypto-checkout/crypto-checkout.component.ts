@@ -35,26 +35,31 @@ export class CryptoCheckoutComponent implements OnInit {
 
     est_subs : any = null;
     status_subs : any = null;
+    ord_subs : any = null;
 
     ngOnDestroy() : void {
 	if (this.est_subs)
 	    this.est_subs.unsubscribe();
 	if (this.status_subs)
 	    this.status_subs.unsubscribe();
+	if (this.ord_subs)
+	    this.ord_subs.unsubscribe();
     }
 
     ngOnInit(): void {
 
-	this.est_subs = interval(30000).subscribe(
-	    (e: any) => {
+	this.est_subs = interval(30000).subscribe({
+	    next: (e: any) => {
 		if (!this.pay_address) {
 		    this.adjust_estimate();
 		}
-	    }
-	);
+	    },
+	    error: (e) => { console.log("estimate", e); },
+	    complete: () => {},
+	});
 
-	this.status_subs = interval(5000).subscribe(
-	    (e: any) => {
+	this.status_subs = interval(5000).subscribe({
+	    next: (e: any) => {
 		if (this.payment_id) {
 		    if (this.payment_status != "finished") {
 			this.service.get_crypto_payment_status(
@@ -70,19 +75,22 @@ export class CryptoCheckoutComponent implements OnInit {
 			)
 		    }
 		}
-	    }
-	);
+	    },
+	    error: (e) => { console.log("status", e); },
+	    complete: () => {},
+	});
 
 	this.service.get_crypto_currencies().subscribe({
 	    next: (c : any) => {
 		this.currencies = c.currencies.sort();
 	    },
 	    error: (err) => {
+		console.log("crypto-currencies", err);
 	    },
 	    complete: () => {},
 	});
 
-	this.service.onorder().subscribe(o => {
+	this.ord_subs = this.service.onorder().subscribe(o => {
 	    this.order = o;
 	    this.adjust_estimate();
 	});
@@ -101,13 +109,7 @@ export class CryptoCheckoutComponent implements OnInit {
 
 	let currency = this.form.value.currency;
 
-	this.service.create_crypto_payment(currency).pipe(
-	    catchError((e : any) => {
-		// FIXME Errors not handled properly here.
-		console.log("ERR>", e);
-		return e;
-	    })
-	).subscribe({
+	this.service.create_crypto_payment(currency).subscribe({
 	    next: (e : any) => {
 		this.pay_address = e["pay_address"];
 		this.pay_amount = e["pay_amount"];
@@ -118,6 +120,7 @@ export class CryptoCheckoutComponent implements OnInit {
 		this.payment_status = e["payment_status"];
 	    },
 	    error: (err) => {
+		console.log("place-order");
 		this.error(err)
 	    },
 	    complete: () => {},
@@ -144,7 +147,8 @@ export class CryptoCheckoutComponent implements OnInit {
 		this.estimate = e["estimated_amount"];
 	    },
 	    error: (err) => {
-		this.error(err)
+		console.log("adjust-estimate");
+		this.error(err);
 	    },
 	    complete: () => {},
 	});
@@ -153,10 +157,14 @@ export class CryptoCheckoutComponent implements OnInit {
     }
 
     error(err : any) {
-	console.log(err);
 	if (err && err.error) {
 	    if (err.error.message) {
 		this.snackBar.open(err.error.message,
+				   "dismiss", { duration: 5000 });
+		return;
+	    }
+	    if (err.error) {
+		this.snackBar.open(err.error,
 				   "dismiss", { duration: 5000 });
 		return;
 	    }

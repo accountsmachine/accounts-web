@@ -193,44 +193,17 @@ export class CheckoutService {
 
     // FIXME: Define type.
     get_crypto_estimate(cur : string) : Observable<any> {
-	return new Observable<any>(obs => {
-	    this.commerce.get_crypto_estimate(this._order, cur).subscribe({
-		next: (e) => { obs.next(e); },
-		error: (err) => {
-		    console.log("ERR", err);
-		    obs.error(err);
-		},
-		complete: () => {},
-	    });
-	});
+	return this.commerce.get_crypto_estimate(this._order, cur);
     }
 
     // FIXME: Define type.
     create_crypto_payment(cur : string) : Observable<any> {
-	return new Observable<any>(obs => {
-	    this.commerce.create_crypto_payment(this._order, cur).subscribe({
-		next: (e) => { obs.next(e); },
-		error: (err) => {
-		    console.log("ERR", err);
-		    obs.error(err);
-		},
-		complete: () => {},
-	    });
-	});
+	return this.commerce.create_crypto_payment(this._order, cur);
     }
 
     // FIXME: Define type.
     get_crypto_payment_status(id : string) : Observable<any> {
-	return new Observable<any>(obs => {
-	    this.commerce.get_crypto_payment_status(id).subscribe({
-		next: (e) => { obs.next(e); },
-		error: (err) => {
-		    console.log("ERR", err);
-		    obs.error(err);
-		},
-		complete: () => {},
-	    });
-	});
+	return this.commerce.get_crypto_payment_status(id);
     }
 
 }

@@ -61,16 +61,16 @@
 	</div>
 
         <div class="detaillabel">Payment method:</div>
-	<div class="detailvalue">{{tx.payment}}</div>
-
-	<ng-container *ngIf="tx.payment_currency">
-	  <div class="detaillabel">Payment currency:</div>
-	  <div class="detailvalue">{{tx.payment_currency | uppercase}}</div>
-        </ng-container>
+	<div class="detailvalue">{{tx.payment}} ({{tx.payment_processor}})</div>
 
 	<ng-container *ngIf="tx.payment_amount">
 	  <div class="detaillabel">Payment amount:</div>
-	  <div class="detailvalue amount">{{tx.payment_amount}}</div>
+	  <div class="detailvalue amount">
+	    {{tx.payment_amount}}
+	    <span *ngIf="tx.payment_currency">
+	      {{tx.payment_currency | uppercase}}
+	    </span>
+	  </div>
 	</ng-container>
 
 	<ng-container *ngIf="tx.payment_id">
@@ -78,9 +78,12 @@
 	  <div class="detailvalue amount">{{tx.payment_id}}</div>
 	</ng-container>
 
-	<ng-container *ngIf="tx.payment_status">
+	<ng-container
+	  *ngIf="tx.payment_status && tx.status != 'complete'">
 	  <div class="detaillabel">Payment status:</div>
-	  <div class="detailvalue amount">{{tx.payment_status}}</div>
+	  <div class="detailvalue amount">
+	    {{tx.payment_status | uppercase}}
+	  </div>
 	</ng-container>
 
 	<div class="header description">Description</div>

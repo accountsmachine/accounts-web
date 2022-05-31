@@ -69,6 +69,7 @@ export class Transaction {
 
     // Mostly for crypto.
     payment : string = "";
+    payment_processor? : string = "";
     payment_currency? : string;
     payment_amount? : number;
     payment_id? : string;
