@@ -112,6 +112,19 @@ export class CommerceService {
 
     }
 
+    get_crypto_minimum(cur : string) : Observable<string[]> {
+
+	let url = "/api/crypto/minimum";
+
+	return this.api.post<any>(
+	    url,
+	    {
+		currency : cur,
+	    }
+	);
+
+    }
+
     create_crypto_payment(order : Order, cur : string) : Observable<string[]> {
 
 	let url = "/api/crypto/payment";

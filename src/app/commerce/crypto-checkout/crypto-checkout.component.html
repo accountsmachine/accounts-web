@@ -43,12 +43,15 @@
 	    Estimated payment value:
 	    <span class="amount">{{estimate}}</span>
 	    {{form.value.currency | uppercase}}
-	    if you choose to proceed.
+	    if you choose to proceed.<br>
+	    Minimum payment for this currency is
+	    <span class="amount">{{minimum}}</span>.
 	  </div>
 
 	  <div>
 	    <button mat-raised-button color="primary"
-		    (click)="place_order()">
+		    (click)="place_order()"
+		    [disabled]="!valid">
 	      <mat-icon>shopping_cart</mat-icon>&nbsp;
 	      Place order
 	    </button>
@@ -96,6 +99,10 @@
 		will cost extra network fees for you.  Over-payments
 		may not be recoverable.
 	      </li>
+	      <li>
+		Double-check the currency when using currencies which have
+		similar symbols e.g. ETC vs ETH.
+	      </li>
 	    </ul>
 	  </div>
 	  <div class="info">
@@ -134,6 +141,7 @@
 	      <td>Payment address</td>
 	      <td class="address">{{pay_address}}</td>
 	    </tr>
+	    <!--
 	    <tr>
 	      <td>Payment ID</td>
 	      <td class="ident">{{payment_id}}</td>
@@ -142,6 +150,7 @@
 	      <td>Order ID</td>
 	      <td class="ident">{{order_id}}</td>
 	    </tr>
+-->
 	  </table>
 	</ng-container>
 

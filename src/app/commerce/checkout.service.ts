@@ -206,5 +206,10 @@ export class CheckoutService {
 	return this.commerce.get_crypto_payment_status(id);
     }
 
+    // FIXME: Define type.
+    get_crypto_minimum(cur : string) : Observable<any> {
+	return this.commerce.get_crypto_minimum(cur);
+    }
+
 }
 

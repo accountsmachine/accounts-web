@@ -17,6 +17,27 @@ export class CryptoCheckoutComponent implements OnInit {
 
     public form : FormGroup;
 
+    estimate : number = 0.0;
+    minimum : number = 0.0;
+
+    pay_amount? : number;
+    actually_paid? : number;
+    pay_address? : string;
+    payment_id? : string;
+    pay_currency? : string;
+    order_id? : string;
+    payment_status? : string;
+
+    currencies : string[] = ["eth"];
+
+    valid = false;
+
+    order : Order  = new Order();
+
+    est_subs : any = null;
+    status_subs : any = null;
+    ord_subs : any = null;
+
     constructor(
 	private service : CheckoutService,
 	private router : Router,
@@ -29,29 +50,13 @@ export class CryptoCheckoutComponent implements OnInit {
     
     }
 
-    currencies : string[] = ["eth"];
-
-    order : Order  = new Order();
-
-    est_subs : any = null;
-    status_subs : any = null;
-    ord_subs : any = null;
-
-    ngOnDestroy() : void {
-	if (this.est_subs)
-	    this.est_subs.unsubscribe();
-	if (this.status_subs)
-	    this.status_subs.unsubscribe();
-	if (this.ord_subs)
-	    this.ord_subs.unsubscribe();
-    }
-
     ngOnInit(): void {
 
 	this.est_subs = interval(30000).subscribe({
 	    next: (e: any) => {
 		if (!this.pay_address) {
 		    this.adjust_estimate();
+		    this.adjust_minimum();
 		}
 	    },
 	    error: (e) => { console.log("estimate", e); },
@@ -93,17 +98,19 @@ export class CryptoCheckoutComponent implements OnInit {
 	this.ord_subs = this.service.onorder().subscribe(o => {
 	    this.order = o;
 	    this.adjust_estimate();
+	    this.adjust_minimum();
 	});
 
     }
 
-    pay_amount? : number;
-    actually_paid? : number;
-    pay_address? : string;
-    payment_id? : string;
-    pay_currency? : string;
-    order_id? : string;
-    payment_status? : string;
+    ngOnDestroy() : void {
+	if (this.est_subs)
+	    this.est_subs.unsubscribe();
+	if (this.status_subs)
+	    this.status_subs.unsubscribe();
+	if (this.ord_subs)
+	    this.ord_subs.unsubscribe();
+    }
 
     place_order() {
 
@@ -134,9 +141,12 @@ export class CryptoCheckoutComponent implements OnInit {
 
     change() {
 	this.adjust_estimate();
+	this.adjust_minimum();
     }
 
-    estimate : number = 0.0;
+    check_min() {
+	this.valid = this.estimate > this.minimum;
+    }
 
     adjust_estimate() {
 
@@ -145,9 +155,32 @@ export class CryptoCheckoutComponent implements OnInit {
 	this.service.get_crypto_estimate(currency).subscribe({
 	    next: (e : any) => {
 		this.estimate = e["estimated_amount"];
+		this.check_min();
 	    },
 	    error: (err) => {
 		console.log("adjust-estimate");
+		this.estimate = 0;
+		this.valid = false;
+		this.error(err);
+	    },
+	    complete: () => {},
+	});
+
+
+    }
+
+    adjust_minimum() {
+
+	let currency = this.form.value.currency;
+
+	this.service.get_crypto_minimum(currency).subscribe({
+	    next: (e : any) => {
+		this.minimum = e;
+		this.check_min();
+	    },
+	    error: (err) => {
+		console.log("adjust-minimum");
+		this.valid = false;
 		this.error(err);
 	    },
 	    complete: () => {},
