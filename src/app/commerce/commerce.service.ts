@@ -18,22 +18,9 @@ import { Balance, Option, Options, Order, Transaction } from './commerce.model';
 })
 export class CommerceService {
 
-    balance_subject = new BehaviorSubject<Balance>({
-        vat: 0, corptax: 0, accounts: 0,
-    });
-
     constructor(
 	private api : ApiService,
     ) {
-	this.update_balance();
-    }
-
-    update_balance() {
-	let url = "/api/commerce/balance";
-
-	this.api.get<Balance>(url).subscribe((b : Balance) =>
-	    this.balance_subject.next(b)
-	);
     }
 
     get_transactions() : Observable<Transaction[]> {
@@ -60,10 +47,16 @@ export class CommerceService {
 
     }
 
-    onbalance() : Observable<Balance> {
+    balance() : Observable<Balance> {
 
 	return new Observable(obs => {
-	    this.balance_subject.subscribe(b => obs.next(b));
+
+	    let url = "/api/commerce/balance";
+
+	    this.api.get<Balance>(url).subscribe(
+		(b : Balance) => obs.next(b)
+	    );
+
 	});
 
     }
@@ -83,7 +76,6 @@ export class CommerceService {
 	return new Observable<any>(obs => {
 
 	    this.api.post<any>(url, {}).subscribe(b => {
-		this.update_balance();
 		obs.next(b);
 	    });
 

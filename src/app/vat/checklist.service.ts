@@ -56,7 +56,7 @@ export class ChecklistService {
 
 	this.id = id;
 
-	this.commerce.onbalance().subscribe({
+	this.commerce.balance().subscribe({
 	    next: bal => {
 		this.balance = bal;
 	    },
@@ -64,8 +64,6 @@ export class ChecklistService {
 		this.balance = { vat: 0, corptax: 0, accounts: 0 };
 	    }
 	});
-
-	this.commerce.update_balance();
 
 	this.outstanding += 1;
 	this.filing.load(id).subscribe({

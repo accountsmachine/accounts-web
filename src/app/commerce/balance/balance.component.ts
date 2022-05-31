@@ -25,7 +25,7 @@ export class BalanceComponent implements OnInit {
 	    vat: 0, corptax: 0, accounts: 0
 	};
 	
-	this.commerce.onbalance().subscribe(b => {
+	this.commerce.balance().subscribe(b => {
 	    this.balance = b;
 	});
     }

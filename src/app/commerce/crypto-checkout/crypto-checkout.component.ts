@@ -64,7 +64,7 @@ export class CryptoCheckoutComponent implements OnInit {
 				this.payment_status = e["payment_status"];
 				this.actually_paid = e["actually_paid"];
 				if (e["payment_status"] == "finished") {
-				    this.service.update_balance();
+				    // Nothing to do?
 				}
 			    }
 			)

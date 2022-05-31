@@ -233,9 +233,5 @@ export class CheckoutService {
 	});
     }
 
-    update_balance() {
-	return this.commerce.update_balance();
-    }
-
 }
 

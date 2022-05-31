@@ -51,8 +51,7 @@ export class ListComponent implements OnInit {
 	private working : WorkingService,
     ) {
 
-	// This isn't a one-off, multiple events come back.
-	this.commerceService.onbalance().subscribe({
+	this.commerceService.balance().subscribe({
 	    next: (b) => { this.balance = b; },
 	    error: (e) => { },
 	    complete: () => { },
