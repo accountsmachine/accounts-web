@@ -67,10 +67,11 @@ export class Transaction {
     seller_name? : string;
     seller_vat_number? : string;
 
-    // For crypto payments
-    crypto? : boolean;
-    currency? : string;
-    paid_amount? : number;
+    // Mostly for crypto.
+    payment : string = "";
+    payment_currency? : string;
+    payment_amount? : number;
     payment_id? : string;
+    payment_status? : string;
 
 };
