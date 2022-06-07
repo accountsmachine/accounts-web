@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { VatConfigService } from '../vat-config.service';
 
@@ -13,14 +13,14 @@ import { VatConfigService } from '../vat-config.service';
 export class NewComponent implements OnInit {
 
     label = "";
-    firstFormGroup: FormGroup;
-    secondFormGroup: FormGroup;
+    firstFormGroup: UntypedFormGroup;
+    secondFormGroup: UntypedFormGroup;
 
     constructor(
 	private filing : VatConfigService,
 	private router : Router,
 	private snackBar : MatSnackBar,
-	private _formBuilder: FormBuilder,
+	private _formBuilder: UntypedFormBuilder,
     ) {     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required],
     });

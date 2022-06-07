@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Company } from '../../company/company.service';
@@ -24,7 +24,7 @@ export class ShopComponent implements OnInit {
     features = new Set<string>(environment.features);
     feature(x : string) { return this.features.has(x); }
 
-    public form : FormGroup;
+    public form : UntypedFormGroup;
 
     offer : Options = { offer: {} };
     kinds : string[] = [];
@@ -37,7 +37,7 @@ export class ShopComponent implements OnInit {
     constructor(
 	private service : CheckoutService,
 	private commerceService : CommerceService,
-	private formBuilder: FormBuilder,
+	private formBuilder: UntypedFormBuilder,
 	private snackBar: MatSnackBar,
 	private router : Router,
     ) {

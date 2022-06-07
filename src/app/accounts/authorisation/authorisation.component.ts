@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import * as moment from 'moment';
 
@@ -34,7 +34,7 @@ export class AuthorisationComponent implements OnInit {
 	private companyService : CompanyService,
 	private snackBar : MatSnackBar,
 	private filing : AccountsConfigService,
-	private fb : FormBuilder,
+	private fb : UntypedFormBuilder,
     ) {
 
 

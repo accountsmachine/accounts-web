@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 
 import { VatConfig } from '../vat-config';
@@ -29,7 +29,7 @@ export class PeriodComponent implements OnInit {
 	private snackBar : MatSnackBar,
 	private filing : VatConfigService,
 	private vat : VatService,
-	private fb : FormBuilder,
+	private fb : UntypedFormBuilder,
     ) {
 
 	this.route.params.subscribe(

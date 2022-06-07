@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Validators } from '@angular/forms';
 import { UserProfile, UserProfileService } from '../user-profile.service';
@@ -56,7 +56,7 @@ export class BillingDetailsComponent implements OnInit {
 
     constructor(
 	private snackBar: MatSnackBar,
-	private fb: FormBuilder,
+	private fb: UntypedFormBuilder,
 	private profileSvc : UserProfileService,
     ) {
     }

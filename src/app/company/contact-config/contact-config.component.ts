@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
@@ -35,7 +35,7 @@ export class ContactConfigComponent implements OnInit {
 	private route : ActivatedRoute,
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
-	private fb: FormBuilder,
+	private fb: UntypedFormBuilder,
 	private working : WorkingService,
     ) {
 	this.company = new Company();
