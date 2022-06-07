@@ -1,5 +1,5 @@
 
-FROM fedora:35
+FROM fedora:36
 
 ARG DIST=MISSING_ARG
 ARG PORT=8080
