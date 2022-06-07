@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
@@ -15,27 +15,26 @@ import { WorkingService } from '../../working.service';
 })
 export class ContactConfigComponent implements OnInit {
 
-    form = this.fb.group({
-	contact_email: ['', [Validators.required, Validators.email]],
-	contact_tel_country: ['', [
-	    Validators.required, Validators.pattern("\\+[0-9]+")
-	]],
-	contact_tel_area: ['', [
+    form = new FormGroup({
+	contact_email: new FormControl<any>
+	    ('', [Validators.required, Validators.email]),
+	contact_tel_country: new FormControl<any>(
+	    '', [ Validators.required, Validators.pattern("\\+[0-9]+") ]),
+	contact_tel_area: new FormControl<any>('', [
 	    Validators.required, Validators.pattern("[0-9]+")
-	]],
-	contact_tel_number: ['', [
+	]),
+	contact_tel_number: new FormControl<any>('', [
 	    Validators.required, Validators.pattern("[0-9]+")
-	]],
-	contact_tel_type: ['', [
+	]),
+	contact_tel_type: new FormControl<any>('', [
 	    Validators.required, 
-	]],
+	]),
     });
 
     constructor(
 	private route : ActivatedRoute,
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
-	private fb: UntypedFormBuilder,
 	private working : WorkingService,
     ) {
 	this.company = new Company();

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
@@ -15,26 +15,25 @@ import { WorkingService } from '../../working.service';
 })
 export class TaxConfigComponent implements OnInit {
 
-    form = this.fb.group({
-	utr: ['', [
+    form = new FormGroup({
+	utr: new FormControl<string>('', [
 //	    Validators.required,
 	    //Validators.pattern('[0-9]*')]
-	]],
-	vat_registration: ['', [
+	]),
+	vat_registration: new FormControl<string>('', [
 //	    Validators.required,
 	    // Validators.pattern('[A-Z]{2}[0-9]{9}')
-	]],
-	vrn: ['', [
+	]),
+	vrn: new FormControl<string>('', [
 //	    Validators.required,
 	    //Validators.pattern('[0-9]{9}')
-	]],
+	]),
     });
 
     constructor(
 	private route : ActivatedRoute,
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
-	private fb: UntypedFormBuilder,
 	private working : WorkingService,
     ) {
 	this.company = new Company();
@@ -78,9 +77,20 @@ export class TaxConfigComponent implements OnInit {
     }
 
     public submit() {
-	this.company.utr = this.form.value.utr;
-	this.company.vrn = this.form.value.vrn;
-	this.company.vat_registration = this.form.value.vat_registration;
+    	if (this.form.value.utr)
+	    this.company.utr = this.form.value.utr;
+	else
+	    this.form.value.utr = "";
+
+	if (this.form.value.vrn)
+	    this.company.vrn = this.form.value.vrn;
+	else
+	    this.form.value.vrn = "";
+
+	if (this.form.value.vat_registration)
+	    this.company.vat_registration = this.form.value.vat_registration;
+	else
+	    this.form.value.vat_registration = "";
 
 	this.working.start();
 

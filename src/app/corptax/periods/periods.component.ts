@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import * as moment from 'moment';
 
@@ -15,11 +15,10 @@ import { CorptaxConfigService } from '../corptax-config.service';
 })
 export class PeriodsComponent implements OnInit {
 
-    form = this.fb.group({
-	period_start_date: ['', [Validators.required]],
-	period_end_date: ['', [Validators.required]],
-//	prev_start_date: ['', [Validators.required]],
-//	prev_end_date: ['', [Validators.required]],
+    // FIXME: What type?
+    form = new FormGroup({
+	period_start_date: new FormControl<any>('', [Validators.required]),
+	period_end_date: new FormControl<any>('', [Validators.required]),
     });
 
     config : any = {};
@@ -28,7 +27,6 @@ export class PeriodsComponent implements OnInit {
 	private route : ActivatedRoute,
 	private snackBar : MatSnackBar,
 	private filing : CorptaxConfigService,
-	private fb : UntypedFormBuilder,
     ) {
 
 	this.route.params.subscribe(

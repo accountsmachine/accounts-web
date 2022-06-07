@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import * as moment from 'moment';
 
@@ -16,10 +16,10 @@ import { AccountsConfigService } from '../accounts-config.service';
 export class PeriodsComponent implements OnInit {
 
     form = this.fb.group({
-	period_start_date: ['', [Validators.required]],
-	period_end_date: ['', [Validators.required]],
-	prev_start_date: ['', [Validators.required]],
-	prev_end_date: ['', [Validators.required]],
+	period_start_date: ['' as any, [Validators.required]],
+	period_end_date: ['' as any, [Validators.required]],
+	prev_start_date: ['' as any, [Validators.required]],
+	prev_end_date: ['' as any, [Validators.required]],
     });
 
     config : any = {};
@@ -28,7 +28,7 @@ export class PeriodsComponent implements OnInit {
 	private route : ActivatedRoute,
 	private snackBar : MatSnackBar,
 	private filing : AccountsConfigService,
-	private fb : UntypedFormBuilder,
+	private fb : FormBuilder,
     ) {
 
 	this.route.params.subscribe(

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
@@ -15,24 +15,23 @@ import { WorkingService } from '../../working.service';
 })
 export class AddressConfigComponent implements OnInit {
 
-    form = this.fb.group({
-	contact_name: ['', [Validators.required]],
-	contact_address0: ['', [Validators.required]],
-	contact_address1: [''],
-	contact_address2: [''],
-	contact_city: ['', [Validators.required]],
+    form = new FormGroup({
+	contact_name: new FormControl<string>('', [Validators.required]),
+	contact_address0: new FormControl<string>('', [Validators.required]),
+	contact_address1: new FormControl<string>(''),
+	contact_address2: new FormControl<string>(''),
+	contact_city: new FormControl<string>('', [Validators.required]),
 
 	// County is considered optional in addresses
-	contact_county: ['', []],
-	contact_country: ['', [Validators.required]],
-	contact_postcode: ['', [Validators.required]],
+	contact_county: new FormControl<string>('', []),
+	contact_country: new FormControl<string>('', [Validators.required]),
+	contact_postcode: new FormControl<string>('', [Validators.required]),
     });
 
     constructor(
 	private route : ActivatedRoute,
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
-	private fb: UntypedFormBuilder,
 	private working : WorkingService,
     ) {
 	this.company = new Company();
@@ -89,7 +88,11 @@ export class AddressConfigComponent implements OnInit {
     }
 
     public submit() {
-	this.company.contact_name = this.form.value.contact_name;
+    	if (this.form.value.contact_name)
+	    this.company.contact_name = this.form.value.contact_name;
+	else
+	    this.company.contact_name = "";
+	
 	this.company.contact_address = [];
 	if (this.form.value.contact_address0)
 	    this.company.contact_address.push(this.form.value.contact_address0);
@@ -97,10 +100,26 @@ export class AddressConfigComponent implements OnInit {
 	    this.company.contact_address.push(this.form.value.contact_address1);
 	if (this.form.value.contact_address2)
 	    this.company.contact_address.push(this.form.value.contact_address2);
-	this.company.contact_city = this.form.value.contact_city;
-	this.company.contact_county = this.form.value.contact_county;
-	this.company.contact_country = this.form.value.contact_country;
-	this.company.contact_postcode = this.form.value.contact_postcode;
+
+	if (this.form.value.contact_city)
+	    this.company.contact_city = this.form.value.contact_city;
+	else
+	    this.company.contact_city = "";
+	
+	if (this.form.value.contact_county)
+	    this.company.contact_county = this.form.value.contact_county;
+	else
+	    this.company.contact_county = "";
+	
+	if (this.form.value.contact_country)
+	    this.company.contact_country = this.form.value.contact_country;
+	else
+	    this.company.contact_country = "";
+	
+	if (this.form.value.contact_postcode)
+	    this.company.contact_postcode = this.form.value.contact_postcode;
+	else
+	    this.company.contact_postcode = "";
 
 	this.working.start();
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, interval, catchError } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -15,7 +15,7 @@ import { Order } from '../commerce.model';
 })
 export class CryptoCheckoutComponent implements OnInit {
 
-    public form : UntypedFormGroup;
+    public form : FormGroup;
 
     estimate : number = 0.0;
     minimum : number = 0.0;
@@ -42,7 +42,7 @@ export class CryptoCheckoutComponent implements OnInit {
 	private service : CheckoutService,
 	private router : Router,
 	private snackBar: MatSnackBar,
-	private formBuilder: UntypedFormBuilder,
+	private formBuilder: FormBuilder,
     ) {
 	this.form = this.formBuilder.group({
 	    currency: ["eth"],

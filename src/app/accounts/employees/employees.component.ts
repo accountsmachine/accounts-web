@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import * as moment from 'moment';
 
@@ -26,7 +26,7 @@ export class EmployeesComponent implements OnInit {
 	private route : ActivatedRoute,
 	private snackBar : MatSnackBar,
 	private filing : AccountsConfigService,
-	private fb : UntypedFormBuilder,
+	private fb : FormBuilder,
     ) {
 
 	this.route.params.subscribe(

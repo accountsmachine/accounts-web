@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl} from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Validators } from '@angular/forms';
@@ -19,17 +19,16 @@ export class ActivitiesConfigComponent implements OnInit {
 
     readonly chipSeparatorKeysCodes = [ENTER, COMMA] as const;
 
-    form = this.fb.group({
-	sector: ['', [Validators.required]],
-	activities: ['', [Validators.required]],
-	sic_codes: [],
+    form = new FormGroup({
+	sector: new FormControl('', [Validators.required]),
+	activities: new FormControl<string>('', [Validators.required]),
+	sic_codes: new FormControl<string[]>([]),
     });
 
     constructor(
 	private route : ActivatedRoute,
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
-	private fb: UntypedFormBuilder,
 	private working : WorkingService,
     ) {
 	this.company = new Company();
@@ -76,9 +75,21 @@ export class ActivitiesConfigComponent implements OnInit {
     }
 
     public submit() {
-	this.company.sector = this.form.value.sector;
-	this.company.activities = this.form.value.activities;
-	this.company.sic_codes = this.sic_codes.value;
+
+	if (this.form.value.sector)
+	    this.company.sector = this.form.value.sector;
+	else
+	    this.company.sector = "";
+
+	if (this.form.value.activities)
+	    this.company.activities = this.form.value.activities;
+	else
+	    this.company.activities = "";
+
+	if (this.sic_codes.value)
+	    this.company.sic_codes = this.sic_codes.value;
+	else
+	    this.company.sic_codes = [];
 
 	this.working.start();
 
@@ -95,25 +106,34 @@ export class ActivitiesConfigComponent implements OnInit {
     }
 
     addSIC(event: MatChipInputEvent): void {
-	const value = (event.value || '').trim();
 
-	if (value) {
-	    this.sic_codes.setValue([...this.sic_codes.value, value]);
-	    this.sic_codes.updateValueAndValidity();
+	if (this.sic_codes.value) {
+
+	    const value = (event.value || '').trim();
+
+	    if (value) {
+		this.sic_codes.setValue([...this.sic_codes.value, value]);
+		this.sic_codes.updateValueAndValidity();
+	    }
+
+	    // Clear the input value
+	    event.chipInput!.clear();
+
 	}
-
-	// Clear the input value
-	event.chipInput!.clear();
 
     }
 
     removeSIC(value: string): void {
 
-	const index = this.sic_codes.value.indexOf(value);
+	if (this.sic_codes.value) {
 
-	if (index >= 0) {
-	    this.sic_codes.value.splice(index, 1);
-	    this.sic_codes.updateValueAndValidity();
+	    const index = this.sic_codes.value.indexOf(value);
+
+	    if (index >= 0) {
+		this.sic_codes.value.splice(index, 1);
+		this.sic_codes.updateValueAndValidity();
+	    }
+
 	}
 
     }

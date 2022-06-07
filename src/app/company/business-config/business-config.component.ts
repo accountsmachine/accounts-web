@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Validators } from '@angular/forms';
@@ -19,24 +19,23 @@ export class BusinessConfigComponent implements OnInit {
 
     readonly chipSeparatorKeysCodes = [ENTER, COMMA] as const;
 
-    form = this.fb.group({
-	company_name: ['', [Validators.required]],
-	company_number: [{value: '', disabled: true}, [
+    form = new FormGroup({
+	company_name: new FormControl('', [Validators.required]),
+	company_number: new FormControl({value: '', disabled: true}, [
 	    Validators.required, Validators.pattern("[0-9]{8}")
-	]],
-	registration_date: ['', [Validators.required]],
-	country: ['', [Validators.required]],
-	form: ['', [Validators.required]],
-	is_dormant: [false, [Validators.required]],
-	directors: [],
-	jurisdiction: ['', [Validators.required]],
+	]),
+	registration_date: new FormControl<any>('', [Validators.required]),
+	country: new FormControl('', [Validators.required]),
+	form: new FormControl('', [Validators.required]),
+	is_dormant: new FormControl<boolean>(false, [Validators.required]),
+	directors: new FormControl<string[]>([]),
+	jurisdiction: new FormControl<string>('', [Validators.required]),
     });
 
     constructor(
 	private route : ActivatedRoute,
 	private state: CompanyService,
 	private snackBar: MatSnackBar,
-	private fb: UntypedFormBuilder,
 	private working : WorkingService,
     ) {
 	this.company = new Company();
@@ -96,17 +95,40 @@ export class BusinessConfigComponent implements OnInit {
     }
 
     public submit() {
-	this.company.company_name = this.form.value.company_name;
+
+	if (this.form.value.company_name)
+	    this.company.company_name = this.form.value.company_name;
+	else
+	    this.company.company_name = "";
 
 	// Convert date to ISO string.
 	this.company.registration_date =
 	    this.from_date(this.form.value.registration_date);
 
-	this.company.country = this.form.value.country;
-	this.company.form = this.form.value.form;
-	this.company.is_dormant = this.form.value.is_dormant;
-	this.company.directors = this.directors.value;
-	this.company.jurisdiction = this.form.value.jurisdiction;
+	if (this.form.value.country)
+	    this.company.country = this.form.value.country;
+	else
+	    this.company.country = "";
+
+	if (this.form.value.form)
+	    this.company.form = this.form.value.form;
+	else
+	    this.company.form = "";
+
+	if (this.form.value.is_dormant)
+	    this.company.is_dormant = this.form.value.is_dormant;
+	else
+	    this.company.is_dormant = false;
+
+	if (this.directors.value)
+	    this.company.directors = this.directors.value;
+	else
+	    this.company.directors = [];
+
+	if (this.form.value.jurisdiction)
+	    this.company.jurisdiction = this.form.value.jurisdiction;
+	else
+	    this.company.jurisdiction = "";
 
 	this.working.start();
 
@@ -123,25 +145,34 @@ export class BusinessConfigComponent implements OnInit {
     }
 
     addDirector(event: MatChipInputEvent): void {
-	const value = (event.value || '').trim();
 
-	if (value) {
-	    this.directors.setValue([...this.directors.value, value]);
-	    this.directors.updateValueAndValidity();
+	if (this.directors && this.directors.value) {
+
+	    const value = (event.value || '').trim();
+
+	    if (value) {
+		this.directors.setValue([...this.directors.value, value]);
+		this.directors.updateValueAndValidity();
+	    }
+
+	    // Clear the input value
+	    event.chipInput!.clear();
+
 	}
-
-	// Clear the input value
-	event.chipInput!.clear();
 
     }
 
     removeDirector(value: string): void {
 
-	const index = this.directors.value.indexOf(value);
+	if (this.directors.value) {
 
-	if (index >= 0) {
-	    this.directors.value.splice(index, 1);
-	    this.directors.updateValueAndValidity();
+	    const index = this.directors.value.indexOf(value);
+
+	    if (index >= 0) {
+		this.directors.value.splice(index, 1);
+		this.directors.updateValueAndValidity();
+	    }
+
 	}
 
     }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import * as moment from 'moment';
 
@@ -21,10 +21,10 @@ export class AuthorisationComponent implements OnInit {
     directors : { ix : number, name : string }[] = [];
 
     form = this.fb.group({
-	report_date: ['', [Validators.required]],
-	authorisation_date: ['', [Validators.required]],
-	balance_sheet_date: ['', [Validators.required]],
-	director_authorising: ['', [Validators.required]],
+	report_date: ['' as any, [Validators.required]],
+	authorisation_date: ['' as any, [Validators.required]],
+	balance_sheet_date: ['' as any, [Validators.required]],
+	director_authorising: ['' as any, [Validators.required]],
     });
 
     config : AccountsConfig = {};
@@ -34,7 +34,7 @@ export class AuthorisationComponent implements OnInit {
 	private companyService : CompanyService,
 	private snackBar : MatSnackBar,
 	private filing : AccountsConfigService,
-	private fb : UntypedFormBuilder,
+	private fb : FormBuilder,
     ) {
 
 

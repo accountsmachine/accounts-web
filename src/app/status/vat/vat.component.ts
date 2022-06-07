@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { MatTableDataSource } from '@angular/material/table';
 import {
@@ -23,7 +23,7 @@ import {
 })
 export class VatComponent implements OnInit {
 
-    public form : UntypedFormGroup;
+    public form : FormGroup;
 
     setup = false;
 
@@ -41,7 +41,7 @@ export class VatComponent implements OnInit {
 	private companyService : CompanyService,
 	private vat : VatService,
 	private dialog : MatDialog,
-	private formBuilder: UntypedFormBuilder,
+	private formBuilder: FormBuilder,
 	private working : WorkingService,
     ) {
 
