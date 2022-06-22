@@ -40,6 +40,7 @@ everything-prod:
 	make run-upgrade KIND=prod
 
 build:
+	rm -f serve && make serve
 	rm -rf ${DIST}/${BUILD}
 	mkdir -p ${DIST}/${BUILD}
 	cat src/version.ts | sed 's/1.0.0/${VERSION}/' > src/version.${BUILD}.ts
