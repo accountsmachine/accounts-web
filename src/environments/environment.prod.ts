@@ -11,7 +11,7 @@ export const environment = {
 	"vat",
 //	"corptax",
 //	"accounts",
-//	"vat-submit",
+	"vat-submit",
 //	"corptax-submit",
 //	"accounts-submit",
 //	"crypto",
