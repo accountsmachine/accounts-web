@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortable } from '@angular/material/sort';
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
@@ -44,7 +44,8 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	"total-vatex-acquisitions": 9,
     };
 
-    accounts : AccountBalance[] = [];
+    book_mapping? : Mapping;
+    accounts? : AccountBalance[];
 
     @ViewChild(MatPaginator) paginator? : MatPaginator;
     @ViewChild(MatSort) sort? : MatSort;
@@ -64,8 +65,20 @@ export class MappingComponent implements OnInit, AfterViewInit {
     ngOnInit() {}
 
     configure() {
-	this.mapping!.paginator = this.paginator!;
-	this.mapping!.sort = this.sort!;
+
+	if (!this.mapping) return;
+	if (!this.sort) return;
+
+	setTimeout( () => {
+	    this.sort!.sort(<MatSortable>{
+		"id": "box",
+		"start": "asc",
+	    });
+	}, 0);
+
+	this.mapping.paginator = this.paginator!;
+	this.mapping.sort = this.sort;
+
     }
 
     ngAfterViewInit(): void {
@@ -81,29 +94,15 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 		    this.booksService.get_mapping(id).subscribe(
 			(mapping : Mapping) => {
-
-			    let data : Row[] = [];
-
-			    for (let key in mapping) {
-
-				let r = new Row();
-
-				r.line = key;
-				r.box = this.vat_box[key];
-				r.accounts = mapping[key];
-
-				data.push(r);
-
-			    }
-
-			    this.mapping.data = data;
-
+			    this.book_mapping = mapping;
+			    this.update_table();
 			}
 		    );
 
 		    this.booksService.get_books_detail(id).subscribe(
 			(e : AccountBalance[]) => {
 			    this.accounts = e;
+			    this.update_table();
 			}
 		    );
 
@@ -113,12 +112,76 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
     }
 
+    update_table() {
+
+	if (!this.accounts) return;
+	if (!this.book_mapping) return;
+
+	// This is used to keep track of if we've modified the mapping
+	// because of a mis-match between accounts file and the
+	// mapping record.
+	let mismatch = false;
+
+	let accounts = new Set(this.accounts.map((a) => a.account));
+
+	let data : Row[] = [];
+
+	for (let key in this.book_mapping) {
+
+	    let r = new Row();
+
+	    r.line = key;
+	    r.box = this.vat_box[key];
+
+	    let m = [];
+
+	    for (let acct of this.book_mapping[key]) {
+		if (accounts.has(acct)) {
+		    m.push(acct);
+		} else {
+		    // Account in mapping doesn't exist in the accounts books
+		    // It has been removed.
+		    mismatch = true;
+		}
+	    }
+
+	    r.accounts = m;
+
+	    // If there was a mismatch, update the book mapping, it's
+	    // going to get posted back.
+	    if (mismatch)
+		this.book_mapping[key] = m;
+
+	    // Note, the mismatch statement will be true, once any
+	    // mismatch has been detected on a line.  Not a problem,
+	    // because it's always safe to run.
+
+	    data.push(r);
+
+	}
+
+	// Write back book mapping.
+	if (mismatch) {
+	    this.booksService.put_mapping(
+		this.id, this.book_mapping
+	    ).subscribe(() => {
+	    });
+	}
+
+
+	this.mapping.data = data;
+
+    }
+
     apply_filter(f : any) {
 	let filt = f!.value.trim().toLowerCase();
 	this.mapping.filter = filt;
     }
 
     select(row : any) {
+
+	if (!this.accounts) return;
+
 	let thing = this.accounts.map((a) => a.account );
 	const dialogRef = this.dialog.open(
 	    AccountsSelectionComponent, {

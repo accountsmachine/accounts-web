@@ -4,31 +4,41 @@
 <div mat-dialog-content>
   <p>
     This operation will allow remapping of the VAT return values to the
-    accounts in your accounting books.  Ensure the tick-box is selected for all
+    accounts in your accounting books.  Ensure the tick box is selected for all
     accounts which correspond to this VAT return value.
     See <a href="https://www.gov.uk/guidance/how-to-fill-in-and-submit-your-vat-return-vat-notice-70012#section3">HMRC guidance</a>.
   </p>
 
   <p *ngIf="line == 'vat-output-sales'">
-    This value corresponds with VAT return box 1.
+    This value corresponds with VAT return box 1:
+    VAT due on sales and other outputs.
   </p>
   <p *ngIf="line == 'vat-output-acquisitions'">
-    This value corresponds with VAT return box 2.
+    This value corresponds with VAT return box 2:
+    VAT period on acquisitions of goods made in Northern Ireland
+    from EU Member States
   </p>
   <p *ngIf="line == 'vat-input'">
-    This value corresponds with VAT return box 4.
+    This value corresponds with VAT return box 4:
+    VAT reclaimed on purchases and other inputs.
   </p>
   <p *ngIf="line == 'total-vatex-sales'">
-    This value corresponds with VAT return box 6.
+    This value corresponds with VAT return box 6:
+    total value of sales and all other outputs excluding any VAT.
   </p>
   <p *ngIf="line == 'total-vatex-purchases'">
-    This value corresponds with VAT return box 7.
+    This value corresponds with VAT return box 7:
+    total value of purchases and all other inputs excluding any VAT.
   </p>
   <p *ngIf="line == 'total-vatex-goods-supplied'">
-    This value corresponds with VAT return box 8.
+    This value corresponds with VAT return box 8:
+    total value of all supplies of goods and related costs, excluding any VAT,
+    to EU member states.
   </p>
   <p *ngIf="line == 'total-vatex-acquisitions'">
-    This value corresponds with VAT return box 9.
+    This value corresponds with VAT return box 9:
+    the total value of all acquisitions of goods and related costs, excluding
+    any VAT, from EU member states.
   </p>
 
   <p *ngFor="let acc of all">
