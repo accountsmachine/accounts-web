@@ -19,6 +19,13 @@
 	<mat-cell *matCellDef="let row">{{row.line}}</mat-cell>
       </ng-container>
 
+      <ng-container matColumnDef="box">
+	<mat-header-cell mat-sort-header *matHeaderCellDef>
+	  VAT box
+	</mat-header-cell>
+	<mat-cell *matCellDef="let row">{{row.box}}</mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="accounts">
 	<mat-header-cell class="header-right" mat-sort-header *matHeaderCellDef>
 	  Mapped accounts

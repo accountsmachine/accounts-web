@@ -18,6 +18,7 @@ import {
 
 class Row {
     line : string = "";
+    box : number = 0;
     accounts : string[] = [];
 };
 
@@ -33,12 +34,22 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
     id : string = "";
 
+    vat_box : { [key : string] : number } = {
+        "vat-output-sales": 1,
+	"vat-output-acquisitions": 2,
+	"vat-input": 4,
+  	"total-vatex-sales": 6,
+	"total-vatex-purchases": 7,
+	"total-vatex-goods-supplied": 8,
+	"total-vatex-acquisitions": 9,
+    };
+
     accounts : AccountBalance[] = [];
 
     @ViewChild(MatPaginator) paginator? : MatPaginator;
     @ViewChild(MatSort) sort? : MatSort;
 
-    columns = ['line', 'accounts'];
+    columns = ['line', 'box', 'accounts'];
 
     constructor(
 	private route : ActivatedRoute,
@@ -78,6 +89,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 				let r = new Row();
 
 				r.line = key;
+				r.box = this.vat_box[key];
 				r.accounts = mapping[key];
 
 				data.push(r);

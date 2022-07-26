@@ -3,8 +3,34 @@
 
 <div mat-dialog-content>
   <p>
-    This operation will blah...
+    This operation will allow remapping of the VAT return values to the
+    accounts in your accounting books.  Ensure the tick-box is selected for all
+    accounts which correspond to this VAT return value.
+    See <a href="https://www.gov.uk/guidance/how-to-fill-in-and-submit-your-vat-return-vat-notice-70012#section3">HMRC guidance</a>.
   </p>
+
+  <p *ngIf="line == 'vat-output-sales'">
+    This value corresponds with VAT return box 1.
+  </p>
+  <p *ngIf="line == 'vat-output-acquisitions'">
+    This value corresponds with VAT return box 2.
+  </p>
+  <p *ngIf="line == 'vat-input'">
+    This value corresponds with VAT return box 4.
+  </p>
+  <p *ngIf="line == 'total-vatex-sales'">
+    This value corresponds with VAT return box 6.
+  </p>
+  <p *ngIf="line == 'total-vatex-purchases'">
+    This value corresponds with VAT return box 7.
+  </p>
+  <p *ngIf="line == 'total-vatex-goods-supplied'">
+    This value corresponds with VAT return box 8.
+  </p>
+  <p *ngIf="line == 'total-vatex-acquisitions'">
+    This value corresponds with VAT return box 9.
+  </p>
+
   <p *ngFor="let acc of all">
     <span *ngIf="selected.has(acc)">
       <mat-checkbox [checked]="true"
