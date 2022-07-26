@@ -17,6 +17,7 @@ import {
 } from '../accounts-selection/accounts-selection.component';
 
 class Row {
+    key : string = "";
     line : string = "";
     box : number = 0;
     accounts : string[] = [];
@@ -42,6 +43,16 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	"total-vatex-purchases": 7,
 	"total-vatex-goods-supplied": 8,
 	"total-vatex-acquisitions": 9,
+    };
+
+    vat_desc : { [key : string] : string } = {
+        "vat-output-sales": "VAT due on sales",
+	"vat-output-acquisitions": "VAT due on acquisitions",
+	"vat-input": "VAT reclaimed on purchases",
+  	"total-vatex-sales": "Total sales ex. VAT",
+	"total-vatex-purchases": "Total purchases ex. VAT",
+	"total-vatex-goods-supplied": "Total goods supplied to EU ex. VAT",
+	"total-vatex-acquisitions": "Total acquisitions of goods from EU ex. VAT",
     };
 
     book_mapping? : Mapping;
@@ -130,7 +141,8 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	    let r = new Row();
 
-	    r.line = key;
+	    r.key = key;
+	    r.line = this.vat_desc[key];
 	    r.box = this.vat_box[key];
 
 	    let m = [];
@@ -189,6 +201,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		data: {
 		    proceed: false,
 		    line: row.line,
+		    key: row.key,
 		    selected: row.accounts,
 		    accounts: this.accounts.map((a) => a.account)
 		},
@@ -202,7 +215,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		if (result.proceed) {
 
 		    for(let row of this.mapping.data) {
-			if (row.line == result.line) {
+			if (row.key == result.key) {
 			    row.accounts = Array.from(result.selected.values());
 			}
 		    }
@@ -210,7 +223,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		    let m = new Mapping();
 
 		    for (let row of this.mapping.data) {
-			m[row.line] = row.accounts;
+			m[row.key] = row.accounts;
 		    }
 
 		    this.booksService.put_mapping(this.id, m).subscribe(
