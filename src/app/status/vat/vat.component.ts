@@ -42,7 +42,7 @@ export class VatComponent implements OnInit {
 	private vat : VatService,
 	private dialog : MatDialog,
 	private formBuilder: FormBuilder,
-	private working : WorkingService,
+	public working : WorkingService,
     ) {
 
 	let now = new Date();
@@ -85,7 +85,7 @@ export class VatComponent implements OnInit {
 		this.working.stop();
 	    },
 	    error: err => {
-		console.log(err);
+		console.log("BROKEN", err);
 		this.working.stop();
 	    },
 	    complete: () => {

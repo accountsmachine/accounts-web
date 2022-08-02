@@ -9,7 +9,6 @@ import {
 
 import { StatusService, Statuses } from '../status.service';
 import { VatService, Obligation } from '../../vat/vat.service';
-import { WorkingService } from '../../working.service';
 
 @Component({
   selector: 'obligations',
@@ -29,7 +28,6 @@ export class ObligationsComponent implements OnInit, OnChanges {
     constructor(
 	private route : ActivatedRoute,
 	private vat : VatService,
-	public working : WorkingService,
     ) {
     }
 
