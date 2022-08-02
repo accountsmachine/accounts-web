@@ -68,7 +68,7 @@ export class ApiService {
 			retryWhen(err => {
 			    let retries = 0;
 			    return err.pipe(
-				delay(this.retries),
+				delay(this.delay),
 				map((err : Error) => {
 				    if (retries++ > this.retries) {
 					throw err;
@@ -147,7 +147,7 @@ export class ApiService {
 			retryWhen(err => {
 			    let retries = 0;
 			    return err.pipe(
-				delay(this.retries),
+				delay(this.delay),
 				map((err : Error) => {
 				    if (retries++ > this.retries) {
 					throw err;
@@ -198,7 +198,7 @@ export class ApiService {
 			retryWhen(err => {
 			    let retries = 0;
 			    return err.pipe(
-				delay(this.retries),
+				delay(this.delay),
 				map((err : Error) => {
 				    if (retries++ > this.retries) {
 					throw err;
@@ -249,7 +249,7 @@ export class ApiService {
 			retryWhen(err => {
 			    let retries = 0;
 			    return err.pipe(
-				delay(this.retries),
+				delay(this.delay),
 				map((err : Error) => {
 				    if (retries++ > this.retries) {
 					throw err;
