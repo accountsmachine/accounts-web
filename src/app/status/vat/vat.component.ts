@@ -25,13 +25,13 @@ export class VatComponent implements OnInit {
 
     public form : FormGroup;
 
+    company : Company = new Company();
     setup = false;
 
     year : any = {};
 
     years : { start : string, end : string, name : string }[] = [];
 
-    company : Company = new Company();
     id : string = "";
 
     constructor(
@@ -75,21 +75,45 @@ export class VatComponent implements OnInit {
 
 	// FIXME: No spinner, combineLatest complicates things.
 	this.route.params.subscribe({
+
 	    next: (params) => {
+
 		let id = params["id"];
 		this.id = id;
-		combineLatest({
-		    status: this.statusService.get(id),
-		    companies: this.companyService.get_list(),
-		}).subscribe(e => {
-		    if (!e.status) {
-			this.setup = false;
-		    } else {
-			this.setup = e.status.vat;
-		    }
-		    this.company =
-			id in e.companies ? e.companies[id] : new Company();
+
+		this.working.start();
+
+		this.statusService.get(id).subscribe({
+		    next: e => {
+			if (!e) {
+			    this.setup = false;
+			} else {
+			    this.setup = e.vat;
+			}
+			this.working.stop();
+		    },
+		    error: e => {
+			this.working.stop();
+		    },
+		    complete: () => {
+		    },
 		});
+
+		this.working.start();
+
+		this.companyService.get_list().subscribe({
+		    next: e => {
+			this.company =
+			    id in e ? e[id] : new Company();
+			this.working.stop();
+		    },
+		    error: e => {
+			this.working.stop();
+		    },
+		    complete: () => {
+		    },
+		});
+
 	    },
 	    error: (err) => {
 	    },

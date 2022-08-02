@@ -35,5 +35,9 @@ export class WorkingService {
 	});
     }
 
+    get working() : boolean {
+	return this.count > 0;
+    }
+
 }
 

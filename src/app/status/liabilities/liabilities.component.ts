@@ -9,6 +9,7 @@ import {
 
 import { StatusService, Statuses } from '../status.service';
 import { VatService, Liability } from '../../vat/vat.service';
+import { WorkingService } from '../../working.service';
 
 @Component({
   selector: 'liabilities',
@@ -31,6 +32,7 @@ export class LiabilitiesComponent implements OnInit, OnChanges {
     constructor(
 	private route : ActivatedRoute,
 	private vat : VatService,
+	public working : WorkingService,
     ) {
     }
 
@@ -41,9 +43,21 @@ export class LiabilitiesComponent implements OnInit, OnChanges {
 		let id = params["id"];
 		this.id = id;
 
-		this.vat.getLiabilities(id, this.start, this.end).subscribe(
-		    obls => this.liabilities.data = obls
-		);
+		this.liabilities.data = [];
+
+		this.working.start();
+		
+		this.vat.getLiabilities(id, this.start, this.end).subscribe({
+		    next: obls => {
+			this.liabilities.data = obls;
+			this.working.stop();
+		    },
+		    error: e => {
+			this.working.stop();
+		    },
+		    complete: () => {
+		    },
+		});
 
 	    }
 	);
