@@ -85,7 +85,7 @@ export class VatComponent implements OnInit {
 		this.working.stop();
 	    },
 	    error: err => {
-		console.log("BROKEN", err);
+		console.log("FIXME DO SOMETHING", err);
 		this.working.stop();
 	    },
 	    complete: () => {

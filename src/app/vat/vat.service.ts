@@ -65,35 +65,10 @@ export type Criteria = {
 })
 export class VatService {
 
-    // FIXME: Lifecycle looks messy?
-    // Lifecycle is send to criteria -> subscribe to status.
-
-    // Subject, request to update current criteria
-    criteria : Subject<Criteria> = new Subject<Criteria>();
-
-    // Current status
-    status : Subject<Status> = new Subject<Status>();
-
     constructor(
 	private api : ApiService,
 	private device : DeviceIdService,
     ) {
-
-	this.criteria.pipe(debounceTime(100)).subscribe((c : Criteria) => {
-
-	    let url = "/api/vat/status/" + c.cid;
-	    url = url + "?start=" + c.start;
-	    url = url + "&end=" + c.end;
-
-    	    this.api.get<any>(url, this.options).subscribe({
-		next: s => {
-		    this.status.next(s);
-		},
-		error: e => { console.log(e); },
-		complete: () => {}
-	    });
-
-	});
 
     }
 
@@ -113,11 +88,11 @@ export class VatService {
 
     getStatus(cid : string, start : string, end : string) : Observable<Status> {
 
-	let c : Criteria = { cid: cid, start: start, end: end };
+	let url = "/api/vat/status/" + cid;
+	url = url + "?start=" + start;
+	url = url + "&end=" + end;
 
-	this.criteria.next(c);
-
-	return this.status.pipe(take(1));
+    	return this.api.get<any>(url, this.options);
 
     }
 

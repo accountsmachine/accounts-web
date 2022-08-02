@@ -21,8 +21,8 @@ import { AuthService } from './auth.service';
 export class ApiService {
 
     // Delay between retries (ms), and number of tries.
-    delay = 1500;
-    retries = 5;
+    delay = 150;
+    retries = 3;
 
     constructor(
 	private auth : AuthService,
@@ -80,7 +80,9 @@ export class ApiService {
 			}),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { obs.error(e); },
+			error: (e : any) => {
+			    obs.error(e);
+			},
 			complete: () => { obs.complete(); },
 		    })
 
