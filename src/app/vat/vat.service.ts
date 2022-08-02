@@ -35,6 +35,12 @@ export type Liability = {
     due: Date,
 };
 
+export type Status = {
+    liabilities : Liability[];
+    payments : Payment [];
+    obligations : Obligation[];
+};
+
 export type Return = {
     periodKey: string,
     vatDueSales: number,
@@ -59,14 +65,21 @@ export type Criteria = {
 })
 export class VatService {
 
-    subj2 : Subject<Criteria> = new Subject<Criteria>();
+    // FIXME: Lifecycle looks messy?
+    // Lifecycle is send to criteria -> subscribe to status.
+
+    // Subject, request to update current criteria
+    criteria : Subject<Criteria> = new Subject<Criteria>();
+
+    // Current status
+    status : Subject<Status> = new Subject<Status>();
 
     constructor(
 	private api : ApiService,
 	private device : DeviceIdService,
     ) {
 
-	this.subj2.pipe(debounceTime(100)).subscribe((c : Criteria) => {
+	this.criteria.pipe(debounceTime(100)).subscribe((c : Criteria) => {
 
 	    let url = "/api/vat/status/" + c.cid;
 	    url = url + "?start=" + c.start;
@@ -74,7 +87,7 @@ export class VatService {
 
     	    this.api.get<any>(url, this.options).subscribe({
 		next: s => {
-		    this.subject.next(s);
+		    this.status.next(s);
 		},
 		error: e => { console.log(e); },
 		complete: () => {}
@@ -98,20 +111,13 @@ export class VatService {
 	})
     };
 
-    cid  = "";
-    start = "";
-    end = "";
-    status : any = {};
-
-    subject : Subject<any> = new Subject<any>();
-
     getStatus(cid : string, start : string, end : string) : Observable<any> {
 
 	let c : Criteria = { cid: cid, start: start, end: end };
 
-	this.subj2.next(c);
+	this.criteria.next(c);
 
-	return this.subject.pipe(take(1));
+	return this.status.pipe(take(1));
 
     }
 
