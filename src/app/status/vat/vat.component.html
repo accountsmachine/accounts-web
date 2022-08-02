@@ -59,19 +59,19 @@
     <h2>Obligations</h2>
 
     <p>
-      <obligations [start]="year.start" [end]="year.end"></obligations>
+      <obligations [obligations]="status.obligations"></obligations>
     </p>
 
     <h2>Liabilities</h2>
 
     <p>
-      <liabilities [start]="year.start" [end]="year.end"></liabilities>
+      <liabilities [liabilities]="status.liabilities"></liabilities>
     </p>
 
     <h2>Payments</h2>
 
     <p>
-      <payments [start]="year.start" [end]="year.end"></payments>
+      <payments [payments]="status.payments"></payments>
     </p>
 
   </div>

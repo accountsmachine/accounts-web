@@ -35,10 +35,10 @@ export type Liability = {
     due: Date,
 };
 
-export type Status = {
-    liabilities : Liability[];
-    payments : Payment [];
-    obligations : Obligation[];
+export class Status {
+    liabilities : Liability[] = [];
+    payments : Payment [] = [];
+    obligations : Obligation[] = [];
 };
 
 export type Return = {
@@ -111,7 +111,7 @@ export class VatService {
 	})
     };
 
-    getStatus(cid : string, start : string, end : string) : Observable<any> {
+    getStatus(cid : string, start : string, end : string) : Observable<Status> {
 
 	let c : Criteria = { cid: cid, start: start, end: end };
 

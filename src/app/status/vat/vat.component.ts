@@ -11,7 +11,7 @@ import {
 import { StatusService, Statuses } from '../status.service';
 import { WorkingService } from '../../working.service';
 import { CompanyService, Companies, Company } from '../../company/company.service';
-import { VatService } from '../../vat/vat.service';
+import { VatService, Status } from '../../vat/vat.service';
 import {
     DisconnectConfirmationComponent
 } from '../disconnect-confirmation/disconnect-confirmation.component';
@@ -71,6 +71,29 @@ export class VatComponent implements OnInit {
 
     }
 
+    status : Status = new Status();
+
+    update() {
+
+	this.status = new Status();
+
+	this.working.start();
+
+	this.vat.getStatus(this.id, this.year.start, this.year.end).subscribe({
+	    next: e => {
+		this.status = e;
+		this.working.stop();
+	    },
+	    error: err => {
+		console.log(err);
+		this.working.stop();
+	    },
+	    complete: () => {
+	    },
+	});
+	
+    }
+
     ngOnInit(): void {
 
 	// FIXME: No spinner, combineLatest complicates things.
@@ -80,6 +103,8 @@ export class VatComponent implements OnInit {
 
 		let id = params["id"];
 		this.id = id;
+
+		this.update();
 
 		this.working.start();
 
@@ -155,6 +180,7 @@ export class VatComponent implements OnInit {
 
     select() {
 	this.year = this.form.value.year;
+	this.update();
     }
 
     fix_vrn() {

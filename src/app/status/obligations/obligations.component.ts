@@ -8,7 +8,7 @@ import {
 } from '@angular/material/dialog';
 
 import { StatusService, Statuses } from '../status.service';
-import { VatService, Obligation, Payment, Liability } from '../../vat/vat.service';
+import { VatService, Obligation } from '../../vat/vat.service';
 import { WorkingService } from '../../working.service';
 
 @Component({
@@ -19,12 +19,11 @@ import { WorkingService } from '../../working.service';
 export class ObligationsComponent implements OnInit, OnChanges {
 
     id : string = "";
-    @Input("start") start : string = "";
-    @Input("end") end : string = "";
+    @Input("obligations") obligations : Obligation[] = [];
 
     columns = ["status", "start", "end", "received", "due" ];
 
-    obligations : MatTableDataSource<Obligation> =
+    data : MatTableDataSource<Obligation> =
 	new MatTableDataSource<Obligation>([]);
 
     constructor(
@@ -34,36 +33,17 @@ export class ObligationsComponent implements OnInit, OnChanges {
     ) {
     }
 
-    ngOnInit(): void {
-
-	this.route.params.subscribe(
-	    params => {
-
-		let id = params["id"];
-		this.id = id;
-
-		this.obligations.data = [];
-
-		this.working.start();
-
-		this.vat.getObligations(id, this.start, this.end).subscribe({
-		    next: obls => {
-			this.obligations.data = obls;
-			this.working.stop();
-		    },
-		    error: err => {
-			this.working.stop();
-		    },
-		    complete: () => {
-		    },
-		});
-
-	    }
-	);
-
+    update() : void {
+	this.data.data = this.obligations;
     }
 
-    ngOnChanges(): void { this.ngOnInit(); }
+    ngOnInit() : void {
+	this.update();
+    }
+
+    ngOnChanges() : void {
+	this.update();
+    }
 
 }
 

@@ -19,12 +19,11 @@ import { WorkingService } from '../../working.service';
 export class PaymentsComponent implements OnInit, OnChanges {
 
     id : string = "";
-    @Input("start") start : string = "";
-    @Input("end") end : string = "";
+    @Input("payments") payments : Payment[] = [];
 
     columns = ["received", "amount"];
 
-    payments : MatTableDataSource<Payment> =
+    data : MatTableDataSource<Payment> =
 	new MatTableDataSource<Payment>([]);
 
     constructor(
@@ -34,35 +33,18 @@ export class PaymentsComponent implements OnInit, OnChanges {
     ) {
     }
 
-    ngOnInit(): void {
-
-	this.route.params.subscribe(
-	    params => {
-		let id = params["id"];
-		this.id = id;
-
-		this.payments.data = [];
-
-		this.working.start();
-
-		this.vat.getPayments(id, this.start, this.end).subscribe({
-		    next: obls => {
-			this.payments.data = obls;
-			this.working.stop();
-		    },
-		    error: err => {
-			this.working.stop();
-		    },
-		    complete: () => {
-		    },
-		});
-
-	    }
-	);
-
+    update() : void {
+	this.data.data = this.payments;
     }
 
-    ngOnChanges(): void { this.ngOnInit(); }
+    ngOnInit() : void {
+	this.update();
+    }
+
+    ngOnChanges() : void {
+	this.update();
+    }
 
 }
+
 

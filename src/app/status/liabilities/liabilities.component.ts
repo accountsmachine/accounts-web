@@ -19,14 +19,13 @@ import { WorkingService } from '../../working.service';
 export class LiabilitiesComponent implements OnInit, OnChanges {
 
     id : string = "";
-    @Input("start") start : string = "";
-    @Input("end") end : string = "";
+    @Input("liabilities") liabilities : Liability[] = [];
 
     columns = [
 	"type", "originalAmount", "outstandingAmount", "from", "to", "due"
     ];
 
-    liabilities : MatTableDataSource<Liability> =
+    data : MatTableDataSource<Liability> =
 	new MatTableDataSource<Liability>([]);
 
     constructor(
@@ -36,35 +35,17 @@ export class LiabilitiesComponent implements OnInit, OnChanges {
     ) {
     }
 
-    ngOnInit(): void {
-
-	this.route.params.subscribe(
-	    params => {
-		let id = params["id"];
-		this.id = id;
-
-		this.liabilities.data = [];
-
-		this.working.start();
-		
-		this.vat.getLiabilities(id, this.start, this.end).subscribe({
-		    next: obls => {
-			this.liabilities.data = obls;
-			this.working.stop();
-		    },
-		    error: e => {
-			this.working.stop();
-		    },
-		    complete: () => {
-		    },
-		});
-
-	    }
-	);
-
+    update() : void {
+	this.data.data = this.liabilities;
     }
 
-    ngOnChanges(): void { this.ngOnInit(); }
+    ngOnInit() : void {
+	this.update();
+    }
+
+    ngOnChanges() : void {
+	this.update();
+    }
 
 }
 

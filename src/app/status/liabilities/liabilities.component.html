@@ -1,8 +1,8 @@
 
 <div class="container mat-elevation-z8"
-     *ngIf="liabilities.data.length > 0; else nodata">
+     *ngIf="data.data.length > 0; else nodata">
   
-  <mat-table #table [dataSource]="liabilities">
+  <mat-table #table [dataSource]="data">
 
     <ng-container matColumnDef="type">
       <mat-header-cell mat-header-cell *matHeaderCellDef>
