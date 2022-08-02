@@ -110,14 +110,10 @@ export class ListComponent implements OnInit {
     }
 
     reload_subs : any = null;
-    reload_working = true;
 
     reload(quick : boolean = false) {
 
-	if (!this.reload_working) {
-	    this.reload_working = true;
-	    this.working.start();
-	}
+	this.working.start();
 
 	if (this.reload_subs) {
 	    this.reload_subs.unsubscribe();
@@ -130,10 +126,7 @@ export class ListComponent implements OnInit {
 
 	    next: (e) => {
 
-		if (this.reload_working) {
-		    this.reload_working = false;
-		    this.working.stop();
-		}
+		this.working.stop();
 
 		this.filingConfigs = e; this.load();
 
@@ -152,10 +145,7 @@ export class ListComponent implements OnInit {
 	    },
 
 	    error: (e) => {
-		if (this.reload_working) {
-		    this.reload_working = false;
-		    this.working.stop();
-		}
+		this.working.stop();
 	    },
 
 	    complete: () => {

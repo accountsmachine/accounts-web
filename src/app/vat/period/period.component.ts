@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 
+import { WorkingService } from '../../working.service';
 import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
 import { VatService } from '../vat.service';
@@ -30,6 +31,7 @@ export class PeriodComponent implements OnInit {
 	private filing : VatConfigService,
 	private vat : VatService,
 	private fb : FormBuilder,
+	public working : WorkingService,
     ) {
 
 	this.route.params.subscribe(
@@ -39,11 +41,22 @@ export class PeriodComponent implements OnInit {
 		    this.load();
 
 		    if (this.config.company) {
-			this.vat.getOpenObligations(this.config.company).subscribe(
-			    obl => {
+
+			this.working.start();
+
+			this.vat.getOpenObligations(
+			    this.config.company
+			).subscribe({
+			    next: obl => {
 			    	this.obligations = obl;
-			    }
-			);
+				this.working.stop();
+			    },
+			    error: err => {
+				this.working.stop();
+			    },
+			    complete: () => {
+			    },
+			});
 		    }
 
 		});

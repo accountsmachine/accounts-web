@@ -86,12 +86,17 @@ export class ListComponent implements OnInit {
 	combineLatest({
 	    books: this.booksService.get_list(),
 	    companies: this.companyService.get_list(),
-	}).subscribe(
-	    e => {
+	}).subscribe({
+	    next: e => {
 		this.working.stop();
 		this.update(e.books, e.companies);
-	    }
-	);
+	    },
+	    error: err => {
+		this.working.stop();
+	    },
+	    complete: () => {
+	    },
+	});
     }	
 
     selected(c : any) {

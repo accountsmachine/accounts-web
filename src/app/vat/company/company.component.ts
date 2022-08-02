@@ -3,9 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import * as moment from 'moment';
-import { CompanyService, Company, Companies } from '../../company/company.service';
 
+import * as moment from 'moment';
+
+import { CompanyService, Company, Companies } from '../../company/company.service';
+import { WorkingService } from '../../working.service';
 import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
 
@@ -32,16 +34,30 @@ export class CompanyComponent implements OnInit {
 	private snackBar : MatSnackBar,
 	private filing : VatConfigService,
 	private fb : FormBuilder,
+	public working : WorkingService,
     ) {
 
 	this.route.params.subscribe(
 	    params => {
-		this.filing.load(params["id"]).subscribe(e => {
-		    this.id = params["id"];
-		    if (e.config.state != "draft")
-			this.router.navigate(["/vat/" + this.id + "/report"]);
-		    this.config = e.config;
-		    this.load();
+
+		this.working.start();
+
+		this.filing.load(params["id"]).subscribe({
+		    next: e => {
+			this.id = params["id"];
+			if (e.config.state != "draft")
+			    this.router.navigate(
+				["/vat/" + this.id + "/report"]
+			    );
+			this.config = e.config;
+			this.load();
+			this.working.stop();
+		    },
+		    error: err => {
+			this.working.stop();
+		    },
+		    complete: () => {
+		    },
 		});
 	    }
 	);
