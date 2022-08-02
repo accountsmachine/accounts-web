@@ -7,7 +7,7 @@
 import { Injectable } from '@angular/core';
 import {
     Observable, tap, throwError, map, catchError, ObservableInput, retryWhen,
-    take, delay, concat, concatMap,
+    take, delay, concat,
 } from 'rxjs';
 import {
     HttpClient, HttpErrorResponse, HttpHeaders
@@ -19,6 +19,10 @@ import { AuthService } from './auth.service';
     providedIn: 'root'
 })
 export class ApiService {
+
+    // Delay between retries (ms), and number of tries.
+    delay = 1500;
+    retries = 5;
 
     constructor(
 	private auth : AuthService,
@@ -61,11 +65,19 @@ export class ApiService {
 
 		    this.http.get<T>(url, opts).pipe(
 			catchError((err) => this.handle_error(err)),
-			retryWhen(err => err.pipe(
-			    delay(250),
-			    take(3),
-			    concatMap(throwError),
-			)),
+			retryWhen(err => {
+			    let retries = 0;
+			    return err.pipe(
+				delay(this.retries),
+				map((err : Error) => {
+				    if (retries++ > this.retries) {
+					throw err;
+				    } else {
+					return err;
+				    }
+				}),
+			    );
+			}),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
 			error: (e : any) => { obs.error(e); },
@@ -132,11 +144,19 @@ export class ApiService {
 
 		    this.http.put<T>(url, data, opts).pipe(
 			catchError((err) => this.handle_error(err)),
-			retryWhen(err => err.pipe(
-			    delay(250),
-			    take(3),
-			    concatMap(throwError),
-			)),
+			retryWhen(err => {
+			    let retries = 0;
+			    return err.pipe(
+				delay(this.retries),
+				map((err : Error) => {
+				    if (retries++ > this.retries) {
+					throw err;
+				    } else {
+					return err;
+				    }
+				}),
+			    );
+			}),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
 			error: (e : any) => { obs.error(e); },
@@ -175,11 +195,19 @@ export class ApiService {
 
 		    this.http.post<T>(url, data, opts).pipe(
 			catchError((err) => this.handle_error(err)),
-			retryWhen(err => err.pipe(
-			    delay(250),
-			    take(3),
-			    concatMap(throwError),
-			)),
+			retryWhen(err => {
+			    let retries = 0;
+			    return err.pipe(
+				delay(this.retries),
+				map((err : Error) => {
+				    if (retries++ > this.retries) {
+					throw err;
+				    } else {
+					return err;
+				    }
+				}),
+			    );
+			}),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
 			error: (e : any) => { obs.error(e); },
@@ -218,11 +246,19 @@ export class ApiService {
 
 		    this.http.delete<T>(url, opts).pipe(
 			catchError((err) => this.handle_error(err)),
-			retryWhen(err => err.pipe(
-			    delay(250),
-			    take(3),
-			    concatMap(throwError),
-			)),
+			retryWhen(err => {
+			    let retries = 0;
+			    return err.pipe(
+				delay(this.retries),
+				map((err : Error) => {
+				    if (retries++ > this.retries) {
+					throw err;
+				    } else {
+					return err;
+				    }
+				}),
+			    );
+			}),
 		    ).subscribe({
 			next: (e : any) => { obs.next(e); },
 			error: (e : any) => { obs.error(e); },
