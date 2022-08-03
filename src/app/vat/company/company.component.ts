@@ -44,6 +44,7 @@ export class CompanyComponent implements OnInit {
 
 		this.filing.load(params["id"]).subscribe({
 		    next: e => {
+			this.working.stop();
 			this.id = params["id"];
 			if (e.config.state != "draft")
 			    this.router.navigate(
@@ -51,7 +52,6 @@ export class CompanyComponent implements OnInit {
 			    );
 			this.config = e.config;
 			this.load();
-			this.working.stop();
 		    },
 		    error: err => {
 			this.working.stop();
