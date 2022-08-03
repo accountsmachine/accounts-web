@@ -11,6 +11,9 @@ import { CompanyService, Companies } from '../../company/company.service';
 import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';
+import {
+    ErrorDialogComponent
+} from '../../shared/error-dialog/error-dialog.component';
 import { WorkingService } from '../../working.service';
 
 class BookItem {
@@ -88,7 +91,27 @@ export class ListComponent implements OnInit {
 	this.reload();
     }
 
-    reload() {
+    reload_companies() : void {
+
+	this.working.start();
+
+	this.companyService.get_list().subscribe({
+	    next: (e : Companies) => {
+		this.working.stop();
+		this.companies = e;
+		this.reload_books();
+	    },
+	    error: err => {
+		this.error("Failed to load books overview");
+		this.working.stop();
+	    },
+	    complete: () => {
+	    },
+	});
+
+    }
+
+    reload_books() {
 
 	this.working.start();
 
@@ -100,26 +123,17 @@ export class ListComponent implements OnInit {
 	    },
 	    error: err => {
 		this.working.stop();
+		this.error("Failed to load books overview");
 	    },
 	    complete: () => {
 	    },
 	});
+	
+    }
 
-	this.working.start();
-
-	this.companyService.get_list().subscribe({
-	    next: (e : Companies) => {
-		this.working.stop();
-		this.companies = e;
-		this.update();
-	    },
-	    error: err => {
-		this.working.stop();
-	    },
-	    complete: () => {
-	    },
-	});
-    }	
+    reload() {
+	this.reload_companies();
+    }
 
     selected(c : any) {
 	this.router.navigate(["/books/" + c.number + "/detail"])
@@ -158,6 +172,25 @@ export class ListComponent implements OnInit {
 
     mapping(c : any) {
 	this.router.navigate(["/books/" + c.number + "/mapping"])
+    }
+
+    error(m : string) {
+	const dialogRef = this.dialog.open(
+	    ErrorDialogComponent, {
+		width: '550px',
+		data: {
+		    retry: false,
+		    message: m,
+		},
+	    }
+	);
+	dialogRef.afterClosed().subscribe((result : any) => {
+	    if (result) {
+		if (result.retry) {
+		    this.reload();
+		}
+	    }
+	});
     }
 
 }

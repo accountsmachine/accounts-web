@@ -101,7 +101,6 @@ export class VatComponent implements OnInit {
 
     ngOnInit(): void {
 
-	// FIXME: No spinner, combineLatest complicates things.
 	this.route.params.subscribe({
 
 	    next: (params) => {
@@ -194,7 +193,6 @@ export class VatComponent implements OnInit {
     }
 
     retry() {
-	console.log("RETRY");
         this.update();
     }
 

@@ -6,6 +6,10 @@ import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
+import {
+    ErrorDialogComponent
+} from '../../shared/error-dialog/error-dialog.component';
+
 import { StatusService, Statuses } from '../status.service';
 import { CompanyService, Companies } from '../../company/company.service';
 import { WorkingService } from '../../working.service';
@@ -73,6 +77,10 @@ export class OverviewComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.reload();
+    }
+
+    reload() : void {
 
 	this.working.start();
 
@@ -86,7 +94,27 @@ export class OverviewComponent implements OnInit {
 	    },
 	    error: err => {
 		console.log(err);
+		this.error("Failed to load status overview");
 		this.working.stop();
+	    }
+	});
+    }
+
+    error(m : string) {
+	const dialogRef = this.dialog.open(
+	    ErrorDialogComponent, {
+		width: '550px',
+		data: {
+		    retry: false,
+		    message: m,
+		},
+	    }
+	);
+	dialogRef.afterClosed().subscribe((result : any) => {
+	    if (result) {
+		if (result.retry) {
+		    this.reload();
+		}
 	    }
 	});
     }

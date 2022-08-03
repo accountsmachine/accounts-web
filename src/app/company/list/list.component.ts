@@ -9,6 +9,9 @@ import { WorkingService } from '../../working.service';
 import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';
+import {
+    ErrorDialogComponent
+} from '../../shared/error-dialog/error-dialog.component';
 
 @Component({
     selector: 'list',
@@ -44,6 +47,7 @@ export class ListComponent implements OnInit {
 	    },
 	    error: (e) => {
 		this.working.stop();
+		this.error("Failed to load company list");
 	    },
 	    complete: () => {
 	    }
@@ -93,6 +97,25 @@ export class ListComponent implements OnInit {
 	    }
 	});
 	
+    }
+
+    error(m : string) {
+	const dialogRef = this.dialog.open(
+	    ErrorDialogComponent, {
+		width: '550px',
+		data: {
+		    retry: false,
+		    message: m,
+		},
+	    }
+	);
+	dialogRef.afterClosed().subscribe((result : any) => {
+	    if (result) {
+		if (result.retry) {
+		    this.reload();
+		}
+	    }
+	});
     }
 
 }

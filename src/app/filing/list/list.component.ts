@@ -7,6 +7,10 @@ import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
+import {
+    ErrorDialogComponent
+} from '../../shared/error-dialog/error-dialog.component';
+
 import { FilingConfigService, FilingItem } from '../filing-config.service';
 import { get_kind_label } from '../../kinds';
 import { CompanyService, Companies } from '../../company/company.service';
@@ -79,6 +83,11 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit(): void {
+	this.load_companies();
+    }
+
+    load_companies() {
+
 	this.working.start();
 	this.companyService.get_list().subscribe({
 	    next: (e) => {
@@ -86,7 +95,11 @@ export class ListComponent implements OnInit {
 		this.companies = e;
 		this.empty = this.is_empty(e);
 	    },
-	    error: (e) => { this.working.stop(); },
+	    error: (e) => {
+		console.log("ERROR");
+		this.error("Failed to load filing configurations");
+		this.working.stop();
+	    },
 	    complete: () => {},
 	});
 
@@ -146,6 +159,7 @@ export class ListComponent implements OnInit {
 
 	    error: (e) => {
 		this.working.stop();
+		this.error("Failed to load filing configurations");
 	    },
 
 	    complete: () => {
@@ -154,6 +168,25 @@ export class ListComponent implements OnInit {
 
 	});
 
+    }
+    
+    error(m : string) {
+	const dialogRef = this.dialog.open(
+	    ErrorDialogComponent, {
+		width: '550px',
+		data: {
+		    retry: false,
+		    message: m,
+		},
+	    }
+	);
+	dialogRef.afterClosed().subscribe((result : any) => {
+	    if (result) {
+		if (result.retry) {
+		    this.load_companies();
+		}
+	    }
+	});
     }
 
     feature(x : string) {
