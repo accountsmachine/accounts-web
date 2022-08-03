@@ -1,0 +1,21 @@
+
+<h1 mat-dialog-title>Error</h1>
+
+<div mat-dialog-content>
+  <p>
+    An error occured: {{data.message}}
+  </p>
+  <p>
+    Do you want to cancel the operation, or retry the current operation?
+  </p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="cancel()" cdkFocusInitial>
+    Cancel
+  </button>
+  <button mat-raised-button color="warn"
+	  [mat-dialog-close]="{retry: true}">
+    Retry
+  </button>
+</div>

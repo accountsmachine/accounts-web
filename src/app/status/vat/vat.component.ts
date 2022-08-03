@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { MatTableDataSource } from '@angular/material/table';
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
@@ -17,6 +16,9 @@ import { VatService, Status } from '../../vat/vat.service';
 import {
     DisconnectConfirmationComponent
 } from '../disconnect-confirmation/disconnect-confirmation.component';
+import {
+    ErrorDialogComponent
+} from '../../shared/error-dialog/error-dialog.component';
 
 @Component({
     selector: 'vat',
@@ -87,7 +89,8 @@ export class VatComponent implements OnInit {
 		this.working.stop();
 	    },
 	    error: err => {
-		console.log("FIXME DO SOMETHING", err);
+		console.log("Failed to get status", err);
+		this.error("Failed to load VAT status for company " + this.id);
 		this.working.stop();
 	    },
 	    complete: () => {
@@ -188,6 +191,30 @@ export class VatComponent implements OnInit {
     fix_vrn() {
         this.router.navigate(["/company/" + this.id + "/tax"]);
 
+    }
+
+    retry() {
+	console.log("RETRY");
+        this.update();
+    }
+
+    error(m : string) {
+	const dialogRef = this.dialog.open(
+	    ErrorDialogComponent, {
+		width: '550px',
+		data: {
+		    retry: false,
+		    message: m,
+		},
+	    }
+	);
+	dialogRef.afterClosed().subscribe((result : any) => {
+	    if (result) {
+		if (result.retry) {
+		    this.retry();
+		}
+	    }
+	});
     }
 
 }

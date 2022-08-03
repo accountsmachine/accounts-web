@@ -11,13 +11,21 @@ import {
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { DATE_FORMATS } from '../date-formats';
 
 import { SafePipe } from './safe.pipe';
-import { ImageUploaderComponent } from './image-uploader/image-uploader.component';
+import {
+    ImageUploaderComponent
+} from './image-uploader/image-uploader.component';
 import { RenderComponent } from './render/render.component';
-import { KeyValueTableComponent } from './key-value-table/key-value-table.component';
+import {
+    KeyValueTableComponent
+} from './key-value-table/key-value-table.component';
+import {
+    ErrorDialogComponent
+} from './error-dialog/error-dialog.component';
 
 @NgModule({
     declarations: [
@@ -25,12 +33,14 @@ import { KeyValueTableComponent } from './key-value-table/key-value-table.compon
         ImageUploaderComponent,
         RenderComponent,
         KeyValueTableComponent,
+	ErrorDialogComponent,
     ],
     imports: [
 	CommonModule,
 	MatProgressBarModule,
 	MatIconModule,
 	MatTableModule,
+	MatDialogModule,
 	MatProgressSpinnerModule,
 	MatButtonModule,
     ],

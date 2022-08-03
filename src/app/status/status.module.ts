@@ -14,6 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 
+import { SharedModule } from '../shared/shared.module';
+
 import { StatusRoutingModule } from './status-routing.module';
 import { VatComponent } from './vat/vat.component';
 import { CorptaxComponent } from './corptax/corptax.component';
@@ -37,6 +39,7 @@ import {
 	DisconnectConfirmationComponent,
     ],
     imports: [
+	SharedModule,
 	CommonModule,
 	StatusRoutingModule,
 	MatDialogModule,

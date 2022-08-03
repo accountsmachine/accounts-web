@@ -90,7 +90,6 @@ export class ListComponent implements OnInit {
 
     reload() {
 
-	// FIXME: Working and combine latest dont work together.
 	this.working.start();
 
 	this.booksService.get_list().subscribe({
