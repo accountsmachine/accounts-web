@@ -90,13 +90,11 @@ export class ListComponent implements OnInit {
 	this.commerceService.balance().subscribe({
 	    next: (b) => {
 		this.working.stop();
-		console.log("GOT BALANCE");
 		this.balance = b;
 		this.load_companies();
 	    },
 	    error: (e) => {
 		this.working.stop();
-		console.log("NOT GOT BALANCE");
 		this.error("Failed to load balance");
 	    },
 	    complete: () => { },
@@ -117,7 +115,6 @@ export class ListComponent implements OnInit {
 	    },
 	    error: (e) => {
 		this.working.stop();
-		console.log("ERROR");
 		this.error("Failed to load company list");
 	    },
 	    complete: () => {},
