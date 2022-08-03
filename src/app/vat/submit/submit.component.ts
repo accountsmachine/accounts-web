@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { MatTableDataSource } from '@angular/material/table';
 
+import { WorkingService } from '../../working.service';
 import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
 import { VatComputations, VatComputationsService }
@@ -40,9 +41,14 @@ export class SubmitComponent implements OnInit {
     record : VatComputations | null = null;
 
     get_config(id : string) {
+
+	this.working.start();
+
 	this.filing.load(id).subscribe({
 
 	    next: e => {
+
+		this.working.stop();
 
                 if (e.config.company) {
 		    this.get_company(e.config.company);
@@ -57,6 +63,9 @@ export class SubmitComponent implements OnInit {
 	    },
 
 	    error: e => {
+
+		this.working.stop();
+
 		this.id = "";
 		this.config = {};
 	    }
@@ -66,22 +75,37 @@ export class SubmitComponent implements OnInit {
     }
 
     get_company(id : string) {
+
+	this.working.start();
+
 	this.companyService.load(id).subscribe({
+
 	    next: c => {
+		this.working.stop();
 		this.company = c;
 	    },
-	    error: e => this.company = {},
+
+	    error: e => {
+		this.working.stop();
+		this.company = {};
+	    },
+
 	});
     }
 
     get_comps(id : string) {
+
+	this.working.start();
+
 	this.comps.load(id).subscribe({
 
 	    next: record => {
+		this.working.stop();
 		this.load_comps(record);
 	    },
 
 	    error: e => {
+		this.working.stop();
 		this.record = new VatComputations();
 		this.vat_table.data = [];
 	    }
@@ -150,6 +174,7 @@ export class SubmitComponent implements OnInit {
 	private comps : VatComputationsService,
 	private vat : VatService,
 	private router : Router,
+	private working : WorkingService,
     ) {
 
 	this.route.params.subscribe(params => {

@@ -20,6 +20,14 @@ export class Mapping {
     [account : string] : string[];
 }
 
+export class BookInfo {
+    length : number = 0;
+    time : string = "";
+    kind : string = "";
+}
+
+export type BooksMap = { [cid : string]: BookInfo };
+
 @Injectable({
     providedIn: 'root'
 })
@@ -85,13 +93,13 @@ export class BooksService {
 	
     }
 
-    get_list() : Observable<any> {
+    get_list() : Observable<BooksMap> {
 
 	let url = "/api/books";
 
-	return new Observable<any>(obs => {
+	return new Observable<BooksMap>(obs => {
 	    
-	    this.api.get<any>(url).subscribe(res => {
+	    this.api.get<BooksMap>(url).subscribe(res => {
 		obs.next(res);
 	    });
 

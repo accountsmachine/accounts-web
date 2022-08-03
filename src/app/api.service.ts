@@ -21,7 +21,7 @@ import { AuthService } from './auth.service';
 export class ApiService {
 
     // Delay between retries (ms), and number of tries.
-    delay = 150;
+    delay = 730;
     retries = 3;
 
     constructor(

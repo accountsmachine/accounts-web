@@ -6,7 +6,7 @@ import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
-import { BooksService } from '../books.service';
+import { BooksService, BooksMap } from '../books.service';
 import { CompanyService, Companies } from '../../company/company.service';
 import {
     DeleteConfirmationComponent
@@ -27,7 +27,8 @@ class BookItem {
 })
 export class ListComponent implements OnInit {
 
-    companies : Companies = {};
+    companies? : Companies;
+    book_list? : BooksMap;
 
     columns = [ "company", "number", "size", "uploaded", "actions" ];
 
@@ -56,9 +57,15 @@ export class ListComponent implements OnInit {
 	    return "";
     }
 
-    update(books : any, companies : any) {
+    update() {
 
 	let data = [];
+
+	let companies = this.companies;
+	let books = this.book_list;
+
+	if (!companies) return;
+	if (!books) return;
 
 	for(let k in companies) {
 
@@ -82,14 +89,30 @@ export class ListComponent implements OnInit {
     }
 
     reload() {
+
+	// FIXME: Working and combine latest dont work together.
 	this.working.start();
-	combineLatest({
-	    books: this.booksService.get_list(),
-	    companies: this.companyService.get_list(),
-	}).subscribe({
-	    next: e => {
+
+	this.booksService.get_list().subscribe({
+	    next: (e : BooksMap) => {
 		this.working.stop();
-		this.update(e.books, e.companies);
+		this.book_list = e;
+		this.update();
+	    },
+	    error: err => {
+		this.working.stop();
+	    },
+	    complete: () => {
+	    },
+	});
+
+	this.working.start();
+
+	this.companyService.get_list().subscribe({
+	    next: (e : Companies) => {
+		this.working.stop();
+		this.companies = e;
+		this.update();
 	    },
 	    error: err => {
 		this.working.stop();

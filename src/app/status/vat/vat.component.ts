@@ -10,7 +10,9 @@ import {
 
 import { StatusService, Statuses } from '../status.service';
 import { WorkingService } from '../../working.service';
-import { CompanyService, Companies, Company } from '../../company/company.service';
+import {
+    CompanyService, Companies, Company
+} from '../../company/company.service';
 import { VatService, Status } from '../../vat/vat.service';
 import {
     DisconnectConfirmationComponent
