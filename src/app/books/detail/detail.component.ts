@@ -5,6 +5,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import {
+    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+
+import {
+    ErrorDialogComponent
+} from '../../shared/error-dialog/error-dialog.component';
 
 import { WorkingService } from '../../working.service';
 import { AccountBalance, BooksService } from '../books.service';
@@ -31,6 +38,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
 	private router : Router,
 	private booksService : BooksService,
 	private working : WorkingService,
+	private dialog : MatDialog,
     )
     {
     }
@@ -43,6 +51,10 @@ export class DetailComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
+	this.reload();
+    }
+
+    reload(): void {
 
 	this.configure();
 
@@ -62,6 +74,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
 			},
 			error: err => {
 			    this.working.stop();
+			    this.error("Failed to load accounting books");
 			},
 			complete: () => {
 			},
@@ -76,6 +89,25 @@ export class DetailComponent implements OnInit, AfterViewInit {
     apply_filter(f : any) {
 	let filt = f!.value.trim().toLowerCase();
 	this.summary.filter = filt;
+    }
+
+    error(m : string) {
+	const dialogRef = this.dialog.open(
+	    ErrorDialogComponent, {
+		width: '550px',
+		data: {
+		    retry: false,
+		    message: m,
+		},
+	    }
+	);
+	dialogRef.afterClosed().subscribe((result : any) => {
+	    if (result) {
+		if (result.retry) {
+		    this.reload();
+		}
+	    }
+	});
     }
 
 }
