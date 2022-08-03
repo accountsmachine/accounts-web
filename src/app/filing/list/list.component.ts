@@ -54,13 +54,6 @@ export class ListComponent implements OnInit {
 	private commerceService : CommerceService,
 	private working : WorkingService,
     ) {
-
-	this.commerceService.balance().subscribe({
-	    next: (b) => { this.balance = b; },
-	    error: (e) => { },
-	    complete: () => { },
-	});
-
     }
 
     nocredits() : boolean {
@@ -83,27 +76,52 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-	this.load_companies();
+	this.reload_all();
+    }
+
+    reload_all() {
+	this.reload_balance();
+    }
+
+    reload_balance() {
+
+	this.working.start();
+
+	this.commerceService.balance().subscribe({
+	    next: (b) => {
+		this.working.stop();
+		console.log("GOT BALANCE");
+		this.balance = b;
+		this.load_companies();
+	    },
+	    error: (e) => {
+		this.working.stop();
+		console.log("NOT GOT BALANCE");
+		this.error("Failed to load balance");
+	    },
+	    complete: () => { },
+	});
+
     }
 
     load_companies() {
 
 	this.working.start();
+
 	this.companyService.get_list().subscribe({
 	    next: (e) => {
 		this.working.stop();
 		this.companies = e;
 		this.empty = this.is_empty(e);
+		this.reload_configs(true);
 	    },
 	    error: (e) => {
-		console.log("ERROR");
-		this.error("Failed to load filing configurations");
 		this.working.stop();
+		console.log("ERROR");
+		this.error("Failed to load company list");
 	    },
 	    complete: () => {},
 	});
-
-	this.reload(true);
 
     }
 
@@ -124,7 +142,7 @@ export class ListComponent implements OnInit {
 
     reload_subs : any = null;
 
-    reload(quick : boolean = false) {
+    reload_configs(quick : boolean = false) {
 
 	this.working.start();
 
@@ -145,12 +163,12 @@ export class ListComponent implements OnInit {
 
 		if (quick) {
 		    interval(250).pipe(take(1)).subscribe(
-			e => this.reload()
+			e => this.reload_configs()
 		    );
 		} else {
 		    if (this.maybe_changing(e)) {
 			interval(5000).pipe(take(1)).subscribe(
-			    e => this.reload()
+			    e => this.reload_configs()
 			);
 		    }
 		}
@@ -183,7 +201,7 @@ export class ListComponent implements OnInit {
 	dialogRef.afterClosed().subscribe((result : any) => {
 	    if (result) {
 		if (result.retry) {
-		    this.load_companies();
+		    this.reload_all();
 		}
 	    }
 	});
@@ -241,7 +259,7 @@ export class ListComponent implements OnInit {
 	this.filingConfigService.move_draft(
 	    config.id
 	).subscribe({
-	    next: () => { this.working.stop(); this.reload(true); },
+	    next: () => { this.working.stop(); this.reload_configs(true); },
 	    error: (e) => { this.working.stop(); },
 	    complete: () => {},
 	});
@@ -278,7 +296,7 @@ export class ListComponent implements OnInit {
 			).subscribe({
 			    next: () => {
 				this.working.stop();
-				this.reload(true);
+				this.reload_all();
 			    },
 			    error: (err) => {
 				this.working.stop();

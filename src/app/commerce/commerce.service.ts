@@ -49,15 +49,9 @@ export class CommerceService {
 
     balance() : Observable<Balance> {
 
-	return new Observable(obs => {
+    	let url = "/api/commerce/balance";
 
-	    let url = "/api/commerce/balance";
-
-	    this.api.get<Balance>(url).subscribe(
-		(b : Balance) => obs.next(b)
-	    );
-
-	});
+	return this.api.get<Balance>(url);
 
     }
 
