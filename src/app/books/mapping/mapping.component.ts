@@ -171,8 +171,10 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	    // If there was a mismatch, update the book mapping, it's
 	    // going to get posted back.
-	    if (mismatch)
+	    if (mismatch) {
+		r.mapping = m;
 		this.book_mapping[key] = m;
+	    }
 
 	    // Note, the mismatch statement will be true, once any
 	    // mismatch has been detected on a line.  Not a problem,
