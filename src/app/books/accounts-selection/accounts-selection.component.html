@@ -3,10 +3,17 @@
 
 <div mat-dialog-content>
   <p>
-    This operation will allow remapping of the VAT return values to the
-    accounts in your accounting books.  Ensure the tick box is selected for all
-    accounts which correspond to this VAT return value.
+    This operation will allow remapping of the VAT return values to
+    the accounts in your accounting books.  Ensure the account is
+    selected for all accounts which should be combined to form this VAT return
+    value.
     See <a href="https://www.gov.uk/guidance/how-to-fill-in-and-submit-your-vat-return-vat-notice-70012#section3">HMRC guidance</a>.
+  </p>
+
+  <p>
+    Account lines marked <i>added</i> are added to the VAT return box.
+    Account lines marked <i>reversed</i> are subtracted.
+    Account lines marked <i>not used</i> are ignored.
   </p>
 
   <p *ngIf="key == 'vat-output-sales'">
@@ -41,18 +48,22 @@
     any VAT, from EU member states.
   </p>
 
-  <p *ngFor="let acc of all">
-    <span *ngIf="selected.has(acc)">
-      <mat-checkbox [checked]="true"
-		    (change)="unset(acc)">
-	<strong>{{acc}}</strong>
-      </mat-checkbox>
-    </span>
-    <span *ngIf="!selected.has(acc)">
-      <mat-checkbox (change)="set(acc)"
-		    [checked]="false">{{acc}}</mat-checkbox>
-    </span>
-  </p>
+  <div class="account" *ngFor="let acc of all">
+
+    <button mat-button *ngIf="!selected.has(acc)" class="off"
+	    (click)="choose(acc)">
+      {{acc}} (not included)
+    </button>
+    <button mat-button *ngIf="selected.has(acc) && !reversed.has(acc)"
+	    class="positive" (click)="choose(acc)">
+      {{acc}} (added)
+    </button>
+    <button mat-button *ngIf="selected.has(acc) && reversed.has(acc)"
+	    class="negative" (click)="choose(acc)">
+      {{acc}} (reversed)
+    </button>
+
+  </div>
 </div>
 
 <div mat-dialog-actions>
@@ -64,3 +75,4 @@
     Update
   </button>
 </div>
+

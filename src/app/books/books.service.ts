@@ -16,8 +16,16 @@ export class AccountBalance {
     balance : number = 0;
 }
 
+export class AccountInclusion {
+    constructor(a : string, r : boolean) {
+        this.account = a; this.reversed = r;
+    }
+    account : string = "";
+    reversed : boolean = false;
+}
+
 export class Mapping {
-    [account : string] : string[];
+    [account : string] : AccountInclusion[];
 }
 
 export class BookInfo {

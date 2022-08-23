@@ -10,7 +10,9 @@ import {
 } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { AccountBalance, BooksService, Mapping } from '../books.service';
+import {
+    AccountBalance, BooksService, Mapping, AccountInclusion
+} from '../books.service';
 
 import {
     AccountsSelectionComponent
@@ -21,6 +23,7 @@ class Row {
     line : string = "";
     box : number = 0;
     accounts : string[] = [];
+    mapping : AccountInclusion[] = [];
 };
 
 @Component({
@@ -144,20 +147,27 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	    r.key = key;
 	    r.line = this.vat_desc[key];
 	    r.box = this.vat_box[key];
+	    r.mapping = this.book_mapping[key];
+	    r.accounts = [];
 
 	    let m = [];
 
-	    for (let acct of this.book_mapping[key]) {
-		if (accounts.has(acct)) {
+	    for (let acct of r.mapping) {
+
+		if (accounts.has(acct.account)) {
+
 		    m.push(acct);
+		    r.accounts.push(acct.account);
+
 		} else {
+
 		    // Account in mapping doesn't exist in the accounts books
 		    // It has been removed.
 		    mismatch = true;
-		}
-	    }
 
-	    r.accounts = m;
+		}
+
+	    }
 
 	    // If there was a mismatch, update the book mapping, it's
 	    // going to get posted back.
@@ -180,7 +190,6 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	    });
 	}
 
-
 	this.mapping.data = data;
 
     }
@@ -194,7 +203,6 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	if (!this.accounts) return;
 
-	let thing = this.accounts.map((a) => a.account );
 	const dialogRef = this.dialog.open(
 	    AccountsSelectionComponent, {
 		width: '450px',
@@ -202,7 +210,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		    proceed: false,
 		    line: row.line,
 		    key: row.key,
-		    selected: row.accounts,
+		    mapping: row.mapping,
 		    accounts: this.accounts.map((a) => a.account)
 		},
 	    }
@@ -216,14 +224,15 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 		    for(let row of this.mapping.data) {
 			if (row.key == result.key) {
-			    row.accounts = Array.from(result.selected.values());
+			    row.mapping = result.mapping;
+			    row.accounts = row.mapping.map((a) => a.account);
 			}
 		    }
 
 		    let m = new Mapping();
 
 		    for (let row of this.mapping.data) {
-			m[row.key] = row.accounts;
+			m[row.key] = row.mapping;
 		    }
 
 		    this.booksService.put_mapping(this.id, m).subscribe(

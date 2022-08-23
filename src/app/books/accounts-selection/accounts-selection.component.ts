@@ -1,5 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {
+    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+
+import { AccountInclusion } from '../books.service';
 
 @Component({
     selector: 'accounts-selection',
@@ -15,6 +19,7 @@ export class AccountsSelectionComponent implements OnInit {
     line : string;
     all : string[];
     selected : Set<string>;
+    reversed : Set<string>;
 
     constructor(
 	public dialogRef: MatDialogRef<AccountsSelectionComponent>,
@@ -23,13 +28,25 @@ export class AccountsSelectionComponent implements OnInit {
 	    key : string,
 	    line : string,
 	    accounts : string[],
-	    selected : string[],
+	    mapping : AccountInclusion[],
 	},
     ) {
 	this.line = this.data.line;
 	this.key = this.data.key;
         this.all = this.data.accounts;
-	this.selected = new Set<string>(this.data.selected);
+
+	this.selected = new Set<string>(
+	    this.data.mapping.map((a) => a.account)
+	);
+
+	this.reversed = new Set<string>(
+	    this.data.mapping.filter(
+		(a) => a.reversed
+	    ).map(
+		(a) => a.account
+	    )
+	);
+
     }
 
     no() {
@@ -37,16 +54,35 @@ export class AccountsSelectionComponent implements OnInit {
     }
 
     yes() {
+
+	let am : AccountInclusion[] = [];
+
+	for (let k of this.selected.keys())
+	    am.push(new AccountInclusion(k, this.reversed.has(k)));
+
         return {
 	    proceed: true,
 	    key: this.data.key,
 	    line: this.data.line,
-	    selected: this.selected
+	    mapping: am,
 	};
     }
 
     set(x : string) { this.selected.add(x); }
     unset(x : string) { this.selected.delete(x); }
+
+    choose(x : string) {
+        if (this.selected.has(x)) {
+	    if (this.reversed.has(x)) {
+	        this.selected.delete(x);
+	    } else {
+		this.reversed.add(x);
+	    }
+	} else {
+	    this.selected.add(x);
+	    this.reversed.delete(x);
+	}
+    }
 
 }
 
