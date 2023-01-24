@@ -1,4 +1,8 @@
 
+// This is designed to run after the accounts-svc deploy.  Therefore, can
+// assume that the artifact repo, and other services is created.  DNS domain
+// exists.
+
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 import { local } from "@pulumi/command";
@@ -53,60 +57,6 @@ const provider = new gcp.Provider(
     }
 );
 
-/*
-
-const enableCloudRun = new gcp.projects.Service(
-    "enable-cloud-run",
-    {
-	service: "run.googleapis.com",
-    },
-    {
-	provider: provider
-    }
-);
-
-const enableComputeEngine = new gcp.projects.Service(
-    "enable-compute-engine",
-    {
-	service: "compute.googleapis.com",
-    },
-    {
-	provider: provider
-    }
-);
-
-const enableCloudDns = new gcp.projects.Service(
-    "enable-cloud-dns",
-    {
-	service: "dns.googleapis.com",
-    },
-    {
-	provider: provider
-    }
-);
-
-const enableArtifactRegistry = new gcp.projects.Service(
-    "enable-artifact-registry",
-    {
-	service: "artifactregistry.googleapis.com",
-    },
-    {
-	provider: provider
-    }
-);
-
-const enableIAM = new gcp.projects.Service(
-    "enable-iam",
-    {
-	service: "iam.googleapis.com",
-    },
-    {
-	provider: provider
-    }
-);
-
-*/
-
 const repo = process.env.ARTIFACT_REPO;
 
 const artifactRepo = new gcp.artifactregistry.Repository(
@@ -119,7 +69,7 @@ const artifactRepo = new gcp.artifactregistry.Repository(
     },
     {
 	provider: provider,
-	dependsOn: enableArtifactRegistry,
+	dependsOn: [],
     }
 );
 
@@ -268,7 +218,7 @@ const zone = new gcp.dns.ManagedZone(
     },
     {
 	provider: provider,
-	dependsOn: [enableCloudDns],
+	dependsOn: [],
     }
 );
 

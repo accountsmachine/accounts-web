@@ -45,7 +45,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
 
-      - name: Get dependencies
+      - name: Build Angular app
         run: make build BUILD=dev
 
       - name: Build container
