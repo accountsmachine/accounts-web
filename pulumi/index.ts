@@ -86,7 +86,7 @@ const image = new local.Command(
 	create: "docker push " + imageName,
     },
     {
-	dependsOn: [taggedImage, artifactRepo],
+	dependsOn: [taggedImage],
     }
 );
 
