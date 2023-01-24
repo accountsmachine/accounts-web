@@ -221,10 +221,10 @@ const zone = gcp.dns.getManagedZone(
 );
 
 const recordSet = new gcp.dns.RecordSet(
-    "web-record",
+    "resource-record",
     {
 	name: process.env.HOSTNAME + ".",
-	managedZone: zone.name,
+	managedZone: zone.apply(zone => zone.name),
 	type: "CNAME",
 	ttl: 300,
 	rrdatas: [host],
