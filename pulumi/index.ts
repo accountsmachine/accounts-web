@@ -211,7 +211,7 @@ export const host = domainMapping.statuses.apply(
     x => x.rrdata
 );
 
-const zone = new gcp.dns.getManagedZone(
+const zone = gcp.dns.getManagedZone(
     {
 	name: process.env.DNS_DOMAIN_DESCRIPTION,
     },
