@@ -27,6 +27,12 @@ jobs:
         id: version
         run: echo VERSION=sha-$(git rev-parse --short HEAD) >> $GITHUB_OUTPUT
 
+      - name: Setup for Angular
+        run: npm install
+
+      - name: Install Angular cli
+        run: npm install -g @angular/cli
+
       - name: Extract metadata for container
         id: meta
         uses: docker/metadata-action@v4
