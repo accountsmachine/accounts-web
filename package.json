@@ -24,7 +24,6 @@
     "@angular/router": "^14.0.0",
     "@stripe/stripe-js": "^1.25.0",
     "firebase": "^9.6.8",
-    "ngx-drag-drop": "^13.0.0",
     "ngx-stripe": "^13.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
