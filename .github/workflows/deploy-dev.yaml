@@ -102,3 +102,4 @@ jobs:
           MAX_SCALE: "1"
           ENVIRONMENT: "dev"
           API_HOSTNAME: api.dev.accountsmachine.io
+
