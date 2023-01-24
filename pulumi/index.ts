@@ -59,7 +59,7 @@ const provider = new gcp.Provider(
 
 const repo = process.env.ARTIFACT_REPO;
 
-const artifactRepo = new gcp.artifactregistry.getRepository(
+const artifactRepo = gcp.artifactregistry.getRepository(
     {
 	location: process.env.ARTIFACT_REPO_REGION,
 	repositoryId: process.env.ARTIFACT_NAME,
