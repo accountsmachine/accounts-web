@@ -73,7 +73,7 @@ const artifactRepo = new gcp.artifactregistry.Repository(
     }
 );
 
-const localImageName = "accounts-web" + imageVersion;
+const localImageName = "accounts-web:" + imageVersion;
 
 const imageName = repo + "/accounts-web:" + imageVersion;
 
