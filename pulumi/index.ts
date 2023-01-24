@@ -224,7 +224,7 @@ const recordSet = new gcp.dns.RecordSet(
     "resource-record",
     {
 	name: process.env.HOSTNAME + ".",
-	managedZone: zone.apply(zone => zone.name),
+	managedZone: zone.then(zone => zone.name),
 	type: "CNAME",
 	ttl: 300,
 	rrdatas: [host],
