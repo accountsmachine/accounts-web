@@ -185,8 +185,6 @@ const noAuthPolicy = new gcp.cloudrun.IamPolicy(
     }
 );
 
-/*
-
 const domainMapping = new gcp.cloudrun.DomainMapping(
     "domain-mapping",
     {
@@ -213,18 +211,12 @@ export const host = domainMapping.statuses.apply(
     x => x.rrdata
 );
 
-const zone = new gcp.dns.ManagedZone(
-    "zone",
+const zone = new gcp.dns.getManagedZone(
     {
 	name: process.env.DNS_DOMAIN_DESCRIPTION,
-	description: process.env.DOMAIN,
-	dnsName: process.env.DOMAIN,
-	labels: {
-	},
     },
     {
 	provider: provider,
-	dependsOn: [],
     }
 );
 
@@ -239,7 +231,6 @@ const recordSet = new gcp.dns.RecordSet(
     },
     {
 	provider: provider,
-	dependsOn: zone,
     }
 );
 
@@ -253,11 +244,11 @@ const serviceMon = new gcp.monitoring.GenericService(
             },
             serviceType: "CLOUD_RUN",
 	},
-	displayName: "API service (" + process.env.ENVIRONMENT + ")",
-	serviceId: "api-service-" + process.env.ENVIRONMENT + "-mon",
+	displayName: "Web service (" + process.env.ENVIRONMENT + ")",
+	serviceId: "web-service-" + process.env.ENVIRONMENT + "-mon",
 	userLabels: {
 	    "service": service.name,
-	    "application": "accounts-svc",
+	    "application": "accounts-web",
 	    "environment": process.env.ENVIRONMENT,
 	},
     },
@@ -270,8 +261,8 @@ const latencySlo = new gcp.monitoring.Slo(
     "latency-slo",
     {
 	service: serviceMon.serviceId,
-	sloId: "api-service-" + process.env.ENVIRONMENT + "-latency-slo",
-	displayName: "API latency (" + process.env.ENVIRONMENT + ")",
+	sloId: "web-service-" + process.env.ENVIRONMENT + "-latency-slo",
+	displayName: "Web latency (" + process.env.ENVIRONMENT + ")",
 	goal: 0.95,
 	rollingPeriodDays: 5,
 	basicSli: {
@@ -289,8 +280,8 @@ const availabilitySlo = new gcp.monitoring.Slo(
     "availability-slo",
     {
 	service: serviceMon.serviceId,
-	sloId: "api-service-" + process.env.ENVIRONMENT + "-availability-slo",
-	displayName: "API availability (" + process.env.ENVIRONMENT + ")",
+	sloId: "web-service-" + process.env.ENVIRONMENT + "-availability-slo",
+	displayName: "Web availability (" + process.env.ENVIRONMENT + ")",
 	goal: 0.95,
 	rollingPeriodDays: 5,
 	windowsBasedSli: {
@@ -308,7 +299,4 @@ const availabilitySlo = new gcp.monitoring.Slo(
 	provider: provider,
     }
 );
-
-
-*/
 
