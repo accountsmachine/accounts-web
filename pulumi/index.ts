@@ -158,8 +158,6 @@ const service = new gcp.cloudrun.Service(
     }
 );
 
-/*
-
 //const apiUrl = service.statuses[0].url;
 
 const allUsersPolicy = gcp.organizations.getIAMPolicy(
@@ -186,6 +184,8 @@ const noAuthPolicy = new gcp.cloudrun.IamPolicy(
 	provider: provider,
     }
 );
+
+/*
 
 const domainMapping = new gcp.cloudrun.DomainMapping(
     "domain-mapping",
