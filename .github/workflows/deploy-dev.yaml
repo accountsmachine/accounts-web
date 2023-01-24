@@ -101,3 +101,4 @@ jobs:
           MIN_SCALE: "0"
           MAX_SCALE: "1"
           ENVIRONMENT: "dev"
+	  API_HOSTNAME: api.dev.accountsmachine.io

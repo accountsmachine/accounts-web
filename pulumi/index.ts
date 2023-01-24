@@ -49,6 +49,9 @@ if (!process.env.MIN_SCALE)
 if (!process.env.MAX_SCALE)
     throw Error("MAX_SCALE not defined");
 
+if (!process.env.API_HOSTNAME)
+    throw Error("API_HOSTNAME not defined");
+
 const provider = new gcp.Provider(
     "gcp",
     {
@@ -103,8 +106,6 @@ const svcAccount = new gcp.serviceaccount.Account(
     }
 );
 
-/*
-
 const service = new gcp.cloudrun.Service(
     "service",
     {
@@ -133,6 +134,13 @@ const service = new gcp.cloudrun.Service(
 				"containerPort": 8080,
                             }
 			],
+			commands: [
+			    "/usr/local/bin/serve",
+			    "0:8080",                // Listen
+			    process.env.API_HOSTNAME, // API resource
+			    "https",		     // API scheme
+			    "./",		     // Base
+			],
 			resources: {
                             limits: {
 				cpu: "1000m",
@@ -149,6 +157,8 @@ const service = new gcp.cloudrun.Service(
 	dependsOn: [image],
     }
 );
+
+/*
 
 //const apiUrl = service.statuses[0].url;
 
