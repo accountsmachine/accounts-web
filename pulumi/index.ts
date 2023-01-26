@@ -93,8 +93,6 @@ const image = new local.Command(
     }
 );
 
-/*
-
 const svcAccount = new gcp.serviceaccount.Account(
     "service-account",
     {
@@ -159,8 +157,6 @@ const service = new gcp.cloudrun.Service(
 	dependsOn: [image],
     }
 );
-
-//const apiUrl = service.statuses[0].url;
 
 const allUsersPolicy = gcp.organizations.getIAMPolicy(
     {
@@ -301,6 +297,4 @@ const availabilitySlo = new gcp.monitoring.Slo(
 	provider: provider,
     }
 );
-
-*/
 
