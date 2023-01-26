@@ -1,4 +1,3 @@
-/*
 
 // This is designed to run after the accounts-svc deploy.  Therefore, can
 // assume that the artifact repo, and other services is created.  DNS domain
@@ -93,6 +92,8 @@ const image = new local.Command(
 	dependsOn: [taggedImage],
     }
 );
+
+/*
 
 const svcAccount = new gcp.serviceaccount.Account(
     "service-account",
