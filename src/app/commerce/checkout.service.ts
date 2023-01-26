@@ -187,6 +187,28 @@ export class CheckoutService {
 
     }
 
+    complete_free_order() : Observable<string> {
+
+	let svc = this;
+
+	return new Observable<string>(obs => {
+
+	    this.commerce.complete_free_order(this._order).subscribe({
+		next(b) {
+		    // Re-fetch offer.
+		    svc.reset();
+		    obs.next(b);
+		},
+		error(err : Error) {
+		    obs.error(err)
+		},
+		complete() { obs.complete() }
+	    });
+
+	});
+
+    }
+
     get_crypto_currencies() {
 	return this.commerce.get_currencies();
     }
