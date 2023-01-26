@@ -77,6 +77,20 @@ export class CommerceService {
 
     }
 
+    complete_free_order(order : Order) : Observable<any> {
+
+	let url = "/api/commerce/complete-free-order";
+
+	return new Observable<any>(obs => {
+
+	    this.api.post<any>(url, order).subscribe(b => {
+		obs.next(b);
+	    });
+
+	});
+
+    }
+
     create_payment(id : string) : Observable<any> {
 	let url = "/api/commerce/create-payment/" + id;
 

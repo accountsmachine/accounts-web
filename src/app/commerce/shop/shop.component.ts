@@ -95,6 +95,13 @@ export class ShopComponent implements OnInit {
 	this.router.navigate(["/commerce/cc-checkout"]);
     }
 
+    free_checkout() {
+	this.service.complete_free_order().subscribe(o => {
+	    this.router.navigate(["/commerce/complete"]);
+	});
+	this.reset();
+    }
+
     crypto_checkout() {
 	this.router.navigate(["/commerce/crypto-checkout"]);
     }
@@ -108,6 +115,12 @@ export class ShopComponent implements OnInit {
 
     order_disabled() {
 	return (this.order.total < 1);
+    }
+
+    free_order_available() {
+    console.log(this.order);
+    console.log(this.order.total == 0);
+	return (this.order.items.length > 0) && (this.order.total == 0);
     }
 
     full_credits() {

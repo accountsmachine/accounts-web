@@ -78,24 +78,33 @@
 
       </section>
 
-      <section class="content" *ngIf="order.total > 0">
+      <section class="content" *ngIf="order.items.length > 0">
 
 	<h1>Your order</h1>
 
 	<order></order>
 
 	<div>
-	  <button mat-raised-button color="primary"
-		  (click)="cc_checkout()" [disabled]="order_disabled()">
-	    <mat-icon>credit_card</mat-icon>&nbsp;
-	    Pay with credit card
-	  </button>
-	  <button mat-raised-button color="primary"
-		  *ngIf="feature('crypto')"
-		  (click)="crypto_checkout()" [disabled]="order_disabled()">
-	    <mat-icon>currency_bitcoin</mat-icon>&nbsp;
-	    Pay with cryptocurrency
-	  </button>
+	  <ng-container *ngIf="free_order_available()">
+	    <button mat-raised-button color="primary"
+		    (click)="free_checkout()">
+	      <mat-icon>redeem</mat-icon>&nbsp;
+	      Process free order
+	    </button>
+	  </ng-container>
+	  <ng-container *ngIf="!free_order_available()">
+	    <button mat-raised-button color="primary"
+		    (click)="cc_checkout()" [disabled]="order_disabled()">
+	      <mat-icon>credit_card</mat-icon>&nbsp;
+	      Pay with credit card
+	    </button>
+	    <button mat-raised-button color="primary"
+		    *ngIf="feature('crypto')"
+		    (click)="crypto_checkout()" [disabled]="order_disabled()">
+	      <mat-icon>currency_bitcoin</mat-icon>&nbsp;
+	      Pay with cryptocurrency
+	    </button>
+	  </ng-container>
 	  <button mat-raised-button color="basic" (click)="reset()">
 	    <mat-icon>clear</mat-icon>&nbsp;
 	    Reset checkout
@@ -109,6 +118,4 @@
   </mat-drawer-container>
 
 </section>
-
-
 
