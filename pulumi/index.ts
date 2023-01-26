@@ -200,6 +200,29 @@ const domainMapping = new gcp.cloudrun.DomainMapping(
     }
 );
 
+// Special domain mapping for prod, the web is also mapped to
+// app.accountsmachine.io.
+if (process.env.ENVIRONMENT === "prod") {
+
+    const domainMapping2 = new gcp.cloudrun.DomainMapping(
+	"domain-mapping-2",
+	{
+	    "name": "app.accountsmachine.io",
+	    location: process.env.CLOUD_RUN_REGION,
+	    metadata: {
+		namespace: process.env.GCP_PROJECT,
+	    },
+	    spec: {
+		routeName: service.name,
+	    }
+	},
+	{
+	    provider: provider
+	}
+    );
+
+}
+
 // Get rrdata from domain mapping.
 export const host = domainMapping.statuses.apply(
     x => x[0].resourceRecords
