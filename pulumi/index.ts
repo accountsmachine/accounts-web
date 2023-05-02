@@ -82,9 +82,6 @@ const apiKey = new gcp.projects.ApiKey(
 		    "allow.chicken.com"
 		],
 	    },
-            serverKeyRestrictions: {
-		allowedIps: ["1.2.3.4"],
-            },
 	},
     },
     {
