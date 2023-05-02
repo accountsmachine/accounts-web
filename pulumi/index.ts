@@ -77,7 +77,7 @@ const apiKey = new gcp.projects.ApiKey(
 		}
 	    ],
 	    browserKeyRestrictions: {
-		allowedReferers: [
+		allowedReferrers: [
 		    "test.bunches.org",
 		    "allow.chicken.com"
 		],
