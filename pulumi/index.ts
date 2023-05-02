@@ -65,7 +65,7 @@ const repo = process.env.ARTIFACT_REPO;
 const enableApiKeys = new gcp.projects.Service(
     "enable-api-keys",
     {
-	service: "apikey.googleapis.com",
+	service: "apikeys.googleapis.com",
     },
     {
 	provider: provider
