@@ -62,6 +62,38 @@ const provider = new gcp.Provider(
 
 const repo = process.env.ARTIFACT_REPO;
 
+const apiKey = new gcp.projects.ApiKey(
+    "api-key",
+    {
+	displayName: "sample-key",
+	project: process.env.GCP_PROJECT,
+	restrictions: {
+	    apiTargets: [
+		{
+		    service: "securetoken.googleapis.com",
+		},
+		{
+		    service: "identitytoolkit",
+		}
+	    ],
+	    browserKeyRestrictions: {
+		allowedReferers: [
+		    "test.bunches.org",
+		    "allow.chicken.com"
+		],
+	    },
+	},
+        serverKeyRestrictions: {
+            allowedIps: ["1.2.3.4"],
+        },
+    },
+    {
+	provider: provider,
+    }
+);
+
+export const keyThing = apiKey.keyString;
+
 const artifactRepo = gcp.artifactregistry.getRepository(
     {
 	location: process.env.ARTIFACT_REPO_REGION,
