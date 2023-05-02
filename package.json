@@ -24,9 +24,10 @@
     "@angular/router": "^14.0.0",
     "@stripe/stripe-js": "^1.25.0",
     "firebase": "^9.6.8",
-    "ngx-stripe": "^13.0.0",
+    "ngx-stripe": "^14.4.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "webpack": "^5.76.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -43,7 +44,7 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "typescript": "~4.7.3"
   }
 }
