@@ -62,11 +62,20 @@ const provider = new gcp.Provider(
 
 const repo = process.env.ARTIFACT_REPO;
 
+const enableApiKeys = new gcp.projects.Service(
+    "enable-api-keys",
+    {
+	service: "apikey.googleapis.com",
+    },
+    {
+	provider: provider
+    }
+);
+
 const apiKey = new gcp.projects.ApiKey(
     "api-key",
     {
 	displayName: "sample-key",
-	project: process.env.GCP_PROJECT,
 	restrictions: {
 	    apiTargets: [
 		{
@@ -86,6 +95,7 @@ const apiKey = new gcp.projects.ApiKey(
     },
     {
 	provider: provider,
+	dependsOn: enableApiKeys,
     }
 );
 
