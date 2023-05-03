@@ -52,10 +52,13 @@ if (!process.env.MAX_SCALE)
 if (!process.env.API_HOSTNAME)
     throw Error("API_HOSTNAME not defined");
 
+const environment = process.env.ENVIRONMENT;
+const project = process.env.PROJECT;
+
 const provider = new gcp.Provider(
     "gcp",
     {
-	project: process.env.GCP_PROJECT,
+	project: project,
 	region: process.env.GCP_REGION,
     }
 );
@@ -72,10 +75,47 @@ const enableApiKeys = new gcp.projects.Service(
     }
 );
 
+let sites : string[] = [];
+let authDomain : string = "";
+let siteProjectid : string = "";
+let features : string[] = [];
+
+if (environment == "dev") {
+    sites = [ "app.dev.accountsmachine.io" ];
+    authDomain = "accounts-machine-dev.firebaseapp.com";
+    siteProjectId = "accounts-machine-dev";
+    features = [
+	"vat", "corptax", "accounts", "vat-submit", "corptax-submit",
+	"accounts-submit", "crypto"
+    ];
+} else if (environment == "stage") {
+    sites = [ ];
+    authDomain = "accounts-machine-dev.firebaseapp.com";
+    siteProjectId = "accounts-machine-dev";
+    features = [
+	"vat", "vat-submit"
+    ];
+} else if (environment == "prod") {
+    sites = [
+	"accounts-machine-prod.firebaseapp.com",
+	"app.accountsmachine.io",
+	"app.prod.accountsmachine.io",
+	"app.stage.accountsmachine.io"
+    ];
+    authDomain = "accounts-machine-prod.firebaseapp.com";
+    siteProjectId = "accounts-machine-prod";
+    features = [
+	"vat", "vat-submit"
+    ];
+} else {
+    throw Error("Environment " + environment + " not valid.");
+}
+
 const apiKey = new gcp.projects.ApiKey(
     "api-key",
     {
-	displayName: "sample-key",
+	name: "web-client",
+	displayName: "Web client on " + environment,
 	restrictions: {
 	    apiTargets: [
 		{
@@ -86,10 +126,7 @@ const apiKey = new gcp.projects.ApiKey(
 		}
 	    ],
 	    browserKeyRestrictions: {
-		allowedReferrers: [
-		    "test.bunches.org",
-		    "allow.chicken.com"
-		],
+		allowedReferrers: sites
 	    },
 	},
     },
@@ -99,7 +136,38 @@ const apiKey = new gcp.projects.ApiKey(
     }
 );
 
-export const keyThing = apiKey.keyString;
+const config = {
+    firebase: {
+	apiKey: apiKey.keyString,
+	authDomain: authDomain,
+	projectId: siteProjectId,
+    },
+    features: features
+};
+
+const secret = new gcp.secretmanager.Secret(
+    "secret",
+    {
+	secretId: "accounts-web-config",
+	replication: {
+	    automatic: true
+	},
+    },
+    {
+	provider: provider,
+    }
+);
+
+const secretVersion = new gcp.secretmanager.SecretVersion(
+    "secret-version",
+    {
+	secret: secret.id,
+	secretData: pulumi.jsonStringify(config).apply(x => atob(x)),
+    },
+    {
+	provider: provider,
+    }
+);
 
 const artifactRepo = gcp.artifactregistry.getRepository(
     {
@@ -145,6 +213,19 @@ const svcAccount = new gcp.serviceaccount.Account(
     }
 );
 
+const configIamMember = new gcp.secretmanager.SecretIamMember(
+    "secret-config-iam-member",
+    {
+	project: process.env.GCP_PROJECT,
+	secretId: secret.id,
+	role: "roles/secretmanager.secretAccessor",
+	member: svcAccount.email.apply(x => "serviceAccount:" + x),
+	},
+    {
+	provider: provider,
+    }
+);
+
 const service = new gcp.cloudrun.Service(
     "service",
     {
@@ -186,7 +267,27 @@ const service = new gcp.cloudrun.Service(
 				memory: "256Mi",
                             }
 			},
+			volumeMounts: [
+			    {
+				name: "accounts-web-config",
+				mountPath: "/configs",
+			    },
+			],
 		    }
+		],
+		volumes: [
+		    {
+			name: "accounts-web-config",
+			secret: {
+			    secretName: "accounts-web-config",
+			    items: [
+				{
+				    key: "latest",
+				    path: "config",
+				}
+			    ],
+			}
+		    },
 		],
             },
 	},
@@ -228,7 +329,7 @@ const domainMapping = new gcp.cloudrun.DomainMapping(
 	"name": process.env.HOSTNAME,
 	location: process.env.CLOUD_RUN_REGION,
 	metadata: {
-	    namespace: process.env.GCP_PROJECT,
+	    namespace: project,
 	},
 	spec: {
 	    routeName: service.name,
@@ -241,7 +342,7 @@ const domainMapping = new gcp.cloudrun.DomainMapping(
 
 // Special domain mapping for prod, the web is also mapped to
 // app.accountsmachine.io.
-if (process.env.ENVIRONMENT === "prod") {
+if (environment === "prod") {
 
     const domainMapping2 = new gcp.cloudrun.DomainMapping(
 	"domain-mapping-2",
@@ -249,7 +350,7 @@ if (process.env.ENVIRONMENT === "prod") {
 	    "name": "app.accountsmachine.io",
 	    location: process.env.CLOUD_RUN_REGION,
 	    metadata: {
-		namespace: process.env.GCP_PROJECT,
+		namespace: project,
 	    },
 	    spec: {
 		routeName: service.name,
@@ -304,12 +405,12 @@ const serviceMon = new gcp.monitoring.GenericService(
             },
             serviceType: "CLOUD_RUN",
 	},
-	displayName: "Web service (" + process.env.ENVIRONMENT + ")",
-	serviceId: "web-service-" + process.env.ENVIRONMENT + "-mon",
+	displayName: "Web service (" + environment + ")",
+	serviceId: "web-service-" + environment + "-mon",
 	userLabels: {
 	    "service": service.name,
 	    "application": "accounts-web",
-	    "environment": process.env.ENVIRONMENT,
+	    "environment": environment,
 	},
     },
     {
@@ -321,8 +422,8 @@ const latencySlo = new gcp.monitoring.Slo(
     "latency-slo",
     {
 	service: serviceMon.serviceId,
-	sloId: "web-service-" + process.env.ENVIRONMENT + "-latency-slo",
-	displayName: "Web latency (" + process.env.ENVIRONMENT + ")",
+	sloId: "web-service-" + environment + "-latency-slo",
+	displayName: "Web latency (" + environment + ")",
 	goal: 0.95,
 	rollingPeriodDays: 5,
 	basicSli: {
@@ -340,8 +441,8 @@ const availabilitySlo = new gcp.monitoring.Slo(
     "availability-slo",
     {
 	service: serviceMon.serviceId,
-	sloId: "web-service-" + process.env.ENVIRONMENT + "-availability-slo",
-	displayName: "Web availability (" + process.env.ENVIRONMENT + ")",
+	sloId: "web-service-" + environment + "-availability-slo",
+	displayName: "Web availability (" + environment + ")",
 	goal: 0.95,
 	rollingPeriodDays: 5,
 	windowsBasedSli: {
