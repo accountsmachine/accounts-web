@@ -77,7 +77,7 @@ const enableApiKeys = new gcp.projects.Service(
 
 let sites : string[] = [];
 let authDomain : string = "";
-let siteProjectid : string = "";
+let siteProjectId : string = "";
 let features : string[] = [];
 
 if (environment == "dev") {
