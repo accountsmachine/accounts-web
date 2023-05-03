@@ -120,7 +120,7 @@ const enableApiKeys = new gcp.projects.Service(
 const apiKey = new gcp.projects.ApiKey(
     "api-key",
     {
-	name: "web-client",
+	name: "web-client-" + environment,
 	displayName: "Web client on " + environment,
 	restrictions: {
 	    apiTargets: [
@@ -300,7 +300,7 @@ const service = new gcp.cloudrun.Service(
     },
     {
 	provider: provider,
-	dependsOn: [image],
+	dependsOn: [image, secretVersion],
     }
 );
 
