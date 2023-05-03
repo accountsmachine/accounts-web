@@ -169,10 +169,6 @@ const secretVersion = new gcp.secretmanager.SecretVersion(
     }
 );
 
-export const thing = config;
-pulumi.jsonStringify(config).apply(console.log);
-pulumi.jsonStringify(config).apply(x => atob(x)).apply(console.log);
-
 const artifactRepo = gcp.artifactregistry.getRepository(
     {
 	location: process.env.ARTIFACT_REPO_REGION,
@@ -182,6 +178,8 @@ const artifactRepo = gcp.artifactregistry.getRepository(
 	provider: provider,
     }
 );
+
+/*
 
 const localImageName = "accounts-web:" + imageVersion;
 
@@ -229,8 +227,6 @@ const configIamMember = new gcp.secretmanager.SecretIamMember(
 	provider: provider,
     }
 );
-
-/*
 
 const service = new gcp.cloudrun.Service(
     "service",
