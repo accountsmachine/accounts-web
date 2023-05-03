@@ -55,10 +55,52 @@ if (!process.env.API_HOSTNAME)
 const environment = process.env.ENVIRONMENT;
 const project = process.env.GCP_PROJECT;
 
+let sites : string[] = [];
+let authProjectId : string = "";
+let hostingProjectId : string = "";
+let features : string[] = [];
+
+if (environment == "dev") {
+    sites = [ "app.dev.accountsmachine.io" ];
+    authProjectId = "accounts-machine-dev";
+    hostingProjectId = "accounts-machine-dev";
+    features = [
+	"vat", "corptax", "accounts", "vat-submit", "corptax-submit",
+	"accounts-submit", "crypto"
+    ];
+} else if (environment == "stage") {
+    sites = [ ];
+    authProjectId = "accounts-machine-prod";
+    hostingProjectId = "accounts-machine-stage";
+    features = [ "vat", "vat-submit" ];
+} else if (environment == "prod") {
+    sites = [
+	"accounts-machine-prod.firebaseapp.com",
+	"app.accountsmachine.io",
+	"app.prod.accountsmachine.io",
+	"app.stage.accountsmachine.io"
+    ];
+    authProjectId = "accounts-machine-prod";
+    hostingProjectId = "accounts-machine-prod";
+    features = [ "vat", "vat-submit" ];
+} else {
+    throw Error("Environment " + environment + " not valid.");
+}
+
+const authDomain = authProjectId + ".firebaseapp.com";
+
 const provider = new gcp.Provider(
-    "gcp",
+    "gcp-hosting-provider",
     {
-	project: project,
+	project: hostingProjectId,
+	region: process.env.GCP_REGION,
+    }
+);
+
+const authProvider = new gcp.Provider(
+    "gcp-auth-provider",
+    {
+	project: authProjectId,
 	region: process.env.GCP_REGION,
     }
 );
@@ -71,45 +113,9 @@ const enableApiKeys = new gcp.projects.Service(
 	service: "apikeys.googleapis.com",
     },
     {
-	provider: provider
+	provider: authProvider
     }
 );
-
-let sites : string[] = [];
-let authDomain : string = "";
-let siteProjectId : string = "";
-let features : string[] = [];
-
-if (environment == "dev") {
-    sites = [ "app.dev.accountsmachine.io" ];
-    authDomain = "accounts-machine-dev.firebaseapp.com";
-    siteProjectId = "accounts-machine-dev";
-    features = [
-	"vat", "corptax", "accounts", "vat-submit", "corptax-submit",
-	"accounts-submit", "crypto"
-    ];
-} else if (environment == "stage") {
-    sites = [ ];
-    authDomain = "accounts-machine-dev.firebaseapp.com";
-    siteProjectId = "accounts-machine-dev";
-    features = [
-	"vat", "vat-submit"
-    ];
-} else if (environment == "prod") {
-    sites = [
-	"accounts-machine-prod.firebaseapp.com",
-	"app.accountsmachine.io",
-	"app.prod.accountsmachine.io",
-	"app.stage.accountsmachine.io"
-    ];
-    authDomain = "accounts-machine-prod.firebaseapp.com";
-    siteProjectId = "accounts-machine-prod";
-    features = [
-	"vat", "vat-submit"
-    ];
-} else {
-    throw Error("Environment " + environment + " not valid.");
-}
 
 const apiKey = new gcp.projects.ApiKey(
     "api-key",
@@ -131,7 +137,7 @@ const apiKey = new gcp.projects.ApiKey(
 	},
     },
     {
-	provider: provider,
+	provider: authProvider,
 	dependsOn: enableApiKeys,
     }
 );
@@ -140,7 +146,7 @@ const config = {
     firebase: {
 	apiKey: apiKey.keyString,
 	authDomain: authDomain,
-	projectId: siteProjectId,
+	projectId: hostingProjectId,
     },
     features: features
 };
@@ -460,5 +466,4 @@ const availabilitySlo = new gcp.monitoring.Slo(
 	provider: provider,
     }
 );
-
 
