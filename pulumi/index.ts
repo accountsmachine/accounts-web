@@ -162,12 +162,12 @@ const secretVersion = new gcp.secretmanager.SecretVersion(
     "secret-version",
     {
 	secret: secret.id,
-	secretData: pulumi.jsonStringify(config).apply(x => atob(x)),
+	secretData: pulumi.jsonStringify(config),
     },
     {
 	provider: provider,
     }
-);
+    );
 
 const artifactRepo = gcp.artifactregistry.getRepository(
     {
@@ -178,8 +178,6 @@ const artifactRepo = gcp.artifactregistry.getRepository(
 	provider: provider,
     }
 );
-
-/*
 
 const localImageName = "accounts-web:" + imageVersion;
 
@@ -463,4 +461,4 @@ const availabilitySlo = new gcp.monitoring.Slo(
     }
 );
 
-*/
+
