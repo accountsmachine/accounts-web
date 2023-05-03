@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AccountsConfig,  } from '../accounts-config';
 import { AccountsConfigService } from '../accounts-config.service';
 
-import { environment } from '../../../environments/environment';
+import { ConfigurationService } from '../../configuration.service';
 
 @Component({
     selector: 'accounts-submit',
@@ -14,10 +14,8 @@ import { environment } from '../../../environments/environment';
 })
 export class SubmitComponent implements OnInit {
 
-    features : Set<string> = new Set(environment.features);
-
     feature(x : string) {
-	return this.features.has(x);
+        return this.configSvc.hasFeature(x);
     }
 
     id : string = "";
@@ -28,6 +26,7 @@ export class SubmitComponent implements OnInit {
 	private route : ActivatedRoute,
 	private filing : AccountsConfigService,
 	private router : Router,
+	private configSvc : ConfigurationService,
     ) {
 	this.route.params.subscribe(params => {
 	    this.filing.load(params["id"]).subscribe(e => {

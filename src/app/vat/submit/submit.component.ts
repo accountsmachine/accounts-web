@@ -14,6 +14,7 @@ import { VatLine } from '../vat-line';
 import { CompanyService } from '../../company/company.service';
 
 import { environment } from '../../../environments/environment';
+import { ConfigurationService } from '../../configuration.service';
 
 @Component({
     selector: 'vat-submit',
@@ -22,10 +23,8 @@ import { environment } from '../../../environments/environment';
 })
 export class SubmitComponent implements OnInit {
 
-    features : Set<string> = new Set(environment.features);
-
     feature(x : string) {
-	return this.features.has(x);
+        return this.config.hasFeature(x);
     }
 
     vat_table : MatTableDataSource<VatLine> = new MatTableDataSource<VatLine>([]);
@@ -175,6 +174,7 @@ export class SubmitComponent implements OnInit {
 	private vat : VatService,
 	private router : Router,
 	private working : WorkingService,
+	private configSvc : ConfigurationService,
     ) {
 
 	this.route.params.subscribe(params => {

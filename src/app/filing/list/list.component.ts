@@ -24,7 +24,7 @@ import { WorkingService } from '../../working.service';
 import { Balance } from '../../commerce/commerce.model';
 import { CommerceService } from '../../commerce/commerce.service';
 
-import { environment } from '../../../environments/environment';
+import { ConfigurationService } from '../../configuration.service';
 
 @Component({
     selector: 'list',
@@ -33,10 +33,16 @@ import { environment } from '../../../environments/environment';
 })
 export class ListComponent implements OnInit {
 
+    feature(x : string) {
+        return this.configSvc.hasFeature(x);
+    }
+
+    get nofeatures() {
+        return this.configSvc.noFeatures();
+    }
+
     filingConfigs : FilingItem[] = [];
     companies : Companies = {};
-
-    features : Set<string> = new Set(environment.features);
 
     balance : Balance | null = null;
 
@@ -53,6 +59,7 @@ export class ListComponent implements OnInit {
 	private dialog : MatDialog,
 	private commerceService : CommerceService,
 	private working : WorkingService,
+	private configSvc : ConfigurationService,
     ) {
     }
 
@@ -202,11 +209,6 @@ export class ListComponent implements OnInit {
 		}
 	    }
 	});
-    }
-
-    feature(x : string) {
-	let p = this.features.has(x);
-	return p;
     }
 
     load() {

@@ -14,7 +14,7 @@ import { StatusService, Statuses } from '../status.service';
 import { CompanyService, Companies } from '../../company/company.service';
 import { WorkingService } from '../../working.service';
 
-import { environment } from '../../../environments/environment';
+import { ConfigurationService } from '../../configuration.service';
 
 class StatusItem {
     company? : string;
@@ -31,8 +31,13 @@ class StatusItem {
 })
 export class OverviewComponent implements OnInit {
 
-    features = new Set<string>(environment.features);
-    feature(x : string) { return this.features.has(x); }
+    feature(x : string) {
+        return this.configSvc.hasFeature(x);
+    }
+
+    get nofeatures() {
+        return this.configSvc.noFeatures();
+    }
 
     status : MatTableDataSource<StatusItem> =
 	new MatTableDataSource<StatusItem>([]);
@@ -45,6 +50,7 @@ export class OverviewComponent implements OnInit {
 	private companyService : CompanyService,
 	private dialog : MatDialog,
 	private working : WorkingService,
+	private configSvc : ConfigurationService,
     ) {
 
 	this.columns = ["company", "number"];

@@ -28,11 +28,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppInitService } from './initialise';
 
-import { environment } from "src/environments/environment";
-import { ConfigurationLoaderService } from './configuration-loader.service';
+import { ConfigurationService } from './configuration.service';
 
-import { AngularFireModule, FIREBASE_OPTIONS } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
 
@@ -43,15 +42,13 @@ import { SharedModule } from './shared/shared.module';
 import { ProfileModule } from './profile/profile.module';
 
 const initAppFn =
-      (svc: ConfigurationLoaderService) => {
+      (svc: ConfigurationService) => {
 	  return () => svc.loadConfig('/assets/config.json');
       };
 
 const getFirebaseFn =
-      () => {
-	  console.log("FNNNN");
-	  return () => ConfigurationLoaderService.getInstance().
-	      getFirebase();
+      (svc: ConfigurationService) => {
+	  return svc.getFirebase();
       };
 
 @NgModule({
@@ -64,14 +61,7 @@ const getFirebaseFn =
 	AppRoutingModule,
 	RouterModule,
 	BrowserModule,
-//	AngularFireModule.initializeApp(
-	    //	    configurationServiceProvider.getConfig()["firebase"]
-	    //	    new ConfigurationLoaderService("/assets/config.json").getConfig(),
-//	    	    {}
-//	    ConfigurationLoaderService.getInstance().getConfig()
-	//	),
-//	AngularFireModule,
-//	AngularFireAuthModule,
+	provideFirebaseApp(() => initializeApp()),
 	BrowserAnimationsModule,
 	MatCardModule,
 	MatFormFieldModule,
@@ -90,29 +80,23 @@ const getFirebaseFn =
 	ProfileModule,
     ],
     providers: [
-	ConfigurationLoaderService,
-	{
-	    provide: USE_AUTH_EMULATOR,
-	    useValue:
-	    environment.useEmulators ?
-		["http://localhost:9099"] :
-		undefined
-	},
+	ConfigurationService,
 	{
 	    provide: APP_INITIALIZER,
 	    useFactory: initAppFn,
 	    multi: true,
-	    deps: [ ConfigurationLoaderService ],
+	    deps: [ ConfigurationService ],
 	},
 	{
 	    provide: FIREBASE_OPTIONS,
 	    useFactory: getFirebaseFn,
+	    deps: [ ConfigurationService ],
 	},
 	{ provide: LOCALE_ID, useValue: "en-GB" },
 	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
 	{
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [MAT_DATE_LOCALE]
+	    deps: [ MAT_DATE_LOCALE ]
 	},
 	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
     ],

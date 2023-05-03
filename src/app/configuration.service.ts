@@ -10,27 +10,29 @@ type EnvConfig = any;
 @Injectable({
     providedIn: 'root'
 })
-export class ConfigurationLoaderService {
+export class ConfigurationService {
 
     private config : EnvConfig;
 
-    private static instance : ConfigurationLoaderService | null = null;
+    private static instance : ConfigurationService | null = null;
 
-    static getInstance(): ConfigurationLoaderService {
-	if (!ConfigurationLoaderService.instance)
-	    throw new Error("ConfigurationLoaderService not initialised");
-	return ConfigurationLoaderService.instance;
+    static getInstance(): ConfigurationService {
+	if (!ConfigurationService.instance)
+	    throw new Error("ConfigurationService not initialised");
+	return ConfigurationService.instance;
     }
 
+    features : Set<string> = new Set<string>();
+
     constructor(private readonly http: HttpClient) {
-	ConfigurationLoaderService.instance = this;
+	ConfigurationService.instance = this;
     }
     
     async loadConfig(configPath: string): Promise<void> {
 	this.config = await lastValueFrom(
 	    this.http.get<EnvConfig>(configPath)
 	);
-	console.log("LOADING....");
+	this.features = new Set<string>(this.config.features);
     }
 
     getConfig(): EnvConfig {
@@ -39,6 +41,14 @@ export class ConfigurationLoaderService {
 
     getFirebase() : any {
 	return this.getConfig()["firebase"];
+    }
+
+    hasFeature(f : string) : boolean {
+	return this.features.has(f);
+    }
+
+    noFeatures() : boolean {
+	return this.features.size == 0;
     }
 
 }
