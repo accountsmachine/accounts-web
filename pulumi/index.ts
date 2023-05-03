@@ -53,7 +53,7 @@ if (!process.env.API_HOSTNAME)
     throw Error("API_HOSTNAME not defined");
 
 const environment = process.env.ENVIRONMENT;
-const project = process.env.PROJECT;
+const project = process.env.GCP_PROJECT;
 
 const provider = new gcp.Provider(
     "gcp",
