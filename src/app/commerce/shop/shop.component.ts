@@ -12,7 +12,7 @@ import { Option, Options, Balance, Order } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 import { CheckoutService } from '../checkout.service';
 
-import { environment } from '../../../environments/environment';
+import { ConfigurationService } from '../../configuration.service';
 
 @Component({
     selector: 'shop',
@@ -21,8 +21,13 @@ import { environment } from '../../../environments/environment';
 })
 export class ShopComponent implements OnInit {
 
-    features = new Set<string>(environment.features);
-    feature(x : string) { return this.features.has(x); }
+    feature(x : string) {
+        return this.configSvc.hasFeature(x);
+    }
+
+    get nofeatures() {
+        return this.configSvc.noFeatures();
+    }
 
     public form : FormGroup;
 
@@ -40,6 +45,7 @@ export class ShopComponent implements OnInit {
 	private formBuilder: FormBuilder,
 	private snackBar: MatSnackBar,
 	private router : Router,
+	private configSvc : ConfigurationService,
     ) {
 	this.form = this.formBuilder.group({
 	    vat: [0],
@@ -118,8 +124,6 @@ export class ShopComponent implements OnInit {
     }
 
     free_order_available() {
-    console.log(this.order);
-    console.log(this.order.total == 0);
 	return (this.order.items.length > 0) && (this.order.total == 0);
     }
 

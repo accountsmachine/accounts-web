@@ -27,13 +27,11 @@ import { DATE_FORMATS } from './date-formats';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppInitService } from './initialise';
-//import { ErrorInterceptor } from './error-interceptor';
-//import { AuthHeaderInterceptor } from './auth-header-interceptor';
 
-import { environment } from "src/environments/environment";
+import { ConfigurationService } from './configuration.service';
 
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
 
@@ -43,11 +41,15 @@ import { TabsComponent } from './tabs/tabs.component';
 import { SharedModule } from './shared/shared.module';
 import { ProfileModule } from './profile/profile.module';
 
-//export function init(appInitService: AppInitService) {
-//    return (): Promise<any> => { 
-//	return appInitService.Init();
-//    }
-//}
+const initAppFn =
+      (svc: ConfigurationService) => {
+	  return () => svc.loadConfig('/assets/config.json');
+      };
+
+const getFirebaseFn =
+      (svc: ConfigurationService) => {
+	  return svc.getFirebase();
+      };
 
 @NgModule({
     declarations: [
@@ -59,8 +61,7 @@ import { ProfileModule } from './profile/profile.module';
 	AppRoutingModule,
 	RouterModule,
 	BrowserModule,
-	AngularFireModule.initializeApp(environment.firebase),
-	AngularFireAuthModule,
+	provideFirebaseApp(() => initializeApp()),
 	BrowserAnimationsModule,
 	MatCardModule,
 	MatFormFieldModule,
@@ -79,37 +80,25 @@ import { ProfileModule } from './profile/profile.module';
 	ProfileModule,
     ],
     providers: [
+	ConfigurationService,
 	{
-	    provide: USE_AUTH_EMULATOR,
-	    useValue:
-	    environment.useEmulators ?
-		["http://localhost:9099"] :
-		undefined
+	    provide: APP_INITIALIZER,
+	    useFactory: initAppFn,
+	    multi: true,
+	    deps: [ ConfigurationService ],
+	},
+	{
+	    provide: FIREBASE_OPTIONS,
+	    useFactory: getFirebaseFn,
+	    deps: [ ConfigurationService ],
 	},
 	{ provide: LOCALE_ID, useValue: "en-GB" },
 	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
 	{
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [MAT_DATE_LOCALE]
+	    deps: [ MAT_DATE_LOCALE ]
 	},
 	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
-//        AppInitService,
-//	{
-//	    provide: APP_INITIALIZER,
-//	    useFactory: init,
-//	    deps: [AppInitService],
-//	    multi: true
-//	},
-//	{
-//	    provide: HTTP_INTERCEPTORS,
-//	    useClass: ErrorInterceptor,
-//	    multi: true
-//	},
-//	{
-//	    provide: HTTP_INTERCEPTORS,
-//	    useClass: AuthHeaderInterceptor,
-//	    multi: true
-//	}
     ],
     bootstrap: [ AppComponent ]
 })
