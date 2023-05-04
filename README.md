@@ -50,6 +50,13 @@ Of note:
   Stripe payments are implemented with a combination of code in the backend
   and front-end.
 
+## Backend
+
+This is a simple service with HTTP endpoints.  The backend implements
+Firebase authentication and uses the auth token to determine user
+access.  It communicates with Google Cloud for storage.  Also communicates
+with Stripe for payments (where used) and HMRC for VAT filing.
+
 ## Deployment environments
 
 There are 4 deployment environments:
@@ -84,7 +91,7 @@ to the Github actions.
 ## Building the web app
 
 Easy to build, but you need to have several components running to
-see it running:
+see it doing something useful:
 ```
 ng build
 ```
@@ -122,6 +129,6 @@ You need a web key at `src/assets/config.json`:
 }
 ```
 
-You also need to start the back-end locally.
-
-
+You also need to start the back-end locally which requires a whole heap
+of configuration.  See
+[`accounts-svc`](https://github.com/accountsmachine/accounts-svc)
