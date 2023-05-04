@@ -98,7 +98,7 @@ ng build
 
 ## Running locally
 
-Build serve-local:
+Build serve-local (the proxy):
 ```
 go build serve-local.go
 ```
@@ -132,3 +132,4 @@ You need a web key at `src/assets/config.json`:
 You also need to start the back-end locally which requires a whole heap
 of configuration.  See
 [`accounts-svc`](https://github.com/accountsmachine/accounts-svc)
+
