@@ -24,7 +24,7 @@ import { ConfigurationService } from '../../configuration.service';
 export class SubmitComponent implements OnInit {
 
     feature(x : string) {
-        return this.config.hasFeature(x);
+        return this.configSvc.hasFeature(x);
     }
 
     vat_table : MatTableDataSource<VatLine> = new MatTableDataSource<VatLine>([]);
