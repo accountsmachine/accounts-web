@@ -75,10 +75,10 @@ if (environment == "dev") {
     features = [ "vat", "vat-submit" ];
 } else if (environment == "prod") {
     sites = [
-	"accounts-machine-prod.firebaseapp.com",
+//	"accounts-machine-prod.firebaseapp.com",
 	"app.accountsmachine.io",
 	"app.prod.accountsmachine.io",
-	"app.stage.accountsmachine.io"
+//	"app.stage.accountsmachine.io"
     ];
     authProjectId = "accounts-machine-prod";
     hostingProjectId = "accounts-machine-prod";
