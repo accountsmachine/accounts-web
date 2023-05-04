@@ -103,7 +103,7 @@ const enableApiKeys = new gcp.projects.Service(
     "enable-api-keys",
     {
 	service: "apikeys.googleapis.com",
-	project: authProjectId,
+	project: project,
     },
     {
 	provider: provider
