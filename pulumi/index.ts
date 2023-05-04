@@ -140,7 +140,7 @@ const config = {
     firebase: {
 	apiKey: apiKey.keyString,
 	authDomain: authDomain,
-	projectId: hostingProjectId,
+	projectId: authProjectId,
     },
     features: features
 };
