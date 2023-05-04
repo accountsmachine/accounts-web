@@ -16,7 +16,8 @@ switched off in the production application.
 ## Overview
 
 This repository is the front-end for accountsmachine.io.  The backend,
-`accounts-svc` is a separate repository.
+(`accounts-svc`)[https://github.com/accountsmachine/accounts-svc]
+is a separate repository.
 
 
 ```
