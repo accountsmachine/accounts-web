@@ -4,25 +4,6 @@
 
 export const environment = {
     production: false,
-    useEmulators: false,
-    firebase: {
-	apiKey: "AIzaSyD6SunplTX-Le2xXjFuv6EWFlxsu_WU2NE",
-	authDomain: "accounts-machine-dev.firebaseapp.com",
-	projectId: "accounts-machine-dev",
-	storageBucket: "accounts-machine-dev.appspot.com",
-	messagingSenderId: "305498129524",
-	appId: "1:305498129524:web:d11bef85b87f7632a1fd21",
-	measurementId: "G-CN6FHHTDLQ"
-    },
-    features: [
-	"vat",
-	"corptax",
-	"accounts",
-	"vat-submit",
-	"corptax-submit",
-	"accounts-submit",
-	"crypto",
-    ],
 };
 
 /*

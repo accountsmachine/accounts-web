@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Balance } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 
-import { environment } from '../../../environments/environment';
+import { ConfigurationService } from '../../configuration.service';
 
 @Component({
   selector: 'balance',
@@ -12,13 +12,19 @@ import { environment } from '../../../environments/environment';
 })
 export class BalanceComponent implements OnInit {
 
-    balance : Balance;
+    feature(x : string) {
+        return this.configSvc.hasFeature(x);
+    }
 
-    features = new Set<string>(environment.features);
-    feature(x : string) { return this.features.has(x); }
+    get nofeatures() {
+        return this.configSvc.noFeatures();
+    }
+
+    balance : Balance;
     
     constructor(
-	private commerce : CommerceService
+	private commerce : CommerceService,
+	private configSvc : ConfigurationService,
     ) {
 
 	this.balance = {
