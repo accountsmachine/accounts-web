@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+    MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 
 import { AuthService, AuthState } from '../../auth.service';
 import {

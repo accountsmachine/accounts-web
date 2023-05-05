@@ -5,7 +5,7 @@ import {
     ActivatedRoute, Router, NavigationStart
 } from '@angular/router';
 
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 import { AuthService, AuthState } from './auth.service';
 import { UserProfileService } from './profile/user-profile.service';

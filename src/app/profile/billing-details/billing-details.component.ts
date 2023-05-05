@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Validators } from '@angular/forms';
 import { UserProfile, UserProfileService } from '../user-profile.service';
 

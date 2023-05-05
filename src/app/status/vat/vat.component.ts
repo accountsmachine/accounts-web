@@ -4,8 +4,8 @@ import { combineLatest } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+    MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 
 import { StatusService, Statuses } from '../status.service';
 import { WorkingService } from '../../working.service';
