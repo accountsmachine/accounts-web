@@ -24,11 +24,14 @@ is a separate repository.
                      ,-----------------.
                      |                 |        ,--------------.
   browser ------------> proxy ----------------> | accounts-svc |
-                     |    |            |        `--------------'
-                     |    '-- web app  |
-                     |                 |
-                     |   accounts-web  |
-                     `-----------------'
+     |               |    |            |        `--------------'
+     |               |    '-- web app  |           |          |
+     |               |                 |           |          |
+     |               |   accounts-web  |           |          |
+     |               `-----------------'           v          v
+     |                                         ,--------.  ,------.
+     '---------------------------------------->| Stripe |  | HMRC |
+                                               `--------'  `------'
 ```
 
 The front-end is deployed to production in a container.  The container
@@ -152,4 +155,3 @@ of configuration.  See
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 See [LICENSE](LICENSE).
-
