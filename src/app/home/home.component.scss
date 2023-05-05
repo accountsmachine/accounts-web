@@ -3,24 +3,28 @@
     padding: 1rem;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card {
     margin: 0.4rem;
     width: 22rem;
     background: #f8f8e0;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card.k2 {
     margin: 0.4rem;
     width: 22rem;
     background: #e0e8f0;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card.k3 {
     margin: 0.4rem;
     width: 22rem;
     background: #e9fae8;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-title {
     padding-bottom: 0.5rem;
 }
@@ -48,21 +52,25 @@ mat-icon {
 //    vertical-align: center;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card div {
     display: flex;
     align-items: center;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card div mat-icon {
     margin-left: 0.2rem;
     margin-right: 0.4rem;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-title {
     display: flex;
     align-items: center;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-title mat-icon {
     margin-right: 0.4rem;
 }

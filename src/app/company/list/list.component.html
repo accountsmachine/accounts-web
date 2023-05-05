@@ -16,7 +16,7 @@
 
     <div class="card-display">
       <ng-container *ngFor="let config of configs | keyvalue">
-	<mat-card>
+	<mat-card appearance="outlined">
 	  <mat-card-title>{{config.value.company_name}}</mat-card-title>
 	  <mat-card-subtitle>{{config.value.contact_city}}</mat-card-subtitle>
 	  <div>

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, interval, catchError } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CheckoutService } from '../checkout.service';
 import { Order } from '../commerce.model';

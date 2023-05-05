@@ -21,6 +21,7 @@ mat-cell {
     font-family: monospace;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 mat-table {
     margin: 1rem auto 1rem auto;
     width: 25rem;

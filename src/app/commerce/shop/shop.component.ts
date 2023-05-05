@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs/operators';
 
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Company } from '../../company/company.service';
 import { Option, Options, Balance, Order } from '../commerce.model';

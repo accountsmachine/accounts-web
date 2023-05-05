@@ -16,21 +16,21 @@
 
       <div *ngIf="balance; else na">
 
-	<mat-card *ngIf="feature('vat')">
+	<mat-card appearance="outlined" *ngIf="feature('vat')">
 	  <mat-card-title>VAT filing</mat-card-title>
 	  <mat-card-content>
 	    {{balance.vat}} credits
 	  </mat-card-content>
 	</mat-card>
 
-	<mat-card *ngIf="feature('corptax')">
+	<mat-card appearance="outlined" *ngIf="feature('corptax')">
 	  <mat-card-title>Corporation tax filing</mat-card-title>
 	  <mat-card-content>
 	    {{balance.corptax}} credits
 	  </mat-card-content>
 	</mat-card>
 
-	<mat-card *ngIf="feature('accounts')">
+	<mat-card appearance="outlined" *ngIf="feature('accounts')">
 	  <mat-card-title>Accounts filing</mat-card-title>
 	  <mat-card-content>
 	    {{balance.accounts}} credits
