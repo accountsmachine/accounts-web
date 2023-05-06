@@ -20,7 +20,6 @@ a {
     flex-wrap: wrap;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
 mat-card.filing {
     min-width: 12rem;
     margin: 1rem;
@@ -28,7 +27,6 @@ mat-card.filing {
     color: $dark-primary-text;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
 mat-card.filing * {
     background-color: $light-background;
     color: $dark-primary-text;

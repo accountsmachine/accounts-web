@@ -36,11 +36,13 @@
   </div>
 
   <div *ngIf="nocredits()">
-    <mat-card appearance="outlined" class="status">
-      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
-      You have no credits.  You can create filings, but you will not be
-      able to submit them online.  Use <strong>Manage credits</strong> to buy
-      credits when you are ready to submit a filing.
+    <mat-card class="status">
+      <mat-card-content>
+	<mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+	You have no credits.  You can create filings, but you will not be
+	able to submit them online.  Use <strong>Manage credits</strong> to buy
+	credits when you are ready to submit a filing.
+      </mat-card-content>
     </mat-card>
   </div>
 
@@ -54,14 +56,18 @@
       <h2>Draft</h2>
       <div class="card-display">
 	<ng-container *ngFor="let config of draft">
-	  <mat-card appearance="outlined" class="filing">
-	    <mat-card-title>
-	      <mat-icon>drafts</mat-icon>
-	      &nbsp;
-	      {{config.label}}
-	    </mat-card-title>
-	    <div class="company">{{company(config)}}</div>
-	    <div class="kind">{{kind_label(config.kind)}}</div>
+	  <mat-card class="filing">
+	    <mat-card-header>
+	      <mat-card-title>
+		<mat-icon>drafts</mat-icon>
+		&nbsp;
+		{{config.label}}
+	      </mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <div class="company">{{company(config)}}</div>
+	      <div class="kind">{{kind_label(config.kind)}}</div>
+	    </mat-card-content>
 	    <mat-card-actions align="start">
 	      <button mat-button (click)="edit(config)">
 		<mat-icon>edit</mat-icon> EDIT
