@@ -23,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatRippleModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonToggleModule } from '@angular/material/button-toggle'; 
 
 import { BooksRoutingModule } from './books-routing.module';
 import { ListComponent } from './list/list.component';
@@ -44,6 +45,7 @@ import { AccountsSelectionComponent } from './accounts-selection/accounts-select
     imports: [
 	CommonModule,
 	MatButtonModule,
+	MatButtonToggleModule,
 	MatRadioModule,
 	MatCardModule,
 	BooksRoutingModule,

@@ -10,9 +10,8 @@ import {
 } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {
-    AccountBalance, BooksService, Mapping, AccountInclusion
-} from '../books.service';
+import { AccountBalance, BooksService } from '../books.service';
+import { MappingService, Mapping, AccountInclusion } from '../mapping.service';
 
 import {
     AccountsSelectionComponent
@@ -38,26 +37,6 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
     id : string = "";
 
-    vat_box : { [key : string] : number } = {
-        "vat-output-sales": 1,
-	"vat-output-acquisitions": 2,
-	"vat-input": 4,
-  	"total-vatex-sales": 6,
-	"total-vatex-purchases": 7,
-	"total-vatex-goods-supplied": 8,
-	"total-vatex-acquisitions": 9,
-    };
-
-    vat_desc : { [key : string] : string } = {
-        "vat-output-sales": "VAT due on sales",
-	"vat-output-acquisitions": "VAT due on acquisitions",
-	"vat-input": "VAT reclaimed on purchases",
-  	"total-vatex-sales": "Total sales ex. VAT",
-	"total-vatex-purchases": "Total purchases ex. VAT",
-	"total-vatex-goods-supplied": "Total goods supplied to EU ex. VAT",
-	"total-vatex-acquisitions": "Total acquisitions of goods from EU ex. VAT",
-    };
-
     book_mapping? : Mapping;
     accounts? : AccountBalance[];
 
@@ -72,6 +51,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	private snackBar : MatSnackBar,
 	private dialog : MatDialog,
 	private booksService : BooksService,
+	private mappingService : MappingService,
     )
     {
     }
@@ -106,10 +86,12 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		    let id = params["id"];
 		    this.id = id;
 
-		    this.booksService.get_mapping(id).subscribe(
+		    this.mappingService.load(id).subscribe(
 			(mapping : Mapping) => {
-			    this.book_mapping = mapping;
-			    this.update_table();
+			    if (mapping) {
+				this.book_mapping = mapping;
+				this.update_table();
+			    }
 			}
 		    );
 
@@ -131,11 +113,6 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	if (!this.accounts) return;
 	if (!this.book_mapping) return;
 
-	// This is used to keep track of if we've modified the mapping
-	// because of a mis-match between accounts file and the
-	// mapping record.
-	let mismatch = false;
-
 	let accounts = new Set(this.accounts.map((a) => a.account));
 
 	let data : Row[] = [];
@@ -145,12 +122,17 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	    let r = new Row();
 
 	    r.key = key;
-	    r.line = this.vat_desc[key];
-	    r.box = this.vat_box[key];
+	    r.line = this.mappingService.vat_desc(key);
+	    r.box = this.mappingService.vat_box(key);
 	    r.mapping = this.book_mapping[key];
 	    r.accounts = [];
 
 	    let m = [];
+
+	    // This is used to keep track of if we've modified the mapping
+	    // because of a mis-match between accounts file and the
+	    // mapping record.
+	    let mismatch = false;
 
 	    for (let acct of r.mapping) {
 
@@ -172,24 +154,13 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	    // If there was a mismatch, update the book mapping, it's
 	    // going to get posted back.
 	    if (mismatch) {
-		r.mapping = m;
-		this.book_mapping[key] = m;
+		this.mappingService.set(key, this.book_mapping[key]).subscribe(
+		    () => {}
+		);
 	    }
-
-	    // Note, the mismatch statement will be true, once any
-	    // mismatch has been detected on a line.  Not a problem,
-	    // because it's always safe to run.
 
 	    data.push(r);
 
-	}
-
-	// Write back book mapping.
-	if (mismatch) {
-	    this.booksService.put_mapping(
-		this.id, this.book_mapping
-	    ).subscribe(() => {
-	    });
 	}
 
 	this.mapping.data = data;
@@ -205,14 +176,20 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	if (!this.accounts) return;
 
+	let amap : Map<string, boolean> = new Map<string, boolean>();
+
+	for (let item of row.mapping) {
+	    amap.set(item.account, item.reversed);
+	}
+
 	const dialogRef = this.dialog.open(
 	    AccountsSelectionComponent, {
-		width: '450px',
+		width: '650px',
 		data: {
 		    proceed: false,
 		    line: row.line,
 		    key: row.key,
-		    mapping: row.mapping,
+		    mapping: amap,
 		    accounts: this.accounts.map((a) => a.account)
 		},
 	    }
@@ -220,34 +197,41 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	dialogRef.afterClosed().subscribe((result : any) => {
 
-	    if (result) {
+	    // Shouldn't happen
+	    if (this.book_mapping == null) return;
 
-		if (result.proceed) {
+	    if (result && result.proceed) {
 
-		    for(let row of this.mapping.data) {
-			if (row.key == result.key) {
-			    row.mapping = result.mapping;
-			    row.accounts = row.mapping.map((a) => a.account);
-			}
-		    }
+		if (!result.mapping) return;
+		if (!result.key) return;
 
-		    let m = new Mapping();
+		let mapping : AccountInclusion[] = [];
 
-		    for (let row of this.mapping.data) {
-			m[row.key] = row.mapping;
-		    }
-
-		    this.booksService.put_mapping(this.id, m).subscribe(
-			() => {
-			    this.snackBar.open(
-				"Mapping updated", "dismiss",
-				{ duration: 2000 });
+		for (let acc of result.mapping.keys()) {
+		    mapping.push(
+			{
+			    account: acc,
+			    reversed: result.mapping.get(acc)
 			}
 		    );
-
 		}
+
+		this.book_mapping[result.key] = mapping;
+		this.update_table();
+
+		this.mappingService.set(result.key, mapping).subscribe(
+		    () => {
+			this.snackBar.open(
+			    "Mapping updated", "dismiss",
+			    { duration: 2000 }
+			);
+		    }
+		);
+
 	    }
+
 	});
+
     }
 
 }

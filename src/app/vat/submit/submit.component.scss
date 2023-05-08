@@ -6,12 +6,12 @@ mat-drawer-content {
 }
 
 button {
-    margin: 0.5rem;
+    margin-top: 1rem;
+    margin-right: 1rem;
 }
 
-mat-form-field {
-    padding: 0.5rem;
-    width: 40%;
+mat-slide-toggle {
+    padding: 2rem;
 }
 
 iframe {
@@ -97,3 +97,4 @@ h2 {
 mat-icon {
     vertical-align: middle;
 }
+

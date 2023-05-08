@@ -6,7 +6,12 @@ mat-drawer-content {
 }
 
 button {
-    margin: 0.5rem;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+mat-slide-toggle {
+    padding: 2rem;
 }
 
 mat-form-field {
