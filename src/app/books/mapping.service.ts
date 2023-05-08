@@ -104,5 +104,40 @@ export class MappingService {
 
     }
 
+    vat_box(key : string) : number {
+
+	const boxes : { [key : string] : number } = {
+            "vat-output-sales": 1,
+	    "vat-output-acquisitions": 2,
+	    "vat-input": 4,
+  	    "total-vatex-sales": 6,
+	    "total-vatex-purchases": 7,
+	    "total-vatex-goods-supplied": 8,
+	    "total-vatex-acquisitions": 9,
+	};
+
+	if (!(key in boxes)) throw "Invalid VAT account ID";
+
+	return boxes[key];
+
+    }
+
+    vat_desc(key : string) : string {
+	const boxes : { [key : string] : string } = {
+            "vat-output-sales": "VAT due on sales",
+	    "vat-output-acquisitions": "VAT due on acquisitions",
+	    "vat-input": "VAT reclaimed on purchases",
+  	    "total-vatex-sales": "Total sales ex. VAT",
+	    "total-vatex-purchases": "Total purchases ex. VAT",
+	    "total-vatex-goods-supplied": "Total goods supplied to EU ex. VAT",
+	    "total-vatex-acquisitions": "Total acquisitions of goods from EU ex. VAT",
+	};
+
+	if (!(key in boxes)) throw "Invalid VAT account ID";
+
+	return boxes[key];
+
+    }
+
 }
 

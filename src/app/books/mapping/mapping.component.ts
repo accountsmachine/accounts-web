@@ -37,26 +37,6 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
     id : string = "";
 
-    vat_box : { [key : string] : number } = {
-        "vat-output-sales": 1,
-	"vat-output-acquisitions": 2,
-	"vat-input": 4,
-  	"total-vatex-sales": 6,
-	"total-vatex-purchases": 7,
-	"total-vatex-goods-supplied": 8,
-	"total-vatex-acquisitions": 9,
-    };
-
-    vat_desc : { [key : string] : string } = {
-        "vat-output-sales": "VAT due on sales",
-	"vat-output-acquisitions": "VAT due on acquisitions",
-	"vat-input": "VAT reclaimed on purchases",
-  	"total-vatex-sales": "Total sales ex. VAT",
-	"total-vatex-purchases": "Total purchases ex. VAT",
-	"total-vatex-goods-supplied": "Total goods supplied to EU ex. VAT",
-	"total-vatex-acquisitions": "Total acquisitions of goods from EU ex. VAT",
-    };
-
     book_mapping? : Mapping;
     accounts? : AccountBalance[];
 
@@ -142,8 +122,8 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	    let r = new Row();
 
 	    r.key = key;
-	    r.line = this.vat_desc[key];
-	    r.box = this.vat_box[key];
+	    r.line = this.mappingService.vat_desc(key);
+	    r.box = this.mappingService.vat_box(key);
 	    r.mapping = this.book_mapping[key];
 	    r.accounts = [];
 
