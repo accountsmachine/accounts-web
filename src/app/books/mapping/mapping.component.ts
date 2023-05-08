@@ -10,9 +10,8 @@ import {
 } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import {
-    AccountBalance, BooksService, Mapping, AccountInclusion
-} from '../books.service';
+import { AccountBalance, BooksService } from '../books.service';
+import { MappingService, Mapping, AccountInclusion } from '../mapping.service';
 
 import {
     AccountsSelectionComponent
@@ -25,13 +24,6 @@ class Row {
     accounts : string[] = [];
     mapping : AccountInclusion[] = [];
 };
-
-// FIXME: State is clunky.
-// book_mapping is only used to initially populate the table
-// subsequent updates are appled to this.mapping.data
-
-// This would be tidier if some of this was in the books service.  Or
-// probably a separate maps service.
 
 @Component({
     selector: 'mapping',
@@ -79,6 +71,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	private snackBar : MatSnackBar,
 	private dialog : MatDialog,
 	private booksService : BooksService,
+	private mappingService : MappingService,
     )
     {
     }
@@ -113,10 +106,12 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		    let id = params["id"];
 		    this.id = id;
 
-		    this.booksService.get_mapping(id).subscribe(
+		    this.mappingService.load(id).subscribe(
 			(mapping : Mapping) => {
-			    this.book_mapping = mapping;
-			    this.update_table();
+			    if (mapping) {
+				this.book_mapping = mapping;
+				this.update_table();
+			    }
 			}
 		    );
 
@@ -138,11 +133,6 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	if (!this.accounts) return;
 	if (!this.book_mapping) return;
 
-	// This is used to keep track of if we've modified the mapping
-	// because of a mis-match between accounts file and the
-	// mapping record.
-	let mismatch = false;
-
 	let accounts = new Set(this.accounts.map((a) => a.account));
 
 	let data : Row[] = [];
@@ -158,6 +148,11 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	    r.accounts = [];
 
 	    let m = [];
+
+	    // This is used to keep track of if we've modified the mapping
+	    // because of a mis-match between accounts file and the
+	    // mapping record.
+	    let mismatch = false;
 
 	    for (let acct of r.mapping) {
 
@@ -179,24 +174,13 @@ export class MappingComponent implements OnInit, AfterViewInit {
 	    // If there was a mismatch, update the book mapping, it's
 	    // going to get posted back.
 	    if (mismatch) {
-		r.mapping = m;
-		this.book_mapping[key] = m;
+		this.mappingService.set(key, this.book_mapping[key]).subscribe(
+		    () => {}
+		);
 	    }
-
-	    // Note, the mismatch statement will be true, once any
-	    // mismatch has been detected on a line.  Not a problem,
-	    // because it's always safe to run.
 
 	    data.push(r);
 
-	}
-
-	// Write back book mapping.
-	if (mismatch) {
-	    this.booksService.put_mapping(
-		this.id, this.book_mapping
-	    ).subscribe(() => {
-	    });
 	}
 
 	this.mapping.data = data;
@@ -233,7 +217,13 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	dialogRef.afterClosed().subscribe((result : any) => {
 
+	    // Shouldn't happen
+	    if (this.book_mapping == null) return;
+
 	    if (result && result.proceed) {
+
+		if (!result.mapping) return;
+		if (!result.key) return;
 
 		let mapping : AccountInclusion[] = [];
 
@@ -246,24 +236,15 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		    );
 		}
 
-		for(let row of this.mapping.data) {
-		    if (row.key == result.key) {
-			row.mapping = mapping;
-			row.accounts = mapping.map((a) => a.account);
-		    }
-		}
+		this.book_mapping[result.key] = mapping;
+		this.update_table();
 
-		let m = new Mapping();
-
-		for (let row of this.mapping.data) {
-		    m[row.key] = row.mapping;
-		}
-
-		this.booksService.put_mapping(this.id, m).subscribe(
+		this.mappingService.set(result.key, mapping).subscribe(
 		    () => {
 			this.snackBar.open(
 			    "Mapping updated", "dismiss",
-			    { duration: 2000 });
+			    { duration: 2000 }
+			);
 		    }
 		);
 
