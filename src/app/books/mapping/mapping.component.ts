@@ -26,6 +26,13 @@ class Row {
     mapping : AccountInclusion[] = [];
 };
 
+// FIXME: State is clunky.
+// book_mapping is only used to initially populate the table
+// subsequent updates are appled to this.mapping.data
+
+// This would be tidier if some of this was in the books service.  Or
+// probably a separate maps service.
+
 @Component({
     selector: 'mapping',
     templateUrl: './mapping.component.html',
@@ -205,14 +212,20 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	if (!this.accounts) return;
 
+	let amap : Map<string, boolean> = new Map<string, boolean>();
+
+	for (let item of row.mapping) {
+	    amap.set(item.account, item.reversed);
+	}
+
 	const dialogRef = this.dialog.open(
 	    AccountsSelectionComponent, {
-		width: '450px',
+		width: '650px',
 		data: {
 		    proceed: false,
 		    line: row.line,
 		    key: row.key,
-		    mapping: row.mapping,
+		    mapping: amap,
 		    accounts: this.accounts.map((a) => a.account)
 		},
 	    }
@@ -220,34 +233,44 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	dialogRef.afterClosed().subscribe((result : any) => {
 
-	    if (result) {
+	    if (result && result.proceed) {
 
-		if (result.proceed) {
+		let mapping : AccountInclusion[] = [];
 
-		    for(let row of this.mapping.data) {
-			if (row.key == result.key) {
-			    row.mapping = result.mapping;
-			    row.accounts = row.mapping.map((a) => a.account);
-			}
-		    }
-
-		    let m = new Mapping();
-
-		    for (let row of this.mapping.data) {
-			m[row.key] = row.mapping;
-		    }
-
-		    this.booksService.put_mapping(this.id, m).subscribe(
-			() => {
-			    this.snackBar.open(
-				"Mapping updated", "dismiss",
-				{ duration: 2000 });
+		for (let acc of result.mapping.keys()) {
+		    mapping.push(
+			{
+			    account: acc,
+			    reversed: result.mapping.get(acc)
 			}
 		    );
-
 		}
+
+		for(let row of this.mapping.data) {
+		    if (row.key == result.key) {
+			row.mapping = mapping;
+			row.accounts = mapping.map((a) => a.account);
+		    }
+		}
+
+		let m = new Mapping();
+
+		for (let row of this.mapping.data) {
+		    m[row.key] = row.mapping;
+		}
+
+		this.booksService.put_mapping(this.id, m).subscribe(
+		    () => {
+			this.snackBar.open(
+			    "Mapping updated", "dismiss",
+			    { duration: 2000 });
+		    }
+		);
+
 	    }
+
 	});
+
     }
 
 }
