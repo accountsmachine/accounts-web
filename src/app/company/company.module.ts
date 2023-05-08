@@ -76,7 +76,6 @@ import { DeleteConfirmationComponent } from './delete-confirmation/delete-confir
 	MatChipsModule,
 	MatIconModule,
 	MatDatepickerModule,
-
 	SharedModule,
     ],
     providers: [

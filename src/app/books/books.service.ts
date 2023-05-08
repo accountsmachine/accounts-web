@@ -16,18 +16,6 @@ export class AccountBalance {
     balance : number = 0;
 }
 
-export class AccountInclusion {
-    constructor(a : string, r : boolean) {
-        this.account = a; this.reversed = r;
-    }
-    account : string = "";
-    reversed : boolean = false;
-}
-
-export class Mapping {
-    [account : string] : AccountInclusion[];
-}
-
 export class BookInfo {
     length : number = 0;
     time : string = "";
@@ -50,14 +38,6 @@ export class BooksService {
     
     get_books_detail(id : string) : Observable<AccountBalance[]>{
 	return this.api.get<AccountBalance[]>("/api/books/" + id + "/summary");
-    }
-
-    get_mapping(id : string) : Observable<Mapping>{
-	return this.api.get<Mapping>("/api/books/" + id + "/mapping");
-    }
-
-    put_mapping(id : string, mapping : Mapping) : Observable<Mapping>{
-	return this.api.put("/api/books/" + id + "/mapping", mapping);
     }
 
     subject : Subject<boolean> = new Subject<boolean>();

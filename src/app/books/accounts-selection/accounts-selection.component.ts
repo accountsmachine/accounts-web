@@ -3,8 +3,6 @@ import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
-import { AccountInclusion } from '../books.service';
-
 @Component({
     selector: 'accounts-selection',
     templateUrl: './accounts-selection.component.html',
@@ -12,14 +10,34 @@ import { AccountInclusion } from '../books.service';
 })
 export class AccountsSelectionComponent implements OnInit {
 
+    groupId = 0;
+
+    get nextGroup() {
+        this.groupId ++;
+	return this.currentGroup;
+    }
+
+    get currentGroup() : string {
+        return "g" + this.groupId.toString();
+    }
+
+    select(acc: string, x : any) {
+	if (x.value == "add") {
+	    this.mapping.set(acc, false);
+	} else if (x.value == "reverse") {
+	    this.mapping.set(acc, true);
+	} else {
+	    this.mapping.delete(acc);
+	}
+    }
+
     ngOnInit(): void {
     }
 
     key : string;
     line : string;
     all : string[];
-    selected : Set<string>;
-    reversed : Set<string>;
+    mapping : Map<string, boolean>;
 
     constructor(
 	public dialogRef: MatDialogRef<AccountsSelectionComponent>,
@@ -28,60 +46,23 @@ export class AccountsSelectionComponent implements OnInit {
 	    key : string,
 	    line : string,
 	    accounts : string[],
-	    mapping : AccountInclusion[],
+	    mapping : Map<string, boolean>,
 	},
     ) {
 	this.line = this.data.line;
 	this.key = this.data.key;
         this.all = this.data.accounts;
-
-	this.selected = new Set<string>(
-	    this.data.mapping.map((a) => a.account)
-	);
-
-	this.reversed = new Set<string>(
-	    this.data.mapping.filter(
-		(a) => a.reversed
-	    ).map(
-		(a) => a.account
-	    )
-	);
-
+	this.mapping = this.data.mapping;
     }
 
-    no() {
-	this.dialogRef.close();
-    }
-
-    yes() {
-
-	let am : AccountInclusion[] = [];
-
-	for (let k of this.selected.keys())
-	    am.push(new AccountInclusion(k, this.reversed.has(k)));
-
-        return {
-	    proceed: true,
-	    key: this.data.key,
-	    line: this.data.line,
-	    mapping: am,
-	};
-    }
-
-    set(x : string) { this.selected.add(x); }
-    unset(x : string) { this.selected.delete(x); }
-
-    choose(x : string) {
-        if (this.selected.has(x)) {
-	    if (this.reversed.has(x)) {
-	        this.selected.delete(x);
+    value(acc : string) {
+	if (this.mapping.has(acc))
+	    if (this.mapping.get(acc)) {
+		return "reverse";
 	    } else {
-		this.reversed.add(x);
+		return "add";
 	    }
-	} else {
-	    this.selected.add(x);
-	    this.reversed.delete(x);
-	}
+	return "ignore";
     }
 
 }

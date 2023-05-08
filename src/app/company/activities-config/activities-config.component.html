@@ -93,29 +93,30 @@
 	<p>
 	  <mat-form-field class="chip-list" appearance="fill">
 	    <mat-label>SIC codes</mat-label>
-	    <mat-chip-list #siccodes aria-label="SIC codes">
-	      <mat-chip *ngFor="let v of sic_codes!.value" (removed)="removeSIC(v)">
+	    <mat-chip-grid #siccodes aria-label="SIC codes">
+	      <mat-chip-row *ngFor="let v of sic_codes!.value" (removed)="removeSIC(v)">
 		{{v}}
 		<button matChipRemove>
 		  <mat-icon>cancel</mat-icon>
 		</button>
-	      </mat-chip>
+	      </mat-chip-row>
 	      <input placeholder="62020"
 		     [matChipInputFor]="siccodes"
 		     [matChipInputSeparatorKeyCodes]="chipSeparatorKeysCodes"
 		     [matChipInputAddOnBlur]="'true'"
 		     (matChipInputTokenEnd)="addSIC($event)">
-	    </mat-chip-list>
+	    </mat-chip-grid>
 	    <mat-hint>Enter SIC cdodes e.g. 12001 12009</mat-hint>
 	  </mat-form-field>
 	</p>
 
-	<button type="submit" [disabled]="!form.valid"
+	<button type="submit" [disabled]="!form.valid" class="action"
 		mat-raised-button color="primary">
 	  Save
 	</button>
 
-	<button mat-raised-button color="basic" (click)="revert()">
+	<button mat-raised-button color="basic" (click)="revert()"
+		class="action">
 	  Revert
 	</button>
 

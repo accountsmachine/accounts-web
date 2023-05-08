@@ -1,7 +1,8 @@
 
 <h1 mat-dialog-title>{{line}}</h1>
 
-<div mat-dialog-content>
+<mat-dialog-content>
+
   <p>
     This operation will allow remapping of the VAT return values to
     the accounts in your accounting books.  Ensure the account is
@@ -48,31 +49,48 @@
     any VAT, from EU member states.
   </p>
 
-  <div class="account" *ngFor="let acc of all">
+  <div class="accounts">
 
-    <button mat-button *ngIf="!selected.has(acc)" class="off"
-	    (click)="choose(acc)">
-      {{acc}} (not included)
-    </button>
-    <button mat-button *ngIf="selected.has(acc) && !reversed.has(acc)"
-	    class="positive" (click)="choose(acc)">
-      {{acc}} (added)
-    </button>
-    <button mat-button *ngIf="selected.has(acc) && reversed.has(acc)"
-	    class="negative" (click)="choose(acc)">
-      {{acc}} (reversed)
-    </button>
+    <ng-container class="account" *ngFor="let acc of all">
+
+      <div class="accid">{{acc}}</div>
+
+      <div>
+
+	<mat-button-toggle-group #group="matButtonToggleGroup"
+				 (change)="select(acc, group)"
+				 [value]="value(acc)">
+
+	  <mat-button-toggle class="off" value="ignore" aria-label="Ignore">
+	    off
+	  </mat-button-toggle>
+
+	  <mat-button-toggle class="add" value="add" aria-label="Add">
+	    add
+	  </mat-button-toggle>
+
+	  <mat-button-toggle class="reverse" value="reverse"
+			     aria-label="Reverse">
+	    reverse
+	  </mat-button-toggle>
+
+	</mat-button-toggle-group>      
+
+      </div>
+
+    </ng-container>
 
   </div>
-</div>
 
-<div mat-dialog-actions>
-  <button mat-raised-button color="basic" (click)="no()" cdkFocusInitial>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close cdkFocusInitial>
     Cancel
   </button>
   <button mat-raised-button color="primary"
-	  [mat-dialog-close]="yes()">
+	  [mat-dialog-close]="{ 'proceed': true, 'mapping': mapping, 'key': key}">
     Update
   </button>
-</div>
+</mat-dialog-actions>
 

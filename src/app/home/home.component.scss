@@ -3,10 +3,15 @@
     padding: 1rem;
 }
 
+/*    TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card {
     margin: 0.4rem;
     width: 22rem;
     background: #f8f8e0;
+}
+
+mat-card-content {
+    margin-top: 1rem;
 }
 
 mat-card.k2 {
@@ -19,10 +24,6 @@ mat-card.k3 {
     margin: 0.4rem;
     width: 22rem;
     background: #e9fae8;
-}
-
-mat-card-title {
-    padding-bottom: 0.5rem;
 }
 
 h2 {

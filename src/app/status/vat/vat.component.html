@@ -35,13 +35,14 @@
   <div *ngIf="setup">
 
     <mat-card>
-      <mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
-      VAT connection to HMRC has been set up for {{company.company_name}}.
-      &nbsp;
-      <a mat-raised-button (click)="disconnect()">
-	<mat-icon>block</mat-icon>
-	click to disconnect
-      </a>
+      <mat-card-content>
+	<mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
+	VAT connection to HMRC has been set up for {{company.company_name}}.
+	<a mat-raised-button (click)="disconnect()">
+	  <mat-icon>block</mat-icon>
+	  click to disconnect
+	</a>
+      </mat-card-content>
     </mat-card>
 
 
