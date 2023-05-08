@@ -18,12 +18,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { NavComponent } from './nav/nav.component';
 import { NewComponent } from './new/new.component';
+import { CompanyComponent } from './company/company.component';
+import { PeriodComponent } from './period/period.component';
+import { CalculationComponent } from './calculation/calculation.component';
 import { PreviewComponent } from './preview/preview.component';
 import { SubmitComponent } from './submit/submit.component';
-import { NavComponent } from './nav/nav.component';
-import { PeriodComponent } from './period/period.component';
-import { CompanyComponent } from './company/company.component';
 
 import {
     DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
@@ -45,6 +46,7 @@ import { LabelComponent } from './label/label.component';
 @NgModule({
     declarations: [
 	NewComponent,
+	CalculationComponent,
 	PreviewComponent,
 	SubmitComponent,
 	NavComponent,
@@ -56,6 +58,7 @@ import { LabelComponent } from './label/label.component';
         RecordComponent,
         LabelComponent,
         ChecklistComponent,
+        CalculationComponent,
     ],
     exports: [
 	NewComponent,
