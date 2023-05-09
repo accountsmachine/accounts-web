@@ -31,8 +31,11 @@
 	  Mapped accounts
 	</mat-header-cell>
 	<mat-cell *matCellDef="let row">
-	  <div *ngFor="let a of row.accounts" style="padding-right: 1rem">
-	    {{a}}, 
+	  <div *ngFor="let acct of row.mapping"
+	       [class]="'mapping ' + (acct.reversed ? 'reverse' : 'add')">
+	    <mat-icon *ngIf="acct.reversed">remove</mat-icon>
+	    <mat-icon *ngIf="!acct.reversed">add_circle</mat-icon>
+	    {{acct.account}}
 	  </div>
 	</mat-cell>
       </ng-container>
@@ -47,6 +50,14 @@
 
     <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
 
+  </div>
+
+  <div class="helpbelow">
+    For help with VAT account mapping
+    see
+    <a href="https://accountsmachine.io/vat-mapping">
+      Mapping your VAT accounts to the VAT return
+    </a>
   </div>
 
 </section>

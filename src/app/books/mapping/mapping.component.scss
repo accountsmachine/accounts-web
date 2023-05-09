@@ -14,6 +14,7 @@ button {
 .container {
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 mat-table {
     height: 100%;
     width: 100%;
@@ -44,4 +45,29 @@ mat-form-field {
 
 mat-row:hover {
     background: #f8f8f8;
+}
+
+.reverse {
+    color: #701000;
+    background-color: #fff0f0;
+}
+
+.add {
+    color: #005010;
+    background-color: #f0fff0;
+}
+
+.mapping {
+    padding: 4px 8px 2px 8px;
+    border: 1px solid #d0d0d0;
+    margin-right: 1rem;
+}
+
+mat-icon {
+    vertical-align: middle;
+    padding-bottom: 3px;
+}
+
+.helpbelow {
+    margin-top: 2rem;
 }

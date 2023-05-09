@@ -61,7 +61,10 @@ let hostingProjectId : string = "";
 let features : string[] = [];
 
 if (environment == "dev") {
-    sites = [ "app.dev.accountsmachine.io" ];
+    sites = [
+        "app.dev.accountsmachine.io",
+	"accounts-machine-dev.firebaseapp.com"
+    ];
     authProjectId = "accounts-machine-dev";
     hostingProjectId = "accounts-machine-dev";
     features = [
@@ -69,16 +72,18 @@ if (environment == "dev") {
 	"accounts-submit", "crypto"
     ];
 } else if (environment == "stage") {
-    sites = [ ];
+    sites = [
+        "app.stage.accountsmachine.io",
+	"accounts-machine-stage.firebaseapp.com"
+    ];
     authProjectId = "accounts-machine-prod";
     hostingProjectId = "accounts-machine-stage";
     features = [ "vat", "vat-submit" ];
 } else if (environment == "prod") {
     sites = [
-//	"accounts-machine-prod.firebaseapp.com",
 	"app.accountsmachine.io",
 	"app.prod.accountsmachine.io",
-//	"app.stage.accountsmachine.io"
+	"accounts-machine-prod.firebaseapp.com"
     ];
     authProjectId = "accounts-machine-prod";
     hostingProjectId = "accounts-machine-prod";

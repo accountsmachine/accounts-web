@@ -1,27 +1,157 @@
-# StartupAccounts
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.3.
+# accounts-web
 
-## Development server
+## Accounts Machine
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Accounts Machine is a UK VAT filing application.  Users use gnucash
+or other tools to manage their accounts, and then upload the account
+files to Accounts Machine to file VAT returns with HMRC.  Accounts
+Machine manages the linking of user accounts to HMRC, and the submission
+of VAT return records using HMRC's MTD.
 
-## Code scaffolding
+Other functionality exists for Companies House and HMRC Corporation Tax
+filing, but this is incomplete and needs further work, and so is
+switched off in the production application.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Overview
 
-## Build
+This repository is the front-end for accountsmachine.io.  The backend,
+[`accounts-svc`](https://github.com/accountsmachine/accounts-svc)
+is a separate repository.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+```
+                     ,-----------------.
+                     |                 |        ,--------------.
+  browser ------------> proxy ----------------> | accounts-svc |
+     |               |    |            |        `--------------'
+     |               |    '-- web app  |           |          |
+     |               |                 |           |          |
+     |               |   accounts-web  |           |          |
+     |               `-----------------'           v          v
+     |                                         ,--------.  ,------.
+     '---------------------------------------->| Stripe |  | HMRC |
+                                               `--------'  `------'
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+The front-end is deployed to production in a container.  The container
+contains an HTTP service at the very front end.  The service serves
+static web resources which make up the web application, while also proxying
+HTTP requests to the back-end service so that the web browser only needs to
+interact with a single origin.
 
-## Running end-to-end tests
+## Web application
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+The browser application is built using Angular.
 
-## Further help
+Of note:
+- Firebase auth is used for accounts.  Users can register using the
+  application.  Firebase ensures emails are verified.
+- The firebase web API key is 'public' information and locked to the domain,
+  is loaded into the container by the deployment scripts.
+- Payment services are provided (everything in the shop is currently free).
+  Stripe payments are implemented with a combination of code in the backend
+  and front-end.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Backend
+
+This is a simple service with HTTP endpoints.  The backend implements
+Firebase authentication and uses the auth token to determine user
+access.  It communicates with Google Cloud for storage.  Also communicates
+with Stripe for payments (where used) and HMRC for VAT filing.
+
+## Deployment environments
+
+There are 4 deployment environments:
+- local: For running the accounts-web and accounts-svc locally
+  for development & testing.  Uses the dev account for authentication and
+  storage.
+- dev: Application deployment to a development account for semi-realistic
+  testing.  The VAT service is a dummy one, so there is no interaction with
+  HMRC live services.
+- stage: Application deployment to a stage account.  The backend service
+  uses the prod account for authentication and storage.  Filing is to the
+  HMRC live, as for prod.  This is only for 'testing' that the live build
+  works, can't be used to 'test' filing procedures as the filing backend
+  is real.
+- production: Deployment is to the prod account.  Uses prod auth, prod
+  storage, and live filing systems.
+
+Domain restrictions restrict who can log in to dev/stage.  Most normal
+users can only access 'prod'.
+
+## Deployment
+
+Deployment is using Github actions and Pulumi scripts.
+Actions is used to build the Angular app and create the container.
+Pulumi is used to push the container to Google Cloud and run it in
+Cloud Run service.  The web key used by Firebase for authentication
+is created by Pulumi.  Github is authenticated with Google Cloud so there
+are no 'deploy' secrets in existence.  The pipelines have full access to
+the cloud environments, and so care needs to be taken to review changes
+to the Github actions.
+
+## Building the web app
+
+Easy to build, but you need to have several components running to
+see it doing something useful:
+```
+ng build
+```
+
+## Running locally
+
+Build serve-local (the proxy):
+```
+go build serve-local.go
+```
+
+Run `serve-local`:
+```
+./serve-local
+```
+
+Run the Angular service:
+```
+ng serve -c local
+```
+
+You need a web key at `src/assets/config.json`:
+```
+{
+    "production": false,
+    "firebase": {
+        "apiKey": "API-KEY-GOES-HERE",
+        "authDomain": "DEV-PROJECT-GOES-HERE.firebaseapp.com",
+        "projectId": "DEV-PROJECT-GOES-HERE"
+    },
+    "features": [
+        "vat",
+        "vat-submit"
+    ]
+}
+```
+
+You also need to start the back-end locally which requires a whole heap
+of configuration.  See
+[`accounts-svc`](https://github.com/accountsmachine/accounts-svc)
+
+## LICENCE
+
+    Accounts Machine software, account-web, accounts-svc
+    Copyright (C) 2021-2023, Accounts Machine Limited, cybermaggedon.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+See [LICENSE](LICENSE).
