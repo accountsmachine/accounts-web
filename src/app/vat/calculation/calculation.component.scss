@@ -51,6 +51,17 @@ pre {
     display: flex;
 }
 
+.node .amount {
+    border: 1px solid black;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    width: 8rem;
+    margin-left: 0.5rem;
+    padding: 0.2rem;
+    text-align: right;
+    font-family: monospace;
+    font-weight: 700;
+}
+
 .node.tx .date {
     width: 6em;
     margin-left: 0.5rem;
@@ -63,11 +74,11 @@ pre {
 }
 
 .node.tx .amount {
-    background-color: #f0f0f8;
-    width: 6rem;
+    width: 8rem;
     margin-left: 0.5rem;
     text-align: right;
     font-family: monospace;
+    font-weight: 200;
 }
 
 .node.line .description {
@@ -80,21 +91,9 @@ pre {
 
 .node .description {
     padding: 0.2rem 0.4rem 0.2rem 0.4rem;
-}
-
-.node .amount {
-    border: 1px solid black;
-    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
-    width: 6rem;
-    margin-left: 0.5rem;
-    padding: 0.2rem;
-    text-align: right;
-    font-family: monospace;
-    font-weight: 700;
-}
-
-.node.tx .amount {
-    font-weight: 200;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .node.account .added {

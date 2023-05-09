@@ -18,7 +18,7 @@
 	  <div class="node tx">
 	    <div class="date">{{node.date}}</div>
 	    <div class="description">{{node.description}}</div>
-	    <div class="amount">{{node.amount}}</div>
+	    <div class="amount">{{node.amount.toFixed(2)}}</div>
 	  </div>
 	</mat-tree-node>
 
@@ -31,7 +31,7 @@
               </mat-icon>
             </button>
             <div class="description">{{node.description}}</div>
-	    <div class="amount">{{node.amount}}</div>
+	    <div class="amount">{{node.amount.toFixed(2)}}</div>
 	  </div>
 	  <div [class.calc-tree-invisible]="!treeControl.isExpanded(node)"
                role="group">
@@ -48,7 +48,7 @@
               </mat-icon>
             </button>
             <div class="description">{{node.description}}</div>
-	    <div class="amount">{{node.amount}}</div>
+	    <div class="amount">{{node.amount.toFixed(2)}}</div>
 	    <div class="reversed" *ngIf="node.reversed">
 	      reversed
 	    </div>
