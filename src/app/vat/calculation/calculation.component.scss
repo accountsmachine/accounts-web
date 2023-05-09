@@ -1,0 +1,119 @@
+
+mat-drawer {
+    width: auto;
+}
+
+mat-drawer a {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+mat-drawer-content {
+    min-height: 25rem;
+}
+
+button {
+    margin: 0.5rem;
+}
+
+mat-form-field {
+    padding: 0.5rem;
+    width: 50%;
+}
+
+pre {
+    background-color: #f9f9f9;
+    border: 1px solid black;
+}
+
+
+
+.calc-tree-invisible {
+  display: none;
+}
+
+.calc-tree ul,
+.calc-tree li {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  list-style-type: none;
+}
+
+.calc-tree .mat-nested-tree-node div[role=group] {
+  padding-left: 40px;
+}
+
+.calc-tree div[role=group] > .mat-tree-node {
+  padding-left: 40px;
+}
+
+.node {
+    display: flex;
+}
+
+.node .amount {
+    border: 1px solid black;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    width: 8rem;
+    margin-left: 0.5rem;
+    padding: 0.2rem;
+    text-align: right;
+    font-family: monospace;
+    font-weight: 700;
+}
+
+.node.tx .date {
+    width: 6em;
+    margin-left: 0.5rem;
+    padding: 0.2rem;
+}
+
+.node.tx .description {
+    width: 20rem;
+    margin-left: 0.5rem;
+}
+
+.node.tx .amount {
+    width: 8rem;
+    margin-left: 0.5rem;
+    text-align: right;
+    font-family: monospace;
+    font-weight: 200;
+}
+
+.node.line .description {
+    width: 20rem;
+}
+
+.node.account .description {
+    width: 20rem;
+}
+
+.node .description {
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.node.account .added {
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    background-color: #e0f0e0;
+    border: 1px solid #e0e0e0;
+    margin-left: 2rem;
+}
+
+.node.account .reversed {
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    border: 1px solid #e0e0e0;
+    background-color: #ffe0e0;
+    margin-left: 2rem;
+}
+
+.reverse .node.tx .amount {
+    background-color: #ffe0e0;
+}
+
+.add .node.tx .amount {
+    background-color: #e0f0e0;
+}
