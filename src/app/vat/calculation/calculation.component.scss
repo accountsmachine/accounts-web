@@ -25,3 +25,43 @@ pre {
     background-color: #f9f9f9;
     border: 1px solid black;
 }
+
+
+
+.calc-tree-invisible {
+  display: none;
+}
+
+.calc-tree ul,
+.calc-tree li {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  list-style-type: none;
+}
+
+/*
+ * This padding sets alignment of the nested nodes.
+ */
+.calc-tree .mat-nested-tree-node div[role=group] {
+  padding-left: 40px;
+}
+
+/*
+ * Padding for leaf nodes.
+ * Leaf nodes need to have padding so as to align with other non-leaf nodes
+ * under the same parent.
+ */
+.calc-tree div[role=group] > .mat-tree-node {
+  padding-left: 40px;
+}
+
+mat-tree-node {
+//    height: 12px !important;
+//    min-height: 1.4rem !important;
+}
+
+.mat-tree-node {
+//    height: 12px !important;
+//    min-height: 1.4rem !important;
+}
+

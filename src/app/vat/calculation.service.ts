@@ -6,8 +6,13 @@ import { VatConfig } from './vat-config';
 import { ApiService } from '../api.service';
 
 export class Calculation {
-    PeriodStart : string = "";
-    PeriodEnd : string = "";
+    [line : string] : {
+	[account : string] : {
+	    amount : number;
+	    description : string;
+	    date : string;
+	}[];
+    };
 };
 
 @Injectable({
@@ -33,7 +38,7 @@ export class CalculationService {
     }
 
     load(id : string) {
-	let url = "/api/vat/compute/" + id;
+	let url = "/api/vat/calculate/" + id;
 
 	return new Observable<Calculation>(obs => {
 	    this.api.post<Calculation>(url, {}).subscribe(

@@ -17,6 +17,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTreeModule } from '@angular/material/tree';
+import {
+    DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
+} from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatStepperModule } from '@angular/material/stepper'; 
+import { DATE_FORMATS } from '../date-formats';
 
 import { NavComponent } from './nav/nav.component';
 import { NewComponent } from './new/new.component';
@@ -25,23 +32,15 @@ import { PeriodComponent } from './period/period.component';
 import { CalculationComponent } from './calculation/calculation.component';
 import { PreviewComponent } from './preview/preview.component';
 import { SubmitComponent } from './submit/submit.component';
-
-import {
-    DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
-} from '@angular/material/core';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MatStepperModule } from '@angular/material/stepper'; 
-import { DATE_FORMATS } from '../date-formats';
-
-import { SharedModule } from '../shared/shared.module';
 import { ChecklistModule } from '../checklist/checklist.module';
-
 import { ChecklistComponent } from './checklist/checklist.component';
 import { ReportComponent } from './report/report.component';
 import { StatusComponent } from './status/status.component';
 import { DataComponent } from './data/data.component';
 import { RecordComponent } from './record/record.component';
 import { LabelComponent } from './label/label.component';
+
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -78,6 +77,7 @@ import { LabelComponent } from './label/label.component';
 	MatSlideToggleModule,
 	MatNativeDateModule,
 	MatIconModule,
+        MatTreeModule,	
 	MatTableModule,
 	MatSelectModule,
 	RouterModule,

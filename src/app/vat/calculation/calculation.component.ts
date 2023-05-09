@@ -4,6 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+
 import * as moment from 'moment';
 
 import { CompanyService, Company, Companies } from '../../company/company.service';
@@ -12,6 +15,14 @@ import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
 import { ConfigurationService } from '../../configuration.service';
 import { CalculationService, Calculation } from '../calculation.service';
+import { MappingService } from '../../books/mapping.service';
+
+interface TransactionNode {
+    date? : string;
+    description : string;
+    amount? : number;
+    children?: TransactionNode[];
+};
 
 @Component({
   selector: 'app-calculation',
@@ -22,7 +33,9 @@ export class CalculationComponent {
 
     debug : string = "debug";
 
-    record : Calculation = new Calculation();
+    calc : Calculation = new Calculation();
+
+    tree_data : TransactionNode[] = [];
 
     companies : Companies = {};
 
@@ -50,7 +63,7 @@ export class CalculationComponent {
 		this.id = e.id;
 	    	this.config = e.config;
 
-		this.get_comps(e.id);
+		this.get_calcs(e.id);
 	    },
 
 	    error: e => {
@@ -84,7 +97,7 @@ export class CalculationComponent {
 	});
     }
 
-    get_comps(id : string) {
+    get_calcs(id : string) {
 
 	this.working.start();
 
@@ -92,26 +105,105 @@ export class CalculationComponent {
 
 	    next: record => {
 		this.working.stop();
-		this.load_comps(record);
+		this.load_calcs(record);
 	    },
 
 	    error: e => {
 		this.working.stop();
-		this.record = new Calculation();
+		this.calc = new Calculation();
 	    }
 
 	});
 
     }
 
-    load_comps(record : Calculation) {
+    load_calcs(calc : Calculation) {
 
-	console.log(record);
+	this.debug = JSON.stringify(calc, null, 4);
+	this.calc = calc;
 
-	this.debug = JSON.stringify(record, null, 4);
-	this.record = record;
+	let tree_data : any = [];
+
+	const boxes = [
+	    "vat-output-sales",
+	    "vat-output-acquisitions",
+	    "vat-input",
+  	    "total-vatex-sales",
+	    "total-vatex-purchases",
+	    "total-vatex-goods-supplied",
+	    "total-vatex-acquisitions"
+	];
+
+	for (let box of boxes) {
+
+	    let children : TransactionNode[] = [];
+
+	    if (!(box in calc)) continue;
+
+	    for(let row in calc[box]) {
+
+		let acct = calc[box][row];
+
+		if (acct.length == 0) {
+		    children.push({
+			description: row,
+			children: [{
+			    description: "no transactions",
+			}]
+		    });
+		    continue;
+		}
+
+		children.push({
+		    description: row,
+		    children: acct,
+		});
+
+	    }
+
+//	    console.log(calc[box]);
+/*
+	    for (let acct of calc[box]) {
+		children.push({
+		    description: acct
+		});
+		}
+		*/
+
+	    let desc = "Box " + this.mapping.vat_box(box).toString() + ": " +
+		this.mapping.vat_desc(box);
+
+	    tree_data.push({
+		description: desc,
+		children: children,
+	    });
+
+	}
+
+	/*
+	for(let line in calc) {
+	    tree_data.push({
+		description: line,
+		children: [
+		    {
+			description: "asd",
+		    },
+		    {
+			description: "def",
+		    }
+		],
+	    });
+	}*/
+
+	console.log(tree_data);
+
+	this.tree_data = tree_data;
+	this.dataSource.data = tree_data;
 
     }
+
+    treeControl = new NestedTreeControl<TransactionNode>(node => node.children);
+    dataSource = new MatTreeNestedDataSource<TransactionNode>();
 
     constructor(
 	private route : ActivatedRoute,
@@ -121,14 +213,22 @@ export class CalculationComponent {
 	private calcs : CalculationService,
 	private working : WorkingService,
 	private configSvc : ConfigurationService,
+	private mapping : MappingService,
     ) {
 
 	this.route.params.subscribe(params => {
 	    this.get_config(params["id"]);
 	});
+
+	this.dataSource.data = this.tree_data;
+
     }
 
     ngOnInit() : void {
+    }
+
+    hasChild(_ : number, node : TransactionNode) {
+	return !!node.children && node.children.length > 0;
     }
 
 }
