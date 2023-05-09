@@ -15,19 +15,23 @@
 		[treeControl]="treeControl" class="calc-tree">
 
 	<mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
-	  {{node.description}} - {{node.amount}}
-	  - {{node.date}}
+	  <div class="node tx">
+	    <div class="date">{{node.date}}</div>
+	    <div class="description">{{node.description}}</div>
+	    <div class="amount">{{node.amount}}</div>
+	  </div>
 	</mat-tree-node>
 
 	<mat-nested-tree-node *matTreeNodeDef="let node; when: isLine">
-	  <div class="mat-tree-node">
+	  <div class="mat-tree-node node line">
             <button mat-icon-button matTreeNodeToggle
                     [attr.aria-label]="'Toggle ' + node.description">
               <mat-icon class="mat-icon-rtl-mirror">
 		{{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
               </mat-icon>
             </button>
-            {{node.description}} - {{node.amount}}
+            <div class="description">{{node.description}}</div>
+	    <div class="amount">{{node.amount}}</div>
 	  </div>
 	  <div [class.calc-tree-invisible]="!treeControl.isExpanded(node)"
                role="group">
@@ -36,16 +40,24 @@
 	</mat-nested-tree-node>
 
 	<mat-nested-tree-node *matTreeNodeDef="let node; when: isAccount">
-	  <div class="mat-tree-node">
+	  <div class="mat-tree-node node account">
             <button mat-icon-button matTreeNodeToggle
                     [attr.aria-label]="'Toggle ' + node.description">
               <mat-icon class="mat-icon-rtl-mirror">
 		{{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
               </mat-icon>
             </button>
-            {{node.description}} - {{node.amount}}
+            <div class="description">{{node.description}}</div>
+	    <div class="amount">{{node.amount}}</div>
+	    <div class="reversed" *ngIf="node.reversed">
+	      reversed
+	    </div>
+	    <div class="added" *ngIf="!node.reversed">
+	      added
+	    </div>
 	  </div>
 	  <div [class.calc-tree-invisible]="!treeControl.isExpanded(node)"
+	       [class]="node.reversed ? 'reverse' : 'add'"
                role="group">
             <ng-container matTreeNodeOutlet></ng-container>
 	  </div>

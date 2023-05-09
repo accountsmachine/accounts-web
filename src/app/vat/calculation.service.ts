@@ -8,10 +8,13 @@ import { ApiService } from '../api.service';
 export class Calculation {
     [line : string] : {
 	[account : string] : {
-	    amount : number;
-	    description : string;
-	    date : string;
-	}[];
+	    transactions : {
+		amount : number;
+		description : string;
+		date : string;
+	    }[];
+	    reversed : boolean;
+	}
     };
 };
 

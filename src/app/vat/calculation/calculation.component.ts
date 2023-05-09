@@ -31,6 +31,7 @@ class LineNode extends Node {
 class AccountNode extends Node {
     description : string = "n/a";
     amount : number = 0;
+    reversed : boolean = false;
     override kind() { return "account"; }
 };
 
@@ -133,6 +134,8 @@ export class CalculationComponent {
 
     load_calcs(calc : Calculation) {
 
+	console.log(calc);
+
 	this.debug = JSON.stringify(calc, null, 4);
 	this.calc = calc;
 
@@ -154,7 +157,8 @@ export class CalculationComponent {
 
 	    line.description = "Box " + this.mapping.vat_box(box).toString() +
 		": " + this.mapping.vat_desc(box);
-	    line.amount = 100;
+
+	    line.amount = 0;
 
 	    if (box in calc) {
 
@@ -164,11 +168,16 @@ export class CalculationComponent {
 
 		    let acctn = new AccountNode();
 		    acctn.description = row;
-		    acctn.amount = 100;
-		    acctn.children = acct.map(
+		    acctn.reversed = acct.reversed;
+		    acctn.amount = acct.transactions.reduce(
+			(acc, cur) => acc + cur.amount,
+			0
+		    );
+		    if (acct.reversed) acctn.amount = -acctn.amount;
+		    acctn.children = acct.transactions.map(
 			(tx) => {
 			    let tn = new TransactionNode();
-			    tn.amount = tx.amount;
+			    tn.amount = acct.reversed ? -tx.amount : tx.amount;
 			    tn.description = tx.description;
 			    tn.date = tx.date;
 			    return tn;
@@ -177,88 +186,22 @@ export class CalculationComponent {
 
 		    line.children.push(acctn);
 
+		    line.amount += acctn.amount;
+
 		}
 
 	    }
 
 	    tree_data.push(line);
 
-
-
-/*
-
-	    let children : TransactionNode[] = [];
-
-	    if (!(box in calc)) continue;
-
-	    for(let row in calc[box]) {
-
-		let acct = calc[box][row];
-
-		if (acct.length == 0) {
-		    children.push({
-			description: row,
-			children: [
-/*
-			    {
-				description: "no transactions",
-			    }
-*/
-
-	    /*
-			]
-		    });
-		    continue;
-		}
-
-		children.push({
-		    description: row,
-		    children: acct,
-		});
-*/
-
-
-//	    console.log(calc[box]);
-/*
-	    for (let acct of calc[box]) {
-		children.push({
-		    description: acct
-		});
-		}
-		*/
-
-
-	/*
-	for(let line in calc) {
-	    tree_data.push({
-		description: line,
-		children: [
-		    {
-			description: "asd",
-		    },
-		    {
-			description: "def",
-		    }
-		],
-	    });
-	    }*/
-
 	}
 
 	console.log(tree_data);
 
-	/*
-	for (let node of tree_data) {
-	    console.log(">>", node);
-	    console.log(node.kind);
-	    console.log(node.kind());
-	    }
-	    */
-
-	//	this.tree_data = tree_data;
-
-	console.log(tree_data[1].kind());
 	this.dataSource.data = tree_data;
+
+	this.treeControl.dataNodes = tree_data;
+	this.treeControl.expandAll();
 
     }
 
@@ -286,12 +229,6 @@ export class CalculationComponent {
 
     ngOnInit() : void {
     }
-/*
-    hasChild(_ : number, node : TransactionNode) {
-	return !!node.children;
-//	    && node.children.length > 0;
-}
-*/
 
     isLine(num : number, n : Node) {
 	return n.kind() == "line";
