@@ -17,11 +17,28 @@ import { ConfigurationService } from '../../configuration.service';
 import { CalculationService, Calculation } from '../calculation.service';
 import { MappingService } from '../../books/mapping.service';
 
-interface TransactionNode {
-    date? : string;
-    description : string;
-    amount? : number;
-    children?: TransactionNode[];
+class Node {
+    kind() { return ""; }
+    children : Node[] = [];
+};
+
+class LineNode extends Node {
+    description : string = "n/a";
+    amount : number = 0;
+    override kind() { return "line"; }
+};
+
+class AccountNode extends Node {
+    description : string = "n/a";
+    amount : number = 0;
+    override kind() { return "account"; }
+};
+
+class TransactionNode extends Node {
+    date : string = "-";
+    description : string = "n/a";
+    amount : number = 0;
+    override kind() { return "transaction"; }
 };
 
 @Component({
@@ -34,8 +51,6 @@ export class CalculationComponent {
     debug : string = "debug";
 
     calc : Calculation = new Calculation();
-
-    tree_data : TransactionNode[] = [];
 
     companies : Companies = {};
 
@@ -62,7 +77,6 @@ export class CalculationComponent {
 
 		this.id = e.id;
 	    	this.config = e.config;
-
 		this.get_calcs(e.id);
 	    },
 
@@ -122,7 +136,7 @@ export class CalculationComponent {
 	this.debug = JSON.stringify(calc, null, 4);
 	this.calc = calc;
 
-	let tree_data : any = [];
+	let tree_data : LineNode[] = [];
 
 	const boxes = [
 	    "vat-output-sales",
@@ -136,6 +150,43 @@ export class CalculationComponent {
 
 	for (let box of boxes) {
 
+	    let line = new LineNode();
+
+	    line.description = "Box " + this.mapping.vat_box(box).toString() +
+		": " + this.mapping.vat_desc(box);
+	    line.amount = 100;
+
+	    if (box in calc) {
+
+		for (let row in calc[box]) {
+
+		    let acct = calc[box][row];
+
+		    let acctn = new AccountNode();
+		    acctn.description = row;
+		    acctn.amount = 100;
+		    acctn.children = acct.map(
+			(tx) => {
+			    let tn = new TransactionNode();
+			    tn.amount = tx.amount;
+			    tn.description = tx.description;
+			    tn.date = tx.date;
+			    return tn;
+			}
+		    );
+
+		    line.children.push(acctn);
+
+		}
+
+	    }
+
+	    tree_data.push(line);
+
+
+
+/*
+
 	    let children : TransactionNode[] = [];
 
 	    if (!(box in calc)) continue;
@@ -147,9 +198,15 @@ export class CalculationComponent {
 		if (acct.length == 0) {
 		    children.push({
 			description: row,
-			children: [{
-			    description: "no transactions",
-			}]
+			children: [
+/*
+			    {
+				description: "no transactions",
+			    }
+*/
+
+	    /*
+			]
 		    });
 		    continue;
 		}
@@ -158,8 +215,8 @@ export class CalculationComponent {
 		    description: row,
 		    children: acct,
 		});
+*/
 
-	    }
 
 //	    console.log(calc[box]);
 /*
@@ -170,15 +227,6 @@ export class CalculationComponent {
 		}
 		*/
 
-	    let desc = "Box " + this.mapping.vat_box(box).toString() + ": " +
-		this.mapping.vat_desc(box);
-
-	    tree_data.push({
-		description: desc,
-		children: children,
-	    });
-
-	}
 
 	/*
 	for(let line in calc) {
@@ -193,17 +241,29 @@ export class CalculationComponent {
 		    }
 		],
 	    });
-	}*/
+	    }*/
+
+	}
 
 	console.log(tree_data);
 
-	this.tree_data = tree_data;
+	/*
+	for (let node of tree_data) {
+	    console.log(">>", node);
+	    console.log(node.kind);
+	    console.log(node.kind());
+	    }
+	    */
+
+	//	this.tree_data = tree_data;
+
+	console.log(tree_data[1].kind());
 	this.dataSource.data = tree_data;
 
     }
 
-    treeControl = new NestedTreeControl<TransactionNode>(node => node.children);
-    dataSource = new MatTreeNestedDataSource<TransactionNode>();
+    treeControl = new NestedTreeControl<Node>(node => node.children);
+    dataSource = new MatTreeNestedDataSource<LineNode>();
 
     constructor(
 	private route : ActivatedRoute,
@@ -220,15 +280,29 @@ export class CalculationComponent {
 	    this.get_config(params["id"]);
 	});
 
-	this.dataSource.data = this.tree_data;
+	this.dataSource.data = [];
 
     }
 
     ngOnInit() : void {
     }
-
+/*
     hasChild(_ : number, node : TransactionNode) {
-	return !!node.children && node.children.length > 0;
+	return !!node.children;
+//	    && node.children.length > 0;
+}
+*/
+
+    isLine(num : number, n : Node) {
+	return n.kind() == "line";
+    }
+
+    isAccount(num : number, n : Node) {
+	return n.kind() == "account";
+    }
+
+    isTransaction(num : number, n : Node) {
+	return n.kind() == "transaction";
     }
 
 }
