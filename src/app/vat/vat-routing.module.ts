@@ -6,6 +6,7 @@ import { LabelComponent } from './label/label.component';
 import { CompanyComponent } from './company/company.component';
 import { PeriodComponent } from './period/period.component';
 import { ChecklistComponent } from './checklist/checklist.component';
+import { CalculationComponent } from './calculation/calculation.component';
 import { PreviewComponent } from './preview/preview.component';
 import { SubmitComponent } from './submit/submit.component';
 import { ReportComponent } from './report/report.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
 	{ path: 'company', component: CompanyComponent },
 	{ path: 'period', component: PeriodComponent },
 	{ path: 'checklist', component: ChecklistComponent },
+	{ path: 'calculation', component: CalculationComponent },
 	{ path: 'preview', component: PreviewComponent },
 	{ path: 'submit', component: SubmitComponent },
 	{ path: 'report', component: ReportComponent },

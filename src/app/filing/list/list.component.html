@@ -37,10 +37,12 @@
 
   <div *ngIf="nocredits()">
     <mat-card class="status">
-      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
-      You have no credits.  You can create filings, but you will not be
-      able to submit them online.  Use <strong>Manage credits</strong> to buy
-      credits when you are ready to submit a filing.
+      <mat-card-content>
+	<mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+	You have no credits.  You can create filings, but you will not be
+	able to submit them online.  Use <strong>Manage credits</strong> to buy
+	credits when you are ready to submit a filing.
+      </mat-card-content>
     </mat-card>
   </div>
 
@@ -55,13 +57,17 @@
       <div class="card-display">
 	<ng-container *ngFor="let config of draft">
 	  <mat-card class="filing">
-	    <mat-card-title>
-	      <mat-icon>drafts</mat-icon>
-	      &nbsp;
-	      {{config.label}}
-	    </mat-card-title>
-	    <div class="company">{{company(config)}}</div>
-	    <div class="kind">{{kind_label(config.kind)}}</div>
+	    <mat-card-header>
+	      <mat-card-title>
+		<mat-icon>drafts</mat-icon>
+		&nbsp;
+		{{config.label}}
+	      </mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <div class="company">{{company(config)}}</div>
+	      <div class="kind">{{kind_label(config.kind)}}</div>
+	    </mat-card-content>
 	    <mat-card-actions align="start">
 	      <button mat-button (click)="edit(config)">
 		<mat-icon>edit</mat-icon> EDIT
@@ -80,13 +86,17 @@
       <div class="card-display">
 	<ng-container *ngFor="let config of pending">
 	  <mat-card class="filing pending">
-	    <mat-card-title>
-	      <mat-icon>pending</mat-icon>
-	      &nbsp;
-	      {{config.label}}
-	    </mat-card-title>
-	    <div class="company">{{company(config)}}</div>
-	    <div class="kind">{{kind_label(config.kind)}}</div>
+	    <mat-card-header>
+	      <mat-card-title>
+		<mat-icon>pending</mat-icon>
+		&nbsp;
+		{{config.label}}
+	      </mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <div class="company">{{company(config)}}</div>
+	      <div class="kind">{{kind_label(config.kind)}}</div>
+	    </mat-card-content>
 	    <mat-card-actions align="start">
 	      <button mat-button (click)="view(config)">
 		<mat-icon>edit</mat-icon> VIEW
@@ -102,13 +112,17 @@
       <div class="card-display">
 	<ng-container *ngFor="let config of errored">
 	  <mat-card class="filing errored">
-	    <mat-card-title>
-	      <mat-icon>error</mat-icon>
-	      &nbsp;
-	      {{config.label}}
-	    </mat-card-title>
-	    <div class="company">{{company(config)}}</div>
-	    <div class="kind">{{kind_label(config.kind)}}</div>
+	    <mat-card-header>
+	      <mat-card-title>
+		<mat-icon>error</mat-icon>
+		&nbsp;
+		{{config.label}}
+	      </mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <div class="company">{{company(config)}}</div>
+	      <div class="kind">{{kind_label(config.kind)}}</div>
+	    </mat-card-content>
 	    <mat-card-actions align="start">
 	      <button mat-button (click)="view(config)">
 		<mat-icon>edit</mat-icon> VIEW
@@ -127,13 +141,17 @@
       <div class="card-display">
 	<ng-container *ngFor="let config of published">
 	  <mat-card class="filing">
-	    <mat-card-title>
-	      <mat-icon>check_circle</mat-icon>
-	      &nbsp;
-	      {{config.label}}
-	    </mat-card-title>
-	    <div class="company">{{company(config)}}</div>
-	    <div class="kind">{{kind_label(config.kind)}}</div>
+	    <mat-card-header>
+	      <mat-card-title>
+		<mat-icon>check_circle</mat-icon>
+		&nbsp;
+		{{config.label}}
+	      </mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <div class="company">{{company(config)}}</div>
+	      <div class="kind">{{kind_label(config.kind)}}</div>
+	    </mat-card-content>
 	    <mat-card-actions align="start">
 	      <button mat-button (click)="view(config)">
 		<mat-icon>edit</mat-icon> VIEW

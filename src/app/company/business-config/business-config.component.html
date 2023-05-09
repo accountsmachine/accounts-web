@@ -74,19 +74,19 @@
 	<div id="directors">
 	  <mat-form-field class="chip-list" appearance="fill">
 	    <mat-label>Directors</mat-label>
-	    <mat-chip-list #directorslist aria-label="Directors">
-	      <mat-chip *ngFor="let v of directors!.value" (removed)="removeDirector(v)">
+	    <mat-chip-grid #directorslist aria-label="Directors">
+	      <mat-chip-row *ngFor="let v of directors!.value" (removed)="removeDirector(v)">
 		{{v}}
 		<button matChipRemove>
 		  <mat-icon>cancel</mat-icon>
 		</button>
-	      </mat-chip>
+	      </mat-chip-row>
 	      <input placeholder="A Smith"
 		     [matChipInputFor]="directorslist"
 		     [matChipInputSeparatorKeyCodes]="chipSeparatorKeysCodes"
 		     [matChipInputAddOnBlur]="'true'"
 		     (matChipInputTokenEnd)="addDirector($event)">
-	    </mat-chip-list>
+	    </mat-chip-grid>
 	    <mat-hint>Enter directors e.g. A Smith, B Jones</mat-hint>
 	  </mat-form-field>
 	</div>
@@ -110,12 +110,13 @@
 	  </mat-form-field>
 	</div>
 
-	<button type="submit" [disabled]="!form.valid"
+	<button type="submit" [disabled]="!form.valid" class="action"
 		mat-raised-button color="primary">
 	  Save
 	</button>
 	
-	<button mat-raised-button color="basic" (click)="revert()">
+	<button mat-raised-button class="action" color="basic"
+		(click)="revert()">
 	  Revert
 	</button>
 
