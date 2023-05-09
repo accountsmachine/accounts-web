@@ -85,14 +85,18 @@
       <h2>Pending</h2>
       <div class="card-display">
 	<ng-container *ngFor="let config of pending">
-	  <mat-card appearance="outlined" class="filing pending">
-	    <mat-card-title>
-	      <mat-icon>pending</mat-icon>
-	      &nbsp;
-	      {{config.label}}
-	    </mat-card-title>
-	    <div class="company">{{company(config)}}</div>
-	    <div class="kind">{{kind_label(config.kind)}}</div>
+	  <mat-card class="filing pending">
+	    <mat-card-header>
+	      <mat-card-title>
+		<mat-icon>pending</mat-icon>
+		&nbsp;
+		{{config.label}}
+	      </mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <div class="company">{{company(config)}}</div>
+	      <div class="kind">{{kind_label(config.kind)}}</div>
+	    </mat-card-content>
 	    <mat-card-actions align="start">
 	      <button mat-button (click)="view(config)">
 		<mat-icon>edit</mat-icon> VIEW
@@ -107,14 +111,18 @@
       <h2>Errored</h2>
       <div class="card-display">
 	<ng-container *ngFor="let config of errored">
-	  <mat-card appearance="outlined" class="filing errored">
-	    <mat-card-title>
-	      <mat-icon>error</mat-icon>
-	      &nbsp;
-	      {{config.label}}
-	    </mat-card-title>
-	    <div class="company">{{company(config)}}</div>
-	    <div class="kind">{{kind_label(config.kind)}}</div>
+	  <mat-card class="filing errored">
+	    <mat-card-header>
+	      <mat-card-title>
+		<mat-icon>error</mat-icon>
+		&nbsp;
+		{{config.label}}
+	      </mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <div class="company">{{company(config)}}</div>
+	      <div class="kind">{{kind_label(config.kind)}}</div>
+	    </mat-card-content>
 	    <mat-card-actions align="start">
 	      <button mat-button (click)="view(config)">
 		<mat-icon>edit</mat-icon> VIEW
@@ -132,14 +140,18 @@
       <h2>Published</h2>
       <div class="card-display">
 	<ng-container *ngFor="let config of published">
-	  <mat-card appearance="outlined" class="filing">
-	    <mat-card-title>
-	      <mat-icon>check_circle</mat-icon>
-	      &nbsp;
-	      {{config.label}}
-	    </mat-card-title>
-	    <div class="company">{{company(config)}}</div>
-	    <div class="kind">{{kind_label(config.kind)}}</div>
+	  <mat-card class="filing">
+	    <mat-card-header>
+	      <mat-card-title>
+		<mat-icon>check_circle</mat-icon>
+		&nbsp;
+		{{config.label}}
+	      </mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <div class="company">{{company(config)}}</div>
+	      <div class="kind">{{kind_label(config.kind)}}</div>
+	    </mat-card-content>
 	    <mat-card-actions align="start">
 	      <button mat-button (click)="view(config)">
 		<mat-icon>edit</mat-icon> VIEW
