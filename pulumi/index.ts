@@ -63,6 +63,7 @@ let features : string[] = [];
 if (environment == "dev") {
     sites = [
         "app.dev.accountsmachine.io",
+	// This is necessary for password reset link to work
 	"accounts-machine-dev.firebaseapp.com"
     ];
     authProjectId = "accounts-machine-dev";
@@ -74,7 +75,8 @@ if (environment == "dev") {
 } else if (environment == "stage") {
     sites = [
         "app.stage.accountsmachine.io",
-	"accounts-machine-stage.firebaseapp.com"
+	// This is necessary for password reset link to work
+	"accounts-machine-prod.firebaseapp.com"
     ];
     authProjectId = "accounts-machine-prod";
     hostingProjectId = "accounts-machine-stage";
@@ -83,6 +85,7 @@ if (environment == "dev") {
     sites = [
 	"app.accountsmachine.io",
 	"app.prod.accountsmachine.io",
+	// This is necessary for password reset link to work
 	"accounts-machine-prod.firebaseapp.com"
     ];
     authProjectId = "accounts-machine-prod";
