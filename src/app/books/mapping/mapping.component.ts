@@ -32,8 +32,7 @@ class Row {
 })
 export class MappingComponent implements OnInit, AfterViewInit {
 
-    mapping : MatTableDataSource<Row> =
-	new MatTableDataSource<Row>([]);
+    mapping : MatTableDataSource<Row> = new MatTableDataSource<Row>([]);
 
     id : string = "";
 
@@ -184,7 +183,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	const dialogRef = this.dialog.open(
 	    AccountsSelectionComponent, {
-		width: '650px',
+		width: '750px',
 		data: {
 		    proceed: false,
 		    line: row.line,

@@ -1,7 +1,14 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortable } from '@angular/material/sort';
+
+class Row {
+    account : string = "";
+};
 
 @Component({
     selector: 'accounts-selection',
@@ -21,6 +28,17 @@ export class AccountsSelectionComponent implements OnInit {
         return "g" + this.groupId.toString();
     }
 
+    unmap(acc : string) {
+	console.log("UNMAP ", acc);
+	if (this.mapping.has(acc))
+	    this.mapping.delete(acc);
+    }
+
+    map(acc : string, reversed : boolean) {
+	console.log(acc, reversed);
+	this.mapping.set(acc, reversed);
+    }
+
     select(acc: string, x : any) {
 	if (x.value == "add") {
 	    this.mapping.set(acc, false);
@@ -31,7 +49,43 @@ export class AccountsSelectionComponent implements OnInit {
 	}
     }
 
+    @ViewChild(MatPaginator) paginator? : MatPaginator;
+    @ViewChild(MatSort) sort? : MatSort;
+
+    columns = ['account', 'actions'];
+
+    accounts : MatTableDataSource<Row> = new MatTableDataSource<Row>([]);
+
+    apply_filter(f : any) {
+	let filt = f!.value.trim().toLowerCase();
+	this.accounts.filter = filt;
+    }
+
     ngOnInit(): void {
+    }
+
+    ngAfterViewInit(): void {
+
+	console.log("AVI");
+	this.configure();
+
+    }
+
+    configure() {
+
+	if (!this.mapping) return;
+	if (!this.sort) return;
+
+	setTimeout( () => {
+	    this.sort!.sort(<MatSortable>{
+		"id": "box",
+		"start": "asc",
+	    });
+	}, 0);
+
+	this.accounts.paginator = this.paginator!;
+	this.accounts.sort = this.sort;
+
     }
 
     key : string;
@@ -53,6 +107,15 @@ export class AccountsSelectionComponent implements OnInit {
 	this.key = this.data.key;
         this.all = this.data.accounts;
 	this.mapping = this.data.mapping;
+
+        this.accounts.data = this.data.accounts.map(
+	    a => {
+		let r = new Row();
+		r.account = a;
+		return r;
+	    }
+	);
+
     }
 
     value(acc : string) {

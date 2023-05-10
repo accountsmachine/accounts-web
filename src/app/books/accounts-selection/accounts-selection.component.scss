@@ -21,3 +21,38 @@ div.accounts {
 
 mat-button-toggle {
 }
+
+.reverse {
+    color: #701000;
+    background-color: #fff0f0;
+}
+
+.add {
+    color: #005010;
+    background-color: #f0fff0;
+}
+
+.mapping {
+    padding: 4px 8px 2px 8px;
+    border: 1px solid #d0d0d0;
+    margin: 4px;
+}
+
+mat-icon {
+    vertical-align: middle;
+}
+
+button mat-icon {
+    vertical-align: top;
+}
+
+.selected {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+}
+
+.mat-column-actions {
+    flex: 0 0 30% !important;
+    width: 30% !important;
+}
