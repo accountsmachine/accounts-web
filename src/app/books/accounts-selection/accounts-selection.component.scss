@@ -49,7 +49,13 @@ button mat-icon {
 .selected {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
     margin-bottom: 0.8rem;
+    height: 16rem;
+    border: 1px solid #d0d0d0;
+
 }
 
 .mat-column-actions {

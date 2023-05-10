@@ -3,6 +3,7 @@
 
 <mat-dialog-content>
 
+  <!--
   <p>
     This operation will allow remapping of the VAT return values to
     the accounts in your accounting books.  Ensure the account is
@@ -10,12 +11,15 @@
     value.
     See <a href="https://www.gov.uk/guidance/how-to-fill-in-and-submit-your-vat-return-vat-notice-70012#section3">HMRC guidance</a>.
   </p>
-
+  -->
+  
+<!--
   <p>
     Account lines marked <i>added</i> are added to the VAT return box.
     Account lines marked <i>reversed</i> are subtracted.
     Account lines marked <i>not used</i> are ignored.
   </p>
+  -->
 
   <p *ngIf="key == 'vat-output-sales'">
     This value corresponds with VAT return box 1:
@@ -47,6 +51,10 @@
     This value corresponds with VAT return box 9:
     the total value of all acquisitions of goods and related costs, excluding
     any VAT, from EU member states.
+  </p>
+
+  <p>
+    Selected mapping:
   </p>
 
   <div class="selected">
