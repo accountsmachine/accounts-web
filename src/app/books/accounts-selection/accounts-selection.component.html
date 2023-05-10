@@ -3,20 +3,6 @@
 
 <mat-dialog-content>
 
-  <p>
-    This operation will allow remapping of the VAT return values to
-    the accounts in your accounting books.  Ensure the account is
-    selected for all accounts which should be combined to form this VAT return
-    value.
-    See <a href="https://www.gov.uk/guidance/how-to-fill-in-and-submit-your-vat-return-vat-notice-70012#section3">HMRC guidance</a>.
-  </p>
-
-  <p>
-    Account lines marked <i>added</i> are added to the VAT return box.
-    Account lines marked <i>reversed</i> are subtracted.
-    Account lines marked <i>not used</i> are ignored.
-  </p>
-
   <p *ngIf="key == 'vat-output-sales'">
     This value corresponds with VAT return box 1:
     VAT due on sales and other outputs.
@@ -49,36 +35,59 @@
     any VAT, from EU member states.
   </p>
 
-  <div class="accounts">
+  <p>
+    Selected mapping:
+  </p>
 
-    <ng-container class="account" *ngFor="let acc of all">
+  <div class="selected">
+    <div *ngFor="let acct of data.mapping"
+	 [class]="'mapping ' + (acct.reversed ? 'reverse' : 'add')">
+      <mat-icon *ngIf="acct.reversed">remove</mat-icon>
+      <mat-icon *ngIf="!acct.reversed">add_circle</mat-icon>
+      {{acct.account}}
+      <button mat-button aria-label="Delete" (click)="unmap(acct.account)">
+	<mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <div class="container mat-elevation-z8">
 
-      <div class="accid">{{acc}}</div>
+    <mat-form-field>
+      <input matInput (keyup)="apply_filter($event.target)"
+	     placeholder="Filter">
+    </mat-form-field>
 
-      <div>
+    <mat-table #table [dataSource]="accounts" matSort>
 
-	<mat-button-toggle-group #group="matButtonToggleGroup"
-				 (change)="select(acc, group)"
-				 [value]="value(acc)">
+      <ng-container matColumnDef="account">
+	<mat-header-cell mat-sort-header *matHeaderCellDef>
+	  Account
+	</mat-header-cell>
+	<mat-cell *matCellDef="let row">{{row.account}}</mat-cell>
+      </ng-container>
 
-	  <mat-button-toggle class="off" value="ignore" aria-label="Ignore">
-	    off
-	  </mat-button-toggle>
+      <ng-container matColumnDef="actions">
+	<mat-header-cell mat-sort-header *matHeaderCellDef>
+	</mat-header-cell>
+	<mat-cell *matCellDef="let row">
+	  <button class="add" mat-icon-button aria-label="Add account normally"
+		  (click)="map(row.account, false)">
+	    <mat-icon>add_circle</mat-icon>
+	  </button>
+	  <button class="reverse" mat-icon-button aria-label="Add account reversed"
+		  (click)="map(row.account, true)">
+	    <mat-icon>remove</mat-icon>
+	  </button>
+	</mat-cell>
+      </ng-container>
 
-	  <mat-button-toggle class="add" value="add" aria-label="Add">
-	    add
-	  </mat-button-toggle>
+      <mat-row *matRowDef="let row; columns: columns;">
+      </mat-row>
 
-	  <mat-button-toggle class="reverse" value="reverse"
-			     aria-label="Reverse">
-	    reverse
-	  </mat-button-toggle>
+    </mat-table>
 
-	</mat-button-toggle-group>      
-
-      </div>
-
-    </ng-container>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 
   </div>
 
@@ -89,7 +98,8 @@
     Cancel
   </button>
   <button mat-raised-button color="primary"
-	  [mat-dialog-close]="{ 'proceed': true, 'mapping': mapping, 'key': key}">
+	  [mat-dialog-close]="{ 'proceed': true, 'mapping': data.mapping,
+			      'key': key}">
     Update
   </button>
 </mat-dialog-actions>
