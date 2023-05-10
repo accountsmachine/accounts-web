@@ -134,8 +134,6 @@ export class CalculationComponent {
 
     load_calcs(calc : Calculation) {
 
-	console.log(calc);
-
 	this.debug = JSON.stringify(calc, null, 4);
 	this.calc = calc;
 
@@ -195,8 +193,6 @@ export class CalculationComponent {
 	    tree_data.push(line);
 
 	}
-
-	console.log(tree_data);
 
 	this.dataSource.data = tree_data;
 

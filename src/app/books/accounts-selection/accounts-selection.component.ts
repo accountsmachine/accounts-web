@@ -5,6 +5,7 @@ import {
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortable } from '@angular/material/sort';
+import { AccountInclusion } from '../mapping.service';
 
 class Row {
     account : string = "";
@@ -29,24 +30,21 @@ export class AccountsSelectionComponent implements OnInit {
     }
 
     unmap(acc : string) {
-	console.log("UNMAP ", acc);
-	if (this.mapping.has(acc))
-	    this.mapping.delete(acc);
+
+	this.data.mapping = this.data.mapping.filter(
+	    (row : AccountInclusion) => row.account !== acc
+	);
+
     }
 
     map(acc : string, reversed : boolean) {
-	console.log(acc, reversed);
-	this.mapping.set(acc, reversed);
-    }
 
-    select(acc: string, x : any) {
-	if (x.value == "add") {
-	    this.mapping.set(acc, false);
-	} else if (x.value == "reverse") {
-	    this.mapping.set(acc, true);
-	} else {
-	    this.mapping.delete(acc);
-	}
+	this.data.mapping = this.data.mapping.filter(
+	    (row : AccountInclusion) => row.account !== acc
+	);
+
+	this.data.mapping.push(new AccountInclusion(acc, reversed));
+
     }
 
     @ViewChild(MatPaginator) paginator? : MatPaginator;
@@ -65,15 +63,11 @@ export class AccountsSelectionComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
-
-	console.log("AVI");
 	this.configure();
-
     }
 
     configure() {
 
-	if (!this.mapping) return;
 	if (!this.sort) return;
 
 	setTimeout( () => {
@@ -91,7 +85,6 @@ export class AccountsSelectionComponent implements OnInit {
     key : string;
     line : string;
     all : string[];
-    mapping : Map<string, boolean>;
 
     constructor(
 	public dialogRef: MatDialogRef<AccountsSelectionComponent>,
@@ -100,13 +93,12 @@ export class AccountsSelectionComponent implements OnInit {
 	    key : string,
 	    line : string,
 	    accounts : string[],
-	    mapping : Map<string, boolean>,
+	    mapping : AccountInclusion[],
 	},
     ) {
 	this.line = this.data.line;
 	this.key = this.data.key;
         this.all = this.data.accounts;
-	this.mapping = this.data.mapping;
 
         this.accounts.data = this.data.accounts.map(
 	    a => {
@@ -116,16 +108,6 @@ export class AccountsSelectionComponent implements OnInit {
 	    }
 	);
 
-    }
-
-    value(acc : string) {
-	if (this.mapping.has(acc))
-	    if (this.mapping.get(acc)) {
-		return "reverse";
-	    } else {
-		return "add";
-	    }
-	return "ignore";
     }
 
 }

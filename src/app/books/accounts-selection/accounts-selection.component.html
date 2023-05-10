@@ -50,12 +50,12 @@
   </p>
 
   <div class="selected">
-    <div *ngFor="let acct of mapping.keys()"
-	 [class]="'mapping ' + (mapping.get(acct) ? 'reverse' : 'add')">
-      <mat-icon *ngIf="mapping.get(acct)">remove</mat-icon>
-      <mat-icon *ngIf="!mapping.get(acct)">add_circle</mat-icon>
-      {{acct}}
-      <button mat-button aria-label="Delete" (click)="unmap(acct)">
+    <div *ngFor="let acct of data.mapping"
+	 [class]="'mapping ' + (acct.reversed ? 'reverse' : 'add')">
+      <mat-icon *ngIf="acct.reversed">remove</mat-icon>
+      <mat-icon *ngIf="!acct.reversed">add_circle</mat-icon>
+      {{acct.account}}
+      <button mat-button aria-label="Delete" (click)="unmap(acct.account)">
 	<mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -108,7 +108,8 @@
     Cancel
   </button>
   <button mat-raised-button color="primary"
-	  [mat-dialog-close]="{ 'proceed': true, 'mapping': mapping, 'key': key}">
+	  [mat-dialog-close]="{ 'proceed': true, 'mapping': data.mapping,
+			      'key': key}">
     Update
   </button>
 </mat-dialog-actions>

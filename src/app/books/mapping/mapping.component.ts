@@ -175,12 +175,6 @@ export class MappingComponent implements OnInit, AfterViewInit {
 
 	if (!this.accounts) return;
 
-	let amap : Map<string, boolean> = new Map<string, boolean>();
-
-	for (let item of row.mapping) {
-	    amap.set(item.account, item.reversed);
-	}
-
 	const dialogRef = this.dialog.open(
 	    AccountsSelectionComponent, {
 		width: '750px',
@@ -188,7 +182,7 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		    proceed: false,
 		    line: row.line,
 		    key: row.key,
-		    mapping: amap,
+		    mapping: row.mapping,
 		    accounts: this.accounts.map((a) => a.account)
 		},
 	    }
@@ -204,21 +198,10 @@ export class MappingComponent implements OnInit, AfterViewInit {
 		if (!result.mapping) return;
 		if (!result.key) return;
 
-		let mapping : AccountInclusion[] = [];
-
-		for (let acc of result.mapping.keys()) {
-		    mapping.push(
-			{
-			    account: acc,
-			    reversed: result.mapping.get(acc)
-			}
-		    );
-		}
-
-		this.book_mapping[result.key] = mapping;
+		this.book_mapping[result.key] = result.mapping;
 		this.update_table();
 
-		this.mappingService.set(result.key, mapping).subscribe(
+		this.mappingService.set(result.key, result.mapping).subscribe(
 		    () => {
 			this.snackBar.open(
 			    "Mapping updated", "dismiss",
