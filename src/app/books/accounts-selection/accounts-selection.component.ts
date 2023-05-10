@@ -1,7 +1,15 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortable } from '@angular/material/sort';
+import { AccountInclusion } from '../mapping.service';
+
+class Row {
+    account : string = "";
+};
 
 @Component({
     selector: 'accounts-selection',
@@ -21,23 +29,62 @@ export class AccountsSelectionComponent implements OnInit {
         return "g" + this.groupId.toString();
     }
 
-    select(acc: string, x : any) {
-	if (x.value == "add") {
-	    this.mapping.set(acc, false);
-	} else if (x.value == "reverse") {
-	    this.mapping.set(acc, true);
-	} else {
-	    this.mapping.delete(acc);
-	}
+    unmap(acc : string) {
+
+	this.data.mapping = this.data.mapping.filter(
+	    (row : AccountInclusion) => row.account !== acc
+	);
+
+    }
+
+    map(acc : string, reversed : boolean) {
+
+	this.data.mapping = this.data.mapping.filter(
+	    (row : AccountInclusion) => row.account !== acc
+	);
+
+	this.data.mapping.push(new AccountInclusion(acc, reversed));
+
+    }
+
+    @ViewChild(MatPaginator) paginator? : MatPaginator;
+    @ViewChild(MatSort) sort? : MatSort;
+
+    columns = ['account', 'actions'];
+
+    accounts : MatTableDataSource<Row> = new MatTableDataSource<Row>([]);
+
+    apply_filter(f : any) {
+	let filt = f!.value.trim().toLowerCase();
+	this.accounts.filter = filt;
     }
 
     ngOnInit(): void {
     }
 
+    ngAfterViewInit(): void {
+	this.configure();
+    }
+
+    configure() {
+
+	if (!this.sort) return;
+
+	setTimeout( () => {
+	    this.sort!.sort(<MatSortable>{
+		"id": "box",
+		"start": "asc",
+	    });
+	}, 0);
+
+	this.accounts.paginator = this.paginator!;
+	this.accounts.sort = this.sort;
+
+    }
+
     key : string;
     line : string;
     all : string[];
-    mapping : Map<string, boolean>;
 
     constructor(
 	public dialogRef: MatDialogRef<AccountsSelectionComponent>,
@@ -46,23 +93,21 @@ export class AccountsSelectionComponent implements OnInit {
 	    key : string,
 	    line : string,
 	    accounts : string[],
-	    mapping : Map<string, boolean>,
+	    mapping : AccountInclusion[],
 	},
     ) {
 	this.line = this.data.line;
 	this.key = this.data.key;
         this.all = this.data.accounts;
-	this.mapping = this.data.mapping;
-    }
 
-    value(acc : string) {
-	if (this.mapping.has(acc))
-	    if (this.mapping.get(acc)) {
-		return "reverse";
-	    } else {
-		return "add";
+        this.accounts.data = this.data.accounts.map(
+	    a => {
+		let r = new Row();
+		r.account = a;
+		return r;
 	    }
-	return "ignore";
+	);
+
     }
 
 }
