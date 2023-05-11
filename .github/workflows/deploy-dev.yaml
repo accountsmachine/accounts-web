@@ -27,12 +27,6 @@ jobs:
         id: version
         run: echo VERSION=sha-$(git rev-parse --short HEAD) >> $GITHUB_OUTPUT
 
-      - name: Setup for Angular
-        run: npm install
-
-      - name: Install Angular cli
-        run: npm install -g @angular/cli
-
       - name: Extract metadata for container
         id: meta
         uses: docker/metadata-action@v4
@@ -54,7 +48,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: Containerfile
           build-args: |
-            DIST=dist/dev
+	    KIND=dev
 
       - id: auth
         name: Authenticate with Google Cloud
