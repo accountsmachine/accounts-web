@@ -1,5 +1,5 @@
 
-FROM alpine:3.18 AS build
+FROM alpine:3.17 AS build
 
 ARG KIND=KIND
 
@@ -14,14 +14,14 @@ COPY src /root/build/src/
 WORKDIR /root/build
 
 RUN npm install
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli@15
 RUN make serve
 
 RUN make build BUILD=${KIND}
 
 RUN cp 404.html dist/${KIND}/
 
-FROM alpine:3.18
+FROM alpine:3.17
 
 ARG KIND=KIND
 
