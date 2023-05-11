@@ -48,7 +48,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: Containerfile
           build-args: |
-	    KIND=dev
+            KIND=dev
 
       - id: auth
         name: Authenticate with Google Cloud
