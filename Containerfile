@@ -1,18 +1,39 @@
 
-FROM fedora:36
+FROM alpine:3.18 AS build
 
-ARG DIST=MISSING_ARG
-ARG PORT=8080
+ARG KIND=KIND
 
-RUN dnf update -y && dnf install -y libgo && dnf clean all
+RUN apk add --update --no-cache --no-progress go npm make
 
-ADD serve /usr/local/bin/serve
-ADD ${DIST} /usr/local/web/
+COPY 404.html /root/build/
+COPY Makefile /root/build/
+COPY angular.json package.json package-lock.json /root/build/
+COPY karma.conf.js serve.go tsconfig*.json /root/build/
+COPY src /root/build/src/
+
+WORKDIR /root/build
+
+RUN npm install
+RUN npm install -g @angular/cli
+RUN make serve
+
+RUN make build BUILD=${KIND}
+
+RUN cp 404.html dist/${KIND}/
+
+FROM alpine:3.18
+
+ARG KIND=KIND
+
+RUN apk add --update --no-cache --no-progress libgo
+COPY --from=build /root/build/dist/${KIND} /usr/local/web/
+COPY --from=build /root/build/serve /usr/local/bin/serve
 
 RUN rm -f /usr/local/web/assets/config.json
 RUN ln -s /configs/config /usr/local/web/assets/config.json
 
 WORKDIR /usr/local/web/
-CMD /usr/local/bin/serve 0.0.0.0:${PORT} api.dev.accountsmachine.io https ./
-EXPOSE ${PORT}
+CMD /usr/local/bin/serve 0.0.0.0:8080 api.dev.accountsmachine.io https ./
+EXPOSE 8080
+
 

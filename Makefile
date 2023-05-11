@@ -68,7 +68,7 @@ container-prod: all container
 
 container: all
 	podman build -f Containerfile -t ${CONTAINER}:${VERSION} \
-	    --format docker --build-arg DIST=dist/${KIND}
+	    --format docker --build-arg KIND=${KIND}
 
 login:
 	gcloud auth print-access-token | \
