@@ -27,12 +27,6 @@ jobs:
         id: version
         run: echo VERSION=sha-$(git rev-parse --short HEAD) >> $GITHUB_OUTPUT
 
-      - name: Setup for Angular
-        run: npm install --force
-
-      - name: Install Angular cli
-        run: npm install -g @angular/cli
-
       - name: Extract metadata for container
         id: meta
         uses: docker/metadata-action@v4
@@ -45,9 +39,6 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
 
-      - name: Build Angular app
-        run: make build BUILD=prod
-
       - name: Build container
         uses: docker/build-push-action@v3
         with:
@@ -57,7 +48,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           file: Containerfile
           build-args: |
-            DIST=dist/prod
+            KIND=prod
 
       - id: auth
         name: Authenticate with Google Cloud
@@ -102,3 +93,4 @@ jobs:
           MAX_SCALE: "1"
           ENVIRONMENT: "prod"
           API_HOSTNAME: api.prod.accountsmachine.io
+
