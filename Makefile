@@ -55,7 +55,7 @@ local:
 
 NAME=accounts-web
 REPO=europe-west2-docker.pkg.dev/accounts-machine-${KIND}/accounts-machine
-CONTAINER=${REPO}/${NAME}
+CONTAINER=${NAME}
 
 container-dev: KIND=dev
 container-dev: all container
@@ -90,7 +90,9 @@ push:
 start:
 	podman run -d --name ${NAME} \
 	    -p 8080:8080 \
-	    ${CONTAINER}:${VERSION}
+	    ${CONTAINER}:${VERSION} \
+	    /usr/local/bin/serve 0.0.0.0:8080 api.dev.accountsmachine.io \
+	        https ./
 
 stop:
 	podman rm -f ${NAME}

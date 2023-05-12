@@ -266,7 +266,7 @@ const service = new gcp.cloudrun.Service(
 			],
 			commands: [
 			    "/usr/local/bin/serve",
-			    "0:8080",                 // Listen
+			    "0.0.0.0:8080",           // Listen
 			    process.env.API_HOSTNAME, // API resource
 			    "https",		      // API scheme
 			    "./",		      // Base
