@@ -93,3 +93,4 @@ jobs:
           MAX_SCALE: "1"
           ENVIRONMENT: "prod"
           API_HOSTNAME: api.prod.accountsmachine.io
+
