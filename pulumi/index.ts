@@ -121,7 +121,9 @@ const enableApiKeys = new gcp.projects.Service(
 const apiKey = new gcp.projects.ApiKey(
     "api-key",
     {
-	name: "web-cli-2-" + environment,
+        // This number needs to be incremented occasionally because the
+	// apikey can't be undeployed and re-reployed
+	name: "web-cli-3-" + environment,
 	project: authProjectId,
 	displayName: "Web client on " + environment,
 	restrictions: {
