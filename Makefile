@@ -1,5 +1,6 @@
 
 VERSION=$(shell git describe | sed 's/^v//')
+PACKAGE_VERSION=2.1.0
 DIST=dist
 
 all: serve
@@ -43,7 +44,7 @@ build:
 	rm -f serve && make serve
 	rm -rf ${DIST}/${BUILD}
 	mkdir -p ${DIST}/${BUILD}
-	cat src/version.ts | sed 's/1.0.0/${VERSION}/' > src/version.${BUILD}.ts
+	cat src/version.ts | sed 's/0.0.0/${PACKAGE_VERSION}/' > src/version.${BUILD}.ts
 	ng build -c ${BUILD} --output-path ${DIST}/${BUILD}
 	cp 404.html ${DIST}/${BUILD}
 
@@ -88,11 +89,9 @@ push:
 	podman push --remove-signatures ${CONTAINER}:${VERSION}
 
 start:
-	podman run -d --name ${NAME} \
-	    -p 8080:8080 \
-	    ${CONTAINER}:${VERSION} \
-	    /usr/local/bin/serve 0.0.0.0:8080 api.dev.accountsmachine.io \
-	        https ./
+	podman run -i -t --volume $$(pwd)/configs:/configs \
+	    -p 8080:8080 ${CONTAINER}:${VERSION} \
+	    /usr/local/bin/serve 0.0.0.0:8080 192.168.0.105:8081 http ./
 
 stop:
 	podman rm -f ${NAME}
