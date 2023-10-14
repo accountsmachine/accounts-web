@@ -7,15 +7,13 @@ import { CompanyLookupService } from '../company-lookup.service';
 import { CompanyService, Company } from '../company.service';
 
 @Component({
-  selector: 'company-new',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss']
+  selector: 'new-uk-company',
+  templateUrl: './new-uk-company.component.html',
+  styleUrls: ['./new-uk-company.component.scss']
 })
-export class NewComponent implements OnInit {
+export class NewUkCompanyComponent implements OnInit {
 
     number : string = "";
-
-    kind : string = "uk-company";
 
     lookup : any | null = null;
     not_found = false;

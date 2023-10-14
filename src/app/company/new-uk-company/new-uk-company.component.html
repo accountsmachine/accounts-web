@@ -1,0 +1,100 @@
+
+<section class="tab-contents">
+  
+  <form class="config-form">
+
+    <div>
+
+      <p>
+	<mat-form-field class="config-field" appearance="fill">
+	  <mat-label>Company number</mat-label>
+	  <input matInput
+		 placeholder="2012/2013"
+		 [(ngModel)]="number"
+		 name="number">
+	  <mat-hint>
+	    The Companies House registered company number.
+	  </mat-hint>
+	</mat-form-field>
+      </p>
+
+      <button mat-raised-button color="primary" (click)="search()">
+	<mat-icon>search</mat-icon>
+	Search Companies House
+      </button>
+
+      <button mat-raised-button color="basic" (click)="cancel()">
+	Cancel
+      </button>
+
+      <section *ngIf="not_found">
+	Company number not found.
+      </section>
+
+      <section *ngIf="lookup">
+	<div>
+	  Found company:
+	</div>
+	<div>
+	  <table>
+	    <tr>
+	      <td>Company name:</td>
+	      <td>{{lookup.company.company_name}}</td>
+	    </tr>
+	    <tr>
+	      <td>Jurisdiction:</td>
+	      <td>{{country_label(lookup.company.jurisdiction)}}</td>
+	    </tr>
+	    <tr>
+	      <td>Registered on:</td>
+	      <td>{{lookup.company.date_of_creation}}</td>
+	    </tr>
+	    <tr>
+	      <td>Address:</td>
+	      <td>
+		{{lookup.company.registered_office_address.address_line_1}}<br>
+		{{lookup.company.registered_office_address.address_line_2}}<br>
+		{{lookup.company.registered_office_address.locality}}<br>
+		{{lookup.company.registered_office_address.postcode}}
+	      </td>
+	    </tr>
+	    <tr>
+	      <td>Officers:</td>
+	      <td>
+		<div *ngFor="let officer of lookup.officers.items">
+		  {{officer.name}}
+		</div>
+	      </td>
+	    </tr>
+	  </table>
+	</div>
+
+	<div *ngIf="company; else create">
+	  You already have a record for this company.
+	</div>
+
+	<ng-template #create>
+
+	  <div>
+
+	    <button mat-raised-button color="primary" (click)="use()">
+	      <mat-icon>add_business</mat-icon>
+	      Use this company
+	    </button>
+
+	    <button mat-raised-button color="basic" (click)="cancel()">
+	      Cancel
+	    </button>
+
+	  </div>
+
+	</ng-template>
+
+      </section>
+
+    </div>
+
+  </form>
+
+</section>
+

@@ -6,6 +6,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -28,6 +29,7 @@ import { DATE_FORMATS } from '../date-formats';
 import { CompanyRoutingModule } from './company-routing.module';
 import { ListComponent } from './list/list.component';
 import { NewComponent } from './new/new.component';
+import { NewUkCompanyComponent } from './new-uk-company/new-uk-company.component';
 
 import { NavComponent } from './nav/nav.component';
 import { BusinessConfigComponent } from './business-config/business-config.component';
@@ -40,11 +42,14 @@ import { TaxConfigComponent } from './tax-config/tax-config.component';
 import { SharedModule } from '../shared/shared.module';
 import { LogoComponent } from './logo/logo.component';
 import { DeleteConfirmationComponent } from './delete-confirmation/delete-confirmation.component';
+import { NewSoleTraderComponent } from './new-sole-trader/new-sole-trader.component';
+import { NewNonUkCompanyComponent } from './new-non-uk-company/new-non-uk-company.component';
 
 @NgModule({
     declarations: [
 	ListComponent,
 	NewComponent,
+	NewUkCompanyComponent,
 	NavComponent,
 	BusinessConfigComponent,
 	AddressConfigComponent,
@@ -54,6 +59,8 @@ import { DeleteConfirmationComponent } from './delete-confirmation/delete-confir
 	TaxConfigComponent,
 	LogoComponent,
 	DeleteConfirmationComponent,
+	NewSoleTraderComponent,
+	NewNonUkCompanyComponent,
     ],
     imports: [
 	CommonModule,
@@ -69,6 +76,7 @@ import { DeleteConfirmationComponent } from './delete-confirmation/delete-confir
 	MatInputModule,
 	MatDialogModule,
 	MatCardModule,
+	MatRadioModule,
 	MatSelectModule,
 	MatSlideToggleModule,
 	MatButtonModule,
