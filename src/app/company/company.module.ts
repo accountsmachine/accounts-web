@@ -18,6 +18,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete'; 
+
 import {
     DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
 } from '@angular/material/core';
@@ -84,6 +86,8 @@ import { NewNonUkCompanyComponent } from './new-non-uk-company/new-non-uk-compan
 	MatChipsModule,
 	MatIconModule,
 	MatDatepickerModule,
+	MatAutocompleteModule,
+	
 	SharedModule,
     ],
     providers: [
