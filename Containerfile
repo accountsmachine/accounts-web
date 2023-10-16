@@ -23,7 +23,6 @@ RUN npm install
 RUN npm install -g @angular/cli
 
 # Build components - the web service
-RUN cat src/app/accounts/status/status.component.scss
 RUN make serve
 
 # Build application
