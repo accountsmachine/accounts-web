@@ -22,14 +22,15 @@ export class BusinessConfigComponent implements OnInit {
     form = new FormGroup({
 	company_name: new FormControl('', [Validators.required]),
 	company_number: new FormControl({value: '', disabled: true}, [
-	    Validators.required, Validators.pattern("[0-9]{8}")
+//	    Validators.required, Validators.pattern("[0-9]{8}")
 	]),
 	registration_date: new FormControl<any>('', [Validators.required]),
-	country: new FormControl('', [Validators.required]),
-	form: new FormControl('', [Validators.required]),
-	is_dormant: new FormControl<boolean>(false, [Validators.required]),
+	owner: new FormControl('', []),
+	country: new FormControl('', []),
+	form: new FormControl('', []),
+	is_dormant: new FormControl<boolean>(false, []),
 	directors: new FormControl<string[]>([]),
-	jurisdiction: new FormControl<string>('', [Validators.required]),
+	jurisdiction: new FormControl<string>('', []),
     });
 
     constructor(
@@ -52,6 +53,7 @@ export class BusinessConfigComponent implements OnInit {
 	    company_name: this.company.company_name,
 	    company_number: this.company.company_number,
 	    registration_date: this.to_date(this.company.registration_date),
+	    owner: this.company.owner,
 	    country: this.company.country,
 	    form: this.company.form,
 	    is_dormant: this.company.is_dormant,
@@ -109,6 +111,11 @@ export class BusinessConfigComponent implements OnInit {
 	    this.company.country = this.form.value.country;
 	else
 	    this.company.country = "";
+
+	if (this.form.value.owner)
+	    this.company.owner = this.form.value.owner;
+	else
+	    this.company.owner = "";
 
 	if (this.form.value.form)
 	    this.company.form = this.form.value.form;

@@ -19,7 +19,16 @@
 	    <mat-select formControlName="company" name="company">
 	      <mat-option *ngFor="let c of companies | keyvalue"
 			  [value]="c.key">
-		{{c.value.company_name}} | {{c.value.company_number}}
+		{{c.value.company_name}}
+		<span *ngIf="c.value.type == 'uk-company'">
+		  | {{c.value.company_number}}
+		</span>
+		<span *ngIf="c.value.type == 'non-uk-company'">
+		  | {{c.value.country}}
+		</span>
+		<span *ngIf="c.value.type == 'sole-trader'">
+		  | {{c.value.owner}}
+		</span>
 	      </mat-option>
 	    </mat-select>
 	    <mat-hint>Company to file for</mat-hint>

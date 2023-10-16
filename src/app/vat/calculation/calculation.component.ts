@@ -6,6 +6,9 @@ import { Validators } from '@angular/forms';
 
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
+import {
+    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 
 import * as moment from 'moment';
 
@@ -16,6 +19,10 @@ import { VatConfigService } from '../vat-config.service';
 import { ConfigurationService } from '../../configuration.service';
 import { CalculationService, Calculation } from '../calculation.service';
 import { MappingService } from '../../books/mapping.service';
+
+import {
+    ErrorDialogComponent
+} from '../../shared/error-dialog/error-dialog.component';
 
 class Node {
     kind() { return ""; }
@@ -48,8 +55,6 @@ class TransactionNode extends Node {
   styleUrls: ['./calculation.component.scss']
 })
 export class CalculationComponent {
-
-    debug : string = "debug";
 
     calc : Calculation = new Calculation();
 
@@ -119,8 +124,11 @@ export class CalculationComponent {
 	this.calcs.load(id).subscribe({
 
 	    next: record => {
+
 		this.working.stop();
+
 		this.load_calcs(record);
+
 	    },
 
 	    error: e => {
@@ -134,7 +142,21 @@ export class CalculationComponent {
 
     load_calcs(calc : Calculation) {
 
-	this.debug = JSON.stringify(calc, null, 4);
+	if (calc.error) {
+	    console.log(calc.error);
+
+	    if (calc.error.message)
+		this.error(calc.error.message);
+	    else
+		this.error("Calculation error - check account books are correct");
+	    return;
+	}
+
+	if (!calc.calculation) {
+	    console.log("Calculation should not be null");
+	    return;
+	}
+
 	this.calc = calc;
 
 	let tree_data : LineNode[] = [];
@@ -158,11 +180,11 @@ export class CalculationComponent {
 
 	    line.amount = 0;
 
-	    if (box in calc) {
+	    if (box in calc.calculation) {
 
-		for (let row in calc[box]) {
+		for (let row in calc.calculation[box]) {
 
-		    let acct = calc[box][row];
+		    let acct = calc.calculation[box][row];
 
 		    let acctn = new AccountNode();
 		    acctn.description = row;
@@ -203,7 +225,7 @@ export class CalculationComponent {
 
     treeControl = new NestedTreeControl<Node>(node => node.children);
     dataSource = new MatTreeNestedDataSource<LineNode>();
-
+    
     constructor(
 	private route : ActivatedRoute,
 	private filing : VatConfigService,
@@ -213,10 +235,14 @@ export class CalculationComponent {
 	private working : WorkingService,
 	private configSvc : ConfigurationService,
 	private mapping : MappingService,
+	private dialog : MatDialog,
     ) {
 
 	this.route.params.subscribe(params => {
-	    this.get_config(params["id"]);
+
+	    // FIXME: Id gets assigned multiple times?
+	    this.id = params["id"];
+	    this.reload();
 	});
 
 	this.dataSource.data = [];
@@ -224,6 +250,10 @@ export class CalculationComponent {
     }
 
     ngOnInit() : void {
+    }
+
+    reload() {
+	this.get_config(this.id);
     }
 
     isLine(num : number, n : Node) {
@@ -236,6 +266,25 @@ export class CalculationComponent {
 
     isTransaction(num : number, n : Node) {
 	return n.kind() == "transaction";
+    }
+
+    error(m : string) {
+	const dialogRef = this.dialog.open(
+	    ErrorDialogComponent, {
+		width: '550px',
+		data: {
+		    retry: false,
+		    message: m,
+		},
+	    }
+	);
+	dialogRef.afterClosed().subscribe((result : any) => {
+	    if (result) {
+		if (result.retry) {
+		    this.reload();
+		}
+	    }
+	});
     }
 
 }
