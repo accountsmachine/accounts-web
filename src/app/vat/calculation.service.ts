@@ -6,16 +6,23 @@ import { VatConfig } from './vat-config';
 import { ApiService } from '../api.service';
 
 export class Calculation {
-    [line : string] : {
-	[account : string] : {
-	    transactions : {
-		amount : number;
-		description : string;
-		date : string;
-	    }[];
-	    reversed : boolean;
-	}
+    calculation?: {
+	[line : string] : {
+	    [account : string] : {
+		transactions : {
+		    amount : number;
+		    description : string;
+		    date : string;
+		}[];
+		reversed : boolean;
+	    }
+	},
     };
+    error?: {
+	kind: string;
+	account? : string;
+	message? : string;
+    }
 };
 
 @Injectable({

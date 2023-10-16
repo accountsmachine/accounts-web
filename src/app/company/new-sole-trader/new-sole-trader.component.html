@@ -7,33 +7,33 @@
 
       <p>
 	<mat-form-field class="config-field" appearance="fill">
-	  <mat-label>Sole trader name</mat-label>
+	  <mat-label>Business owner</mat-label>
 	  <input matInput
 		 placeholder="John Smith"
 		 [(ngModel)]="name"
 		 name="name">
 	  <mat-hint>
-	    Name of person registered as sole trader.
+	    Name of person who is registered as owner of the business
 	  </mat-hint>
 	</mat-form-field>
       </p>
 
       <p>
 	<mat-form-field class="config-field" appearance="fill">
-	  <mat-label>Trading as</mat-label>
+	  <mat-label>Business name</mat-label>
 	  <input matInput
 		 placeholder="J. S. Plumbing"
 		 [(ngModel)]="trade_name"
 		 name="trade-name">
 	  <mat-hint>
-	    Trading-as name
+	    Business trading name used by sole trader
 	  </mat-hint>
 	</mat-form-field>
       </p>
 
       <p>
 	<mat-form-field class="config-field" appearance="fill">
-	  <mat-label>Registered location</mat-label>
+	  <mat-label>Registered town/city</mat-label>
 	  <input matInput
 		 placeholder="Winchihampton"
 		 [(ngModel)]="trade_location"
@@ -48,7 +48,7 @@
 
 	<button mat-raised-button color="primary" (click)="create()">
 	  <mat-icon>add_business</mat-icon>
-	  Use this company
+	  Create business
 	</button>
 
 	<button mat-raised-button color="basic" (click)="cancel()">

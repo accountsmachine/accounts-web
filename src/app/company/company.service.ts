@@ -19,6 +19,9 @@ export class Company {
     type : string = "";
     company_name : string = "";
     company_number : string = "";
+    owner : string = "";
+    city : string = "";
+
     activities : string = "";
     registration_date : string = "";
     country : string = "";
@@ -311,6 +314,7 @@ export class CompanyService {
 
 	    c.type = "sole-trader";
 	    c.company_name = trade_name;
+	    c.owner = name;
 	    c.contact_name = name;
 	    c.contact_city = trade_location;
 	    c.contact_country = "UK";
@@ -349,7 +353,9 @@ export class CompanyService {
 	    c.type = "non-uk-company";
 	    c.company_number = number;
 	    c.company_name = name;
+	    c.city = city;
 	    c.contact_city = city;
+	    c.country = country;
 	    c.contact_country = country;
 
 	    const httpOptions = {

@@ -13,6 +13,7 @@
       <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
 
 	<div>
+
 	  <mat-form-field class="config-field" appearance="fill">
 	    <mat-label>Company name</mat-label>
 	    <input matInput
@@ -34,6 +35,18 @@
 	    </mat-hint>
 	    <mat-hint *ngIf="company.type == 'non-uk-company'">
 	      Registration number or identifier
+	    </mat-hint>
+	  </mat-form-field>
+
+	  <mat-form-field class="config-field" appearance="fill"
+			  *ngIf="company.type == 'sole-trader'">
+	    <mat-label>Business owner</mat-label>
+	    <input matInput
+		   placeholder="Business owner"
+		   formControlName="owner"
+		   name="owner">
+	    <mat-hint>
+	      Registered owner of the business
 	    </mat-hint>
 	  </mat-form-field>
 

@@ -24,10 +24,10 @@
 		  | {{c.value.company_number}}
 		</span>
 		<span *ngIf="c.value.type == 'non-uk-company'">
-		  | {{c.value.contact_country}}
+		  | {{c.value.country}}
 		</span>
 		<span *ngIf="c.value.type == 'sole-trader'">
-		  | {{c.value.contact_name}}
+		  | {{c.value.owner}}
 		</span>
 	      </mat-option>
 	    </mat-select>

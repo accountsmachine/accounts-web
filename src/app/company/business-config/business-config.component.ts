@@ -25,6 +25,7 @@ export class BusinessConfigComponent implements OnInit {
 //	    Validators.required, Validators.pattern("[0-9]{8}")
 	]),
 	registration_date: new FormControl<any>('', [Validators.required]),
+	owner: new FormControl('', []),
 	country: new FormControl('', []),
 	form: new FormControl('', []),
 	is_dormant: new FormControl<boolean>(false, []),
@@ -52,6 +53,7 @@ export class BusinessConfigComponent implements OnInit {
 	    company_name: this.company.company_name,
 	    company_number: this.company.company_number,
 	    registration_date: this.to_date(this.company.registration_date),
+	    owner: this.company.owner,
 	    country: this.company.country,
 	    form: this.company.form,
 	    is_dormant: this.company.is_dormant,
@@ -109,6 +111,11 @@ export class BusinessConfigComponent implements OnInit {
 	    this.company.country = this.form.value.country;
 	else
 	    this.company.country = "";
+
+	if (this.form.value.owner)
+	    this.company.owner = this.form.value.owner;
+	else
+	    this.company.owner = "";
 
 	if (this.form.value.form)
 	    this.company.form = this.form.value.form;
