@@ -17,23 +17,56 @@
     <div class="card-display">
       <ng-container *ngFor="let config of configs | keyvalue">
 	<mat-card>
+
 	  <mat-card-header>
-	    <mat-card-title>{{config.value.company_name}}</mat-card-title>
-	    <mat-card-subtitle>{{config.value.contact_city}}</mat-card-subtitle>
+
+	    <mat-card-title>
+	      {{config.value.company_name | uppercase}}
+	    </mat-card-title>
+
+	    <mat-card-subtitle>
+	      {{config.value.contact_city}}
+	    </mat-card-subtitle>
+
 	  </mat-card-header>
+
 	  <mat-card-content>
-	    <div>
-	      Number: {{config.value.company_number}}</div>
-	    <div>Registered in: {{country_label(config.value.country)}}</div>
+
+	    <div *ngIf="config.value.type == 'uk-company'">
+	      Number: {{config.value.company_number}}
+	    </div>
+
+	    <div *ngIf="config.value.type == 'sole-trader'">
+	      Sole tradership
+	    </div>
+
+	    <div *ngIf="config.value.type == 'non-uk-company'">
+	      Non-UK company
+	    </div>
+
+	    <div *ngIf="config.value.type == 'sole-trader'">
+	      Proprietor: {{config.value.contact_name}}
+	    </div>
+
+	    <div *ngIf="config.value.type == 'non-uk-company'">
+	      Incorporated in: {{config.value.contact_country}}
+	    </div>
+
+	    <div *ngIf="config.value.type == 'uk-company'">
+	      Registered in: {{country_label(config.value.country)}}
+	    </div>
+
 	  </mat-card-content>
+
 	  <mat-card-actions align="start">
-	    <button mat-button (click)="edit(config.value)">
+	    <button mat-button (click)="edit(config.key)">
 	      <mat-icon>edit</mat-icon> EDIT
 	    </button>
-	    <button mat-button (click)="delete(config.value)">
+	    <button mat-button (click)="delete(config.key, config.value)">
 	      <mat-icon>delete</mat-icon> DELETE
 	    </button>
 	  </mat-card-actions>
+
 	</mat-card>
       </ng-container>
     </div>

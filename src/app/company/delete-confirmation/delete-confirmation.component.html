@@ -7,7 +7,7 @@
   </p>
   <p>
     <strong>{{data.company.company_name}}</strong><br>
-    (company number {{data.company.company_number}}).
+<!--    (company number {{data.company.company_number}}).-->
   </p>
   <p>
     This will delete the company information, account books and all filing
@@ -22,7 +22,7 @@
     No
   </button>
   <button mat-raised-button color="warn"
-	  [mat-dialog-close]="{proceed: true, company: data.company}">
+	  [mat-dialog-close]="{proceed: true, id: data.id}">
     Yes
   </button>
 </div>

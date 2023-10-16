@@ -1,0 +1,65 @@
+
+<section class="tab-contents">
+  
+  <form class="config-form">
+
+    <div>
+
+      <p>
+	<mat-form-field class="config-field" appearance="fill">
+	  <mat-label>Business owner</mat-label>
+	  <input matInput
+		 placeholder="John Smith"
+		 [(ngModel)]="name"
+		 name="name">
+	  <mat-hint>
+	    Name of person who is registered as owner of the business
+	  </mat-hint>
+	</mat-form-field>
+      </p>
+
+      <p>
+	<mat-form-field class="config-field" appearance="fill">
+	  <mat-label>Business name</mat-label>
+	  <input matInput
+		 placeholder="J. S. Plumbing"
+		 [(ngModel)]="trade_name"
+		 name="trade-name">
+	  <mat-hint>
+	    Business trading name used by sole trader
+	  </mat-hint>
+	</mat-form-field>
+      </p>
+
+      <p>
+	<mat-form-field class="config-field" appearance="fill">
+	  <mat-label>Registered town/city</mat-label>
+	  <input matInput
+		 placeholder="Winchihampton"
+		 [(ngModel)]="trade_location"
+		 name="trade-location">
+	  <mat-hint>
+	    Town/city of registered sole trader
+	  </mat-hint>
+	</mat-form-field>
+      </p>
+
+      <div>
+
+	<button mat-raised-button color="primary" (click)="create()">
+	  <mat-icon>add_business</mat-icon>
+	  Create business
+	</button>
+
+	<button mat-raised-button color="basic" (click)="cancel()">
+	  Cancel
+	</button>
+
+      </div>
+
+    </div>
+
+  </form>
+
+</section>
+
