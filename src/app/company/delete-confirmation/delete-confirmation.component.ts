@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
+import { CompanyService, Company, Companies } from '../company.service';
+
 @Component({
   selector: 'app-delete-confirmation',
   templateUrl: './delete-confirmation.component.html',
@@ -13,7 +15,9 @@ export class DeleteConfirmationComponent implements OnInit {
 
     constructor(
 	public dialogRef: MatDialogRef<DeleteConfirmationComponent>,
-	@Inject(MAT_DIALOG_DATA) public data : any,
+	@Inject(MAT_DIALOG_DATA) public data : {
+	    id : string, company : Company
+	},
     ) {
     }
 

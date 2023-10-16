@@ -22,14 +22,14 @@ export class BusinessConfigComponent implements OnInit {
     form = new FormGroup({
 	company_name: new FormControl('', [Validators.required]),
 	company_number: new FormControl({value: '', disabled: true}, [
-	    Validators.required, Validators.pattern("[0-9]{8}")
+//	    Validators.required, Validators.pattern("[0-9]{8}")
 	]),
 	registration_date: new FormControl<any>('', [Validators.required]),
-	country: new FormControl('', [Validators.required]),
-	form: new FormControl('', [Validators.required]),
-	is_dormant: new FormControl<boolean>(false, [Validators.required]),
+	country: new FormControl('', []),
+	form: new FormControl('', []),
+	is_dormant: new FormControl<boolean>(false, []),
 	directors: new FormControl<string[]>([]),
-	jurisdiction: new FormControl<string>('', [Validators.required]),
+	jurisdiction: new FormControl<string>('', []),
     });
 
     constructor(

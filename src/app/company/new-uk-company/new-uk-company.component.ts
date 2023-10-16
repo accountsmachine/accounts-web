@@ -42,11 +42,11 @@ export class NewUkCompanyComponent implements OnInit {
 	}
 
 	this.companyService.create_from_lookup(this.lookup).subscribe(
-	    () => {
+	    (id : string) => {
 		this.snackBar.open("Configuration created",
 				   "dismiss",
 				   { duration: 5000 });
-		this.router.navigate(["/company/" + this.number]);
+		this.router.navigate(["/company/" + id]);
 	    }
 	);
 

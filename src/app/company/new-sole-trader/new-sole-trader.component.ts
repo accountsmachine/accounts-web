@@ -30,33 +30,23 @@ export class NewSoleTraderComponent implements OnInit {
     }
 
     create() {
+
+	this.companyService.create_sole_trader(
+	    this.name, this.trade_name, this.trade_location,
+	).subscribe(
+	    (id : string) => {
+		this.snackBar.open("Configuration created",
+				   "dismiss",
+				   { duration: 5000 });
+		this.router.navigate(["/company/" + id]);
+	    }
+	);
+
     }
 
     cancel() {
 	this.router.navigate(["/company"]);
     }
-
-    /*
-
-    use() {
-
-	if (this.number == "") {
-	    this.snackBar.open("Invalid company number", "dismiss",
-			       { duration: 5000 });
-	    return;
-	}
-
-	this.companyService.create_from_lookup(this.lookup).subscribe(
-	    () => {
-		this.snackBar.open("Configuration created",
-				   "dismiss",
-				   { duration: 5000 });
-		this.router.navigate(["/company/" + this.number]);
-	    }
-	);
-
-	}
-	*/
 
 }
 
