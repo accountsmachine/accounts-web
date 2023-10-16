@@ -66,18 +66,19 @@ export class ListComponent implements OnInit {
 	return "undefined: " + s;
     }
 
-    edit(config : any) {
-	this.router.navigate(["/company/" + config.company_number]);
+    edit(id : string) {
+	this.router.navigate(["/company/" + id]);
     }
 
-    delete(company : any) {
+    delete(id : string, c : Company) {
 
 	const dialogRef = this.dialog.open(
 	    DeleteConfirmationComponent, {
 		width: '450px',
 		data: {
 		    proceed: false,
-		    company: company,
+		    id: id,
+		    company: c,
 		},
 	    }
 	);
@@ -87,7 +88,7 @@ export class ListComponent implements OnInit {
 		if (result.proceed) {
 		    this.working.start();
 		    this.companyService.delete(
-			company.company_number
+			id
 		    ).subscribe({
 			next: () => {  this.working.stop(); this.reload(); },
 			error: () => { this.working.stop(); },

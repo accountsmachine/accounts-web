@@ -10,12 +10,18 @@ import { Observable, Subject, of, BehaviorSubject, throwError, map,
 	 pipe, OperatorFunction } from 'rxjs';
 import { catchError, retry, tap } from 'rxjs/operators';
 
+import {v4 as uuidv4} from 'uuid';
+
 import { ApiService } from '../api.service';
 
 export class Company {
 
+    type : string = "";
     company_name : string = "";
     company_number : string = "";
+    owner : string = "";
+    city : string = "";
+
     activities : string = "";
     registration_date : string = "";
     country : string = "";
@@ -211,7 +217,10 @@ export class CompanyService {
 	    let c = new Company();
 
 	    // FIXME: Defensive coding, more checking.
-	    
+
+	    let id = uuidv4();
+
+	    c.type = "uk-company";
 	    c.company_number = rec.company.company_number;
 	    c.registration_date = rec.company.date_of_creation;
 	    c.company_name = rec.company.company_name;
@@ -279,10 +288,87 @@ export class CompanyService {
 	    };
 
 	    return this.api.put(
-		"/api/company/" + c.company_number, c, httpOptions
+		"/api/company/" + id, c, httpOptions
 	    ).subscribe(
 		(e : any) => {
-		    subs.next(c.company_number);
+		    subs.next(id);
+		}
+	    );
+	});
+
+    }
+
+    create_sole_trader(
+	name : string,
+	trade_name : string,
+	trade_location : string
+    ) : Observable<string> {
+
+	return new Observable<string>(subs => {
+
+	    let c = new Company();
+
+	    // FIXME: Defensive coding, more checking.
+
+	    let id = uuidv4();
+
+	    c.type = "sole-trader";
+	    c.company_name = trade_name;
+	    c.owner = name;
+	    c.contact_name = name;
+	    c.contact_city = trade_location;
+	    c.contact_country = "UK";
+
+	    const httpOptions = {
+		headers: new HttpHeaders({
+		    'Content-Type': 'application/json'
+		})
+	    };
+
+	    return this.api.put(
+		"/api/company/" + id, c, httpOptions
+	    ).subscribe(
+		(e : any) => {
+		    subs.next(id);
+		}
+	    );
+	});
+
+    }
+
+    create_non_uk_company(
+	name : string,
+	number : string,
+	city : string,
+	country : string
+    ) : Observable<string> {
+
+	return new Observable<string>(subs => {
+
+	    let c = new Company();
+
+	    // FIXME: Defensive coding, more checking.
+	    let id = uuidv4();
+
+	    c.type = "non-uk-company";
+	    c.company_number = number;
+	    c.company_name = name;
+	    c.city = city;
+	    c.contact_city = city;
+	    c.country = country;
+	    c.contact_country = country;
+
+	    const httpOptions = {
+		headers: new HttpHeaders({
+		    'Content-Type': 'application/json'
+		})
+	    };
+
+	    return this.api.put(
+		"/api/company/" + id, c, httpOptions
+	    ).subscribe(
+		(e : any) => {
+		    subs.next(id);
 		}
 	    );
 	});

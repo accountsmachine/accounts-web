@@ -1,0 +1,86 @@
+
+<section class="tab-contents">
+  
+  <form class="company-form">
+
+    <div>
+
+      <p>
+	<mat-form-field class="config-field" appearance="fill">
+	  <mat-label>Company name</mat-label>
+	  <input matInput
+		 placeholder="ACME Components SRTZ"
+		 [(ngModel)]="name"
+		 name="name">
+	  <mat-hint>
+	    Name of person registered as sole trader.
+	  </mat-hint>
+	</mat-form-field>
+      </p>
+
+      <p>
+	<mat-form-field class="config-field" appearance="fill">
+	  <mat-label>Registration number</mat-label>
+	  <input matInput
+		 placeholder="CSZ1230124"
+		 [(ngModel)]="number"
+		 name="number">
+	  <mat-hint>
+	    Company registration number or identifier
+	  </mat-hint>
+	</mat-form-field>
+      </p>
+
+      <p>
+	<mat-form-field class="config-field" appearance="fill">
+	  <mat-label>Town/city</mat-label>
+	  <input matInput
+		 placeholder="La Turbie"
+		 [(ngModel)]="city"
+		 name="city">
+	  <mat-hint>
+	    Town/city of registration
+	  </mat-hint>
+	</mat-form-field>
+      </p>
+
+      <p>
+	<mat-form-field class="config-field" appearance="fill">
+	  <mat-label>Country of registration</mat-label>
+	  <input matInput
+		 placeholder="Monaco"
+		 [(ngModel)]="country"
+		 [formControl]="control"
+		 [matAutocomplete]="auto"		 
+		 name="country">
+	  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+	    <mat-option *ngFor="let country of filteredCountries | async"
+			[value]="country">
+              {{country}}
+	    </mat-option>
+	  </mat-autocomplete>
+	  <mat-hint>
+	    Country of registration
+	  </mat-hint>
+	</mat-form-field>
+      </p>
+
+      <div>
+
+	<button mat-raised-button color="primary" (click)="create()">
+	  <mat-icon>add_business</mat-icon>
+	  Create company
+	</button>
+
+	<button mat-raised-button color="basic" (click)="cancel()">
+	  Cancel
+	</button>
+
+      </div>
+
+    </div>
+
+  </form>
+
+</section>
+
