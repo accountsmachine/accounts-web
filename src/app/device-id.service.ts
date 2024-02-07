@@ -33,7 +33,9 @@ export class DeviceIdService {
 	if (n < 0) {
 	    s += "-";
 	    n = -n;
-	}
+	} else {
+            s += "+";
+        }
 
 	let h = Math.floor(n / 60).toFixed(0);
 	let m = Math.floor(n % 60).toFixed(0);
