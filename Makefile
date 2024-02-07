@@ -1,6 +1,6 @@
 
 VERSION=$(shell git describe | sed 's/^v//')
-PACKAGE_VERSION=2.1.1
+PACKAGE_VERSION=2.2.0
 DIST=dist
 
 all: serve
