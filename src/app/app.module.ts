@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -51,57 +51,51 @@ const getFirebaseFn =
 	  return svc.getFirebase();
       };
 
-@NgModule({
-    declarations: [
-	AppComponent,
-	HomeComponent,
-	TabsComponent,
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        TabsComponent,
     ],
-    imports: [
-	AppRoutingModule,
-	RouterModule,
-	BrowserModule,
-//	provideFirebaseApp(() => initializeApp()),
-	BrowserAnimationsModule,
-	MatCardModule,
-	MatFormFieldModule,
-	MatButtonModule,
-	MatExpansionModule,
-	MatNativeDateModule,
-	MatInputModule,
-	MatProgressSpinnerModule,
-	MatIconModule,
-	MatTabsModule,
-	MatSnackBarModule,
-	HttpClientModule,
-	FormsModule,
-	ReactiveFormsModule,
-	SharedModule,
-	ProfileModule,
-    ],
-    providers: [
-	ConfigurationService,
-	{
-	    provide: APP_INITIALIZER,
-	    useFactory: initAppFn,
-	    multi: true,
-	    deps: [ ConfigurationService ],
-	},
-	{
-	    provide: FIREBASE_OPTIONS,
-	    useFactory: getFirebaseFn,
-	    deps: [ ConfigurationService ],
-	},
-	{ provide: LOCALE_ID, useValue: "en-GB" },
-	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
-	{
+    bootstrap: [AppComponent], imports: [AppRoutingModule,
+        RouterModule,
+        BrowserModule,
+        //	provideFirebaseApp(() => initializeApp()),
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatExpansionModule,
+        MatNativeDateModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatIconModule,
+        MatTabsModule,
+        MatSnackBarModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedModule,
+        ProfileModule], providers: [
+        ConfigurationService,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initAppFn,
+            multi: true,
+            deps: [ConfigurationService],
+        },
+        {
+            provide: FIREBASE_OPTIONS,
+            useFactory: getFirebaseFn,
+            deps: [ConfigurationService],
+        },
+        { provide: LOCALE_ID, useValue: "en-GB" },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
+        {
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [ MAT_DATE_LOCALE ]
-	},
-	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
-    ],
-    bootstrap: [ AppComponent ]
-})
+            deps: [MAT_DATE_LOCALE]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 
 export class AppModule {}
 

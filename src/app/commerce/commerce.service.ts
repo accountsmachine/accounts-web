@@ -1,8 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import {
-    HttpClient, HttpErrorResponse, HttpHeaders
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError, map, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operators';

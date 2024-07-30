@@ -9,9 +9,7 @@ import {
     Observable, tap, throwError, map, catchError, ObservableInput, retryWhen,
     take, delay, concat,
 } from 'rxjs';
-import {
-    HttpClient, HttpErrorResponse, HttpHeaders
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
 

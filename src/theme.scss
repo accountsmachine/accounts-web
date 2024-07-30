@@ -15,16 +15,16 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$accountsmachine-primary: mat.define-palette($accountsmachine-palette);
-$accountsmachine-accent: mat.define-palette($accountsmachine-accent-palette, A200, A100, A400);
+$accountsmachine-primary: mat.m2-define-palette($accountsmachine-palette);
+$accountsmachine-accent: mat.m2-define-palette($accountsmachine-accent-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$accountsmachine-warn: mat.define-palette($accountsmachine-warn-palette);
-$accountsmachine-affirm: mat.define-palette($accountsmachine-affirm-palette);
+$accountsmachine-warn: mat.m2-define-palette($accountsmachine-warn-palette);
+$accountsmachine-affirm: mat.m2-define-palette($accountsmachine-affirm-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$accountsmachine-theme: mat.define-light-theme((
+$accountsmachine-theme: mat.m2-define-light-theme((
   color: (
     primary: $accountsmachine-primary,
     accent: $accountsmachine-accent,
@@ -33,21 +33,21 @@ $accountsmachine-theme: mat.define-light-theme((
 ));
 
 
-$colour-config: mat.get-color-config($accountsmachine-theme);
+$colour-config: mat.m2-get-color-config($accountsmachine-theme);
 $primary-palette: map.get($colour-config, 'primary');
 $accent-palette: map.get($colour-config, 'accent');
 $warn-palette: map.get($colour-config, 'warn');
 $affirm-palette: map.get($colour-config, 'affirm');
 
-$pale-background: mat.get-color-from-palette($primary-palette, 50);
+$pale-background: mat.m2-get-color-from-palette($primary-palette, 50);
 $very-pale-background: #f8f8f8;
-$light-background: mat.get-color-from-palette($primary-palette, 100);
-$dark-background: mat.get-color-from-palette($primary-palette, 700);
-$lighter-text: mat.get-color-from-palette($primary-palette, 500);
-$subtle-text: mat.get-color-from-palette($primary-palette, 400);
-$primary-text: mat.get-color-from-palette($primary-palette, 500);
+$light-background: mat.m2-get-color-from-palette($primary-palette, 100);
+$dark-background: mat.m2-get-color-from-palette($primary-palette, 700);
+$lighter-text: mat.m2-get-color-from-palette($primary-palette, 500);
+$subtle-text: mat.m2-get-color-from-palette($primary-palette, 400);
+$primary-text: mat.m2-get-color-from-palette($primary-palette, 500);
 
-$affirm-text: mat.get-color-from-palette($accountsmachine-affirm, 800);
-$deny-text: mat.get-color-from-palette($warn-palette, 800);
-$warn-text: mat.get-color-from-palette($warn-palette, 800);
-$warn-background: mat.get-color-from-palette($warn-palette, 50);
+$affirm-text: mat.m2-get-color-from-palette($accountsmachine-affirm, 800);
+$deny-text: mat.m2-get-color-from-palette($warn-palette, 800);
+$warn-text: mat.m2-get-color-from-palette($warn-palette, 800);
+$warn-background: mat.m2-get-color-from-palette($warn-palette, 50);

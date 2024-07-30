@@ -2,7 +2,7 @@ import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE, APP_INITIALIZER } from '@an
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -44,60 +44,54 @@ import { DeleteComponent } from './delete/delete.component';
 import { BillingDetailsComponent
        } from './billing-details/billing-details.component';
 
-@NgModule({
-    declarations: [
-	ProfileComponent,
-	ResetPasswordComponent,
-	FrontComponent,
-	RegisterComponent,
-	VerifyEmailComponent,
-	LoginComponent,
-	UpdateProfileComponent,
-	ChangeEmailComponent,
-	ChangePasswordComponent,
-	NavComponent,
-	OverviewComponent,
-	DeleteConfirmationComponent,
-	DeleteComponent,
- BillingDetailsComponent,
+@NgModule({ declarations: [
+        ProfileComponent,
+        ResetPasswordComponent,
+        FrontComponent,
+        RegisterComponent,
+        VerifyEmailComponent,
+        LoginComponent,
+        UpdateProfileComponent,
+        ChangeEmailComponent,
+        ChangePasswordComponent,
+        NavComponent,
+        OverviewComponent,
+        DeleteConfirmationComponent,
+        DeleteComponent,
+        BillingDetailsComponent,
     ],
     exports: [
-	ProfileComponent,
-	ResetPasswordComponent,
-	FrontComponent,
-	RegisterComponent,
-	VerifyEmailComponent,
-	LoginComponent,
-    ],
-    imports: [
-	RouterModule,
-	BrowserModule,
-	BrowserAnimationsModule,
-	MatCardModule,
-	MatFormFieldModule,
-	MatButtonModule,
-	MatDialogModule,
-	MatNativeDateModule,
-	MatInputModule,
-	MatProgressSpinnerModule,
-	MatIconModule,
-	MatTabsModule,
-	MatSidenavModule,
-	MatSnackBarModule,
-	HttpClientModule,
-	FormsModule,
-	ReactiveFormsModule,
-    ],
-    providers: [
-	{ provide: LOCALE_ID, useValue: "en-GB" },
-	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
-	{
+        ProfileComponent,
+        ResetPasswordComponent,
+        FrontComponent,
+        RegisterComponent,
+        VerifyEmailComponent,
+        LoginComponent,
+    ], imports: [RouterModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatNativeDateModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatIconModule,
+        MatTabsModule,
+        MatSidenavModule,
+        MatSnackBarModule,
+        FormsModule,
+        ReactiveFormsModule], providers: [
+        { provide: LOCALE_ID, useValue: "en-GB" },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
+        {
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [MAT_DATE_LOCALE]
-	},
-	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
-    ],
-})
+            deps: [MAT_DATE_LOCALE]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 
 export class ProfileModule {}
 
