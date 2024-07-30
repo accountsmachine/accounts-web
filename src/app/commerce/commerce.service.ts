@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject, throwError, map, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operators';
 import { v4 as uuid } from 'uuid';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { ApiService } from '../api.service';
 

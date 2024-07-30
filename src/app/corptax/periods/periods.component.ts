@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { CorptaxConfig } from '../corptax-config';
 import { CorptaxConfigService } from '../corptax-config.service';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Observable } from 'rxjs';
 
 import { AccountsConfig } from '../accounts-config';

@@ -5,7 +5,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { CompanyService, Company } from '../company.service';
 import { WorkingService } from '../../working.service';

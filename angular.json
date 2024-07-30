@@ -18,7 +18,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist/accounts-machine",
             "index": "src/index.html",
@@ -114,7 +114,6 @@
             "local": {
               "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
   	      "namedChunks": true,
@@ -128,7 +127,6 @@
             "emulator": {
               "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
 		"namedChunks": true,

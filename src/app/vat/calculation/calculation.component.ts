@@ -10,7 +10,7 @@ import {
     MatDialog, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { CompanyService, Company, Companies } from '../../company/company.service';
 import { WorkingService } from '../../working.service';
