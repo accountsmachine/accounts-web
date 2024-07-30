@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { CompanyService, Company, Companies } from '../../company/company.service';
 import { AccountsConfig } from '../accounts-config';
