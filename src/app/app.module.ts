@@ -61,7 +61,7 @@ const getFirebaseFn =
 	AppRoutingModule,
 	RouterModule,
 	BrowserModule,
-	provideFirebaseApp(() => initializeApp()),
+//	provideFirebaseApp(() => initializeApp()),
 	BrowserAnimationsModule,
 	MatCardModule,
 	MatFormFieldModule,

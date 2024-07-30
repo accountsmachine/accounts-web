@@ -146,13 +146,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "prod": {
-              "browserTarget": "accounts-machine:build:prod"
+              "buildTarget": "accounts-machine:build:prod"
             },
             "local": {
-              "browserTarget": "accounts-machine:build:local"
+              "buildTarget": "accounts-machine:build:local"
             },
             "emulator": {
-              "browserTarget": "accounts-machine:build:emulator"
+              "buildTarget": "accounts-machine:build:emulator"
             }
           },
           "defaultConfiguration": "emulator"
@@ -160,7 +160,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "accounts-machine:build"
+            "buildTarget": "accounts-machine:build"
           }
         },
         "test": {
