@@ -2,9 +2,7 @@
 // FIXME: Should cache information.
 
 import { Injectable } from '@angular/core';
-import {
-    HttpEventType
-} from '@angular/common/http';
+import { HttpEventType } from '@angular/common/http';
 
 import { Observable, Subject, throwError, map } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';

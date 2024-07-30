@@ -3,9 +3,7 @@
 
 import { Injectable } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
-import {
-    HttpHeaders
-} from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, of, BehaviorSubject, throwError, map,
 	 pipe, OperatorFunction } from 'rxjs';
 import { catchError, retry, tap } from 'rxjs/operators';

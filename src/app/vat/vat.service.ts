@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, of, Subject } from 'rxjs';
 import { debounceTime, take, tap } from 'rxjs/operators';
-import {
-    HttpHeaders
-} from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 
 import { ApiService } from '../api.service';
 

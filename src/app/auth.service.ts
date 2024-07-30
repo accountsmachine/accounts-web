@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import {
-    HttpClient, HttpErrorResponse, HttpHeaders
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
