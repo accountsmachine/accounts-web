@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { combineLatest } from 'rxjs';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+    MatDialog
 } from '@angular/material/dialog';
 
 import { BooksService, BooksMap } from '../books.service';
@@ -15,6 +14,10 @@ import {
     ErrorDialogComponent
 } from '../../shared/error-dialog/error-dialog.component';
 import { WorkingService } from '../../working.service';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenuTrigger, MatMenu, MatMenuContent, MatMenuItem } from '@angular/material/menu';
+import { DatePipe } from '@angular/common';
 
 class BookItem {
     company? : string;
@@ -26,9 +29,16 @@ class BookItem {
 @Component({
     selector: 'list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.scss'],
+    imports: [MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatButton, MatIcon, MatMenuTrigger, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatMenu, MatMenuContent, MatMenuItem, DatePipe]
 })
 export class ListComponent implements OnInit {
+    private router = inject(Router);
+    private booksService = inject(BooksService);
+    private companyService = inject(CompanyService);
+    private dialog = inject(MatDialog);
+    private working = inject(WorkingService);
+
 
     companies? : Companies;
     book_list? : BooksMap;
@@ -38,22 +48,14 @@ export class ListComponent implements OnInit {
     books : MatTableDataSource<BookItem> =
 	new MatTableDataSource<BookItem>([]);
 
-    constructor(
-	private router : Router,
-	private booksService : BooksService,
-	private companyService : CompanyService,
-	private dialog : MatDialog,
-	private working : WorkingService,
-    ) { }
-
-    length(val : any) {
-	if (val > 0)
+    length(val : number | undefined) {
+	if (val && val > 0)
 	    return Math.round(val / 1024) + " kB";
 	else
 	    return "-";
     }
 
-    time(val : any) {
+    time(val : Date | string | undefined) {
 	if (val instanceof Date) {
 	    return val;
 	} else
@@ -62,17 +64,17 @@ export class ListComponent implements OnInit {
 
     update() {
 
-	let data = [];
+	const data = [];
 
-	let companies = this.companies;
-	let books = this.book_list;
+	const companies = this.companies;
+	const books = this.book_list;
 
 	if (!companies) return;
 	if (!books) return;
 
-	for(let k in companies) {
+	for(const k in companies) {
 
-	    let row : BookItem = {
+	    const row : BookItem = {
 		company: k in companies ? companies[k].company_name : "",
 		number: k,
 		size: k in books ? books[k].length : undefined,
@@ -101,7 +103,7 @@ export class ListComponent implements OnInit {
 		this.companies = e;
 		this.reload_books();
 	    },
-	    error: err => {
+	    error: _err => {
 		this.error("Failed to load books overview");
 		this.working.stop();
 	    },
@@ -121,7 +123,7 @@ export class ListComponent implements OnInit {
 		this.book_list = e;
 		this.update();
 	    },
-	    error: err => {
+	    error: _err => {
 		this.working.stop();
 		this.error("Failed to load books overview");
 	    },
@@ -135,15 +137,15 @@ export class ListComponent implements OnInit {
 	this.reload_companies();
     }
 
-    selected(c : any) {
+    selected(c : BookItem) {
 	this.router.navigate(["/books/" + c.number + "/detail"])
     }
 
-    upload(c : any) {
+    upload(c : BookItem) {
 	this.router.navigate(["/books/" + c.number + "/upload"])
     }
 
-    delete(c : any) {
+    delete(c : BookItem) {
 	const dialogRef = this.dialog.open(
 	    DeleteConfirmationComponent, {
 		width: '450px',
@@ -153,11 +155,11 @@ export class ListComponent implements OnInit {
 		},
 	    }
 	);
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { proceed?: boolean; company?: BookItem } | undefined) => {
 	    if (result) {
 		if (result.proceed) {
 		    this.booksService.delete(
-			result.company.number
+			result.company!.number!
 		    ).subscribe(() => {
 			this.reload();
 		    });
@@ -166,11 +168,11 @@ export class ListComponent implements OnInit {
 	});
     }
 
-    info(c : any) {
+    info(c : BookItem) {
 	this.router.navigate(["/books/" + c.number + "/detail"])
     }
 
-    mapping(c : any) {
+    mapping(c : BookItem) {
 	this.router.navigate(["/books/" + c.number + "/mapping"])
     }
 
@@ -184,7 +186,7 @@ export class ListComponent implements OnInit {
 		},
 	    }
 	);
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { retry?: boolean } | undefined) => {
 	    if (result) {
 		if (result.retry) {
 		    this.reload();

@@ -1,28 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MatTableDataSource } from '@angular/material/table';
 
 import { VatLine } from '../vat-line';
+import { VatComputations } from '../vat-computations.service';
 import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { RecordComponent } from '../record/record.component';
 
 @Component({
     selector: 'vat-data',
     templateUrl: './data.component.html',
-    styleUrls: ['./data.component.scss']
+    styleUrls: ['./data.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, RecordComponent]
 })
 export class DataComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private filing = inject(VatConfigService);
+
 
     id = "";
     config : VatConfig = {};
 
     vat_table : MatTableDataSource<VatLine> = new MatTableDataSource<VatLine>([]);
-
-    constructor(
-	private route : ActivatedRoute,
-	private filing : VatConfigService,
-    ) {}
 
     ngOnInit(): void {
 	this.route.params.subscribe(
@@ -31,7 +34,8 @@ export class DataComponent implements OnInit {
 		    this.id = params["id"];
 		    this.config = e.config;
 		    this.filing.get_data(this.id).subscribe(
-			(record : any) => {
+			(r) => {
+			    const record = r as VatComputations;
 
 			    this.vat_table.data = [
 				{

@@ -1,28 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AccountsConfig } from '../accounts-config';
 import { AccountsConfigService } from '../accounts-config.service';
 import { WorkingService } from '../../working.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { SafePipe } from '../../shared/safe.pipe';
 
 @Component({
-  selector: 'accounts-report',
-  templateUrl: './report.component.html',
-  styleUrls: ['./report.component.scss']
+    selector: 'accounts-report',
+    templateUrl: './report.component.html',
+    styleUrls: ['./report.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, SafePipe]
 })
 export class ReportComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private filing = inject(AccountsConfigService);
+    private working = inject(WorkingService);
+
 
     id = "";
     config : AccountsConfig = {};
 
 //    report : string = "";
     src = "";
-
-    constructor(
-	private route : ActivatedRoute,
-	private filing : AccountsConfigService,
-	private working : WorkingService,
-    ) {}
 
     ngOnInit(): void {
 	this.route.params.subscribe(
@@ -48,9 +50,9 @@ export class ReportComponent implements OnInit {
 	console.log(this.config.state);
     }
 
-    render(e : any) {
-	let blob = new Blob([e], {type: 'application/xhtml+xml'});
-	let url = URL.createObjectURL(blob);
+    render(e : unknown) {
+	const blob = new Blob([e as string], {type: 'application/xhtml+xml'});
+	const url = URL.createObjectURL(blob);
 	this.src = url;
     }
 

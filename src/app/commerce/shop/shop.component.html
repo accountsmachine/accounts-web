@@ -5,113 +5,125 @@
     <mat-drawer mode="side" class="drawer-side" opened>
       <navigator></navigator>
     </mat-drawer>
-    
+
     <mat-drawer-content class="main-content">
 
       <section class="content">
 
-	<h1>Purchase more credits</h1>
+        <h1>Purchase more credits</h1>
 
-	<p>Select credits below to see price, and purchase:</p>
+        <p>Select credits below to see price, and purchase:</p>
 
-	<ul>
+        <ul>
 
-	  <li *ngIf="feature('vat')">
-	    <strong>VAT credit</strong>: This covers the cost of submitting a
-	    single VAT return.  For businesses submitting quarterly, 4
-	    credits will cover filing for one year.</li>
-	  <li *ngIf="feature('corptax')">
-	    <strong>Corporation tax credit</strong>:
-	    This covers the cost of
-	    submitting a single corporation tax return.  Most
-	    businesses will need to file one return annually.  New
-	    businesses may need to submit two in their first
-	    year.</li>
-	  <li *ngIf="feature('accounts')">
-	    <strong>Accounts filing credit</strong>: This covers the cost of
-	    submitting a single accounts filing to companies house.
-	    Most businesses will file a single set of accounts
-	    annually.</li>
-	</ul>
+          @if (feature('vat')) {
+            <li>
+              <strong>VAT credit</strong>: This covers the cost of submitting a
+              single VAT return.  For businesses submitting quarterly, 4
+            credits will cover filing for one year.</li>
+          }
+          @if (feature('corptax')) {
+            <li>
+              <strong>Corporation tax credit</strong>:
+              This covers the cost of
+              submitting a single corporation tax return.  Most
+              businesses will need to file one return annually.  New
+              businesses may need to submit two in their first
+            year.</li>
+          }
+          @if (feature('accounts')) {
+            <li>
+              <strong>Accounts filing credit</strong>: This covers the cost of
+              submitting a single accounts filing to companies house.
+              Most businesses will file a single set of accounts
+            annually.</li>
+          }
+        </ul>
 
-	<p>A discount is applied to orders for multiple credits which
-	  increases with the order size.</p>
+        <p>A discount is applied to orders for multiple credits which
+        increases with the order size.</p>
 
       </section>
       <section class="content">
 
-	<h1>Select credits</h1>
+        <h1>Select credits</h1>
 
-	<p *ngIf="nofeatures">
-	  <mat-icon class="tick-false">highlight_off</mat-icon>
-	  No filing applications are enabled in this application, currently.
-	  You will not be able to buy filing credits.
-	</p>
+        @if (nofeatures) {
+          <p>
+            <mat-icon class="tick-false">highlight_off</mat-icon>
+            No filing applications are enabled in this application, currently.
+            You will not be able to buy filing credits.
+          </p>
+        }
 
-	<form [formGroup]="form" *ngIf="offer.offer">
-
-	  <ng-container *ngFor="let kind of kinds">
-	    <div *ngIf="feature(kind)" class="selection">
-	      <div class="selectlabel">{{offer.offer[kind].description}}:</div>
-	      <div class="choice">
-		<mat-button-toggle-group aria-label="Credits to purchase"
-					 (change)="recalc()"
-					 formControlName="{{kind}}">
-		  <mat-button-toggle *ngFor="let c of offer.offer[kind].offer"
-				     [value]="c.quantity">
-		    {{c.quantity}}
-		  </mat-button-toggle>
-		</mat-button-toggle-group>
-	      </div>
-	      <div class="price">
-		{{(value[kind] / 100) | currency}}
-	      </div>
-	    </div>
-	  </ng-container>
-
-	  <div *ngIf="some_max()">
-	    You have the maximum credits for {{full_credits()}}.
-	    There are no more credits available to purchase.
-	  </div>
-
-	</form>
+        @if (offer.offer) {
+          <form [formGroup]="form">
+            @for (kind of kinds; track kind) {
+              @if (feature(kind)) {
+                <div class="selection">
+                  <div class="selectlabel">{{offer.offer[kind].description}}:</div>
+                  <div class="choice">
+                    <mat-button-toggle-group aria-label="Credits to purchase"
+                      (change)="recalc()"
+                      formControlName="{{kind}}">
+                      @for (c of offer.offer[kind].offer; track c) {
+                        <mat-button-toggle
+                          [value]="c.quantity">
+                          {{c.quantity}}
+                        </mat-button-toggle>
+                      }
+                    </mat-button-toggle-group>
+                  </div>
+                  <div class="price">
+                    {{(value[kind] / 100) | currency}}
+                  </div>
+                </div>
+              }
+            }
+            @if (some_max()) {
+              <div>
+                You have the maximum credits for {{full_credits()}}.
+                There are no more credits available to purchase.
+              </div>
+            }
+          </form>
+        }
 
       </section>
 
-      <section class="content" *ngIf="order.items.length > 0">
-
-	<h1>Your order</h1>
-
-	<order></order>
-
-	<div>
-	  <ng-container *ngIf="free_order_available()">
-	    <button mat-raised-button color="primary"
-		    (click)="free_checkout()">
-	      <mat-icon>redeem</mat-icon>&nbsp;
-	      Process free order
-	    </button>
-	  </ng-container>
-	  <ng-container *ngIf="!free_order_available()">
-	    <button mat-raised-button color="primary"
-		    (click)="cc_checkout()" [disabled]="order_disabled()">
-	      <mat-icon>credit_card</mat-icon>&nbsp;
-	      Pay with credit card
-	    </button>
-	    <button mat-raised-button color="primary"
-		    *ngIf="feature('crypto')"
-		    (click)="crypto_checkout()" [disabled]="order_disabled()">
-	      <mat-icon>currency_bitcoin</mat-icon>&nbsp;
-	      Pay with cryptocurrency
-	    </button>
-	  </ng-container>
-	  <button mat-raised-button color="basic" (click)="reset()">
-	    <mat-icon>clear</mat-icon>&nbsp;
-	    Reset checkout
-	  </button>
-	</div>
-
-	</section>
+      @if (order.items.length > 0) {
+        <section class="content">
+          <h1>Your order</h1>
+          <order></order>
+          <div>
+            @if (free_order_available()) {
+              <button mat-raised-button color="primary"
+                (click)="free_checkout()">
+                <mat-icon>redeem</mat-icon>&nbsp;
+                Process free order
+              </button>
+            }
+            @if (!free_order_available()) {
+              <button mat-raised-button color="primary"
+                (click)="cc_checkout()" [disabled]="order_disabled()">
+                <mat-icon>credit_card</mat-icon>&nbsp;
+                Pay with credit card
+              </button>
+              @if (feature('crypto')) {
+                <button mat-raised-button color="primary"
+                  (click)="crypto_checkout()" [disabled]="order_disabled()">
+                  <mat-icon>currency_bitcoin</mat-icon>&nbsp;
+                  Pay with cryptocurrency
+                </button>
+              }
+            }
+            <button mat-raised-button color="basic" (click)="reset()">
+              <mat-icon>clear</mat-icon>&nbsp;
+              Reset checkout
+            </button>
+          </div>
+        </section>
+      }
 
     </mat-drawer-content>
 

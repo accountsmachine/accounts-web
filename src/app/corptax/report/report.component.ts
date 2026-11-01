@@ -1,28 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CorptaxConfig } from '../corptax-config';
 import { CorptaxConfigService } from '../corptax-config.service';
 import { WorkingService } from '../../working.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { SafePipe } from '../../shared/safe.pipe';
 
 @Component({
-  selector: 'corptax-report',
-  templateUrl: './report.component.html',
-  styleUrls: ['./report.component.scss']
+    selector: 'corptax-report',
+    templateUrl: './report.component.html',
+    styleUrls: ['./report.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, SafePipe]
 })
 export class ReportComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private filing = inject(CorptaxConfigService);
+    private working = inject(WorkingService);
+
 
     id = "";
     config : CorptaxConfig = {};
 
 //    report : string = "";
     src = "";
-
-    constructor(
-	private route : ActivatedRoute,
-	private filing : CorptaxConfigService,
-	private working : WorkingService,
-    ) {}
 
     ngOnInit(): void {
 	this.route.params.subscribe(
@@ -37,7 +39,7 @@ export class ReportComponent implements OnInit {
 		    this.filing.get_report(this.id).subscribe(e => {
 			//			(e : any) => this.report = e
 			this.working.stop();
-			this.render(e);
+			this.render(e as string);
 		    });
 		});
 	    }
@@ -48,9 +50,9 @@ export class ReportComponent implements OnInit {
 	console.log(this.config.state);
     }
 
-    render(e : any) {
-	let blob = new Blob([e], {type: 'application/xhtml+xml'});
-	let url = URL.createObjectURL(blob);
+    render(e : string) {
+	const blob = new Blob([e], {type: 'application/xhtml+xml'});
+	const url = URL.createObjectURL(blob);
 	this.src = url;
     }
 

@@ -1,19 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
 
 @Component({
     selector: 'accounts-structure',
     templateUrl: './structure.component.html',
-    styleUrls: ['./structure.component.scss']
+    styleUrls: ['./structure.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent]
 })
-export class StructureComponent implements OnInit {
-
-    constructor(
-    ) {
-    }
-
-    ngOnInit() : void {
-    }
+export class StructureComponent {
 
     revert() {
     }

@@ -1,8 +1,8 @@
-import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE, APP_INITIALIZER } from '@angular/core';
+import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -22,7 +22,6 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { DATE_FORMATS } from '../date-formats';
 
-import { HttpClientModule } from '@angular/common/http';
 
 import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -44,22 +43,7 @@ import { DeleteComponent } from './delete/delete.component';
 import { BillingDetailsComponent
        } from './billing-details/billing-details.component';
 
-@NgModule({ declarations: [
-        ProfileComponent,
-        ResetPasswordComponent,
-        FrontComponent,
-        RegisterComponent,
-        VerifyEmailComponent,
-        LoginComponent,
-        UpdateProfileComponent,
-        ChangeEmailComponent,
-        ChangePasswordComponent,
-        NavComponent,
-        OverviewComponent,
-        DeleteConfirmationComponent,
-        DeleteComponent,
-        BillingDetailsComponent,
-    ],
+@NgModule({
     exports: [
         ProfileComponent,
         ResetPasswordComponent,
@@ -82,7 +66,20 @@ import { BillingDetailsComponent
         MatSidenavModule,
         MatSnackBarModule,
         FormsModule,
-        ReactiveFormsModule], providers: [
+        ReactiveFormsModule, ProfileComponent,
+        ResetPasswordComponent,
+        FrontComponent,
+        RegisterComponent,
+        VerifyEmailComponent,
+        LoginComponent,
+        UpdateProfileComponent,
+        ChangeEmailComponent,
+        ChangePasswordComponent,
+        NavComponent,
+        OverviewComponent,
+        DeleteConfirmationComponent,
+        DeleteComponent,
+        BillingDetailsComponent], providers: [
         { provide: LOCALE_ID, useValue: "en-GB" },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
         {

@@ -1,35 +1,31 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { Component, OnInit, Input, OnChanges, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { MatTableDataSource } from '@angular/material/table';
-import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 
-import { StatusService, Statuses } from '../status.service';
+
 import { VatService, Obligation } from '../../vat/vat.service';
+import { MatIcon } from '@angular/material/icon';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'obligations',
-  templateUrl: './obligations.component.html',
-  styleUrls: ['./obligations.component.scss']
+    selector: 'obligations',
+    templateUrl: './obligations.component.html',
+    styleUrls: ['./obligations.component.scss'],
+    imports: [MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatIcon, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, DatePipe]
 })
 export class ObligationsComponent implements OnInit, OnChanges {
+    private route = inject(ActivatedRoute);
+    private vat = inject(VatService);
 
-    id : string = "";
-    @Input("obligations") obligations : Obligation[] = [];
+
+    id  = "";
+    @Input() obligations : Obligation[] = [];
 
     columns = ["status", "start", "end", "received", "due" ];
 
     data : MatTableDataSource<Obligation> =
 	new MatTableDataSource<Obligation>([]);
-
-    constructor(
-	private route : ActivatedRoute,
-	private vat : VatService,
-    ) {
-    }
 
     update() : void {
 	this.data.data = this.obligations;

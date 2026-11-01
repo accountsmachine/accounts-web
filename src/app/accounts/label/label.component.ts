@@ -1,32 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import moment from 'moment';
 
-import { AccountsConfig } from '../accounts-config';
 import { AccountsConfigService } from '../accounts-config.service';
+import { AccountsConfig } from '../accounts-config';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'label',
     templateUrl: './label.component.html',
-    styleUrls: ['./label.component.scss']
+    styleUrls: ['./label.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatHint, MatButton]
 })
-export class LabelComponent implements OnInit {
+export class LabelComponent {
+    private route = inject(ActivatedRoute);
+    private snackBar = inject(MatSnackBar);
+    private filing = inject(AccountsConfigService);
+    private fb = inject(FormBuilder);
+
 
     form = this.fb.group({
 	label: ['', [Validators.required]],
     });
 
-    config : any = {};
+    config : AccountsConfig = {};
 
-    constructor(
-	private route : ActivatedRoute,
-	private snackBar : MatSnackBar,
-	private filing : AccountsConfigService,
-	private fb : FormBuilder,
-    ) {
+    constructor() {
 
 	this.route.params.subscribe(
 	    params => {
@@ -39,10 +45,7 @@ export class LabelComponent implements OnInit {
 
     }
 
-    ngOnInit() : void {
-    }
-
-    to_date(d : any) {
+    to_date(d : string) {
 	return moment(d);
     }
 
@@ -52,13 +55,13 @@ export class LabelComponent implements OnInit {
 	});
     }
 
-    from_date(d : any) {
+    from_date(d : moment.Moment) {
 	return d.format("YYYY-MM-DD");
     }
 
     submit() {
 
-	this.config.label = this.form.value.label;
+	this.config.label = this.form.value.label ?? undefined;
 
 	this.filing.save().subscribe(
 	    () => {

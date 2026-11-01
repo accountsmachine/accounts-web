@@ -1,11 +1,12 @@
 
-export type AccountsConfig = {
+export interface AccountsConfig {
 
     kind? : string;
     state? : string;
     label? : string;
     company? : string;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     structure? : any;
 
     period_name? : string;
@@ -26,5 +27,5 @@ export type AccountsConfig = {
     period_average_employees? : number;
     prev_average_employees? : number;
 
-};
+}
 

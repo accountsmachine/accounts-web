@@ -1,66 +1,67 @@
 
 <section class="tab-contents">
-  
+
   <h1>Upload accounts file</h1>
 
   <input type="file" class="file-input" (change)="onFileSelected($event)"
-	 #fileUpload>
+    #fileUpload>
 
   <div class="upload">
 
     <div class="file-upload">
       <span class="filename">
-	{{filename || "Click to upload accounts."}}
+        {{filename || "Click to upload accounts."}}
       </span>
       <button mat-raised-button color="primary" class="upload-btn"
-	      (click)="fileUpload.click(); false">
+        (click)="fileUpload.click(); false">
         <mat-icon>attach_file</mat-icon>
-	Upload acccounting file
+        Upload acccounting file
       </button>
     </div>
 
     <div class="kind">
-      <label id="accounts-kind-label">
-	Select an account file kind
-      </label>      
+      <span id="accounts-kind-label">
+        Select an account file kind
+      </span>
       <mat-radio-group aria-labelledby="accounts-kind-label"
-		       [(ngModel)]="kind">
-	<mat-radio-button value="gnucash-sqlite">
-	  GnuCash SQLite format
-	  (<a href="https://accountsmachine.freshdesk.com/support/solutions/articles/101000403445-accounting-books-in-gnucash-file-format" target="_blank">help</a>)
-	</mat-radio-button>
-	<mat-radio-button value="csv">
-	  CSV format (<a href="https://accountsmachine.freshdesk.com/support/solutions/articles/101000403449-accounting-books-in-csv-format" target="_blank">help</a>)
-	</mat-radio-button>
+        [(ngModel)]="kind">
+        <mat-radio-button value="gnucash-sqlite">
+          GnuCash SQLite format
+          (<a href="https://accountsmachine.freshdesk.com/support/solutions/articles/101000403445-accounting-books-in-gnucash-file-format" target="_blank">help</a>)
+        </mat-radio-button>
+        <mat-radio-button value="csv">
+          CSV format (<a href="https://accountsmachine.freshdesk.com/support/solutions/articles/101000403449-accounting-books-in-csv-format" target="_blank">help</a>)
+        </mat-radio-button>
       </mat-radio-group>
     </div>
-    
-    <div class="progress" *ngIf="status != 'idle'">
-      <label>{{status}}</label>
-      <mat-progress-bar class="progress-bar" [mode]="mode"
-			[value]="uploadProgress">
-      </mat-progress-bar>
-      
-      <mat-icon class="cancel-upload" (click)="cancelUpload()" 
-		*ngIf="uploadProgress">delete_forever</mat-icon>
-      
-    </div>
+
+    @if (status !== 'idle') {
+      <div class="progress">
+        <span class="progress-label">{{status}}</span>
+        <mat-progress-bar class="progress-bar" [mode]="mode"
+          [value]="uploadProgress">
+        </mat-progress-bar>
+        @if (uploadProgress) {
+          <mat-icon class="cancel-upload" (click)="cancelUpload()"
+          >delete_forever</mat-icon>
+        }
+      </div>
+    }
 
   </div>
 
   <div class="status">
 
-    <div *ngIf="books_info; else noAccounts">
-
-      <div>Accounts have been uploaded.</div>
-      <div>Updated: {{time | date:'dd/MM/YYYY HH:mm:ss'}}</div>
-      <div>Size: {{length}}</div>
-      
-    </div>
-
-    <ng-template #noAccounts>
+    @if (books_info) {
+      <div>
+        <div>Accounts have been uploaded.</div>
+        <div>Updated: {{time | date:'dd/MM/YYYY HH:mm:ss'}}</div>
+        <div>Size: {{length}}</div>
+      </div>
+    } @else {
       No accounts have been uploaded.
-    </ng-template>
+    }
+
 
   </div>
 

@@ -8,8 +8,8 @@ describe('AccountsStructureComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountsStructureComponent ]
-    })
+    imports: [AccountsStructureComponent]
+})
     .compileComponents();
   });
 

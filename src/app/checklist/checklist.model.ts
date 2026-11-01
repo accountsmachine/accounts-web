@@ -10,7 +10,7 @@ export class Check {
 };
 
 export class Checklist {
-    pending : boolean = false;
-    complete : boolean = false;
+    pending  = false;
+    complete  = false;
     list : Check[] = [];
 };

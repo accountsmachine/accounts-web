@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"io"
 	"log"
 	"net/http"
-	"regexp"
 	"os"
+	"regexp"
 )
 
 func copyHeader(dst, src http.Header) {
@@ -22,7 +21,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	filename := r.URL.Path[1:]
 	fmt.Println(filename)
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 
 	if err != nil {
 		http.NotFound(w, r)
@@ -56,7 +55,7 @@ func main() {
 	listen := ":8080"
 	apiEndpoint := "localhost:8081"
 	scheme := "http"
-	base := "./dist/startup-accounts/"
+	base := "./dist/accounts-machine/"
 
 	if len(os.Args) > 1 {
 		listen = os.Args[1]
@@ -90,7 +89,7 @@ func main() {
 			w.Header().Set("Content-Type", "text/html; charset=utf-8")
 			filename := base + r.URL.Path[1:]
 			filename = "./ref.html"
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -155,7 +154,7 @@ func main() {
 		if m := cssPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/css")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -163,7 +162,7 @@ func main() {
 		if m := pngPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "image/png")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -171,7 +170,7 @@ func main() {
 		if m := gifPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "image/gif")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -179,7 +178,7 @@ func main() {
 		if m := xhtmlPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "application/xhtml+xml; charset=utf-8")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -187,7 +186,7 @@ func main() {
 		if m := jsPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/javascript")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -195,7 +194,7 @@ func main() {
 		if m := jsonPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/javascript")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -203,7 +202,7 @@ func main() {
 		if m := woffPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/plain")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -211,7 +210,7 @@ func main() {
 		if m := svgPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/xml+svg")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -219,7 +218,7 @@ func main() {
 		if m := htmlPath.FindStringSubmatch(r.URL.Path); m != nil {
 			w.Header().Set("Content-Type", "text/html; charset=utf-8")
 			filename := base + r.URL.Path[1:]
-			data, _ := ioutil.ReadFile(filename)
+			data, _ := os.ReadFile(filename)
 			w.Write(data)
 			return
 		}
@@ -227,7 +226,7 @@ func main() {
 		// FIXME: Deals with the Angular paths
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		filename := base + "index.html"
-		data, _ := ioutil.ReadFile(filename)
+		data, _ := os.ReadFile(filename)
 		w.Write(data)
 		return
 

@@ -1,6 +1,6 @@
 
-import { Injectable } from '@angular/core';
-import { Observable, Subject, BehaviorSubject, throwError, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 
 import { ApiService } from '../api.service';
@@ -9,8 +9,8 @@ export class AccountInclusion {
     constructor(a : string, r : boolean) {
         this.account = a; this.reversed = r;
     }
-    account : string = "";
-    reversed : boolean = false;
+    account  = "";
+    reversed  = false;
 }
 
 export class Mapping {
@@ -21,11 +21,11 @@ export class Mapping {
     providedIn: 'root'
 })
 export class MappingService {
+    private api = inject(ApiService);
 
-    id : string = "";
+
+    id  = "";
     mapping : Mapping | null = null;
-
-    constructor(private api : ApiService) { }
 
     subject : BehaviorSubject<Mapping | null> =
 	new BehaviorSubject<Mapping | null>(null);
@@ -94,8 +94,6 @@ export class MappingService {
 	    })
 	};
 
-	let svc = this;
-
 	return this.api.put(
 	    "/api/books/" + this.id + "/mapping",
 	    this.mapping,
@@ -106,7 +104,7 @@ export class MappingService {
 
     vat_box(key : string) : number {
 
-	const boxes : { [key : string] : number } = {
+	const boxes : Record<string, number> = {
             "vat-output-sales": 1,
 	    "vat-output-acquisitions": 2,
 	    "vat-input": 4,
@@ -123,7 +121,7 @@ export class MappingService {
     }
 
     vat_desc(key : string) : string {
-	const boxes : { [key : string] : string } = {
+	const boxes : Record<string, string> = {
             "vat-output-sales": "VAT due on sales",
 	    "vat-output-acquisitions": "VAT due on acquisitions",
 	    "vat-input": "VAT reclaimed on purchases",

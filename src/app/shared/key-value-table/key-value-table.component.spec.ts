@@ -8,8 +8,8 @@ describe('KeyValueTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ KeyValueTableComponent ]
-    })
+    imports: [KeyValueTableComponent]
+})
     .compileComponents();
   });
 

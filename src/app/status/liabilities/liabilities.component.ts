@@ -1,24 +1,25 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { Component, OnInit, Input, OnChanges, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { MatTableDataSource } from '@angular/material/table';
-import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 
-import { StatusService, Statuses } from '../status.service';
+
 import { VatService, Liability } from '../../vat/vat.service';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'liabilities',
-  templateUrl: './liabilities.component.html',
-  styleUrls: ['./liabilities.component.scss']
+    selector: 'liabilities',
+    templateUrl: './liabilities.component.html',
+    styleUrls: ['./liabilities.component.scss'],
+    imports: [MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, CurrencyPipe, DatePipe]
 })
 export class LiabilitiesComponent implements OnInit, OnChanges {
+    private route = inject(ActivatedRoute);
+    private vat = inject(VatService);
 
-    id : string = "";
-    @Input("liabilities") liabilities : Liability[] = [];
+
+    id  = "";
+    @Input() liabilities : Liability[] = [];
 
     columns = [
 	"type", "originalAmount", "outstandingAmount", "from", "to", "due"
@@ -26,12 +27,6 @@ export class LiabilitiesComponent implements OnInit, OnChanges {
 
     data : MatTableDataSource<Liability> =
 	new MatTableDataSource<Liability>([]);
-
-    constructor(
-	private route : ActivatedRoute,
-	private vat : VatService,
-    ) {
-    }
 
     update() : void {
 	this.data.data = this.liabilities;

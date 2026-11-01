@@ -1,33 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import moment from 'moment';
 
 import { CorptaxConfig } from '../corptax-config';
 import { CorptaxConfigService } from '../corptax-config.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatSuffix, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'corptax-periods',
     templateUrl: './periods.component.html',
-    styleUrls: ['./periods.component.scss']
+    styleUrls: ['./periods.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, MatHint, MatButton]
 })
-export class PeriodsComponent implements OnInit {
+export class PeriodsComponent {
+    private route = inject(ActivatedRoute);
+    private snackBar = inject(MatSnackBar);
+    private filing = inject(CorptaxConfigService);
+
 
     // FIXME: What type?
     form = new FormGroup({
-	period_start_date: new FormControl<any>('', [Validators.required]),
-	period_end_date: new FormControl<any>('', [Validators.required]),
+	period_start_date: new FormControl<moment.Moment | string>('', [Validators.required]),
+	period_end_date: new FormControl<moment.Moment | string>('', [Validators.required]),
     });
 
-    config : any = {};
+    config : CorptaxConfig = {};
 
-    constructor(
-	private route : ActivatedRoute,
-	private snackBar : MatSnackBar,
-	private filing : CorptaxConfigService,
-    ) {
+    constructor() {
 
 	this.route.params.subscribe(
 	    params => {
@@ -40,10 +47,7 @@ export class PeriodsComponent implements OnInit {
 
     }
 
-    ngOnInit() : void {
-    }
-
-    to_date(d : any) {
+    to_date(d : string | undefined) {
 	return moment(d);
     }
 
@@ -56,21 +60,24 @@ export class PeriodsComponent implements OnInit {
 	});
     }
 
-    from_date(d : any) {
+    from_date(d : moment.Moment) {
 	return d.format("YYYY-MM-DD");
     }
 
     submit() {
 
+	const start = this.form.value.period_start_date as moment.Moment;
+	const end = this.form.value.period_end_date as moment.Moment;
+
 	this.config.period_start_date =
-	    this.from_date(this.form.value.period_start_date);
+	    this.from_date(start);
 	this.config.period_end_date =
-	    this.from_date(this.form.value.period_end_date);
+	    this.from_date(end);
 
-	this.config.period_name = this.form.value.period_start_date.format("YYYY");
+	this.config.period_name = start.format("YYYY");
 
-	var eop_date = moment(this.form.value.period_start_date);
-	var son_date = moment(this.form.value.period_start_date);
+	let eop_date = moment(start);
+	const son_date = moment(start);
 	let one_fy = false;
 
 	if (son_date.month() > 3) {
@@ -90,7 +97,7 @@ export class PeriodsComponent implements OnInit {
 	    son_date.month(3);
 	    son_date.date(6);
 	} else if (son_date.month() == 3 && son_date.date() == 6) {
-	    eop_date = this.form.value.period_end_date;
+	    eop_date = moment(end);
 	    one_fy = true;
 	} else {
 	    // Previous year
@@ -100,12 +107,12 @@ export class PeriodsComponent implements OnInit {
 	    son_date.date(6);
 	}
 
-	if (son_date && (son_date > this.form.value.period_end_date)) {
+	if (son_date && (son_date > end)) {
 	    one_fy = true;
 	}
 
 	this.config.fy1 = {
-	    name: this.form.value.period_start_date.format("YYYY"),
+	    name: start.format("YYYY"),
 	    start: this.config.period_start_date,
 	    end: this.from_date(eop_date),
 	};
@@ -119,7 +126,7 @@ export class PeriodsComponent implements OnInit {
 	}
 
 	this.filing.save().subscribe(
-	    (e : any) => {
+	    () => {
 		this.snackBar.open("Configuration saved", "dismiss",
 				   { duration: 5000 });
 	    }

@@ -1,17 +1,27 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Validators } from '@angular/forms';
 import { UserProfile, UserProfileService } from '../user-profile.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'app-billing-details',
     templateUrl: './billing-details.component.html',
-    styleUrls: ['./billing-details.component.scss']
+    styleUrls: ['./billing-details.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatHint, MatButton]
 })
 export class BillingDetailsComponent implements OnInit {
+    private snackBar = inject(MatSnackBar);
+    private fb = inject(FormBuilder);
+    private profileSvc = inject(UserProfileService);
+
 /*
     form = this.fb.group({
 	billing_name: ['', [Validators.required]],
@@ -56,7 +66,7 @@ export class BillingDetailsComponent implements OnInit {
 	    billing_vat: this.profile.billing_vat,
 	});
 
-	for(var i = 0; i < 3; i++) {
+	for(let i = 0; i < 3; i++) {
 	    if (this.profile.billing_address.length > i) {
 		this.form.get("billing_address" + i)!.setValue(
 		    this.profile.billing_address[i]
@@ -66,13 +76,6 @@ export class BillingDetailsComponent implements OnInit {
 	    }
 	}
 
-    }
-
-    constructor(
-	private snackBar: MatSnackBar,
-	private fb: FormBuilder,
-	private profileSvc : UserProfileService,
-    ) {
     }
 
     ngOnInit(): void {
@@ -85,7 +88,7 @@ export class BillingDetailsComponent implements OnInit {
     }
 
     public success() {
-	let snack = this.snackBar.open("Profile saved", "dismiss",
+	this.snackBar.open("Profile saved", "dismiss",
 				       { duration: 5000 });
     }
 
@@ -140,7 +143,7 @@ export class BillingDetailsComponent implements OnInit {
 	    this.profile.billing_vat = "";
 
 	this.profileSvc.save().subscribe(
-	    e => this.success()
+	    () => this.success()
 	);
 
     }

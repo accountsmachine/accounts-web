@@ -8,8 +8,8 @@ describe('NewNonUkCompanyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewNonUkCompanyComponent ]
-    })
+    imports: [NewNonUkCompanyComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(NewNonUkCompanyComponent);

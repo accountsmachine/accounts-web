@@ -41,7 +41,7 @@ export class DemoComponent {
     ];
 
     contains(l : NestableListItem[], k : string) : boolean {
-	for (var elt of l) {
+	for (const elt of l) {
 	    if (elt.kind == k) {
 		return true;
 	    }
@@ -52,7 +52,7 @@ export class DemoComponent {
 	return false;
     }
 
-    is_disabled(item : any) : boolean {
+    is_disabled(item : NestableListItem) : boolean {
 	if (item.kind == "frs-102") {
 	    if (this.contains(this.nestableList, "frs-102"))
 		return true;
@@ -75,15 +75,12 @@ export class DemoComponent {
     private currentDraggableEvent?:DragEvent;
     private currentDragEffectMsg?:string;
 
-    constructor() {
-    }
-
     onDragStart( event:DragEvent ) {
 	this.currentDragEffectMsg = "";
 	this.currentDraggableEvent = event;
     }
 
-    onDragged( item:any, list:any[], effect:DropEffect ) {
+    onDragged( item:NestableListItem, list:NestableListItem[], effect:DropEffect ) {
 	if( effect === "move" ) {
 	    const index = list.indexOf( item );
 	    list.splice( index, 1 );
@@ -94,7 +91,7 @@ export class DemoComponent {
 	this.currentDraggableEvent = event;
     }
 
-    onDrop( event:DndDropEvent, list?:any[] ) {
+    onDrop( event:DndDropEvent, list?:NestableListItem[] ) {
 	if (list &&
 	    (event.dropEffect === "copy" || event.dropEffect === "move")) {
 

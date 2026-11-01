@@ -1,27 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { VatConfigService } from '../vat-config.service';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'vat-new',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss']
+    selector: 'vat-new',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.scss'],
+    imports: [FormsModule, MatFormField, MatLabel, MatInput, MatHint, MatButton]
 })
-export class NewComponent implements OnInit {
+export class NewComponent {
+    private filing = inject(VatConfigService);
+    private router = inject(Router);
+    private snackBar = inject(MatSnackBar);
+
 
     label = "";
-
-    constructor(
-	private filing : VatConfigService,
-	private router : Router,
-	private snackBar : MatSnackBar,
-    ) {
-    }
-
-    ngOnInit(): void {
-    }
 
     cancel() {
 	this.router.navigate(["/filing"]);

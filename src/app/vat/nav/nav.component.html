@@ -1,88 +1,74 @@
 <nav class="config-drawer">
 
-  <ng-container *ngIf="config.state == 'draft'; else status">
-
+  @if (config.state === 'draft') {
     <div>
       <a mat-button [routerLink]="'../label'" routerLinkActive="active">
-	<mat-icon>label</mat-icon>
-	&nbsp;Label
+        <mat-icon>label</mat-icon>
+        &nbsp;Label
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../company'" routerLinkActive="active">
-	<mat-icon>business</mat-icon>
-	&nbsp;Company
+        <mat-icon>business</mat-icon>
+        &nbsp;Company
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../period'" routerLinkActive="active">
-	<mat-icon>date_range</mat-icon>
-	Period
+        <mat-icon>date_range</mat-icon>
+        Period
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../checklist'" routerLinkActive="active">
-	<mat-icon>check</mat-icon>
-	Checklist
+        <mat-icon>check</mat-icon>
+        Checklist
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../calculation'" routerLinkActive="active">
-	<mat-icon>calculate</mat-icon>
-	Calculation
+        <mat-icon>calculate</mat-icon>
+        Calculation
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../preview'" routerLinkActive="active">
-	<mat-icon>preview</mat-icon>
-	Preview
+        <mat-icon>preview</mat-icon>
+        Preview
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../submit'" routerLinkActive="active">
-	<mat-icon>publish</mat-icon>
-	Submit
+        <mat-icon>publish</mat-icon>
+        Submit
       </a>
     </div>
-
-  </ng-container>
-
-  <ng-template #status>
-    
+  } @else {
     <div>
       <a mat-button [routerLink]="'../report'" routerLinkActive="active">
-	<mat-icon>preview</mat-icon>
-	&nbsp;Report
+        <mat-icon>preview</mat-icon>
+        &nbsp;Report
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../calculation'" routerLinkActive="active">
-	<mat-icon>calculate</mat-icon>
-	Calculation
+        <mat-icon>calculate</mat-icon>
+        Calculation
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../data'" routerLinkActive="active">
-	<mat-icon>table_rows</mat-icon>
-	&nbsp;Record
+        <mat-icon>table_rows</mat-icon>
+        &nbsp;Record
       </a>
     </div>
-
     <div>
       <a mat-button [routerLink]="'../status'" routerLinkActive="active">
-	<mat-icon>toc</mat-icon>
-	&nbsp;Log
+        <mat-icon>toc</mat-icon>
+        &nbsp;Log
       </a>
     </div>
+  }
 
-  </ng-template>
 
 </nav>

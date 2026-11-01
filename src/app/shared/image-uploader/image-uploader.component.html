@@ -1,6 +1,6 @@
 
 <input type="file" class="file-input" (change)="onFileSelected($event)"
-       #fileUpload>
+  #fileUpload>
 
 <div class="upload">
 
@@ -9,28 +9,32 @@
       {{filename || "Click to upload image."}}
     </span>
     <button mat-raised-button color="primary" class="upload-btn"
-	    (click)="fileUpload.click(); false">
+      (click)="fileUpload.click(); false">
       <mat-icon>attach_file</mat-icon>
       Upload image
     </button>
   </div>
-  
-  <div class="progress" *ngIf="status != 'idle'">
-    <label>{{status}}</label>
-    <mat-progress-bar class="progress-bar" [mode]="mode"
-		      [value]="progress">
-    </mat-progress-bar>
-    
-    <mat-icon class="cancel-upload" (click)="cancelUpload()" 
-	      *ngIf="progress">delete_forever</mat-icon>
-  </div>
+
+  @if (status !== 'idle') {
+    <div class="progress">
+      <span class="progress-label">{{status}}</span>
+      <mat-progress-bar class="progress-bar" [mode]="mode"
+        [value]="progress">
+      </mat-progress-bar>
+      @if (progress) {
+        <mat-icon class="cancel-upload" (click)="cancelUpload()"
+        >delete_forever</mat-icon>
+      }
+    </div>
+  }
 
   <div class="status">
-    <div *ngIf="uploaded; else no">
-      <div>Image has been uploaded.</div>
-    </div>
-    <ng-template #no>
-    </ng-template>
+    @if (uploaded) {
+      <div>
+        <div>Image has been uploaded.</div>
+      </div>
+    } @else {
+    }
   </div>
 
 </div>

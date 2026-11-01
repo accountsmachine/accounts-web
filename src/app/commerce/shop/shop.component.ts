@@ -1,25 +1,36 @@
-import { Component, ViewChild, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Company } from '../../company/company.service';
-import { Option, Options, Balance, Order } from '../commerce.model';
+import { Options, Order } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 import { CheckoutService } from '../checkout.service';
 
 import { ConfigurationService } from '../../configuration.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { OrderComponent } from '../order/order.component';
+import { MatButton } from '@angular/material/button';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
     selector: 'shop',
     templateUrl: './shop.component.html',
-    styleUrls: ['./shop.component.scss']
+    styleUrls: ['./shop.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, MatIcon, FormsModule, ReactiveFormsModule, MatButtonToggleGroup, MatButtonToggle, OrderComponent, MatButton, CurrencyPipe]
 })
 export class ShopComponent implements OnInit {
+    private service = inject(CheckoutService);
+    private commerceService = inject(CommerceService);
+    private formBuilder = inject(FormBuilder);
+    private snackBar = inject(MatSnackBar);
+    private router = inject(Router);
+    private configSvc = inject(ConfigurationService);
+
 
     feature(x : string) {
         return this.configSvc.hasFeature(x);
@@ -34,19 +45,12 @@ export class ShopComponent implements OnInit {
     offer : Options = { offer: {} };
     kinds : string[] = [];
 
-    value : { [kind : string] : number } = {};
-    descriptions : { [kind : string] : string } = {};
+    value : Record<string, number> = {};
+    descriptions : Record<string, string> = {};
 
     order : Order = new Order();
 
-    constructor(
-	private service : CheckoutService,
-	private commerceService : CommerceService,
-	private formBuilder: FormBuilder,
-	private snackBar: MatSnackBar,
-	private router : Router,
-	private configSvc : ConfigurationService,
-    ) {
+    constructor() {
 	this.form = this.formBuilder.group({
 	    vat: [0],
 	    corptax: [0],
@@ -59,7 +63,7 @@ export class ShopComponent implements OnInit {
 	    this.value = {};
 	    this.descriptions = {};
 
-	    for (let item of this.order.items) {
+	    for (const item of this.order.items) {
 		this.value[item.kind] = item.amount;
 //		this.description[item.kind]
 	    }
@@ -83,7 +87,7 @@ export class ShopComponent implements OnInit {
 	this.commerceService.get_offer().subscribe(o => {
 	    this.offer = o;
 	    this.kinds = [];
-	    for (let k in this.offer.offer) {
+	    for (const k in this.offer.offer) {
 		this.kinds.push(k);
 	    }
 	});
@@ -102,7 +106,7 @@ export class ShopComponent implements OnInit {
     }
 
     free_checkout() {
-	this.service.complete_free_order().subscribe(o => {
+	this.service.complete_free_order().subscribe(_o => {
 	    this.router.navigate(["/commerce/complete"]);
 	});
 	this.reset();
@@ -129,7 +133,7 @@ export class ShopComponent implements OnInit {
 
     full_credits() {
 
-	let unavail = [];
+	const unavail = [];
 
 	if (!this.offer.offer["vat"]) unavail.push("VAT");
 	if (!this.offer.offer["corptax"]) unavail.push("corporation tax");

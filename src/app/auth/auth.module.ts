@@ -6,13 +6,11 @@ import { CredentialsComponent } from './credentials/credentials.component';
 import { AuthRoutingModule } from './auth-routing.module';
 
 @NgModule({
-  declarations: [
-    VatTokenComponent,
-    CredentialsComponent
-  ],
-  imports: [
-    CommonModule,
-    AuthRoutingModule,
-  ]
+    imports: [
+        CommonModule,
+        AuthRoutingModule,
+        VatTokenComponent,
+        CredentialsComponent,
+    ]
 })
 export class AuthModule { }
