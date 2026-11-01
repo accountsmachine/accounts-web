@@ -46,7 +46,7 @@ build:
 	mkdir -p ${DIST}/${BUILD}
 	cat src/version.ts | sed 's/0.0.0/${PACKAGE_VERSION}/' > src/version.${BUILD}.ts
 	ng build -c ${BUILD} --output-path ${DIST}/${BUILD}
-	cp 404.html ${DIST}/${BUILD}
+	cp 404.html ${DIST}/${BUILD}/browser/
 
 serve: serve.go
 	CGO_ENABLED=0 go build serve.go
