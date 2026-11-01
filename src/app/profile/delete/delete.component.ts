@@ -1,32 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+    MatDialog
 } from '@angular/material/dialog';
 
-import { AuthService, AuthState } from '../../auth.service';
+import { AuthService } from '../../auth.service';
 import {
     DeleteConfirmationComponent
 } from '../delete-confirmation/delete-confirmation.component';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
     selector: 'delete-account',
     templateUrl: './delete.component.html',
-    styleUrls: ['./delete.component.scss']
+    styleUrls: ['./delete.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, MatButton, MatIcon]
 })
-export class DeleteComponent implements OnInit {
+export class DeleteComponent {
+    private auth = inject(AuthService);
+    private dialog = inject(MatDialog);
+
 
     username = "";
     username2 = "";
-
-    constructor(
-	private auth : AuthService,
-	private dialog : MatDialog,
-    ) {
-    }
-
-    ngOnInit(): void {
-    }
 
     delete() {
 	const dialogRef = this.dialog.open(
@@ -37,7 +37,7 @@ export class DeleteComponent implements OnInit {
 		},
 	    }
 	);
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { proceed?: boolean } | undefined) => {
 	    if (result) {
 		if (result.proceed) {
 		    console.log("Proceeding with delete.");

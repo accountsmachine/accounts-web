@@ -12,10 +12,12 @@
 
       <image-uploader [uploader]="upload"></image-uploader>
 
-      <div *ngIf="image_url">
-	<h2>Current Signature</h2>
-	<img class="img-preview" [src]="image_url">
-      </div>
+      @if (image_url) {
+        <div>
+          <h2>Current Signature</h2>
+          <img class="img-preview" [src]="image_url" alt="Current signature preview">
+        </div>
+      }
 
     </mat-drawer-content>
   </mat-drawer-container>

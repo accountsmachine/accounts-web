@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { combineLatest } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+    MatDialog
 } from '@angular/material/dialog';
 
-import { StatusService, Statuses } from '../status.service';
+import { StatusService } from '../status.service';
 import { WorkingService } from '../../working.service';
 import {
-    CompanyService, Companies, Company
+    CompanyService, Company
 } from '../../company/company.service';
 import { VatService, Status } from '../../vat/vat.service';
 import {
@@ -19,43 +18,51 @@ import {
 import {
     ErrorDialogComponent
 } from '../../shared/error-dialog/error-dialog.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { ObligationsComponent } from '../obligations/obligations.component';
+import { LiabilitiesComponent } from '../liabilities/liabilities.component';
+import { PaymentsComponent } from '../payments/payments.component';
 
 @Component({
     selector: 'vat',
     templateUrl: './vat.component.html',
-    styleUrls: ['./vat.component.scss']
+    styleUrls: ['./vat.component.scss'],
+    imports: [MatIcon, MatButton, MatCard, MatCardContent, FormsModule, ReactiveFormsModule, MatButtonToggleGroup, MatButtonToggle, ObligationsComponent, LiabilitiesComponent, PaymentsComponent]
 })
 export class VatComponent implements OnInit {
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+    private statusService = inject(StatusService);
+    private companyService = inject(CompanyService);
+    private vat = inject(VatService);
+    private dialog = inject(MatDialog);
+    private formBuilder = inject(FormBuilder);
+    working = inject(WorkingService);
+
 
     public form : FormGroup;
 
     company : Company = new Company();
     setup = false;
 
-    year : any = {};
+    year : { start: string, end: string, name: string } = { start: '', end: '', name: '' };
 
     years : { start : string, end : string, name : string }[] = [];
 
-    id : string = "";
+    id  = "";
 
-    constructor(
-	private router : Router,
-	private route : ActivatedRoute,
-	private statusService : StatusService,
-	private companyService : CompanyService,
-	private vat : VatService,
-	private dialog : MatDialog,
-	private formBuilder: FormBuilder,
-	public working : WorkingService,
-    ) {
+    constructor() {
 
-	let now = new Date();
-	let curYear = now.getFullYear();
+	const now = new Date();
+	const curYear = now.getFullYear();
 
-	let y = [];
+	const y = [];
 
 	for (let i = 0; i < 10; i++) {
-	    let start = new Date(curYear - i, 0, 1);
+	    const start = new Date(curYear - i, 0, 1);
 	    let end = new Date(curYear - i, 11, 31);
 	    if (i == 0)
 		end = new Date()
@@ -105,7 +112,7 @@ export class VatComponent implements OnInit {
 
 	    next: (params) => {
 
-		let id = params["id"];
+		const id = params["id"];
 		this.id = id;
 
 		this.update();
@@ -121,7 +128,7 @@ export class VatComponent implements OnInit {
 			}
 			this.working.stop();
 		    },
-		    error: e => {
+		    error: _e => {
 			this.working.stop();
 		    },
 		    complete: () => {
@@ -136,7 +143,7 @@ export class VatComponent implements OnInit {
 			    id in e ? e[id] : new Company();
 			this.working.stop();
 		    },
-		    error: e => {
+		    error: _e => {
 			this.working.stop();
 		    },
 		    complete: () => {
@@ -144,7 +151,7 @@ export class VatComponent implements OnInit {
 		});
 
 	    },
-	    error: (err) => {
+	    error: (_err) => {
 	    },
 	    complete: () => {
 	    },
@@ -170,7 +177,7 @@ export class VatComponent implements OnInit {
 	    }
 	);
 	
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { proceed?: boolean } | undefined) => {
 	    if (result) {
 		if (result.proceed) {
 		    this.vat.deauthorize(this.id).subscribe(() => {
@@ -206,7 +213,7 @@ export class VatComponent implements OnInit {
 		},
 	    }
 	);
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { retry?: boolean } | undefined) => {
 	    if (result) {
 		if (result.retry) {
 		    this.retry();

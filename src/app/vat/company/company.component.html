@@ -12,43 +12,51 @@
       <h1>Company - {{config.label}}</h1>
 
       <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
-	
-	<div>
-	  <mat-form-field appearance="fill">
-	    <mat-label>Company</mat-label>
-	    <mat-select formControlName="company" name="company">
-	      <mat-option *ngFor="let c of companies | keyvalue"
-			  [value]="c.key">
-		{{c.value.company_name}}
-		<span *ngIf="c.value.type == 'uk-company'">
-		  | {{c.value.company_number}}
-		</span>
-		<span *ngIf="c.value.type == 'non-uk-company'">
-		  | {{c.value.country}}
-		</span>
-		<span *ngIf="c.value.type == 'sole-trader'">
-		  | {{c.value.owner}}
-		</span>
-	      </mat-option>
-	    </mat-select>
-	    <mat-hint>Company to file for</mat-hint>
-	  </mat-form-field>
-	</div>
 
-	<button mat-raised-button [disabled]="!form.valid"
-		kind="submit" color="primary">
-	  Save
-	</button>
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Company</mat-label>
+            <mat-select formControlName="company" name="company">
+              @for (c of companies | keyvalue; track c) {
+                <mat-option
+                  [value]="c.key">
+                  {{c.value.company_name}}
+                  @if (c.value.type === 'uk-company') {
+                    <span>
+                      | {{c.value.company_number}}
+                    </span>
+                  }
+                  @if (c.value.type === 'non-uk-company') {
+                    <span>
+                      | {{c.value.country}}
+                    </span>
+                  }
+                  @if (c.value.type === 'sole-trader') {
+                    <span>
+                      | {{c.value.owner}}
+                    </span>
+                  }
+                </mat-option>
+              }
+            </mat-select>
+            <mat-hint>Company to file for</mat-hint>
+          </mat-form-field>
+        </div>
 
-	<button mat-raised-button color="basic" (click)="revert()">
-	  Revert
-	</button>
+        <button mat-raised-button [disabled]="!form.valid"
+          kind="submit" color="primary">
+          Save
+        </button>
+
+        <button mat-raised-button color="basic" (click)="revert()">
+          Revert
+        </button>
 
       </form>
 
     </mat-drawer-content>
 
   </mat-drawer-container>
-      
+
 </section>
 

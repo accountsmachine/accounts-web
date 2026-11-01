@@ -1,6 +1,5 @@
 import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
@@ -34,44 +33,42 @@ import { MappingComponent } from './mapping/mapping.component';
 import { AccountsSelectionComponent } from './accounts-selection/accounts-selection.component';
 
 @NgModule({
-    declarations: [
-	ListComponent,
-	UploadComponent,
-	DetailComponent,
-	DeleteConfirmationComponent,
-        MappingComponent,
-	AccountsSelectionComponent,
-    ],
     imports: [
-	CommonModule,
-	MatButtonModule,
-	MatButtonToggleModule,
-	MatRadioModule,
-	MatCardModule,
-	BooksRoutingModule,
-	MatIconModule,
-	MatInputModule,
-	MatProgressBarModule,
-	MatMenuModule,
-	MatTableModule,
-	MatSortModule,
-	MatDialogModule,
-	MatSnackBarModule,
-	MatCheckboxModule,
-	MatRippleModule,
-	MatPaginatorModule,
-	MatProgressSpinnerModule,
-	FormsModule,
-	ReactiveFormsModule,
+        CommonModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatRadioModule,
+        MatCardModule,
+        BooksRoutingModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressBarModule,
+        MatMenuModule,
+        MatTableModule,
+        MatSortModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatCheckboxModule,
+        MatRippleModule,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ListComponent,
+        UploadComponent,
+        DetailComponent,
+        DeleteConfirmationComponent,
+        MappingComponent,
+        AccountsSelectionComponent,
     ],
     providers: [
-	{ provide: LOCALE_ID, useValue: "en-GB" },
-	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
-	{
+        { provide: LOCALE_ID, useValue: "en-GB" },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
+        {
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [MAT_DATE_LOCALE]
-	},
-	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
+            deps: [MAT_DATE_LOCALE]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
     ]
 })
 export class BooksModule { }

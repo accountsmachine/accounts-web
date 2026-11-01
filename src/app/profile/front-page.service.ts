@@ -26,9 +26,6 @@ export class FrontPageService {
 	});
     }
 
-    constructor() {
-    }
-
     login() {
 	this._subject.next(FrontState.LOGIN);
     }

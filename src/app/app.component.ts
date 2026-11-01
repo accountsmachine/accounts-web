@@ -1,6 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component, OnInit, inject } from '@angular/core';
 import {
     ActivatedRoute, Router, NavigationStart
 } from '@angular/router';
@@ -21,31 +20,29 @@ import { ReferrerService } from './referrer.service';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    styleUrls: ['./app.component.scss'],
+    // eslint-disable-next-line @angular-eslint/prefer-standalone
+    standalone: false,
 })
 export class AppComponent implements OnInit {
+    private auth = inject(AuthService);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private frontPageService = inject(FrontPageService);
+    private snackBar = inject(MatSnackBar);
+    private userProfile = inject(UserProfileService);
+    private working = inject(WorkingService);
+    private referrer = inject(ReferrerService);
+
 
     work = false;
 
     private freshdesk : FreshdeskService = new FreshdeskService({
 	widgetId: 101000004796,
 	locale: 'en-GB',
-	callback(widget : any) {
+	callback(_widget : (...args: unknown[]) => void) {
 	}
     });
-
-    constructor(
-	private auth : AuthService,
-	private route : ActivatedRoute,
-	private router : Router,
-	private frontPageService : FrontPageService,
-	private snackBar : MatSnackBar,
-	private userProfile : UserProfileService,
-	private working : WorkingService,
-	private referrer : ReferrerService,
-    )
-    {
-    }
 
     front = false;
 
@@ -87,7 +84,7 @@ export class AppComponent implements OnInit {
 
 	    if (s == AuthState.AUTHENTICATED) {
 		this.frontPageService.application();
-		this.userProfile.load().subscribe((e : any) => {});
+		this.userProfile.load().subscribe(() => {});
 	    } else if (s == AuthState.UNVERIFIED) {
 		this.frontPageService.verifying_email();
 	    } else if (s == AuthState.UNAUTHENTICATED) {
@@ -107,7 +104,7 @@ export class AppComponent implements OnInit {
 
 	// Pass name and email through to freshdesk widget on auth.
 	// Blank out on logout.
-	this.auth.onauth().subscribe((s : any) => {
+	this.auth.onauth().subscribe((s) => {
 	    let name = "";
 	    let email = "";
 	    if (s) {

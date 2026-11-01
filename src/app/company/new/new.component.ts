@@ -1,35 +1,36 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CompanyLookupService } from '../company-lookup.service';
 
-import { CompanyService, Company } from '../company.service';
+import { CompanyService, Company, CompanyLookupRecord } from '../company.service';
+import { FormsModule } from '@angular/forms';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NewUkCompanyComponent } from '../new-uk-company/new-uk-company.component';
+import { NewSoleTraderComponent } from '../new-sole-trader/new-sole-trader.component';
+import { NewNonUkCompanyComponent } from '../new-non-uk-company/new-non-uk-company.component';
 
 @Component({
-  selector: 'company-new',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss']
+    selector: 'company-new',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.scss'],
+    imports: [FormsModule, MatRadioGroup, MatRadioButton, NewUkCompanyComponent, NewSoleTraderComponent, NewNonUkCompanyComponent]
 })
-export class NewComponent implements OnInit {
+export class NewComponent {
+    private router = inject(Router);
+    private snackBar = inject(MatSnackBar);
+    private companyService = inject(CompanyService);
+    private companyLookup = inject(CompanyLookupService);
 
-    number : string = "";
 
-    kind : string = "uk-company";
+    number  = "";
 
-    lookup : any | null = null;
+    kind  = "uk-company";
+
+    lookup : CompanyLookupRecord | null = null;
     not_found = false;
     company : Company | null = null;
-
-    constructor(
-	private router : Router,
-	private snackBar : MatSnackBar,
-	private companyService : CompanyService,
-	private companyLookup : CompanyLookupService,
-    ) { }
-
-    ngOnInit(): void {
-    }
 
     cancel() {
 	this.router.navigate(["/company"]);
@@ -43,7 +44,7 @@ export class NewComponent implements OnInit {
 	    return;
 	}
 
-	this.companyService.create_from_lookup(this.lookup).subscribe(
+	this.companyService.create_from_lookup(this.lookup!).subscribe(
 	    () => {
 		this.snackBar.open("Configuration created",
 				   "dismiss",
@@ -55,28 +56,27 @@ export class NewComponent implements OnInit {
     }
 
     search() {
-	let cmp = this;
 
-	this.companyLookup.get(cmp.number).subscribe({
+	this.companyLookup.get(this.number).subscribe({
 
-	    next(f) {
-		cmp.lookup = f;
-		cmp.not_found = false;
-		cmp.companyService.load(cmp.number).subscribe({
-		    next(c) {
-			cmp.company = c;
+	    next: (f) => {
+		this.lookup = f;
+		this.not_found = false;
+		this.companyService.load(this.number).subscribe({
+		    next: (c) => {
+			this.company = c;
 		    },
-		    error(c) {
-			cmp.company = null;
+		    error: (_c) => {
+			this.company = null;
 		    },
-		    complete() {}
+		    complete: () => {}
 		});
 	    },
-	    error(err) {
-		cmp.lookup = null;
-		cmp.not_found = true;
+	    error: (_err) => {
+		this.lookup = null;
+		this.not_found = true;
 	    },
-	    complete() {
+	    complete: () => {
 	    }
 	});
     }

@@ -1,28 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Transaction } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
-
-type Row = {
-    label : string,
-    value : string,
-};
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { UpperCasePipe, CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
     selector: 'transaction',
     templateUrl: './transaction.component.html',
-    styleUrls: ['./transaction.component.scss']
+    styleUrls: ['./transaction.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, UpperCasePipe, CurrencyPipe, DatePipe]
 })
-export class TransactionComponent implements OnInit {
+export class TransactionComponent {
+    private route = inject(ActivatedRoute);
+    private commerce = inject(CommerceService);
+
 
     id = "";
     tx : Transaction = new Transaction();
 
-    constructor(
-	private route : ActivatedRoute,
-	private commerce : CommerceService,
-    )
+    constructor()
     {
 	this.route.params.subscribe(
 	    params => {
@@ -34,9 +33,6 @@ export class TransactionComponent implements OnInit {
 		}
 	    }
 	);
-    }
-
-    ngOnInit(): void {
     }
 
     load(tx : Transaction) {

@@ -1,25 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
 
 @Component({
-  selector: 'vat-status',
-  templateUrl: './status.component.html',
-  styleUrls: ['./status.component.scss']
+    selector: 'vat-status',
+    templateUrl: './status.component.html',
+    styleUrls: ['./status.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent]
 })
 export class StatusComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private filing = inject(VatConfigService);
+
 
     id = "";
     config : VatConfig = {};
 
-    status : string = "";
-
-    constructor(
-	private route : ActivatedRoute,
-	private filing : VatConfigService,
-    ) {}
+    status  = "";
 
     ngOnInit(): void {
 	this.route.params.subscribe(
@@ -28,7 +29,7 @@ export class StatusComponent implements OnInit {
 		    this.id = params["id"];
 		    this.config = e.config;
 		    this.filing.get_status(this.id).subscribe(
-			(e : any) => this.status = e.report
+			(e : { report: string }) => this.status = e.report
 		    );
 		});
 	    }

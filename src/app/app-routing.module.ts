@@ -3,8 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 
-import { VatTokenComponent }
-    from './auth/vat-token/vat-token.component';
+
 
 import { AuthGuardService as AuthGuard } from './auth-guard.service';
 

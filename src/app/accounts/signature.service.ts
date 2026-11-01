@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpEventType } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 
 import { ApiService } from '../api.service';
@@ -8,9 +8,8 @@ import { ApiService } from '../api.service';
     providedIn: 'root'
 })
 export class SignatureService {
+    private api = inject(ApiService);
 
-    constructor(private api : ApiService) {
-    }
 
     onload_subject : Subject<void> = new Subject<void>();
 
@@ -20,8 +19,8 @@ export class SignatureService {
 	});
     }
 
-    progress(event : any) : number {
-	let val = Math.round(100 * (event.loaded / event.total));
+    progress(event : { loaded: number; total: number }) : number {
+	const val = Math.round(100 * (event.loaded / event.total));
 	return val;
     }
 
@@ -30,7 +29,7 @@ export class SignatureService {
         const formData = new FormData();
         formData.append("image", file);
 
-	let url = "/api/filing/" + id + "/signature";
+	const url = "/api/filing/" + id + "/signature";
 	
 	return new Observable<number>(
 	    subs => {
@@ -38,9 +37,10 @@ export class SignatureService {
 		    reportProgress: true,
 		    observe: 'events'
 		}).subscribe(
-		    (event : any) => {
-			if (event.type == HttpEventType.UploadProgress) {
-			    subs.next(this.progress(event));
+		    (evt) => {
+			const event = evt as HttpEvent<unknown>;
+			if (event.type == HttpEventType.UploadProgress && event.loaded !== undefined && event.total !== undefined) {
+			    subs.next(this.progress({ loaded: event.loaded, total: event.total }));
 			} else if (event.type == HttpEventType.Response) {
 			    subs.complete();
 
@@ -53,14 +53,14 @@ export class SignatureService {
 	
     }
 
-    get(id : string) : Observable<any> {
+    get(id : string) : Observable<Blob> {
 
-	return new Observable<any>(obs => {
+	return new Observable<Blob>(obs => {
 
 	    this.api.get("/api/filing/" + id + "/signature", {
 		responseType: 'blob' as 'json'
-	    }).subscribe((res : any) => {
-		obs.next(res);
+	    }).subscribe((res) => {
+		obs.next(res as Blob);
 	    });
 
 	});

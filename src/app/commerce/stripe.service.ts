@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { StripeFactoryService, StripeInstance, StripePaymentElementComponent
+import { StripeFactoryService, StripeInstance,
+         StripePaymentElementComponent
        } from 'ngx-stripe';
-import { StripeElementsOptions, PaymentIntent
+import { StripeElementsOptions
        } from '@stripe/stripe-js';
 
 import { ApiService } from '../api.service';
-import { CheckoutService } from './checkout.service';
 
 @Injectable({
     providedIn: 'any'
 })
 export class PaymentService {
+    private stripeFactory = inject(StripeFactoryService);
+    private api = inject(ApiService);
+
 
     _strp? : StripeInstance;
 
@@ -28,19 +31,16 @@ export class PaymentService {
 
     get_stripe() { return this._strp!; }
 
-    constructor(
-	private stripeFactory : StripeFactoryService,
-	private api : ApiService,
-    )
+    constructor()
     {
-	let url = "/api/commerce/payment-key";
-	this.api.get<any>(url).subscribe(resp => {
-	    let key = resp["key"];
+	const url = "/api/commerce/payment-key";
+	this.api.get<{ key: string }>(url).subscribe(resp => {
+	    const key = resp.key;
 	    this._strp = this.stripeFactory.create(key);
 	});
     }
 
-    confirm(element : any) {
+    confirm(element : StripePaymentElementComponent | undefined) {
 	return new Observable<string>(obs => {
 	    if (!this._strp) {
 		obs.error("Stripe is not initialised!");
@@ -60,14 +60,14 @@ export class PaymentService {
 		next(result) {
 		    if (result && result.paymentIntent) {
 
-			let status = result.paymentIntent.status;
+			const status = result.paymentIntent.status;
 		    
 			if (status != "succeeded") {
 			    obs.error(result);
 			    return;
 			}
 		    
-			let id = result.paymentIntent.id;
+			const id = result.paymentIntent.id;
 
 			if (id) {
 			    obs.next(id);

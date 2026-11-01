@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,24 +9,27 @@ import { CheckoutService } from '../checkout.service';
 import { PaymentService } from '../stripe.service';
 
 import { StripePaymentElementComponent } from 'ngx-stripe';
-import { PaymentIntent } from '@stripe/stripe-js';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { OrderComponent } from '../order/order.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
     selector: 'app-checkout',
     templateUrl: './credit-card-checkout.component.html',
-    styleUrls: ['./credit-card-checkout.component.scss']
+    styleUrls: ['./credit-card-checkout.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, OrderComponent, StripePaymentElementComponent, MatButton, MatIcon]
 })
 export class CreditCardCheckoutComponent implements OnInit {
+    private service = inject(CheckoutService);
+    private router = inject(Router);
+    private snackBar = inject(MatSnackBar);
+    payments = inject(PaymentService);
+
 
     @ViewChild(StripePaymentElementComponent)
     paymentElement? : StripePaymentElementComponent = undefined;
-
-    constructor(
-	private service : CheckoutService,
-	private router : Router,
-	private snackBar: MatSnackBar,
-	public payments : PaymentService,
-    ) { }
 
     ngOnInit(): void {
 	this.service.create_order().subscribe(txid => {
@@ -44,7 +48,7 @@ export class CreditCardCheckoutComponent implements OnInit {
 	    next: (pid) => {
 
 		this.service.complete_payment(pid).subscribe({
-		    next: (bal) => {
+		    next: (_bal) => {
 			this.router.navigate(["/commerce/complete"]);
 		    },
 		    error: (err) => {
@@ -64,23 +68,21 @@ export class CreditCardCheckoutComponent implements OnInit {
 	this.router.navigate(["/commerce/purchase"]);
     }
 
-    create_payment() : Observable<PaymentIntent> {
+    create_payment() : Observable<string> {
 
-	let cmp = this;
-
-	return new Observable<PaymentIntent>((obs : any) => {
+	return new Observable<string>((obs) => {
 
 	    this.service.create_order().subscribe({
-		next(ev) { obs.next(ev); },
-		error(err) { cmp.error(err); },
-		complete() {}
+		next: (ev) => { obs.next(ev); },
+		error: (err) => { this.error(err); },
+		complete: () => {}
 	    });
 
 	});
 
     }
 
-    error(err : any) {
+    error(err : HttpErrorResponse) {
 	console.log(err);
 	if (err.error) {
 	    if (err.error.message) {

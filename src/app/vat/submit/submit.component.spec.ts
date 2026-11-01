@@ -8,8 +8,8 @@ describe('VatSubmitComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VatSubmitComponent ]
-    })
+    imports: [VatSubmitComponent]
+})
     .compileComponents();
   });
 

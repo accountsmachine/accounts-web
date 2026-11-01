@@ -1,37 +1,35 @@
 
 // FIXME: Should cache information.
 
-import { Injectable } from '@angular/core';
-import { HttpEventType } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 
-import { Observable, Subject, throwError, map } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { Observable, Subject, Observer } from 'rxjs';
 
 import { ApiService } from '../api.service';
 
 export class AccountBalance {
-    account : string = "";
-    balance : number = 0;
+    account  = "";
+    balance  = 0;
 }
 
 export class BookInfo {
-    length : number = 0;
-    time : string = "";
-    kind : string = "";
+    length  = 0;
+    time  = "";
+    kind  = "";
 }
 
-export type BooksMap = { [cid : string]: BookInfo };
+export type BooksMap = Record<string, BookInfo>;
 
 @Injectable({
     providedIn: 'root'
 })
 export class BooksService {
+    private api = inject(ApiService);
 
-    constructor(private api : ApiService) {
-    }
 
     get_books_info(id : string) {
-	return this.api.get("/api/books/" + id + "/info");
+	return this.api.get<BookInfo>("/api/books/" + id + "/info");
     }
     
     get_books_detail(id : string) : Observable<AccountBalance[]>{
@@ -40,12 +38,12 @@ export class BooksService {
 
     subject : Subject<boolean> = new Subject<boolean>();
 
-    subscribe(f : any) {
+    subscribe(f : Partial<Observer<boolean>> | ((value: boolean) => void)) {
 	this.subject.subscribe(f);
     }
 
-    progress(event : any) : number {
-	let val = Math.round(100 * (event.loaded / event.total));
+    progress(event : { loaded: number; total: number }) : number {
+	const val = Math.round(100 * (event.loaded / event.total));
 	return val;
     }
 
@@ -55,17 +53,17 @@ export class BooksService {
         formData.append("books", file);
         formData.append("kind", kind);
 
-	let url = "/api/books/" + id + "/upload";
+	const url = "/api/books/" + id + "/upload";
 	
 	return new Observable<number>(
 	    subs => {
-		this.api.post(url, formData, {
+		this.api.post<HttpEvent<unknown>>(url, formData, {
 		    reportProgress: true,
 		    observe: 'events'
 		}).subscribe({
-		    next: (event : any) => {
-			if (event.type == HttpEventType.UploadProgress) {
-			    subs.next(this.progress(event));
+		    next: (event : HttpEvent<unknown>) => {
+			if (event.type == HttpEventType.UploadProgress && 'loaded' in event && 'total' in event) {
+			    subs.next(this.progress(event as { loaded: number; total: number }));
 			} else if (event.type == HttpEventType.Response) {
 			    subs.complete();
 			    this.subject.next(true);
@@ -81,7 +79,7 @@ export class BooksService {
 
     get_list() : Observable<BooksMap> {
 
-	let url = "/api/books";
+	const url = "/api/books";
 
 	return new Observable<BooksMap>(obs => {
 	    

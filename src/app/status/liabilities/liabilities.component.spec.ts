@@ -8,8 +8,8 @@ describe('ObligationsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ObligationsComponent ]
-    })
+    imports: [ObligationsComponent]
+})
     .compileComponents();
   });
 

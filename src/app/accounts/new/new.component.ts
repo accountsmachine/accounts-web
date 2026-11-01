@@ -1,29 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { AccountsConfig } from '../accounts-config';
 import { AccountsConfigService } from '../accounts-config.service';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'accounts-new',
-  templateUrl: './new.component.html',
-  styleUrls: ['./new.component.scss']
+    selector: 'accounts-new',
+    templateUrl: './new.component.html',
+    styleUrls: ['./new.component.scss'],
+    imports: [FormsModule, MatFormField, MatLabel, MatInput, MatHint, MatButton]
 })
-export class NewComponent implements OnInit {
+export class NewComponent {
+    private router = inject(Router);
+    private snackBar = inject(MatSnackBar);
+    private filing = inject(AccountsConfigService);
+
 
     label = "";
 
-    configs : any[] = [];
-
-    constructor(
-	private router : Router,
-	private snackBar : MatSnackBar,
-	private filing : AccountsConfigService,
-    ) { }
-
-    ngOnInit(): void {
-    }
+    configs : unknown[] = [];
 
     cancel() {
 	this.router.navigate(["/filing"]);

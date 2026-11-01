@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // FIXME: Need both?
@@ -6,24 +6,26 @@ import { PreviewService } from '../preview.service';
 import { RenderService } from '../render.service';
 import { FilingConfigService } from '../../filing/filing-config.service';
 import { WorkingService } from '../../working.service';
+import { SafePipe } from '../safe.pipe';
 
 @Component({
     selector: 'render',
     templateUrl: './render.component.html',
-    styleUrls: ['./render.component.scss']
+    styleUrls: ['./render.component.scss'],
+    imports: [SafePipe]
 })
-export class RenderComponent implements OnInit {
+export class RenderComponent {
+    private route = inject(ActivatedRoute);
+    private renderService = inject(RenderService);
+    private filing = inject(FilingConfigService);
+    private renderer = inject(PreviewService);
+    private working = inject(WorkingService);
 
-    config : any = {};
+
+    config: Record<string, unknown> = {};
     src = "";
 
-    constructor(
-	private route : ActivatedRoute,
-	private renderService : RenderService,
-	private filing : FilingConfigService,
-	private renderer : PreviewService,
-	private working : WorkingService,
-    ) {
+    constructor() {
 
 	this.renderer.onsubmit().subscribe(
 	    () => {
@@ -33,20 +35,17 @@ export class RenderComponent implements OnInit {
 	);
 
 	this.renderer.onrender().subscribe(
-	    (report : any) => {
-		this.render(report);
+	    (report) => {
+		this.render(report as string);
 		this.working.stop();
 	    }
 	);
 
     }
 
-    ngOnInit() : void {
-    }
-
-    render(e : any) {
-	let blob = new Blob([e], {type: 'application/xhtml+xml'});
-	let url = URL.createObjectURL(blob);
+    render(e : string) {
+	const blob = new Blob([e], {type: 'application/xhtml+xml'});
+	const url = URL.createObjectURL(blob);
 	this.src = url;
     }
 

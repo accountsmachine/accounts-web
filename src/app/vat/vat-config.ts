@@ -1,8 +1,14 @@
 
 
-export type VatConfig = {
+export interface VatConfig {
     label? : string;
     state? : string;
+    company? : string;
+    period_key? : string;
+    periodKey? : string;
+    start? : string | Date;
+    end? : string | Date;
+    due? : string | Date;
     PeriodStart? : string;
     PeriodEnd? : string;
     VatDueSales? : number;
@@ -14,5 +20,5 @@ export type VatConfig = {
     TotalValuePurchasesExVAT? : number;
     TotalValueGoodsSuppliedExVAT? : number;
     TotalAcquisitionsExVAT? : number;
-};
+}
 

@@ -1,44 +1,43 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { RenderService } from '../shared/render.service';
 import { FilingConfigService } from '../filing/filing-config.service';
-import { CompanyService, Company } from '../company/company.service';
 import { BooksService } from '../books/books.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PreviewService {
+    private filing = inject(FilingConfigService);
+    private renderService = inject(RenderService);
+    private books = inject(BooksService);
 
-    report : any | null = null;
 
-    onrender_subject : Subject<any | null> = new Subject<any | null>();
+    report : unknown = null;
+
+    onrender_subject : Subject<unknown> = new Subject<unknown>();
     onsubmit_subject : Subject<void> = new Subject<void>();
 
     private chgobs : Subject<string> = new Subject<string>();
 
-    onrender() : Observable<any> {
-	return new Observable<any>(obs => {
+    onrender() : Observable<unknown> {
+	return new Observable<unknown>(obs => {
 	    if (this.report) obs.next(this.report);
 	    this.onrender_subject.subscribe(report => obs.next(report))
 	});
     }
 
     onsubmit() : Observable<void> {
-	return new Observable<any>(obs => {
-	    this.onsubmit_subject.subscribe(report => obs.next())
+	return new Observable<void>(obs => {
+	    this.onsubmit_subject.subscribe(_report => obs.next(undefined))
 	});
     }
 
-    id : string = "";
+    id  = "";
     
-    constructor(
-	private filing : FilingConfigService,
-	private renderService : RenderService,
-	private books : BooksService,
-    ) {
+    constructor() {
 
 	this.chgobs.pipe(debounceTime(100)).subscribe(id => {
 	    this.id = id;
@@ -58,7 +57,7 @@ export class PreviewService {
 	this.chgobs.next(id);
     }
 
-    impl_render(id : string) {
+    impl_render(_id : string) {
 
 	if (!this.id) {
 	    return;

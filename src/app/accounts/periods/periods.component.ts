@@ -1,35 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import moment from 'moment';
 
 import { AccountsConfig } from '../accounts-config';
 import { AccountsConfigService } from '../accounts-config.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatSuffix, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'accounts-periods',
     templateUrl: './periods.component.html',
-    styleUrls: ['./periods.component.scss']
+    styleUrls: ['./periods.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, MatHint, MatButton]
 })
-export class PeriodsComponent implements OnInit {
+export class PeriodsComponent {
+    private route = inject(ActivatedRoute);
+    private snackBar = inject(MatSnackBar);
+    private filing = inject(AccountsConfigService);
+    private fb = inject(FormBuilder);
+
 
     form = this.fb.group({
-	period_start_date: ['' as any, [Validators.required]],
-	period_end_date: ['' as any, [Validators.required]],
-	prev_start_date: ['' as any, [Validators.required]],
-	prev_end_date: ['' as any, [Validators.required]],
+	period_start_date: ['' as string | moment.Moment, [Validators.required]],
+	period_end_date: ['' as string | moment.Moment, [Validators.required]],
+	prev_start_date: ['' as string | moment.Moment, [Validators.required]],
+	prev_end_date: ['' as string | moment.Moment, [Validators.required]],
     });
 
-    config : any = {};
+    config : AccountsConfig = {};
 
-    constructor(
-	private route : ActivatedRoute,
-	private snackBar : MatSnackBar,
-	private filing : AccountsConfigService,
-	private fb : FormBuilder,
-    ) {
+    constructor() {
 
 	this.route.params.subscribe(
 	    params => {
@@ -42,10 +49,7 @@ export class PeriodsComponent implements OnInit {
 
     }
 
-    ngOnInit() : void {
-    }
-
-    to_date(d : any) {
+    to_date(d : string | undefined) {
 	return moment(d);
     }
 
@@ -58,8 +62,8 @@ export class PeriodsComponent implements OnInit {
 	});
     }
 
-    from_date(d : any) {
-	return d.format("YYYY-MM-DD");
+    from_date(d : string | moment.Moment | null | undefined) {
+	return moment(d ?? undefined).format("YYYY-MM-DD");
     }
 
     submit() {
@@ -73,8 +77,8 @@ export class PeriodsComponent implements OnInit {
 	this.config.prev_end_date =
 	    this.from_date(this.form.value.prev_end_date);
 
-	this.config.period_name = this.form.value.period_start_date.format("YYYY");
-	this.config.prev_name = this.form.value.prev_start_date.format("YYYY");
+	this.config.period_name = (this.form.value.period_start_date as moment.Moment).format("YYYY");
+	this.config.prev_name = (this.form.value.prev_start_date as moment.Moment).format("YYYY");
 
 	this.filing.save().subscribe(
 	    () => {
@@ -92,10 +96,10 @@ export class PeriodsComponent implements OnInit {
     start_change() {
 
 	// For some reason, the default date is today.
-	let now = this.from_date(moment());
+	const now = this.from_date(moment());
 
 	if (now == this.from_date(this.form.value.period_end_date)) {
-	    let e = this.form.value.period_start_date.clone();
+	    let e = (this.form.value.period_start_date as moment.Moment).clone();
 	    e = e.add(1, 'year');
 	    e = e.subtract(1, 'day');
 	    this.form.patchValue({
@@ -104,7 +108,7 @@ export class PeriodsComponent implements OnInit {
 	}
 	
 	if (now == this.from_date(this.form.value.prev_start_date)) {
-	    let e = this.form.value.period_start_date.clone();
+	    let e = (this.form.value.period_start_date as moment.Moment).clone();
 	    e = e.subtract(1, 'year');
 	    this.form.patchValue({
 		prev_start_date: e
@@ -112,7 +116,7 @@ export class PeriodsComponent implements OnInit {
 	}
 	
 	if (now == this.from_date(this.form.value.prev_end_date)) {
-	    let e = this.form.value.period_start_date.clone();
+	    let e = (this.form.value.period_start_date as moment.Moment).clone();
 	    e = e.subtract(1, 'day');
 	    this.form.patchValue({
 		prev_end_date: e
@@ -124,10 +128,10 @@ export class PeriodsComponent implements OnInit {
     end_change() {
 
 	// For some reason, the default date is today.
-	let now = this.from_date(moment());
+	const now = this.from_date(moment());
 
 	if (now == this.from_date(this.form.value.period_start_date)) {
-	    let e = this.form.value.period_end_date.clone();
+	    let e = (this.form.value.period_end_date as moment.Moment).clone();
 	    e = e.subtract(1, 'year');
 	    e = e.add(1, 'day');
 	    this.form.patchValue({
@@ -136,7 +140,7 @@ export class PeriodsComponent implements OnInit {
 	}
 	
 	if (now == this.from_date(this.form.value.prev_start_date)) {
-	    let e = this.form.value.period_start_date.clone();
+	    let e = (this.form.value.period_start_date as moment.Moment).clone();
 	    e = e.subtract(1, 'year');
 	    this.form.patchValue({
 		prev_start_date: e
@@ -144,7 +148,7 @@ export class PeriodsComponent implements OnInit {
 	}
 	
 	if (now == this.from_date(this.form.value.prev_end_date)) {
-	    let e = this.form.value.period_start_date.clone();
+	    let e = (this.form.value.period_start_date as moment.Moment).clone();
 	    e = e.subtract(1, 'day');
 	    this.form.patchValue({
 		prev_end_date: e

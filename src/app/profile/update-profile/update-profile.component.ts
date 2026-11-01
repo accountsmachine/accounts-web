@@ -1,21 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
-import { AuthService, AuthState } from '../../auth.service';
-import { FrontPageService, FrontState } from '../front-page.service';
+import { AuthService } from '../../auth.service';
+import { FrontPageService } from '../front-page.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'update-profile',
     templateUrl: './update-profile.component.html',
-    styleUrls: ['./update-profile.component.scss']
+    styleUrls: ['./update-profile.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, MatFormField, MatLabel, MatInput, MatButton]
 })
-export class UpdateProfileComponent implements OnInit {
+export class UpdateProfileComponent {
+    private auth = inject(AuthService);
+    private frontPageService = inject(FrontPageService);
+
 
     name = "";
 
-    constructor(
-	private auth : AuthService,
-	private frontPageService : FrontPageService,
-    ) {
+    constructor() {
 	
 	this.auth.onauth().subscribe(auth => {
 
@@ -24,13 +31,11 @@ export class UpdateProfileComponent implements OnInit {
 		return;
 	    }
 
-	    this.name = auth.auth.currentUser.displayName;
+	    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+	    this.name = (auth as any).auth.currentUser.displayName;
 
 	});
 
-    }
-
-    ngOnInit(): void {
     }
 
     change() {

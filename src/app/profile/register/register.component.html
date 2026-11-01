@@ -7,63 +7,65 @@
 
     <div>
       <mat-form-field appearance="fill">
-	<mat-label>E-mail address</mat-label>
-	<input matInput placeholder="user@example.com"
-	       [(ngModel)]="username" name="username">
-	<mat-hint>An email address which will also be your username</mat-hint>
+        <mat-label>E-mail address</mat-label>
+        <input matInput placeholder="user@example.com"
+          [(ngModel)]="username" name="username">
+        <mat-hint>An email address which will also be your username</mat-hint>
       </mat-form-field>
     </div>
 
     <div>
       <mat-form-field appearance="fill">
-	<mat-label>Password</mat-label>
-	<input matInput type="password" [(ngModel)]="password" name="password">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="password" name="password">
       </mat-form-field>
     </div>
 
     <div>
       <mat-form-field appearance="fill">
-	<mat-label>Re-type password</mat-label>
-	<input matInput type="password" [(ngModel)]="password2"
-	       name="password2">
+        <mat-label>Re-type password</mat-label>
+        <input matInput type="password" [(ngModel)]="password2"
+          name="password2">
       </mat-form-field>
     </div>
 
     <div>
       <mat-form-field appearance="fill">
-	<mat-label>Phone-number</mat-label>
-	<input matInput type="phone" [(ngModel)]="phone"
-	       name="phone">
-	<mat-hint>Phone number with + prefix e.g. +447900123456</mat-hint>
+        <mat-label>Phone-number</mat-label>
+        <input matInput type="phone" [(ngModel)]="phone"
+          name="phone">
+        <mat-hint>Phone number with + prefix e.g. +447900123456</mat-hint>
       </mat-form-field>
     </div>
 
     <div>
       <mat-form-field appearance="fill">
-	<mat-label>Name</mat-label>
-	<input matInput [(ngModel)]="name" name="name">
-	<mat-hint>Please include first name and surname as you wish to be
-	addressed.</mat-hint>
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="name" name="name">
+        <mat-hint>Please include first name and surname as you wish to be
+        addressed.</mat-hint>
       </mat-form-field>
     </div>
 
-    <div *ngIf="ref != ''">
-      <mat-form-field appearance="fill">
-	<mat-label>Referrer token</mat-label>
-	<input matInput [(ngModel)]="ref" name="ref" readonly="true">
-	<mat-hint>Referrer token provided to you</mat-hint>
-      </mat-form-field>
-    </div>
+    @if (ref !== '') {
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label>Referrer token</mat-label>
+          <input matInput [(ngModel)]="ref" name="ref" readonly="true">
+          <mat-hint>Referrer token provided to you</mat-hint>
+        </mat-form-field>
+      </div>
+    }
 
     <div class="center">
       <button mat-raised-button color="primary" (click)="register()">
-	Register
+        Register
       </button>
     </div>
 
     <div class="center">
       <button mat-button color="primary" (click)="login()">
-	Back to login
+        Back to login
       </button>
     </div>
 

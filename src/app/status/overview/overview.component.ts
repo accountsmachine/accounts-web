@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { combineLatest } from 'rxjs';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+    MatDialog
 } from '@angular/material/dialog';
 
 import {
@@ -15,21 +15,31 @@ import { CompanyService, Companies } from '../../company/company.service';
 import { WorkingService } from '../../working.service';
 
 import { ConfigurationService } from '../../configuration.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 class StatusItem {
     company? : string;
     number? : string;
-    vat : boolean = false;
-    corptax : boolean = false;
-    accounts : boolean = false;
+    vat  = false;
+    corptax  = false;
+    accounts  = false;
 }
 
 @Component({
-  selector: 'app-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+    selector: 'app-overview',
+    templateUrl: './overview.component.html',
+    styleUrls: ['./overview.component.scss'],
+    imports: [MatIcon, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatButton, RouterLink, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow]
 })
 export class OverviewComponent implements OnInit {
+    private router = inject(Router);
+    private statusService = inject(StatusService);
+    private companyService = inject(CompanyService);
+    private dialog = inject(MatDialog);
+    private working = inject(WorkingService);
+    private configSvc = inject(ConfigurationService);
+
 
     feature(x : string) {
         return this.configSvc.hasFeature(x);
@@ -42,16 +52,9 @@ export class OverviewComponent implements OnInit {
     status : MatTableDataSource<StatusItem> =
 	new MatTableDataSource<StatusItem>([]);
 
-    columns : Array<string>;
+    columns : string[];
 
-    constructor(
-	private router : Router,
-	private statusService : StatusService,
-	private companyService : CompanyService,
-	private dialog : MatDialog,
-	private working : WorkingService,
-	private configSvc : ConfigurationService,
-    ) {
+    constructor() {
 
 	this.columns = ["company", "number"];
 
@@ -65,10 +68,10 @@ export class OverviewComponent implements OnInit {
 
     update(status: Statuses, companies : Companies) {
 
-	let data = [];
+	const data = [];
 
-	for (let k in companies) {
-	    let row : StatusItem = {
+	for (const k in companies) {
+	    const row : StatusItem = {
 		company: companies[k].company_name,
 		number: k,
 		vat: k in status ? status[k].vat : false,
@@ -116,7 +119,7 @@ export class OverviewComponent implements OnInit {
 		},
 	    }
 	);
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { retry?: boolean } | undefined) => {
 	    if (result) {
 		if (result.retry) {
 		    this.reload();

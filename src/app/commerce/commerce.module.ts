@@ -14,7 +14,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatNativeDateModule } from '@angular/material/core';
 import {
     DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
 } from '@angular/material/core';
@@ -44,45 +43,43 @@ import {
 import { CompleteComponent } from './complete/complete.component';
 
 @NgModule({
-    declarations: [
-	DeleteConfirmationComponent,
-	CommerceComponent,
-	BalanceComponent,
+    imports: [
+        NgxStripeModule.forChild(),
+        CommonModule,
+        RouterModule,
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDialogModule,
+        MatTableModule,
+        MatSidenavModule,
+        MatSnackBarModule,
+        MatSelectModule,
+        CommerceRoutingModule,
+        FormsModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        DeleteConfirmationComponent,
+        CommerceComponent,
+        BalanceComponent,
         ShopComponent,
         TransactionListComponent,
         TransactionComponent,
         NavComponent,
         OrderComponent,
         CreditCardCheckoutComponent,
-	CryptoCheckoutComponent,
-        CompleteComponent
-    ],
-    imports: [
-        NgxStripeModule.forChild(),
-	CommonModule,
-	RouterModule,
-	MatCardModule,
-	MatIconModule,
-	MatButtonModule,
-	MatButtonToggleModule,
-	MatDialogModule,
-	MatTableModule,
-	MatSidenavModule,
-	MatSnackBarModule,
-	MatSelectModule,
-	CommerceRoutingModule,
-	FormsModule,
-	MatFormFieldModule,
-	ReactiveFormsModule,
+        CryptoCheckoutComponent,
+        CompleteComponent,
     ],
     providers: [
-	{ provide: LOCALE_ID, useValue: "en-GB" },
-	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
-	{
+        { provide: LOCALE_ID, useValue: "en-GB" },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
+        {
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [MAT_DATE_LOCALE]
-	},
-	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+            deps: [MAT_DATE_LOCALE]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
     ],
 })
 export class CommerceModule { }

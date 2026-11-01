@@ -1,11 +1,11 @@
 
-export type Balance = {
+export interface Balance {
     vat : number,
     corptax : number,
     accounts : number,
-};
+}
 
-export type Option = {
+export interface Option {
     description : string,
     adjustment? : string,
     permitted : number,
@@ -15,49 +15,70 @@ export type Option = {
 	price : number,
 	discount : number
     }[],
-};
+}
 
-export type Options = {
-    offer : { [kind : string]  : Option },
+export interface Options {
+    offer : Record<string, Option>,
     vat_rate? : number,
-};
+}
 
-export type ItemQuantities = {
-    [kind : string] : number
-};
+export type ItemQuantities = Record<string, number>;
 
-export type ItemLine = {
+export interface ItemLine {
     kind : string,
     description : string,
     adjustment? : string,
     quantity : number,
     amount : number,
     discount : number,
-};
+}
 
 export class Order {
     items : ItemLine[] = [];
-    subtotal : number = 0;
-    vat_rate : number = 0;
-    vat : number = 0;
-    total : number = 0;
+    subtotal  = 0;
+    vat_rate  = 0;
+    vat  = 0;
+    total  = 0;
 };
 
+export interface CryptoEstimate {
+    estimated_amount: number;
+}
+
+export interface CryptoPayment {
+    pay_address: string;
+    pay_amount: number;
+    actually_paid: number;
+    payment_id: string;
+    pay_currency: string;
+    order_id: string;
+    payment_status: string;
+}
+
+export interface CryptoPaymentStatus {
+    payment_status: string;
+    actually_paid: number;
+}
+
+export interface CryptoCurrencies {
+    currencies: string[];
+}
+
 export class Transaction {
-    id : string = "";
-    type : string = "";
+    id  = "";
+    type  = "";
     description? : string;
-    uid : string = "";
-    email : string = "";
+    uid  = "";
+    email  = "";
     tel? : string;
-    time : string = "";
+    time  = "";
     name? : string;
     address? : string[];
     city? : string;
     county? : string;
     country? : string;
     postcode? : string;
-    valid : boolean = false;
+    valid  = false;
     vat_rate? : number;
     vat_number? : string;
     order? : Order;
@@ -68,7 +89,7 @@ export class Transaction {
     seller_vat_number? : string;
 
     // Mostly for crypto.
-    payment : string = "";
+    payment  = "";
     payment_processor? : string = "";
     payment_currency? : string;
     payment_amount? : number;

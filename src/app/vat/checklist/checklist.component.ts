@@ -1,39 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
-import { Validators } from '@angular/forms';
-import moment from 'moment';
-import { CompanyService, Company, Companies } from '../../company/company.service';
+import { CompanyService, Companies } from '../../company/company.service';
 
 import { WorkingService } from '../../working.service';
 import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
 import { ChecklistService } from '../checklist.service';
 import { Checklist } from '../../checklist/checklist.model';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { ChecklistTableComponent } from '../../checklist/checklist-table/checklist-table.component';
 
 @Component({
     selector: 'vat-checklist',
     templateUrl: './checklist.component.html',
-    styleUrls: ['./checklist.component.scss']
+    styleUrls: ['./checklist.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, ChecklistTableComponent]
 })
-export class ChecklistComponent implements OnInit {
+export class ChecklistComponent {
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private companyService = inject(CompanyService);
+    private filing = inject(VatConfigService);
+    private checklistSvc = inject(ChecklistService);
+    working = inject(WorkingService);
+
 
     companies : Companies = {};
 
     checklist : Checklist = new Checklist();
 
     id = "";
-    config : any = {};
+    config : VatConfig = {};
 
-    constructor(
-	private route : ActivatedRoute,
-	private router : Router,
-	private companyService : CompanyService,
-	private filing : VatConfigService,
-	private checklistSvc : ChecklistService,
-	public working : WorkingService,
-    ) {
+    constructor() {
 
 	this.checklistSvc.onupdate().subscribe(
 	    (cl : Checklist) => {
@@ -63,7 +63,7 @@ export class ChecklistComponent implements OnInit {
 
 		   },
 
-		   error: err => {
+		   error: _err => {
 		       this.working.stop();
 		   },
 
@@ -74,9 +74,6 @@ export class ChecklistComponent implements OnInit {
            }
        );
 
-    }
-
-    ngOnInit() : void {
     }
 
 }

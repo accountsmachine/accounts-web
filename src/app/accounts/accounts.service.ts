@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable} from 'rxjs';
 
 import { ApiService } from '../api.service';
@@ -7,14 +7,14 @@ import { ApiService } from '../api.service';
     providedIn: 'root'
 })
 export class AccountsService {
+    private api = inject(ApiService);
 
-    constructor(private api : ApiService) { }
 
     authorize(id : string, authentication_code : string) {
 
-	let url = "/api/accounts/authorize/" + id;
+	const url = "/api/accounts/authorize/" + id;
 
-    	return this.api.post<any>(
+    	return this.api.post<unknown>(
 	    url, { authentication_code: authentication_code }
 	);
 
@@ -22,9 +22,9 @@ export class AccountsService {
 
     deauthorize(c : string) : Observable<void> {
 
-	let url = "/api/accounts/deauthorize/" + c;
+	const url = "/api/accounts/deauthorize/" + c;
 
-    	return this.api.post<any>(
+    	return this.api.post<void>(
 	    url, {}
 	);
 

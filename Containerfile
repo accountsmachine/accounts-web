@@ -3,18 +3,18 @@
 # Build container, creates distribution
 ############################################################################
 
-FROM alpine:3.17 AS build
+FROM alpine:3.21 AS build
 
 ARG KIND=KIND
 
 # Want an even-numbered nodejs, odd-numbers should not be used in production
-RUN apk add --update --no-cache --no-progress 'nodejs<19' go npm make
+RUN apk add --update --no-cache --no-progress 'nodejs<23' go npm make
 
 # Copy source to build area
 COPY 404.html /root/build/
 COPY Makefile /root/build/
 COPY angular.json package.json package-lock.json /root/build/
-COPY karma.conf.js serve.go tsconfig*.json /root/build/
+COPY serve.go tsconfig*.json /root/build/
 COPY src /root/build/src/
 
 # Setup build area
@@ -35,11 +35,9 @@ RUN cp 404.html dist/${KIND}/
 # Target container, for deployment
 ############################################################################
 
-FROM alpine:3.17
+FROM alpine:3.21
 
 ARG KIND=KIND
-
-RUN apk add --update --no-cache --no-progress libgo
 COPY --from=build /root/build/dist/${KIND} /usr/local/web/
 COPY --from=build /root/build/serve /usr/local/bin/serve
 

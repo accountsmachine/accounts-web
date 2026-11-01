@@ -8,8 +8,8 @@ describe('RenderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RenderComponent ]
-    })
+    imports: [RenderComponent]
+})
     .compileComponents();
   });
 

@@ -5,49 +5,54 @@
     <mat-drawer mode="side" class="drawer-side" opened>
       <navigator></navigator>
     </mat-drawer>
-    
+
     <mat-drawer-content class="main-content">
 
-      <p *ngIf="nofeatures">
-	<mat-icon class="tick-false">highlight_off</mat-icon>
-	No filing applications are enabled in this application, currently.
-	You will not be able to buy filing credits.
-      </p>
+      @if (nofeatures) {
+        <p>
+          <mat-icon class="tick-false">highlight_off</mat-icon>
+          No filing applications are enabled in this application, currently.
+          You will not be able to buy filing credits.
+        </p>
+      }
 
-      <div *ngIf="balance; else na">
+      @if (balance) {
+        <div>
+          @if (feature('vat')) {
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>VAT filing</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                {{balance.vat}} credits
+              </mat-card-content>
+            </mat-card>
+          }
+          @if (feature('corptax')) {
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Corporation tax filing</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                {{balance.corptax}} credits
+              </mat-card-content>
+            </mat-card>
+          }
+          @if (feature('accounts')) {
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Accounts filing</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                {{balance.accounts}} credits
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      } @else {
+        Balance not available.
+      }
 
-	<mat-card *ngIf="feature('vat')">
-	  <mat-card-header>
-	    <mat-card-title>VAT filing</mat-card-title>
-	  </mat-card-header>
-	  <mat-card-content>
-	    {{balance.vat}} credits
-	  </mat-card-content>
-	</mat-card>
-
-	<mat-card *ngIf="feature('corptax')">
-	  <mat-card-header>
-	    <mat-card-title>Corporation tax filing</mat-card-title>
-	  </mat-card-header>
-	  <mat-card-content>
-	    {{balance.corptax}} credits
-	  </mat-card-content>
-	</mat-card>
-
-	<mat-card *ngIf="feature('accounts')">
-	  <mat-card-header>
-	    <mat-card-title>Accounts filing</mat-card-title>
-	  </mat-card-header>
-	  <mat-card-content>
-	    {{balance.accounts}} credits
-	  </mat-card-content>
-	</mat-card>
-
-      </div>
-
-      <ng-template #na>
-	Balance not available.
-      </ng-template>
 
     </mat-drawer-content>
 

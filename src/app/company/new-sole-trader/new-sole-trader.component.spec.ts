@@ -8,8 +8,8 @@ describe('NewSoleTraderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewSoleTraderComponent ]
-    })
+    imports: [NewSoleTraderComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(NewSoleTraderComponent);

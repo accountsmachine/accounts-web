@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { ApiService } from '../api.service';
 
@@ -6,12 +6,11 @@ import { ApiService } from '../api.service';
     providedIn: 'root'
 })
 export class RenderService {
+    private api = inject(ApiService);
 
-    constructor(private api : ApiService) {
-    }
 
     render(id : string) {
-	let url = "/api/render-html/" + id;
+	const url = "/api/render-html/" + id;
 	return this.api.post(url, {}, {"responseType": "text"});
     }
 

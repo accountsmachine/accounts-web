@@ -1,12 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, AfterViewInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+    MatDialog
 } from '@angular/material/dialog';
 
 import {
@@ -15,35 +14,33 @@ import {
 
 import { WorkingService } from '../../working.service';
 import { AccountBalance, BooksService } from '../books.service';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
     selector: 'detail',
     templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss']
+    styleUrls: ['./detail.component.scss'],
+    imports: [MatFormField, MatInput, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatPaginator, CurrencyPipe]
 })
-export class DetailComponent implements OnInit, AfterViewInit {
+export class DetailComponent implements AfterViewInit {
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private booksService = inject(BooksService);
+    private working = inject(WorkingService);
+    private dialog = inject(MatDialog);
+
 
     summary : MatTableDataSource<AccountBalance> =
 	new MatTableDataSource<AccountBalance>([]);
 
-    id : string = "";
+    id  = "";
 
     @ViewChild(MatPaginator) paginator? : MatPaginator;
     @ViewChild(MatSort) sort? : MatSort;
 
     columns = ['account', 'balance'];
-
-    constructor(
-	private route : ActivatedRoute,
-	private router : Router,
-	private booksService : BooksService,
-	private working : WorkingService,
-	private dialog : MatDialog,
-    )
-    {
-    }
-
-    ngOnInit() {}
 
     configure() {
 	this.summary!.paginator = this.paginator!;
@@ -62,7 +59,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
 	    params => {
 		if (params["id"]) {
 
-		    let id = params["id"];
+		    const id = params["id"];
 		    this.id = id;
 
 		    this.working.start();
@@ -72,7 +69,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
 			    this.summary.data = e;
 			    this.working.stop();
 			},
-			error: err => {
+			error: _err => {
 			    this.working.stop();
 			    this.error("Failed to load accounting books");
 			},
@@ -86,8 +83,8 @@ export class DetailComponent implements OnInit, AfterViewInit {
 
     }
 
-    apply_filter(f : any) {
-	let filt = f!.value.trim().toLowerCase();
+    apply_filter(f : HTMLInputElement) {
+	const filt = f.value.trim().toLowerCase();
 	this.summary.filter = filt;
     }
 
@@ -101,7 +98,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
 		},
 	    }
 	);
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { retry?: boolean } | undefined) => {
 	    if (result) {
 		if (result.retry) {
 		    this.reload();

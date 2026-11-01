@@ -13,7 +13,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatNativeDateModule } from '@angular/material/core';
 import {
     DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
 } from '@angular/material/core';
@@ -28,34 +27,32 @@ import {
 } from './delete-confirmation/delete-confirmation.component';
 
 @NgModule({
-    declarations: [
-	ListComponent,
-	DeleteConfirmationComponent,
-    ],
     imports: [
-	CommonModule,
-	MatCardModule,
-	MatIconModule,
-	MatButtonModule,
-	MatButtonToggleModule,
-	MatDialogModule,
-	MatTableModule,
-	MatSidenavModule,
-	MatSnackBarModule,
-	RouterModule,
-	FilingRoutingModule,
-	FormsModule,
-	MatFormFieldModule,
-	ReactiveFormsModule,
+        CommonModule,
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDialogModule,
+        MatTableModule,
+        MatSidenavModule,
+        MatSnackBarModule,
+        RouterModule,
+        FilingRoutingModule,
+        FormsModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        ListComponent,
+        DeleteConfirmationComponent,
     ],
     providers: [
-	{ provide: LOCALE_ID, useValue: "en-GB" },
-	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
-	{
+        { provide: LOCALE_ID, useValue: "en-GB" },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
+        {
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [MAT_DATE_LOCALE]
-	},
-	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+            deps: [MAT_DATE_LOCALE]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
     ],
 })
 export class FilingModule { }

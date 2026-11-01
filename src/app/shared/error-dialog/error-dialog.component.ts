@@ -1,21 +1,18 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Component, inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-error-dialog',
-  templateUrl: './error-dialog.component.html',
-  styleUrls: ['./error-dialog.component.scss']
+    selector: 'app-error-dialog',
+    templateUrl: './error-dialog.component.html',
+    styleUrls: ['./error-dialog.component.scss'],
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatDialogActions, MatButton, MatDialogClose]
 })
-export class ErrorDialogComponent implements OnInit {
+export class ErrorDialogComponent {
+    dialogRef = inject<MatDialogRef<ErrorDialogComponent>>(MatDialogRef);
+    data = inject(MAT_DIALOG_DATA);
 
-    ngOnInit(): void {
-    }
-
-    constructor(
-	public dialogRef: MatDialogRef<ErrorDialogComponent>,
-	@Inject(MAT_DIALOG_DATA) public data : any,
-    ) {
-    }
 
     cancel() {
 	this.dialogRef.close();

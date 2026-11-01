@@ -1,24 +1,20 @@
-import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { AccountsConfig } from './accounts-config';
 import { FilingConfigService } from '../filing/filing-config.service';
 
-export type AccountsConfigEvent = {
+export interface AccountsConfigEvent {
     id : string,
     config : AccountsConfig,
-};
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class AccountsConfigService {
+    private filingConfigService = inject(FilingConfigService);
 
-    constructor(
-	private filingConfigService : FilingConfigService,
-    ) {
-    }
 
     onload() : Observable<AccountsConfigEvent> {
 	return this.filingConfigService.onload();
@@ -35,7 +31,7 @@ export class AccountsConfigService {
 
     create(label : string) : Observable<string> {
 
-	let config = {
+	const config = {
 	    kind: "accounts",
 	    state: "draft",
 	    label: label,
@@ -74,15 +70,15 @@ export class AccountsConfigService {
 
     }
 
-    get_status(id : string) : Observable<string> {
-	return this.filingConfigService.get_status(id);
+    get_status(id : string) : Observable<{ report: string }> {
+	return this.filingConfigService.get_status(id) as Observable<{ report: string }>;
     }
 
-    get_report(id : string) : Observable<any> {
+    get_report(id : string) : Observable<unknown> {
 	return this.filingConfigService.get_report(id);
     }
 
-    get_data(id : string) : Observable<any> {
+    get_data(id : string) : Observable<unknown> {
 	return this.filingConfigService.get_data(id);
     }
 
