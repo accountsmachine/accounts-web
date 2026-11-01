@@ -29,7 +29,7 @@ RUN make serve
 RUN make build BUILD=${KIND}
 
 # Put 404 error page in the distribution
-RUN cp 404.html dist/${KIND}/
+RUN cp 404.html dist/${KIND}/browser/
 
 ############################################################################
 # Target container, for deployment
@@ -38,7 +38,7 @@ RUN cp 404.html dist/${KIND}/
 FROM alpine:3.21
 
 ARG KIND=KIND
-COPY --from=build /root/build/dist/${KIND} /usr/local/web/
+COPY --from=build /root/build/dist/${KIND}/browser /usr/local/web/
 COPY --from=build /root/build/serve /usr/local/bin/serve
 
 # The configuration file needs to be mounted as a volume on /configs
