@@ -1,23 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
-import { Option, Options, Balance, Order } from '../commerce.model';
+import { Order } from '../commerce.model';
 import { CheckoutService } from '../checkout.service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
     selector: 'order',
     templateUrl: './order.component.html',
-    styleUrls: ['./order.component.scss']
+    styleUrls: ['./order.component.scss'],
+    imports: [CurrencyPipe]
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent {
+    private service = inject(CheckoutService);
+
 
     order : Order = new Order();
 
-    value : { [kind : string] : number } = {};
-    descriptions : { [kind : string] : string } = {};
+    value : Record<string, number> = {};
+    descriptions : Record<string, string> = {};
 
-    constructor(
-	private service : CheckoutService,
-    ) {
+    constructor() {
 	this.service.onorder().subscribe(o => {
 
 	    this.order = o;
@@ -25,15 +27,12 @@ export class OrderComponent implements OnInit {
 	    this.value = {};
 	    this.descriptions = {};
 
-	    for (let item of this.order.items) {
+	    for (const item of this.order.items) {
 		this.value[item.kind] = item.amount;
 	    }
 	    
 	});
 
-    }
-
-    ngOnInit(): void {
     }
 
     vat_rate() {

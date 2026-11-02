@@ -2,7 +2,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CommerceComponent } from './commerce/commerce.component';
 import { BalanceComponent } from './balance/balance.component';
 import { ShopComponent } from './shop/shop.component';
 import {

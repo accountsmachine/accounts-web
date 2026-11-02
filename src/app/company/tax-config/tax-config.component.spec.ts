@@ -8,8 +8,8 @@ describe('TaxConfigComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TaxConfigComponent ]
-    })
+    imports: [TaxConfigComponent]
+})
     .compileComponents();
   });
 

@@ -18,9 +18,6 @@ export class ReferrerService {
 	});
     }
 
-    constructor() {
-    }
-
     publish(token : string) {
 	this._subject.next(token);
     }

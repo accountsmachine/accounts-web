@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpEventType } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpEvent, HttpEventType, HttpProgressEvent } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 
 import { ApiService } from '../api.service';
@@ -8,18 +8,17 @@ import { ApiService } from '../api.service';
     providedIn: 'root'
 })
 export class LogoService {
+    private api = inject(ApiService);
 
-    constructor(private api: ApiService) {
-    }
 
     subject : Subject<boolean> = new Subject<boolean>();
 
-    subscribe(f : any) {
+    subscribe(f : (value: boolean) => void) {
 	this.subject.subscribe(f);
     }
 
-    progress(event : any) : number {
-	let val = Math.round(100 * (event.loaded / event.total));
+    progress(event : HttpProgressEvent) : number {
+	const val = Math.round(100 * (event.loaded / (event.total ?? event.loaded)));
 	return val;
     }
 
@@ -28,17 +27,17 @@ export class LogoService {
         const formData = new FormData();
         formData.append("image", file);
 
-	let url = "/api/company/" + id + "/logo";
-	
+	const url = "/api/company/" + id + "/logo";
+
 	return new Observable<number>(
 	    subs => {
-		this.api.post(url, formData, {
+		this.api.post<HttpEvent<unknown>>(url, formData, {
 		    reportProgress: true,
 		    observe: 'events'
 		}).subscribe(
-		    (event : any) => {
+		    (event : HttpEvent<unknown>) => {
 			if (event.type == HttpEventType.UploadProgress) {
-			    subs.next(this.progress(event));
+			    subs.next(this.progress(event as HttpProgressEvent));
 			} else if (event.type == HttpEventType.Response) {
 			    subs.complete();
 
@@ -48,23 +47,23 @@ export class LogoService {
 		    }
 		);
 	    });
-	
+
     }
 
-    get(id : string) : Observable<any> {
+    get(id : string) : Observable<Blob> {
 
-	let url = "/api/company/" + id + "/logo";
+	const _url = "/api/company/" + id + "/logo";
 
-	return new Observable<any>(obs => {
+	return new Observable<Blob>(obs => {
 
-	    this.api.get("/api/company/" + id + "/logo", {
+	    this.api.get<Blob>("/api/company/" + id + "/logo", {
 		responseType: 'blob' as 'json'
-	    }).subscribe((res : any) => {
+	    }).subscribe((res : Blob) => {
 		obs.next(res);
 	    });
 
 	});
-					   
+
     }
 
 }

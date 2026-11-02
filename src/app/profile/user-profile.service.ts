@@ -1,6 +1,6 @@
 
-import { Injectable } from '@angular/core';
-import { Observable, Subject, BehaviorSubject, pipe } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
 
@@ -8,15 +8,15 @@ import { ApiService } from '../api.service';
 
 export class UserProfile {
     features : Set<string> = new Set<string>();
-    billing_name : string = "";
-    billing_city : string = "";
-    billing_county : string = "";
-    billing_country : string = "";
-    billing_postcode : string = "";
+    billing_name  = "";
+    billing_city  = "";
+    billing_county  = "";
+    billing_country  = "";
+    billing_postcode  = "";
     billing_address : string[] = [];
-    billing_tel : string = "";
-    billing_email : string = "";
-    billing_vat : string = "";
+    billing_tel  = "";
+    billing_email  = "";
+    billing_vat  = "";
     has_feature(x : string) { return this.features.has(x); }
 };
 
@@ -24,6 +24,8 @@ export class UserProfile {
   providedIn: 'root'
 })
 export class UserProfileService {
+    private api = inject(ApiService);
+
 
     profile : UserProfile | null = new UserProfile();
 
@@ -50,10 +52,6 @@ export class UserProfileService {
 //	this.load().subscribe(e => {});
 	return this.subject;
     }
-
-    constructor(
-	private api : ApiService,
-    ) { }
 
     load() : Observable<UserProfile> {
 
@@ -87,14 +85,12 @@ export class UserProfileService {
 	    })
 	};
 
-	let svc = this;
-
 	return this.api.put(
 	    "/api/user-account/profile", this.profile,
 	    httpOptions
 	).pipe(
 	    tap({
-		error: (err) => {
+		error: (_err) => {
 		},
 		complete: () => {
 		}

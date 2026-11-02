@@ -1,19 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import moment from 'moment';
 
 import { CompanyService, Company } from '../company.service';
 import { WorkingService } from '../../working.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'web-config',
-  templateUrl: './web-config.component.html',
-  styleUrls: ['./web-config.component.scss']
+    selector: 'web-config',
+    templateUrl: './web-config.component.html',
+    styleUrls: ['./web-config.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatHint, MatButton]
 })
 export class WebConfigComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private state = inject(CompanyService);
+    private snackBar = inject(MatSnackBar);
+    private working = inject(WorkingService);
+
 
     form = new FormGroup({
 	web_description: new FormControl<string>('', [Validators.required]),
@@ -22,12 +32,7 @@ export class WebConfigComponent implements OnInit {
 	]),
     });
 
-    constructor(
-	private route : ActivatedRoute,
-	private state: CompanyService,
-	private snackBar: MatSnackBar,
-	private working : WorkingService,
-    ) {
+    constructor() {
 	this.company = new Company();
     }
 
@@ -53,7 +58,7 @@ export class WebConfigComponent implements OnInit {
 				this.load();
 			    }
 			},
-			error: (e) => {
+			error: (_e) => {
 			    this.working.stop();
 			}
 		    });
@@ -63,7 +68,7 @@ export class WebConfigComponent implements OnInit {
     }
 
     public success() {
-	let snack = this.snackBar.open("Configuration saved", "dismiss",
+	this.snackBar.open("Configuration saved", "dismiss",
 				       { duration: 5000 });
     }
 
@@ -82,8 +87,8 @@ export class WebConfigComponent implements OnInit {
 	this.working.start();
 
 	this.state.save().subscribe({
-	    next: (e) => { this.working.stop(); this.success(); },
-	    error: (e) => { this.working.stop(); },
+	    next: () => { this.working.stop(); this.success(); },
+	    error: (_e) => { this.working.stop(); },
 	    complete: () => {},
 	});
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 
@@ -11,17 +11,34 @@ import { VatComputations, VatComputationsService }
     from '../vat-computations.service';
 import { VatService } from '../vat.service';
 import { VatLine } from '../vat-line';
-import { CompanyService } from '../../company/company.service';
+import { Company, CompanyService } from '../../company/company.service';
 
-import { environment } from '../../../environments/environment';
 import { ConfigurationService } from '../../configuration.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { RecordComponent } from '../record/record.component';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'vat-submit',
     templateUrl: './submit.component.html',
-    styleUrls: ['./submit.component.scss']
+    styleUrls: ['./submit.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, RecordComponent, MatSlideToggle, FormsModule, MatButton, MatIcon, DatePipe]
 })
-export class SubmitComponent implements OnInit {
+export class SubmitComponent {
+    private route = inject(ActivatedRoute);
+    private filing = inject(VatConfigService);
+    private companyService = inject(CompanyService);
+    private comps = inject(VatComputationsService);
+    private vat = inject(VatService);
+    private router = inject(Router);
+    private working = inject(WorkingService);
+    private configSvc = inject(ConfigurationService);
+
 
     feature(x : string) {
         return this.configSvc.hasFeature(x);
@@ -29,11 +46,11 @@ export class SubmitComponent implements OnInit {
 
     vat_table : MatTableDataSource<VatLine> = new MatTableDataSource<VatLine>([]);
 
-    id : string = "";
+    id  = "";
 
-    config : any = {};
+    config : VatConfig = {};
 
-    company : any = {};
+    company : Company = new Company();
 
     confirmed = false;
 
@@ -52,7 +69,7 @@ export class SubmitComponent implements OnInit {
                 if (e.config.company) {
 		    this.get_company(e.config.company);
 		} else {
-		    this.company = {};
+		    this.company = new Company();
 		}
 
 		this.id = e.id;
@@ -61,7 +78,7 @@ export class SubmitComponent implements OnInit {
 		this.get_comps(e.id);
 	    },
 
-	    error: e => {
+	    error: _e => {
 
 		this.working.stop();
 
@@ -81,12 +98,12 @@ export class SubmitComponent implements OnInit {
 
 	    next: c => {
 		this.working.stop();
-		this.company = c;
+		this.company = c ?? new Company();
 	    },
 
-	    error: e => {
+	    error: _e => {
 		this.working.stop();
-		this.company = {};
+		this.company = new Company();
 	    },
 
 	});
@@ -103,7 +120,7 @@ export class SubmitComponent implements OnInit {
 		this.load_comps(record);
 	    },
 
-	    error: e => {
+	    error: _e => {
 		this.working.stop();
 		this.record = new VatComputations();
 		this.vat_table.data = [];
@@ -166,23 +183,11 @@ export class SubmitComponent implements OnInit {
 	];
     }
 
-    constructor(
-	private route : ActivatedRoute,
-	private filing : VatConfigService,
-	private companyService : CompanyService,
-	private comps : VatComputationsService,
-	private vat : VatService,
-	private router : Router,
-	private working : WorkingService,
-	private configSvc : ConfigurationService,
-    ) {
+    constructor() {
 
 	this.route.params.subscribe(params => {
 	    this.get_config(params["id"]);
 	});
-    }
-
-    ngOnInit() : void {
     }
 
     submit() {

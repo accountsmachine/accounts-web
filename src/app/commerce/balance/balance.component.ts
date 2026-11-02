@@ -1,16 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { Balance } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
 
 import { ConfigurationService } from '../../configuration.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
 
 @Component({
-  selector: 'balance',
-  templateUrl: './balance.component.html',
-  styleUrls: ['./balance.component.scss']
+    selector: 'balance',
+    templateUrl: './balance.component.html',
+    styleUrls: ['./balance.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, MatIcon, MatCard, MatCardHeader, MatCardTitle, MatCardContent]
 })
-export class BalanceComponent implements OnInit {
+export class BalanceComponent {
+    private commerce = inject(CommerceService);
+    private configSvc = inject(ConfigurationService);
+
 
     feature(x : string) {
         return this.configSvc.hasFeature(x);
@@ -22,10 +30,7 @@ export class BalanceComponent implements OnInit {
 
     balance : Balance;
     
-    constructor(
-	private commerce : CommerceService,
-	private configSvc : ConfigurationService,
-    ) {
+    constructor() {
 
 	this.balance = {
 	    vat: 0, corptax: 0, accounts: 0
@@ -34,10 +39,6 @@ export class BalanceComponent implements OnInit {
 	this.commerce.balance().subscribe(b => {
 	    this.balance = b;
 	});
-    }
-
-    ngOnInit(): void {
-  
     }
 
 }

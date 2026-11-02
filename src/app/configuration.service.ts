@@ -1,16 +1,18 @@
 
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 
-type EnvConfig = any;
+type EnvConfig = Record<string, unknown> & { features?: string[]; firebase?: Record<string, unknown> };
 
 @Injectable({
     providedIn: 'root'
 })
 export class ConfigurationService {
+    private readonly http = inject(HttpClient);
 
-    private config : EnvConfig;
+
+    private config! : EnvConfig;
 
     private static instance : ConfigurationService | null = null;
 
@@ -22,7 +24,7 @@ export class ConfigurationService {
 
     features : Set<string> = new Set<string>();
 
-    constructor(private readonly http: HttpClient) {
+    constructor() {
 	ConfigurationService.instance = this;
     }
     
@@ -37,7 +39,7 @@ export class ConfigurationService {
 	return this.config;
     }
 
-    getFirebase() : any {
+    getFirebase() : Record<string, unknown> | undefined {
 	return this.getConfig()["firebase"];
     }
 

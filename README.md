@@ -139,7 +139,7 @@ of configuration.  See
 ## LICENCE
 
     Accounts Machine software, account-web, accounts-svc
-    Copyright (C) 2021-2023, Accounts Machine Limited, cybermaggedon.
+    Copyright (C) 2021-2026, cybermaggedon.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

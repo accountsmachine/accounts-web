@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Subject, Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 
-import { Option, Options, Balance, Order, ItemLine, ItemQuantities
+import { Options, Order, ItemLine, ItemQuantities,
+         CryptoEstimate, CryptoPayment, CryptoPaymentStatus,
+         CryptoCurrencies
        } from './commerce.model';
 import { CommerceService } from './commerce.service';
 
@@ -9,6 +11,8 @@ import { CommerceService } from './commerce.service';
     providedIn: 'root'
 })
 export class CheckoutService {
+    private commerce = inject(CommerceService);
+
 
     receipt_subject = new BehaviorSubject<string | null>(null);
     _quantities : ItemQuantities = {};
@@ -36,9 +40,7 @@ export class CheckoutService {
 	return this.order_subject;
     }
 
-    constructor(
-	private commerce : CommerceService,
-    ) {
+    constructor() {
 
 	this.reset();
 
@@ -46,7 +48,7 @@ export class CheckoutService {
 	    offer: this.offer_subject,
 	    q: this.quantity_subject,
 	}).subscribe(
-	    ev => {
+	    _ev => {
 		this.recalc();
 		this.order_subject.next(this._order);
 	    }
@@ -76,11 +78,11 @@ export class CheckoutService {
 	    return;
 	}
 
-	let items : ItemLine[] = [];
+	const items : ItemLine[] = [];
 
 	let subtotal = 0;
 
-	for (let kind in this._quantities) {
+	for (const kind in this._quantities) {
 
 	    if (this._quantities[kind] == 0) continue;
 
@@ -89,7 +91,7 @@ export class CheckoutService {
 		return;
 	    }
 
-	    let item : ItemLine = {
+	    const item : ItemLine = {
 		kind: kind,
 		description: this._offer.offer[kind].description,
 		quantity: this._quantities[kind],
@@ -104,7 +106,7 @@ export class CheckoutService {
 	    let price;
 	    let discount;
 
-	    for (let o of this._offer.offer[kind].offer) {
+	    for (const o of this._offer.offer[kind].offer) {
 		if (o.quantity == this._quantities[kind]) {
 		    price = o.price;
 		    discount = o.discount;
@@ -133,8 +135,8 @@ export class CheckoutService {
 	    return;
 	}
 	    
-	let vat = Math.round(subtotal * this._offer.vat_rate);
-	let total = subtotal + vat;
+	const vat = Math.round(subtotal * this._offer.vat_rate);
+	const total = subtotal + vat;
 
 	this._order = {
 	    items: items,
@@ -167,20 +169,18 @@ export class CheckoutService {
 
     complete_payment(id: string) : Observable<string> {
 
-	let svc = this;
-
 	return new Observable<string>(obs => {
 
 	    this.commerce.complete_order(id).subscribe({
-		next(b) {
+		next: (b) => {
 		    // Re-fetch offer.
-		    svc.reset();
+		    this.reset();
 		    obs.next(b);
 		},
-		error(err : Error) {
+		error: (err : Error) => {
 		    obs.error(err)
 		},
-		complete() { obs.complete() }
+		complete: () => { obs.complete() }
 	    });
 
 	});
@@ -189,47 +189,41 @@ export class CheckoutService {
 
     complete_free_order() : Observable<string> {
 
-	let svc = this;
-
 	return new Observable<string>(obs => {
 
 	    this.commerce.complete_free_order(this._order).subscribe({
-		next(b) {
+		next: (b) => {
 		    // Re-fetch offer.
-		    svc.reset();
+		    this.reset();
 		    obs.next(b);
 		},
-		error(err : Error) {
+		error: (err : Error) => {
 		    obs.error(err)
 		},
-		complete() { obs.complete() }
+		complete: () => { obs.complete() }
 	    });
 
 	});
 
     }
 
-    get_crypto_currencies() {
+    get_crypto_currencies() : Observable<CryptoCurrencies> {
 	return this.commerce.get_currencies();
     }
 
-    // FIXME: Define type.
-    get_crypto_estimate(cur : string) : Observable<any> {
+    get_crypto_estimate(cur : string) : Observable<CryptoEstimate> {
 	return this.commerce.get_crypto_estimate(this._order, cur);
     }
 
-    // FIXME: Define type.
-    create_crypto_payment(cur : string) : Observable<any> {
+    create_crypto_payment(cur : string) : Observable<CryptoPayment> {
 	return this.commerce.create_crypto_payment(this._order, cur);
     }
 
-    // FIXME: Define type.
-    get_crypto_payment_status(id : string) : Observable<any> {
+    get_crypto_payment_status(id : string) : Observable<CryptoPaymentStatus> {
 	return this.commerce.get_crypto_payment_status(id);
     }
 
-    // FIXME: Define type.
-    get_crypto_minimum(cur : string) : Observable<any> {
+    get_crypto_minimum(cur : string) : Observable<number> {
 	return this.commerce.get_crypto_minimum(cur);
     }
 

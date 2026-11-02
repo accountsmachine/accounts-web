@@ -1,23 +1,19 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-import { VatConfig } from './vat-config';
 import { ApiService } from '../api.service';
+import { VatConfig } from './vat-config';
 
 export class Calculation {
-    calculation?: {
-	[line : string] : {
-	    [account : string] : {
+    calculation?: Record<string, Record<string, {
 		transactions : {
 		    amount : number;
 		    description : string;
 		    date : string;
 		}[];
 		reversed : boolean;
-	    }
-	},
-    };
+	    }>>;
     error?: {
 	kind: string;
 	account? : string;
@@ -29,8 +25,10 @@ export class Calculation {
     providedIn: 'root'
 })
 export class CalculationService {
+    private api = inject(ApiService);
 
-    config : any | null = null;
+
+    config : VatConfig | null = null;
     record : Calculation = new Calculation();
 
     onload_subject : Subject<Calculation> = new Subject<Calculation>();
@@ -41,14 +39,8 @@ export class CalculationService {
 	});
     }
 
-    constructor(
-	private api : ApiService,
-    ) {
-
-    }
-
     load(id : string) {
-	let url = "/api/vat/calculate/" + id;
+	const url = "/api/vat/calculate/" + id;
 
 	return new Observable<Calculation>(obs => {
 	    this.api.post<Calculation>(url, {}).subscribe(

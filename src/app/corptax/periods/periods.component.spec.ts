@@ -8,8 +8,8 @@ describe('AccountsConfigComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountsConfigComponent ]
-    })
+    imports: [AccountsConfigComponent]
+})
     .compileComponents();
   });
 

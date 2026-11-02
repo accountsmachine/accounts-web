@@ -1,29 +1,24 @@
 
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError, map, of } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-import { debounceTime } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
-import moment from 'moment';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { ApiService } from '../api.service';
 
-import { Balance, Option, Options, Order, Transaction } from './commerce.model';
+import { Balance, Options, Order, Transaction,
+         CryptoCurrencies, CryptoEstimate, CryptoPayment,
+         CryptoPaymentStatus
+       } from './commerce.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CommerceService {
+    private api = inject(ApiService);
 
-    constructor(
-	private api : ApiService,
-    ) {
-    }
 
     get_transactions() : Observable<Transaction[]> {
 
-	let url = "/api/commerce/transactions";
+	const url = "/api/commerce/transactions";
 
 	return this.api.get<Transaction[]>(url);
 
@@ -31,7 +26,7 @@ export class CommerceService {
 
     get_transaction(id : string) : Observable<Transaction> {
 
-	let url = "/api/commerce/transaction/" + id;
+	const url = "/api/commerce/transaction/" + id;
 
 	return this.api.get<Transaction>(url);
 
@@ -39,7 +34,7 @@ export class CommerceService {
 
     get_offer() : Observable<Options> {
 
-	let url = "/api/commerce/offer";
+	const url = "/api/commerce/offer";
 
 	return this.api.get<Options>(url);
 
@@ -47,27 +42,27 @@ export class CommerceService {
 
     balance() : Observable<Balance> {
 
-    	let url = "/api/commerce/balance";
+    	const url = "/api/commerce/balance";
 
 	return this.api.get<Balance>(url);
 
     }
 
-    create_order(order : any) : Observable<any> {
+    create_order(order : Order) : Observable<string> {
 
-	let url = "/api/commerce/create-order";
+	const url = "/api/commerce/create-order";
 
-	return this.api.post<any>(url, order);
+	return this.api.post<string>(url, order);
 
     }
 
-    complete_order(id : string) : Observable<any> {
+    complete_order(id : string) : Observable<string> {
 
-	let url = "/api/commerce/complete-order/" + id;
+	const url = "/api/commerce/complete-order/" + id;
 
-	return new Observable<any>(obs => {
+	return new Observable<string>(obs => {
 
-	    this.api.post<any>(url, {}).subscribe(b => {
+	    this.api.post<string>(url, {}).subscribe(b => {
 		obs.next(b);
 	    });
 
@@ -75,13 +70,13 @@ export class CommerceService {
 
     }
 
-    complete_free_order(order : Order) : Observable<any> {
+    complete_free_order(order : Order) : Observable<string> {
 
-	let url = "/api/commerce/complete-free-order";
+	const url = "/api/commerce/complete-free-order";
 
-	return new Observable<any>(obs => {
+	return new Observable<string>(obs => {
 
-	    this.api.post<any>(url, order).subscribe(b => {
+	    this.api.post<string>(url, order).subscribe(b => {
 		obs.next(b);
 	    });
 
@@ -89,26 +84,26 @@ export class CommerceService {
 
     }
 
-    create_payment(id : string) : Observable<any> {
-	let url = "/api/commerce/create-payment/" + id;
+    create_payment(id : string) : Observable<string> {
+	const url = "/api/commerce/create-payment/" + id;
 
-	return this.api.post<any>(url, {});
-
-    }
-
-    get_currencies() : Observable<string[]> {
-
-	let url = "/api/crypto/currencies";
-
-	return this.api.get<string[]>(url);
+	return this.api.post<string>(url, {});
 
     }
 
-    get_crypto_estimate(order : Order, cur : string) : Observable<string[]> {
+    get_currencies() : Observable<CryptoCurrencies> {
 
-	let url = "/api/crypto/estimate";
+	const url = "/api/crypto/currencies";
 
-	return this.api.post<any>(
+	return this.api.get<CryptoCurrencies>(url);
+
+    }
+
+    get_crypto_estimate(order : Order, cur : string) : Observable<CryptoEstimate> {
+
+	const url = "/api/crypto/estimate";
+
+	return this.api.post<CryptoEstimate>(
 	    url,
 	    {
 		order: order,
@@ -118,11 +113,11 @@ export class CommerceService {
 
     }
 
-    get_crypto_minimum(cur : string) : Observable<string[]> {
+    get_crypto_minimum(cur : string) : Observable<number> {
 
-	let url = "/api/crypto/minimum";
+	const url = "/api/crypto/minimum";
 
-	return this.api.post<any>(
+	return this.api.post<number>(
 	    url,
 	    {
 		currency : cur,
@@ -131,11 +126,11 @@ export class CommerceService {
 
     }
 
-    create_crypto_payment(order : Order, cur : string) : Observable<string[]> {
+    create_crypto_payment(order : Order, cur : string) : Observable<CryptoPayment> {
 
-	let url = "/api/crypto/payment";
+	const url = "/api/crypto/payment";
 
-	return this.api.post<any>(
+	return this.api.post<CryptoPayment>(
 	    url,
 	    {
 		order: order,
@@ -145,11 +140,11 @@ export class CommerceService {
 
     }
 
-    get_crypto_payment_status(id : string) : Observable<string[]> {
+    get_crypto_payment_status(id : string) : Observable<CryptoPaymentStatus> {
 
-	let url = "/api/crypto/payment/" + id;
+	const url = "/api/crypto/payment/" + id;
 
-	return this.api.get<any>(url);
+	return this.api.get<CryptoPaymentStatus>(url);
 
     }
 

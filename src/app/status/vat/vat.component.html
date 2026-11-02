@@ -1,91 +1,81 @@
 
 <section class="tab-contents">
-  
+
   <h1>VAT - {{company.company_name}}</h1>
 
-  <div *ngIf="!company.vrn">
-    <p>
-      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
-      The VAT registration number has not been entered for
-      {{company.company_name}}.
-      <button mat-button (click)="fix_vrn()">
-	<mat-icon>build</mat-icon> Fix
-      </button>
-    </p>
-  </div>
-
-  <div *ngIf="company.vrn && !setup">
-
-    <p>
-      <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
-      VAT connection to HMRC has not been set up for {{company.company_name}}.
-    </p>
-
-    <p>
-      This dialog will help you perform the setup.
-    </p>
-
-    <button mat-raised-button color="primary" (click)="authenticate()">
-      <mat-icon>key</mat-icon>&nbsp;
-      Initiate setup
-    </button>
-
-  </div>
-
-  <div *ngIf="setup">
-
-    <mat-card>
-      <mat-card-content>
-	<mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
-	VAT connection to HMRC has been set up for {{company.company_name}}.
-	<a mat-raised-button (click)="disconnect()">
-	  <mat-icon>block</mat-icon>
-	  click to disconnect
-	</a>
-      </mat-card-content>
-    </mat-card>
-
-
-    <form [formGroup]="form">
-      <mat-button-toggle-group aria-label="Year"
-			       (change)="select()" formControlName="year">
-	<mat-button-toggle *ngFor="let y of years" [value]="y">
-	  {{y.name}}
-	</mat-button-toggle>
-	
-      </mat-button-toggle-group>
-
-    </form>
-
-    <div *ngIf="!working.working; else loading">
-
-      <h2>Obligations</h2>
-
+  @if (!company.vrn) {
+    <div>
       <p>
-	<obligations [obligations]="status.obligations"></obligations>
+        <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+        The VAT registration number has not been entered for
+        {{company.company_name}}.
+        <button mat-button (click)="fix_vrn()">
+          <mat-icon>build</mat-icon> Fix
+        </button>
       </p>
-
-      <h2>Liabilities</h2>
-
-      <p>
-	<liabilities [liabilities]="status.liabilities"></liabilities>
-      </p>
-
-      <h2>Payments</h2>
-
-      <p>
-	<payments [payments]="status.payments"></payments>
-      </p>
-
     </div>
+  }
 
-    <ng-template #loading>
-      <section>
-	Loading...
-      </section>
-    </ng-template>
+  @if (company.vrn && !setup) {
+    <div>
+      <p>
+        <mat-icon class="tick-false">highlight_off</mat-icon>&nbsp;
+        VAT connection to HMRC has not been set up for {{company.company_name}}.
+      </p>
+      <p>
+        This dialog will help you perform the setup.
+      </p>
+      <button mat-raised-button color="primary" (click)="authenticate()">
+        <mat-icon>key</mat-icon>&nbsp;
+        Initiate setup
+      </button>
+    </div>
+  }
 
-  </div>
+  @if (setup) {
+    <div>
+      <mat-card>
+        <mat-card-content>
+          <mat-icon class="tick-true">check_circle_outline</mat-icon>&nbsp;
+          VAT connection to HMRC has been set up for {{company.company_name}}.
+          <a mat-raised-button (click)="disconnect()" (keydown.enter)="disconnect()" tabindex="0">
+            <mat-icon>block</mat-icon>
+            click to disconnect
+          </a>
+        </mat-card-content>
+      </mat-card>
+      <form [formGroup]="form">
+        <mat-button-toggle-group aria-label="Year"
+          (change)="select()" formControlName="year">
+          @for (y of years; track y) {
+            <mat-button-toggle [value]="y">
+              {{y.name}}
+            </mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      </form>
+      @if (!working.working) {
+        <div>
+          <h2>Obligations</h2>
+          <p>
+            <obligations [obligations]="status.obligations"></obligations>
+          </p>
+          <h2>Liabilities</h2>
+          <p>
+            <liabilities [liabilities]="status.liabilities"></liabilities>
+          </p>
+          <h2>Payments</h2>
+          <p>
+            <payments [payments]="status.payments"></payments>
+          </p>
+        </div>
+      } @else {
+        <section>
+          Loading...
+        </section>
+      }
+    </div>
+  }
 
 </section>
 

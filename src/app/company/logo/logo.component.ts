@@ -1,56 +1,58 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import moment from 'moment';
+
 import { Observable } from 'rxjs';
 
 import { CompanyService, Company } from '../company.service';
 import { LogoService } from '../logo.service';
 import { WorkingService } from '../../working.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { ImageUploaderComponent } from '../../shared/image-uploader/image-uploader.component';
 
-class Uploader {
-    svc : any;
-    cmp : any;
-    constructor(cmp : any) {
-	this.svc = cmp.logoService;
-	this.cmp = cmp;
+class LogoUploader {
+    constructor(
+	private svc : LogoService,
+	private getId : () => string,
+    ) {}
+    upload(x : File) : Observable<number> {
+	return this.svc.upload(this.getId(), x);
     }
-    upload(x : any) {
-	return this.svc.upload(this.cmp.id, x);
-    }
-};
+}
 
 @Component({
     selector: 'logo',
     templateUrl: './logo.component.html',
-    styleUrls: ['./logo.component.scss']
+    styleUrls: ['./logo.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, ImageUploaderComponent]
 })
 export class LogoComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private state = inject(CompanyService);
+    private logoService = inject(LogoService);
+    private working = inject(WorkingService);
+
 
     filename = "";
 
-    upload = new Uploader(this);
+    upload = new LogoUploader(this.logoService, () => this.id);
 
-    imgbin : any | null = null;
-    imgtype : string = "";
-    
-    constructor(
-	private route : ActivatedRoute,
-	private state: CompanyService,
-	private logoService : LogoService,
-	private working : WorkingService,
-    ) {
+    imgbin : Blob | null = null;
+    imgtype  = "";
+
+    constructor() {
 	this.company = new Company();
     }
 
     company : Company;
 
-    id : any = "";
+    id  = "";
 
-    public image_url : any | null = null;
+    public image_url : string | ArrayBuffer | null = null;
     
     createImageFromBlob(image: Blob) {
 
-	let reader = new FileReader();
+	const reader = new FileReader();
 
 	reader.addEventListener("load", () => {
 	    this.image_url = reader.result;
@@ -75,7 +77,7 @@ export class LogoComponent implements OnInit {
 				this.update_logo();
 			    }
 			},
-			error: (e) => {
+			error: (_e) => {
 			    this.working.stop();
 			},
 			complete: () => {},
@@ -85,7 +87,7 @@ export class LogoComponent implements OnInit {
 	);
 
 	this.logoService.subscribe(
-	    (res : any) => this.update_logo()
+	    () => this.update_logo()
 	);
 
     }
@@ -93,10 +95,10 @@ export class LogoComponent implements OnInit {
     // Don't need spinner here because there's a progress bar.
     update_logo() {
 	this.logoService.get(this.id).subscribe({
-	    next: (img : any) => {
+	    next: (img : Blob) => {
 		this.createImageFromBlob(img);
 	    },
-	    error: (e) => {},
+	    error: (_e) => {},
 	});
     }
 

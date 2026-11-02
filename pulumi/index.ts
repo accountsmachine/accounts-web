@@ -160,7 +160,7 @@ const secret = new gcp.secretmanager.Secret(
     {
 	secretId: "accounts-web-config",
 	replication: {
-	    automatic: true
+	    auto: {},
 	},
     },
     {

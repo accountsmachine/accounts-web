@@ -1,26 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { CorptaxConfig } from './corptax-config';
 import { FilingConfigService } from '../filing/filing-config.service';
 
-export type CorptaxConfigEvent = {
+export interface CorptaxConfigEvent {
     id : string,
     config : CorptaxConfig,
-};
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class CorptaxConfigService {
+    private filingConfigService = inject(FilingConfigService);
 
-    config : any = {};
 
-    constructor(
-	private filingConfigService : FilingConfigService,
-    ) {
-    }
+    config : CorptaxConfig = {};
 
     onload() : Observable<CorptaxConfigEvent> {
 	return this.filingConfigService.onload();
@@ -37,7 +33,7 @@ export class CorptaxConfigService {
 
     create(label : string) : Observable<string> {
 
-	let config = {
+	const config = {
 	    kind: "corptax",
 	    state: "draft",
 	    label: label,
@@ -83,15 +79,15 @@ export class CorptaxConfigService {
 
     }
 
-    get_status(id : string) : Observable<string> {
-	return this.filingConfigService.get_status(id);
+    get_status(id : string) : Observable<{ report: string }> {
+	return this.filingConfigService.get_status(id) as Observable<{ report: string }>;
     }
 
-    get_report(id : string) : Observable<any> {
+    get_report(id : string) : Observable<unknown> {
 	return this.filingConfigService.get_report(id);
     }
 
-    get_data(id : string) : Observable<any> {
+    get_data(id : string) : Observable<unknown> {
 	return this.filingConfigService.get_data(id);
     }
 
@@ -112,7 +108,7 @@ export class CorptaxConfigService {
     set fy2(v) { this.config.fy2 = v; this.change(); }
     get company() { return this.config.company; }
     set company(v) { this.config.company = v; this.change(); }
-    get state() { return this.config.start; }
+    get state() { return this.config.state; }
     set state(v) { this.config.state = v; this.change(); }
 
 }

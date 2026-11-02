@@ -1,5 +1,5 @@
 
-@import '../../../theme.scss';
+@use '../../../theme.scss' as *;
 
 a {
     width: 8rem;

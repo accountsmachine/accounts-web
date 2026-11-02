@@ -1,12 +1,12 @@
 
-export type CorptaxConfig = {
+export interface CorptaxConfig {
 
     kind? : string;
     state? : string;
     label? : string;
     company? : string;
 
-    structure? : any;
+    structure? : unknown;
 
     period_start_date? : string;
     period_end_date? : string;
@@ -23,4 +23,4 @@ export type CorptaxConfig = {
     },
     report_date? : string;
     
-};
+}

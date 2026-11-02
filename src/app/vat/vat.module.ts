@@ -43,13 +43,40 @@ import { LabelComponent } from './label/label.component';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-    declarations: [
-	NewComponent,
-	CalculationComponent,
-	PreviewComponent,
-	SubmitComponent,
-	NavComponent,
-	PeriodComponent,
+    exports: [
+        NewComponent,
+        PreviewComponent,
+        SubmitComponent,
+        NavComponent,
+        PeriodComponent,
+    ],
+    imports: [
+        VatRoutingModule,
+        MatStepperModule,
+        CommonModule,
+        MatSidenavModule,
+        FormsModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatSlideToggleModule,
+        MatNativeDateModule,
+        MatIconModule,
+        MatTreeModule,
+        MatTableModule,
+        MatSelectModule,
+        RouterModule,
+        MatButtonModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
+        SharedModule,
+        ChecklistModule,
+        NewComponent,
+        CalculationComponent,
+        PreviewComponent,
+        SubmitComponent,
+        NavComponent,
+        PeriodComponent,
         CompanyComponent,
         ReportComponent,
         StatusComponent,
@@ -59,43 +86,14 @@ import { SharedModule } from '../shared/shared.module';
         ChecklistComponent,
         CalculationComponent,
     ],
-    exports: [
-	NewComponent,
-	PreviewComponent,
-	SubmitComponent,
-	NavComponent,
-	PeriodComponent,
-    ],
-    imports: [
-        VatRoutingModule,
-	MatStepperModule,
-	CommonModule,
-	MatSidenavModule,
-	FormsModule,
-	MatFormFieldModule,
-	ReactiveFormsModule,
-	MatSlideToggleModule,
-	MatNativeDateModule,
-	MatIconModule,
-        MatTreeModule,	
-	MatTableModule,
-	MatSelectModule,
-	RouterModule,
-	MatButtonModule,
-	MatInputModule,
-	MatProgressSpinnerModule,
-	MatSnackBarModule,
-	SharedModule,
-	ChecklistModule,
-    ],
     providers: [
-	{ provide: LOCALE_ID, useValue: "en-GB" },
-	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
-	{
+        { provide: LOCALE_ID, useValue: "en-GB" },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
+        {
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [MAT_DATE_LOCALE]
-	},
-	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
+            deps: [MAT_DATE_LOCALE]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
     ]
 })
 export class VatModule { }

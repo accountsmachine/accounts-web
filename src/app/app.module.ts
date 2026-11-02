@@ -1,14 +1,13 @@
-import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE, APP_INITIALIZER } from '@angular/core';
+import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input';
@@ -24,16 +23,12 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { DATE_FORMATS } from './date-formats';
 
-import { HttpClientModule } from '@angular/common/http';
 
-import { AppInitService } from './initialise';
 
 import { ConfigurationService } from './configuration.service';
 
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
-import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
 
 import { HomeComponent } from './home/home.component';
 import { TabsComponent } from './tabs/tabs.component';
@@ -51,12 +46,7 @@ const getFirebaseFn =
 	  return svc.getFirebase();
       };
 
-@NgModule({ declarations: [
-        AppComponent,
-        HomeComponent,
-        TabsComponent,
-    ],
-    bootstrap: [AppComponent], imports: [AppRoutingModule,
+@NgModule({ declarations: [AppComponent], bootstrap: [AppComponent], imports: [AppRoutingModule,
         RouterModule,
         BrowserModule,
         //	provideFirebaseApp(() => initializeApp()),
@@ -74,14 +64,13 @@ const getFirebaseFn =
         FormsModule,
         ReactiveFormsModule,
         SharedModule,
-        ProfileModule], providers: [
+        ProfileModule, HomeComponent,
+        TabsComponent], providers: [
         ConfigurationService,
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initAppFn,
-            multi: true,
-            deps: [ConfigurationService],
-        },
+        provideAppInitializer(() => {
+            const initializerFn = (initAppFn)(inject(ConfigurationService));
+            return initializerFn();
+        }),
         {
             provide: FIREBASE_OPTIONS,
             useFactory: getFirebaseFn,

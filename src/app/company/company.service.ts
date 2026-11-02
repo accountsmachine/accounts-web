@@ -1,63 +1,78 @@
 
 // FIXME: Should cache information.
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, of, BehaviorSubject, throwError, map,
-	 pipe, OperatorFunction } from 'rxjs';
-import { catchError, retry, tap } from 'rxjs/operators';
+import { Observable, Subject, of, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import {v4 as uuidv4} from 'uuid';
 
 import { ApiService } from '../api.service';
 
+export interface CompanyLookupRecord {
+    company: {
+	company_number: string;
+	date_of_creation: string;
+	company_name: string;
+	registered_office_address: Record<string, string>;
+	type: string;
+	jurisdiction: string;
+	sic_codes: string[];
+	company_status: string;
+    };
+    officers: {
+	items: { name: string }[];
+    };
+}
+
 export class Company {
 
-    type : string = "";
-    company_name : string = "";
-    company_number : string = "";
-    owner : string = "";
-    city : string = "";
+    type  = "";
+    company_name  = "";
+    company_number  = "";
+    owner  = "";
+    city  = "";
 
-    activities : string = "";
-    registration_date : string = "";
-    country : string = "";
-    form : string = "";
+    activities  = "";
+    registration_date  = "";
+    country  = "";
+    form  = "";
     directors : string[] = [];
-    sector : string = "";
-    is_dormant : boolean = false;
+    sector  = "";
+    is_dormant  = false;
     sic_codes : string[] = [];
-    jurisdiction : string = "";
+    jurisdiction  = "";
 
-    contact_name : string = "";
+    contact_name  = "";
     contact_address : string[] = [];
-    contact_city : string = "";
-    contact_county: string = "";
-    contact_country : string = "";
-    contact_postcode : string = "";
-    contact_email : string = "";
-    contact_tel_country : string = "";
-    contact_tel_area : string = "";
-    contact_tel_number : string = "";
-    contact_tel_type : string = "";
-    web_description : string = "";
-    web_url : string = "";
+    contact_city  = "";
+    contact_county = "";
+    contact_country  = "";
+    contact_postcode  = "";
+    contact_email  = "";
+    contact_tel_country  = "";
+    contact_tel_area  = "";
+    contact_tel_number  = "";
+    contact_tel_type  = "";
+    web_description  = "";
+    web_url  = "";
 
-    vat_registration : string = "";
-    vrn : string = "";
-    utr : string = "";
+    vat_registration  = "";
+    vrn  = "";
+    utr  = "";
 
 };
 
-export type Companies = {
-    [key: string]: Company,
-};
+export type Companies = Record<string, Company>;
 
 @Injectable({
     providedIn: 'root'
 })
 export class CompanyService {
+    private api = inject(ApiService);
+
 
     id : string | null = "";
     config : Company | null = null;
@@ -69,15 +84,13 @@ export class CompanyService {
     }
 
     get_list() : Observable<Companies> {
-	let url = "/api/companies";
-
-	let svc = this;
+	const url = "/api/companies";
 
 	return this.api.get<Companies>(url).pipe(
 	    tap({
-		error(err) {
+		error: (_err) => {
 		},
-		complete() {
+		complete: () => {
 		}
 	    })
 	);
@@ -96,15 +109,13 @@ export class CompanyService {
 	});
     }
 
-    constructor(
-	private api : ApiService,
-    ) {
+    constructor() {
 
 	// All changes are announced on this subject.  Could be a lot of
 	// publications in a short space, so debounce to 1 notification
 	// every 100 ms.
 	this.chgobs.pipe(debounceTime(100)).subscribe(
-	    e => {
+	    () => {
 		this.subject.next(this.config)
 	    }
 	);
@@ -121,7 +132,7 @@ export class CompanyService {
 		"/api/company/" + id
 	    ).pipe(
 		tap({
-		    error: (err) => {
+		    error: (_err) => {
 		    },
 		    complete: () => {
 		    }
@@ -133,10 +144,10 @@ export class CompanyService {
 		    this.subject.next(config);
 		    obs.next(config);
 		},
-		error: (err) => {
+		error: (_err) => {
 		    this.config = null;
 		    this.id = "";
-		    obs.error(err);
+		    obs.error(_err);
 		    //		if (err && err.status && err.status == 404) {
 		    //		    svc.subject.next(new Company());
 		    //		}
@@ -161,14 +172,12 @@ export class CompanyService {
 	    })
 	};
 
-	let svc = this;
-
 	return this.api.put(
 	    "/api/company/" + this.id, this.config,
 	    httpOptions
 	).pipe(
 	    tap({
-		error: (err) => {
+		error: (_err) => {
 		},
 		complete: () => {
 		}
@@ -181,7 +190,7 @@ export class CompanyService {
 
 	return new Observable<string>(subs => {
 
-	    let c = new Company();
+	    const c = new Company();
 	    c.company_number = crn;
 
 	    const httpOptions = {
@@ -190,33 +199,31 @@ export class CompanyService {
 		})
 	    };
 
-	    let svc = this;
-
 	    return this.api.put(
 		"/api/company/" + crn, c, httpOptions
 	    ).pipe(
 		tap({
-		    error: (err) => {
+		    error: (_err) => {
 		    },
 		    complete: () => {
 		    }
 		})
-	    ).subscribe((e : any) => {
+	    ).subscribe(() => {
 		subs.next(crn);
 	    });
 	});
 
     }
 
-    create_from_lookup(rec : any) : Observable<string> {
+    create_from_lookup(rec : CompanyLookupRecord) : Observable<string> {
 
 	return new Observable<string>(subs => {
 
-	    let c = new Company();
+	    const c = new Company();
 
 	    // FIXME: Defensive coding, more checking.
 
-	    let id = uuidv4();
+	    const id = uuidv4();
 
 	    c.type = "uk-company";
 	    c.company_number = rec.company.company_number;
@@ -226,58 +233,58 @@ export class CompanyService {
 	    c.contact_address = []
 	    if ("address_line_1" in rec.company.registered_office_address) {
 		c.contact_address.push(
-		    rec.company.registered_office_address.address_line_1
+		    rec.company.registered_office_address["address_line_1"]
 		);
 	    }
 	    if ("address_line_2" in rec.company.registered_office_address) {
 		c.contact_address.push(
-		    rec.company.registered_office_address.address_line_2
+		    rec.company.registered_office_address["address_line_2"]
 		);
 	    }
 	    if ("address_line_3" in rec.company.registered_office_address) {
 		c.contact_address.push(
-		    rec.company.registered_office_address.address_line_3
+		    rec.company.registered_office_address["address_line_3"]
 		);
 	    }
 
-	    c.contact_city = rec.company.registered_office_address.locality;
+	    c.contact_city = rec.company.registered_office_address["locality"];
 	    c.contact_postcode =
-		rec.company.registered_office_address.postal_code;
+		rec.company.registered_office_address["postal_code"];
 
 	    // Maybe not true, but true for the bulk of cases.
 	    c.contact_country = "UK";
 
 	    try {
-		let form = {
+		const form = {
 		    "ltd": "private-limited-company"
 		}[String(rec.company.type)];
 		if (form) c.form = form;
-	    } catch(e) {}
+	    } catch {}
 
 	    try {
-		let country = {
+		const country = {
 		    "england-wales": "england-and-wales",
 		    "scotland": "scotland",
 		    "northern-ireland": "northern-ireland",
 		}[String(rec.company.jurisdiction)];
 		if (country) c.country = country;
-	    } catch(e) {}
+	    } catch {}
 
 	    try {
-		let juris = {
+		const juris = {
 		    "england-wales": "England and Wales",
 		    "scotland": "Scotland",
 		    "northern-ireland": "Northern Ireland",
 		}[String(rec.company.jurisdiction)];
 		if (juris) c.jurisdiction = juris;
-	    } catch(e) {}
+	    } catch {}
 
 	    c.sic_codes = rec.company.sic_codes;
 	    c.is_dormant = rec.company.company_status != "active";
 
 	    c.web_description = "Corporate website";
 
-	    c.directors = rec.officers.items.map((f : any) => f.name);
+	    c.directors = rec.officers.items.map((f) => f.name);
 
 	    const httpOptions = {
 		headers: new HttpHeaders({
@@ -288,7 +295,7 @@ export class CompanyService {
 	    return this.api.put(
 		"/api/company/" + id, c, httpOptions
 	    ).subscribe(
-		(e : any) => {
+		() => {
 		    subs.next(id);
 		}
 	    );
@@ -304,11 +311,11 @@ export class CompanyService {
 
 	return new Observable<string>(subs => {
 
-	    let c = new Company();
+	    const c = new Company();
 
 	    // FIXME: Defensive coding, more checking.
 
-	    let id = uuidv4();
+	    const id = uuidv4();
 
 	    c.type = "sole-trader";
 	    c.company_name = trade_name;
@@ -326,7 +333,7 @@ export class CompanyService {
 	    return this.api.put(
 		"/api/company/" + id, c, httpOptions
 	    ).subscribe(
-		(e : any) => {
+		() => {
 		    subs.next(id);
 		}
 	    );
@@ -343,10 +350,10 @@ export class CompanyService {
 
 	return new Observable<string>(subs => {
 
-	    let c = new Company();
+	    const c = new Company();
 
 	    // FIXME: Defensive coding, more checking.
-	    let id = uuidv4();
+	    const id = uuidv4();
 
 	    c.type = "non-uk-company";
 	    c.company_number = number;
@@ -365,7 +372,7 @@ export class CompanyService {
 	    return this.api.put(
 		"/api/company/" + id, c, httpOptions
 	    ).subscribe(
-		(e : any) => {
+		() => {
 		    subs.next(id);
 		}
 	    );

@@ -4,31 +4,32 @@
 
 // Thus, any auth error can be treated as a need to re-auth.
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
-    Observable, tap, throwError, map, catchError, ObservableInput, retryWhen,
-    take, delay, concat,
+    Observable, throwError, map, catchError, retryWhen, delay,
 } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { AuthService } from './auth.service';
 
+interface HttpRequestOptions {
+  headers?: HttpHeaders;
+  [key: string]: unknown;
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
+    private auth = inject(AuthService);
+    private http = inject(HttpClient);
+
 
     // Delay between retries (ms), and number of tries.
     delay = 150;
     retries = 3;
 
-    constructor(
-	private auth : AuthService,
-	private http : HttpClient,
-    ) {
-    }
-
-    headers(headers : any, token : string) {
+    headers(headers : HttpHeaders | null, token : string) {
 	if (headers == null) headers = new HttpHeaders();
 
 	return headers.set(
@@ -36,20 +37,20 @@ export class ApiService {
 	);
     }
 
-    options(options : any, token : string) {
+    options(options : HttpRequestOptions | null | undefined, token : string) {
 	if (options) {
-	    options.headers = this.headers(options.headers, token);
+	    options.headers = this.headers(options.headers ?? null, token);
 	    return options;
 	}
 
 	return { headers: this.headers(null, token) };
     }
 
-    get<T>(url: string, options? : any): Observable<T> {
+    get<T>(url: string, options? : HttpRequestOptions): Observable<T> {
 
 	return new Observable<T>(obs => {
 
-	    let subs = this.auth.get_token().subscribe({
+	    const subs = this.auth.get_token().subscribe({
 
 		next: (token) => {
 
@@ -59,7 +60,7 @@ export class ApiService {
 			return;
 		    }
 
-		    let opts = this.options(options, token);
+		    const opts = this.options(options, token);
 
 		    this.http.get<T>(url, opts).pipe(
 			catchError((err) => this.handle_error(err)),
@@ -77,8 +78,8 @@ export class ApiService {
 			    );
 			}),
 		    ).subscribe({
-			next: (e : any) => { obs.next(e); },
-			error: (e : any) => {
+			next: (e) => { obs.next(e); },
+			error: (e) => {
 			    obs.error(e);
 			},
 			complete: () => { obs.complete(); },
@@ -126,11 +127,11 @@ export class ApiService {
 
     }
 
-    put<T>(url: string, data : any, options? : any): Observable<T> {
+    put<T>(url: string, data : unknown, options? : HttpRequestOptions): Observable<T> {
 
 	return new Observable<T>(obs => {
 
-	    let subs = this.auth.get_token().subscribe({
+	    const subs = this.auth.get_token().subscribe({
 
 		next: (token) => {
 
@@ -140,7 +141,7 @@ export class ApiService {
 			return;
 		    }
 
-		    let opts = this.options(options, token);
+		    const opts = this.options(options, token);
 
 		    this.http.put<T>(url, data, opts).pipe(
 			catchError((err) => this.handle_error(err)),
@@ -158,8 +159,8 @@ export class ApiService {
 			    );
 			}),
 		    ).subscribe({
-			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { obs.error(e); },
+			next: (e) => { obs.next(e); },
+			error: (e) => { obs.error(e); },
 			complete: () => { obs.complete(); },
 		    })
 
@@ -177,11 +178,11 @@ export class ApiService {
 
     }
 
-    post<T>(url: string, data : any, options? : any): Observable<T> {
+    post<T>(url: string, data : unknown, options? : HttpRequestOptions): Observable<T> {
 
 	return new Observable<T>(obs => {
 
-	    let subs = this.auth.get_token().subscribe({
+	    const subs = this.auth.get_token().subscribe({
 
 		next: (token) => {
 
@@ -191,7 +192,7 @@ export class ApiService {
 			return;
 		    }
 
-		    let opts = this.options(options, token);
+		    const opts = this.options(options, token);
 
 		    this.http.post<T>(url, data, opts).pipe(
 			catchError((err) => this.handle_error(err)),
@@ -209,8 +210,8 @@ export class ApiService {
 			    );
 			}),
 		    ).subscribe({
-			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { obs.error(e); },
+			next: (e) => { obs.next(e); },
+			error: (e) => { obs.error(e); },
 			complete: () => { obs.complete(); },
 		    })
 
@@ -228,11 +229,11 @@ export class ApiService {
 
     }
 
-    delete<T>(url: string, options? : any): Observable<T> {
+    delete<T>(url: string, options? : HttpRequestOptions): Observable<T> {
 
 	return new Observable<T>(obs => {
 
-	    let subs = this.auth.get_token().subscribe({
+	    const subs = this.auth.get_token().subscribe({
 
 		next: (token) => {
 
@@ -242,7 +243,7 @@ export class ApiService {
 			return;
 		    }
 
-		    let opts = this.options(options, token);
+		    const opts = this.options(options, token);
 
 		    this.http.delete<T>(url, opts).pipe(
 			catchError((err) => this.handle_error(err)),
@@ -260,8 +261,8 @@ export class ApiService {
 			    );
 			}),
 		    ).subscribe({
-			next: (e : any) => { obs.next(e); },
-			error: (e : any) => { obs.error(e); },
+			next: (e) => { obs.next(e); },
+			error: (e) => { obs.error(e); },
 			complete: () => { obs.complete(); },
 		    })
 

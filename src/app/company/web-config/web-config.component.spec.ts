@@ -8,8 +8,8 @@ describe('WebConfigComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WebConfigComponent ]
-    })
+    imports: [WebConfigComponent]
+})
     .compileComponents();
   });
 

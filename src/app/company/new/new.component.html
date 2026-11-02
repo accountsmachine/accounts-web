@@ -1,36 +1,42 @@
 
 <section class="tab-contents">
-  
+
   <h1>Create new company configuration</h1>
 
   <form class="config-form">
 
     <div>
       <mat-radio-group aria-label="Select an option"
-		       [(ngModel)]="kind" name="company-kind">		       
-	<mat-radio-button value="uk-company">
-	  UK Company
-	</mat-radio-button>
-	<mat-radio-button value="sole-trader">
-	  UK Sole Trader
-	</mat-radio-button>
-	<mat-radio-button value="non-uk-company">
-	  Non-UK Company
-	</mat-radio-button>
-      </mat-radio-group>      
+        [(ngModel)]="kind" name="company-kind">
+        <mat-radio-button value="uk-company">
+          UK Company
+        </mat-radio-button>
+        <mat-radio-button value="sole-trader">
+          UK Sole Trader
+        </mat-radio-button>
+        <mat-radio-button value="non-uk-company">
+          Non-UK Company
+        </mat-radio-button>
+      </mat-radio-group>
     </div>
 
-    <div *ngIf="kind == 'uk-company'">
-      <new-uk-company/>
-    </div>
+    @if (kind === 'uk-company') {
+      <div>
+        <new-uk-company/>
+      </div>
+    }
 
-    <div *ngIf="kind == 'sole-trader'">
-      <new-sole-trader/>
-    </div>
+    @if (kind === 'sole-trader') {
+      <div>
+        <new-sole-trader/>
+      </div>
+    }
 
-    <div *ngIf="kind == 'non-uk-company'">
-      <new-non-uk-company/>
-    </div>
+    @if (kind === 'non-uk-company') {
+      <div>
+        <new-non-uk-company/>
+      </div>
+    }
 
   </form>
 

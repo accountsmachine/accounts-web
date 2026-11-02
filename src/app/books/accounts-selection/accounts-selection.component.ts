@@ -1,22 +1,35 @@
-import { Component, OnInit, Inject, ViewChild, AfterViewInit } from '@angular/core';
-import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
-} from '@angular/material/dialog';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Component, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatRowDef, MatRow } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, MatSortable } from '@angular/material/sort';
+import { MatSort, MatSortable, MatSortHeader } from '@angular/material/sort';
 import { AccountInclusion } from '../mapping.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 class Row {
-    account : string = "";
+    account  = "";
 };
 
 @Component({
     selector: 'accounts-selection',
     templateUrl: './accounts-selection.component.html',
-    styleUrls: ['./accounts-selection.component.scss']
+    styleUrls: ['./accounts-selection.component.scss'],
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, MatIcon, MatButton, MatFormField, MatInput, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatIconButton, MatRowDef, MatRow, MatPaginator, MatDialogActions, MatDialogClose]
 })
-export class AccountsSelectionComponent implements OnInit {
+export class AccountsSelectionComponent implements AfterViewInit {
+    dialogRef = inject<MatDialogRef<AccountsSelectionComponent>>(MatDialogRef);
+    data = inject<{
+    proceed: boolean;
+    key: string;
+    line: string;
+    accounts: string[];
+    mapping: AccountInclusion[];
+}>(MAT_DIALOG_DATA);
+
 
     groupId = 0;
 
@@ -54,12 +67,9 @@ export class AccountsSelectionComponent implements OnInit {
 
     accounts : MatTableDataSource<Row> = new MatTableDataSource<Row>([]);
 
-    apply_filter(f : any) {
-	let filt = f!.value.trim().toLowerCase();
+    apply_filter(f : HTMLInputElement) {
+	const filt = f.value.trim().toLowerCase();
 	this.accounts.filter = filt;
-    }
-
-    ngOnInit(): void {
     }
 
     ngAfterViewInit(): void {
@@ -71,10 +81,10 @@ export class AccountsSelectionComponent implements OnInit {
 	if (!this.sort) return;
 
 	setTimeout( () => {
-	    this.sort!.sort(<MatSortable>{
+	    this.sort!.sort(({
 		"id": "box",
 		"start": "asc",
-	    });
+	    } as MatSortable));
 	}, 0);
 
 	this.accounts.paginator = this.paginator!;
@@ -86,23 +96,14 @@ export class AccountsSelectionComponent implements OnInit {
     line : string;
     all : string[];
 
-    constructor(
-	public dialogRef: MatDialogRef<AccountsSelectionComponent>,
-	@Inject(MAT_DIALOG_DATA) public data : {
-	    proceed: boolean,
-	    key : string,
-	    line : string,
-	    accounts : string[],
-	    mapping : AccountInclusion[],
-	},
-    ) {
+    constructor() {
 	this.line = this.data.line;
 	this.key = this.data.key;
         this.all = this.data.accounts;
 
         this.accounts.data = this.data.accounts.map(
 	    a => {
-		let r = new Row();
+		const r = new Row();
 		r.account = a;
 		return r;
 	    }

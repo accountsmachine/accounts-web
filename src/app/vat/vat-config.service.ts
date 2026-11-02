@@ -1,28 +1,25 @@
-import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { debounceTime, tap } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { VatConfig } from './vat-config';
 import { VatService, Obligation } from './vat.service';
 import { FilingConfigService } from '../filing/filing-config.service';
 
-export type VatConfigEvent = {
+export interface VatConfigEvent {
     id : string,
     config : VatConfig,
-};
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class VatConfigService {
+    private filingConfigService = inject(FilingConfigService);
+    private vat = inject(VatService);
+
 
     obligations : Obligation[] = [];
-
-    constructor(
-	private filingConfigService : FilingConfigService,
-	private vat : VatService,
-    ) {
-    }
 
     onload() : Observable<VatConfigEvent> {
 	return this.filingConfigService.onload();
@@ -34,7 +31,7 @@ export class VatConfigService {
 
     load(id : string) {
         return this.filingConfigService.load(id).pipe(
-	    tap((cfg : any) => {
+	    tap((cfg : VatConfigEvent) => {
 		if (cfg.config["company"]) {
 		    this.vat.getOpenObligations(
 			cfg.config["company"]
@@ -53,7 +50,7 @@ export class VatConfigService {
 
     create(label : string) : Observable<string> {
 
-	let config = {
+	const config = {
 	    "kind": "vat",
 	    state: "draft",
 	    "label": label,
@@ -77,21 +74,21 @@ export class VatConfigService {
 
     }
 
-    get_status(id : string) : Observable<string> {
-	return this.filingConfigService.get_status(id);
+    get_status(id : string) : Observable<{ report: string }> {
+	return this.filingConfigService.get_status(id) as Observable<{ report: string }>;
     }
 
-    get_report(id : string) : Observable<any> {
+    get_report(id : string) : Observable<unknown> {
 	return this.filingConfigService.get_report(id);
     }
 
-    get_data(id : string) : Observable<any> {
+    get_data(id : string) : Observable<unknown> {
 	return this.filingConfigService.get_data(id);
     }
 
     updobl() {
 
-	for(var ob of this.obligations) {
+	for(const ob of this.obligations) {
 	    if (ob.periodKey == this.config.period_key) {
 		console.log("BUNCH");
 		this.config.start = ob.start;

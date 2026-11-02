@@ -1,26 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService, AuthState } from '../../auth.service';
+import { AuthService } from '../../auth.service';
 import { UserProfileService } from '../user-profile.service';
-import { FrontPageService, FrontState } from '../front-page.service';
+import { FrontPageService } from '../front-page.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { FormsModule } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'profile',
     templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss']
+    styleUrls: ['./profile.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, MatButton]
 })
 export class ProfileComponent implements OnInit {
+    private auth = inject(AuthService);
+    private frontPageService = inject(FrontPageService);
+    private userProfile = inject(UserProfileService);
+    private router = inject(Router);
+
 
     username = "";
     name = "";
-
-    constructor(
-	private auth : AuthService,
-	private frontPageService : FrontPageService,
-	private userProfile : UserProfileService,
-	private router : Router,
-    ) { }
 
     ngOnInit(): void {
 
@@ -32,8 +35,10 @@ export class ProfileComponent implements OnInit {
 		return;
 	    }
 
-	    this.name = auth.auth.currentUser.displayName;
-	    this.username = auth.auth.currentUser.email;
+	    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+	    const currentUser = (auth as any).auth.currentUser;
+	    this.name = currentUser.displayName;
+	    this.username = currentUser.email;
 
 	});
 

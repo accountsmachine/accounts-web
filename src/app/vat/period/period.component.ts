@@ -1,38 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 
 import { WorkingService } from '../../working.service';
-import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
-import { VatService } from '../vat.service';
+import { VatConfig } from '../vat-config';
+import { VatService, Obligation } from '../vat.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'vat-period',
     templateUrl: './period.component.html',
-    styleUrls: ['./period.component.scss']
+    styleUrls: ['./period.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, MatHint, MatButton]
 })
-export class PeriodComponent implements OnInit {
+export class PeriodComponent {
+    private route = inject(ActivatedRoute);
+    private snackBar = inject(MatSnackBar);
+    private filing = inject(VatConfigService);
+    private vat = inject(VatService);
+    private fb = inject(FormBuilder);
+    working = inject(WorkingService);
+
 
     form = this.fb.group({
 	period_key: ['', [Validators.required]],
     });
 
-    config : any = {};
+    config : VatConfig = {};
 
-    // FIXME: Should subscribe to vat.
-    obligations : any = [];
+    obligations : Obligation[] = [];
 
-    constructor(
-	private route : ActivatedRoute,
-	private snackBar : MatSnackBar,
-	private filing : VatConfigService,
-	private vat : VatService,
-	private fb : FormBuilder,
-	public working : WorkingService,
-    ) {
+    constructor() {
 
 	this.route.params.subscribe(
 	    params => {
@@ -51,7 +56,7 @@ export class PeriodComponent implements OnInit {
 			    	this.obligations = obl;
 				this.working.stop();
 			    },
-			    error: err => {
+			    error: _err => {
 				this.working.stop();
 			    },
 			    complete: () => {
@@ -65,9 +70,6 @@ export class PeriodComponent implements OnInit {
 
     }
 
-    ngOnInit() : void {
-    }
-
     load() {
 	this.form.patchValue({
 	    period_key: this.config.period_key,
@@ -76,9 +78,9 @@ export class PeriodComponent implements OnInit {
 
     submit() {
 
-	this.config.period_key = this.form.value.period_key;
+	this.config.period_key = this.form.value.period_key ?? undefined;
 
-	for(var ob of this.obligations) {
+	for(const ob of this.obligations) {
 	    if (ob.periodKey == this.config.period_key) {
 		this.config.start = ob.start;
 		this.config.end = ob.end;
@@ -87,7 +89,7 @@ export class PeriodComponent implements OnInit {
 	}
 
 	this.filing.save().subscribe(
-	    (e : any) => {
+	    () => {
 		this.snackBar.open("Configuration saved", "dismiss",
 				   { duration: 5000 });
 	    }

@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 
 import { Transaction } from '../commerce.model';
 import { CommerceService } from '../commerce.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
-type Row = {
+interface Row {
     id: string,
     time : Date,
     type? : string,
@@ -18,14 +21,18 @@ type Row = {
     a? : number,
     company? : string,
     filing? : string
-};
+}
 
 @Component({
     selector: 'app-transaction-list',
     templateUrl: './transaction-list.component.html',
-    styleUrls: ['./transaction-list.component.scss']
+    styleUrls: ['./transaction-list.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, CurrencyPipe, DatePipe]
 })
-export class TransactionListComponent implements OnInit {
+export class TransactionListComponent {
+    private commerce = inject(CommerceService);
+    private router = inject(Router);
+
 
     txs : Transaction[] = [];
 
@@ -37,19 +44,16 @@ export class TransactionListComponent implements OnInit {
     data : MatTableDataSource<Row> =
 	new MatTableDataSource<Row>([]);
 
-    constructor(
-	private commerce : CommerceService,
-	private router : Router,
-    ) {
+    constructor() {
 
 	this.commerce.get_transactions().subscribe(txs => {
-	    let data : Row[] = [];
+	    const data : Row[] = [];
 
-	    for (let txid in txs) {
+	    for (const txid in txs) {
 
-		let tx = txs[txid];
+		const tx = txs[txid];
 
-		let row : Row = {
+		const row : Row = {
 		    id: txid,
 		    time: new Date(tx.time + "Z"),
 		    type: tx.type,
@@ -63,7 +67,7 @@ export class TransactionListComponent implements OnInit {
 		let v = 0, c = 0, a = 0;
 
 		if (tx.order)
-		    for (let i of tx.order.items) {
+		    for (const i of tx.order.items) {
 			if (i.kind == "vat") v += i.quantity;
 			if (i.kind == "corptax") c += i.quantity;
 			if (i.kind == "accounts") a += i.quantity;
@@ -77,17 +81,14 @@ export class TransactionListComponent implements OnInit {
 
 	    }
 
-	    data.sort((a : any, b : any) => b.time - a.time);
+	    data.sort((a : Row, b : Row) => b.time.getTime() - a.time.getTime());
 
 	    this.data.data = data;
 	});
 
     }
 
-    ngOnInit(): void {
-    }
-
-    select(x : any) {
+    select(x : Row) {
 	this.router.navigate(["/commerce/transaction/" + x.id]);
     }
 

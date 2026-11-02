@@ -5,151 +5,179 @@
     <mat-drawer mode="side" class="drawer-side" opened>
       <navigator></navigator>
     </mat-drawer>
-    
+
     <mat-drawer-content class="main-content">
 
       <h1>Business configuration</h1>
 
       <form class="config-form" [formGroup]="form" (ngSubmit)="submit()">
 
-	<div>
+        <div>
 
-	  <mat-form-field class="config-field" appearance="fill">
-	    <mat-label>Company name</mat-label>
-	    <input matInput
-		   placeholder="Company name"
-		   formControlName="company_name"
-		   name="company_name">
-	    <mat-hint>Your registered company name</mat-hint>
-	  </mat-form-field>
+          <mat-form-field class="config-field" appearance="fill">
+            <mat-label>Company name</mat-label>
+            <input matInput
+              placeholder="Company name"
+              formControlName="company_name"
+              name="company_name">
+            <mat-hint>Your registered company name</mat-hint>
+          </mat-form-field>
 
-	  <mat-form-field class="config-field" appearance="fill"
-			  *ngIf="company.type!='sole-trader'">
-	    <mat-label>Company number</mat-label>
-	    <input matInput
-		   placeholder="Registered company number"
-		   formControlName="company_number"
-		   name="company_number">
-	    <mat-hint *ngIf="company.type == 'uk-company'">
-	      Companies House provided registration number
-	    </mat-hint>
-	    <mat-hint *ngIf="company.type == 'non-uk-company'">
-	      Registration number or identifier
-	    </mat-hint>
-	  </mat-form-field>
+          @if (company.type!=='sole-trader') {
+            <mat-form-field class="config-field" appearance="fill"
+              >
+              <mat-label>Company number</mat-label>
+              <input matInput
+                placeholder="Registered company number"
+                formControlName="company_number"
+                name="company_number">
+              @if (company.type === 'uk-company') {
+                <mat-hint>
+                  Companies House provided registration number
+                </mat-hint>
+              }
+              @if (company.type === 'non-uk-company') {
+                <mat-hint>
+                  Registration number or identifier
+                </mat-hint>
+              }
+            </mat-form-field>
+          }
 
-	  <mat-form-field class="config-field" appearance="fill"
-			  *ngIf="company.type == 'sole-trader'">
-	    <mat-label>Business owner</mat-label>
-	    <input matInput
-		   placeholder="Business owner"
-		   formControlName="owner"
-		   name="owner">
-	    <mat-hint>
-	      Registered owner of the business
-	    </mat-hint>
-	  </mat-form-field>
+          @if (company.type === 'sole-trader') {
+            <mat-form-field class="config-field" appearance="fill"
+              >
+              <mat-label>Business owner</mat-label>
+              <input matInput
+                placeholder="Business owner"
+                formControlName="owner"
+                name="owner">
+              <mat-hint>
+                Registered owner of the business
+              </mat-hint>
+            </mat-form-field>
+          }
 
-	</div>
+        </div>
 
-	<div>
-	  <mat-form-field appearance="fill">
-	    <mat-label *ngIf="company.type!='sole-trader'">
-	      Company registration date
-	    </mat-label>
-	    <mat-label *ngIf="company.type=='sole-trader'">
-	      Sole trader registration date
-	    </mat-label>
-	    <input matInput
-		   [matDatepicker]="picker"
-		   formControlName="registration_date"
-		   name="registration_date">
-	    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-	    <mat-datepicker #picker></mat-datepicker>
-	    <mat-hint *ngIf="company.type != 'sole-trader'">
-	      Company registation date
-	    </mat-hint>
-	    <mat-hint *ngIf="company.type == 'sole-trader'">
-	      Sole trader registation date
-	    </mat-hint>
-	  </mat-form-field>
-	  <mat-form-field appearance="fill" *ngIf="company.type == 'uk-company'">
-	    <mat-label>Country of registration</mat-label>
-	    <mat-select formControlName="country" name="country">
-	      <mat-option [value]="'england-and-wales'">
-		England and Wales
-	      </mat-option>
-	      <mat-option [value]="'scotland'">
-		Scotland
-	      </mat-option>
-	      <mat-option [value]="'northern-ireland'">
-		Northern Ireland
-	      </mat-option>
-	    </mat-select>
-	    <mat-hint>The country of registration at Companies House</mat-hint>
-	  </mat-form-field>
-	</div>
+        <div>
+          <mat-form-field appearance="fill">
+            @if (company.type!=='sole-trader') {
+              <mat-label>
+                Company registration date
+              </mat-label>
+            }
+            @if (company.type==='sole-trader') {
+              <mat-label>
+                Sole trader registration date
+              </mat-label>
+            }
+            <input matInput
+              [matDatepicker]="picker"
+              formControlName="registration_date"
+              name="registration_date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (company.type !== 'sole-trader') {
+              <mat-hint>
+                Company registation date
+              </mat-hint>
+            }
+            @if (company.type === 'sole-trader') {
+              <mat-hint>
+                Sole trader registation date
+              </mat-hint>
+            }
+          </mat-form-field>
+          @if (company.type === 'uk-company') {
+            <mat-form-field appearance="fill">
+              <mat-label>Country of registration</mat-label>
+              <mat-select formControlName="country" name="country">
+                <mat-option [value]="'england-and-wales'">
+                  England and Wales
+                </mat-option>
+                <mat-option [value]="'scotland'">
+                  Scotland
+                </mat-option>
+                <mat-option [value]="'northern-ireland'">
+                  Northern Ireland
+                </mat-option>
+              </mat-select>
+              <mat-hint>The country of registration at Companies House</mat-hint>
+            </mat-form-field>
+          }
+        </div>
 
-	<div *ngIf="company.type == 'uk-company'">
-	  <mat-form-field appearance="fill">
-	    <mat-label>Form of company</mat-label>
-	    <mat-select formControlName="form" name="form">
-	      <mat-option [value]="'private-limited-company'">
-		Private Limited Company
-	      </mat-option>
-	    </mat-select>
-	    <mat-hint>The type of registration  at Companies House</mat-hint>
-	  </mat-form-field>
-	</div>
+        @if (company.type === 'uk-company') {
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Form of company</mat-label>
+              <mat-select formControlName="form" name="form">
+                <mat-option [value]="'private-limited-company'">
+                  Private Limited Company
+                </mat-option>
+              </mat-select>
+              <mat-hint>The type of registration  at Companies House</mat-hint>
+            </mat-form-field>
+          </div>
+        }
 
-	<div id="directors" *ngIf="company.type != 'sole-trader'">
-	  <mat-form-field class="chip-list" appearance="fill">
-	    <mat-label>Directors</mat-label>
-	    <mat-chip-grid #directorslist aria-label="Directors">
-	      <mat-chip-row *ngFor="let v of directors!.value" (removed)="removeDirector(v)">
-		{{v}}
-		<button matChipRemove>
-		  <mat-icon>cancel</mat-icon>
-		</button>
-	      </mat-chip-row>
-	      <input placeholder="A Smith"
-		     [matChipInputFor]="directorslist"
-		     [matChipInputSeparatorKeyCodes]="chipSeparatorKeysCodes"
-		     [matChipInputAddOnBlur]="'true'"
-		     (matChipInputTokenEnd)="addDirector($event)">
-	    </mat-chip-grid>
-	    <mat-hint>Enter directors e.g. A Smith, B Jones</mat-hint>
-	  </mat-form-field>
-	</div>
+        @if (company.type !== 'sole-trader') {
+          <div id="directors">
+            <mat-form-field class="chip-list" appearance="fill">
+              <mat-label>Directors</mat-label>
+              <mat-chip-grid #directorslist aria-label="Directors">
+                @for (v of directors!.value; track v) {
+                  <mat-chip-row (removed)="removeDirector(v)">
+                    {{v}}
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                }
+                <input placeholder="A Smith"
+                  [matChipInputFor]="directorslist"
+                  [matChipInputSeparatorKeyCodes]="chipSeparatorKeysCodes"
+                  [matChipInputAddOnBlur]="'true'"
+                  (matChipInputTokenEnd)="addDirector($event)">
+              </mat-chip-grid>
+              <mat-hint>Enter directors e.g. A Smith, B Jones</mat-hint>
+            </mat-form-field>
+          </div>
+        }
 
-	<div *ngIf="company.type == 'uk-company'">
-	  <mat-slide-toggle class="config-field"
-			formControlName="is_dormant"
-			name="is_dormant">
-	    Company is dormant
-	  </mat-slide-toggle>
-	</div>
-	
-	<div *ngIf="company.type == 'uk-company'">
-	  <mat-form-field class="config-field" appearance="fill">
-	    <mat-label>Jurisdiction</mat-label>
-	    <input matInput
-		   formControlName="jurisdiction"
-		   name="jurisdiction"
-		   placeholder="England and Wales">
-	    <mat-hint>Company jurisdiction e.g. England and Wales</mat-hint>
-	  </mat-form-field>
-	</div>
+        @if (company.type === 'uk-company') {
+          <div>
+            <mat-slide-toggle class="config-field"
+              formControlName="is_dormant"
+              name="is_dormant">
+              Company is dormant
+            </mat-slide-toggle>
+          </div>
+        }
 
-	<button type="submit" [disabled]="!form.valid" class="action"
-		mat-raised-button color="primary">
-	  Save
-	</button>
-	
-	<button mat-raised-button class="action" color="basic"
-		(click)="revert()">
-	  Revert
-	</button>
+        @if (company.type === 'uk-company') {
+          <div>
+            <mat-form-field class="config-field" appearance="fill">
+              <mat-label>Jurisdiction</mat-label>
+              <input matInput
+                formControlName="jurisdiction"
+                name="jurisdiction"
+                placeholder="England and Wales">
+              <mat-hint>Company jurisdiction e.g. England and Wales</mat-hint>
+            </mat-form-field>
+          </div>
+        }
+
+        <button type="submit" [disabled]="!form.valid" class="action"
+          mat-raised-button color="primary">
+          Save
+        </button>
+
+        <button mat-raised-button class="action" color="basic"
+          (click)="revert()">
+          Revert
+        </button>
 
       </form>
 

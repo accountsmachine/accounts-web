@@ -3,19 +3,19 @@
   <div class="header quantity">Quantity</div>
   <div class="header amount">Amount</div>
 
-  <ng-container *ngFor="let item of order.items">
+  @for (item of order.items; track item) {
     <div class="item description">
       {{item.description}}
-      <ng-container *ngIf="item.adjustment">
-	({{item.adjustment}})
-      </ng-container>
-      <ng-container *ngIf="item.discount > 0">
-	(discount {{item.discount / 100 | currency}})
-      </ng-container>
+      @if (item.adjustment) {
+        ({{item.adjustment}})
+      }
+      @if (item.discount > 0) {
+        (discount {{item.discount / 100 | currency}})
+      }
     </div>
     <div class="item quantity">{{item.quantity}} credits</div>
     <div class="item amount">{{item.amount / 100 | currency}}</div>
-  </ng-container>
+  }
   <ng-container>
     <div class="subtotal label">Subtotal</div>
     <div class="subtotal amount">

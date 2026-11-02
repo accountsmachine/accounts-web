@@ -1,21 +1,27 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { VatConfig } from './vat-config';
 import { VatConfigService } from './vat-config.service';
 import { Company, CompanyService } from '../company/company.service';
 import { CommerceService } from '../commerce/commerce.service';
 import { Balance } from '../commerce/commerce.model';
-import { StatusService } from '../status/status.service';
+import { Status, StatusService } from '../status/status.service';
 import { BooksService } from '../books/books.service';
+import { VatConfig } from './vat-config';
 import { Check, Checklist } from '../checklist/checklist.model'
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChecklistService {
+    private filing = inject(VatConfigService);
+    private companyService = inject(CompanyService);
+    private commerce = inject(CommerceService);
+    private statusService = inject(StatusService);
+    private books = inject(BooksService);
+
 
     _outstanding = 0;
 
@@ -27,20 +33,14 @@ export class ChecklistService {
 	this._outstanding = val;
     }
 
-    id : string = "";
-    config : any = {};
-    company : any = {};
+    id  = "";
+    config : VatConfig = {};
+    company : Company = new Company();
     balance : Balance;
-    status : any;
-    books_info : any = {};
+    status : Status = new Status();
+    books_info : { time?: string } = {};
 
-    constructor(
-	private filing : VatConfigService,
-	private companyService : CompanyService,
-	private commerce : CommerceService,
-	private statusService : StatusService,
-	private books : BooksService,
-    ) {
+    constructor() {
  	this.balance = {
 	    vat: 0, corptax: 0, accounts: 0
 	};
@@ -49,7 +49,7 @@ export class ChecklistService {
     load(id : string) {
 
 	// This pushes the pending = true update.
-	let cl = new Checklist();
+	const cl = new Checklist();
 	cl.list = [];
 	cl.pending = true;
 	this.subject.next(cl);
@@ -60,7 +60,7 @@ export class ChecklistService {
 	    next: bal => {
 		this.balance = bal;
 	    },
-	    error: e => {
+	    error: _e => {
 		this.balance = { vat: 0, corptax: 0, accounts: 0 };
 	    }
 	});
@@ -74,46 +74,46 @@ export class ChecklistService {
 
 		if ("company" in this.config) {
 
-		    this.company = {};
-		    this.status = {};
+		    this.company = new Company();
+		    this.status = new Status();
 		    this.books_info = {};
 
 		    this.outstanding += 1;
-		    this.companyService.load(this.config.company).subscribe({
+		    this.companyService.load(this.config.company!).subscribe({
 			next: cmp => {
-			    this.company = cmp;
+			    this.company = cmp ?? new Company();
 			    this.outstanding -= 1;
 			    this.validate();
 			},
 			error: () => {
-			    this.company = {};
+			    this.company = new Company();
 			    this.outstanding -= 1;
 			    this.validate();
 			}
 		    });
 
 		    this.outstanding += 1;
-		    this.statusService.get(this.config.company).subscribe({
+		    this.statusService.get(this.config.company!).subscribe({
 			next: st => {
 			    this.status = st;
 			    this.outstanding -= 1;
 			    this.validate();
 			},
-			error: (e) => {
-			    this.status = {};
+			error: (_e) => {
+			    this.status = new Status();
 			    this.outstanding -= 1;
 			    this.validate();
 			}
 		    });
 
 		    this.outstanding += 1;
-		    this.books.get_books_info(this.config.company).subscribe({
+		    this.books.get_books_info(this.config.company!).subscribe({
 			next: info => {
-			    this.books_info = info;
+			    this.books_info = info as { time?: string };
 			    this.outstanding -= 1;
 			    this.validate();
 			},
-			error: (e) => {
+			error: (_e) => {
 			    this.books_info = {};
 			    this.outstanding -= 1;
 			    this.validate();
@@ -121,8 +121,8 @@ export class ChecklistService {
 		    });
 
 		} else {
-		    this.company = {};
-		    this.status = {};
+		    this.company = new Company();
+		    this.status = new Status();
 		    this.books_info = {};
 		}
 
@@ -130,9 +130,9 @@ export class ChecklistService {
 
 	    },
 
-	    error: (e) => {
-		this.company = {};
-		this.status = {};
+	    error: (_e) => {
+		this.company = new Company();
+		this.status = new Status();
 		this.books_info = {};
 		this.outstanding -= 1;
 		this.validate();
@@ -144,7 +144,7 @@ export class ChecklistService {
 
     validate() {
 
-	let list : Check[] = [];
+	const list : Check[] = [];
 
 	if (this.balance && this.balance.vat > 0) {
 	    list.push(
@@ -283,14 +283,14 @@ export class ChecklistService {
 	}
 
 	let complete = true;
-	for(let elt of list) {
+	for(const elt of list) {
 	    if (elt.kind != "OK") {
 		complete = false;
 		break;
 	    }
 	}
 
-	let cl = new Checklist();
+	const cl = new Checklist();
 	cl.list = list;
 	cl.pending = this.outstanding > 0;
 	cl.complete = complete;

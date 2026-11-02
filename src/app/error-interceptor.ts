@@ -1,4 +1,5 @@
-NOT USED
+/* eslint-disable */
+// NOT USED
 
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
