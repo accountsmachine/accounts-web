@@ -1,24 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
 import { PreviewService } from '../../shared/preview.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { RenderComponent } from '../../shared/render/render.component';
 
 @Component({
     selector: 'vat-preview',
     templateUrl: './preview.component.html',
-    styleUrls: ['./preview.component.scss']
+    styleUrls: ['./preview.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, RenderComponent]
 })
-export class PreviewComponent implements OnInit {
+export class PreviewComponent {
+    private route = inject(ActivatedRoute);
+    private filing = inject(VatConfigService);
+    private renderer = inject(PreviewService);
+
 
     config : VatConfig = {};
 
-    constructor(
-	private route : ActivatedRoute,
-	private filing : VatConfigService,
-	private renderer : PreviewService,
-    ) {
+    constructor() {
 
 	this.route.params.subscribe(params => {
 	    this.working = true;
@@ -30,9 +34,6 @@ export class PreviewComponent implements OnInit {
 
     }
 
-    ngOnInit() : void {
-    }
-    
     working = false;
 
 }

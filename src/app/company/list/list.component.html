@@ -1,13 +1,13 @@
 
 <section class="tab-contents">
-  
+
   <h1>Companies</h1>
 
   <div>
 
     <button mat-raised-button (click)="create()">
-          <mat-icon>add_business</mat-icon>
-	  Create company configuration
+      <mat-icon>add_business</mat-icon>
+      Create company configuration
     </button>
 
   </div>
@@ -15,60 +15,58 @@
   <div>
 
     <div class="card-display">
-      <ng-container *ngFor="let config of configs | keyvalue">
-	<mat-card>
-
-	  <mat-card-header>
-
-	    <mat-card-title>
-	      {{config.value.company_name | uppercase}}
-	    </mat-card-title>
-
-	    <mat-card-subtitle>
-	      {{config.value.contact_city}}
-	    </mat-card-subtitle>
-
-	  </mat-card-header>
-
-	  <mat-card-content>
-
-	    <div *ngIf="config.value.type == 'uk-company'">
-	      Number: {{config.value.company_number}}
-	    </div>
-
-	    <div *ngIf="config.value.type == 'sole-trader'">
-	      Sole tradership
-	    </div>
-
-	    <div *ngIf="config.value.type == 'non-uk-company'">
-	      Non-UK company
-	    </div>
-
-	    <div *ngIf="config.value.type == 'sole-trader'">
-	      Proprietor: {{config.value.contact_name}}
-	    </div>
-
-	    <div *ngIf="config.value.type == 'non-uk-company'">
-	      Incorporated in: {{config.value.contact_country}}
-	    </div>
-
-	    <div *ngIf="config.value.type == 'uk-company'">
-	      Registered in: {{country_label(config.value.country)}}
-	    </div>
-
-	  </mat-card-content>
-
-	  <mat-card-actions align="start">
-	    <button mat-button (click)="edit(config.key)">
-	      <mat-icon>edit</mat-icon> EDIT
-	    </button>
-	    <button mat-button (click)="delete(config.key, config.value)">
-	      <mat-icon>delete</mat-icon> DELETE
-	    </button>
-	  </mat-card-actions>
-
-	</mat-card>
-      </ng-container>
+      @for (config of configs | keyvalue; track config) {
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              {{config.value.company_name | uppercase}}
+            </mat-card-title>
+            <mat-card-subtitle>
+              {{config.value.contact_city}}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            @if (config.value.type === 'uk-company') {
+              <div>
+                Number: {{config.value.company_number}}
+              </div>
+            }
+            @if (config.value.type === 'sole-trader') {
+              <div>
+                Sole tradership
+              </div>
+            }
+            @if (config.value.type === 'non-uk-company') {
+              <div>
+                Non-UK company
+              </div>
+            }
+            @if (config.value.type === 'sole-trader') {
+              <div>
+                Proprietor: {{config.value.contact_name}}
+              </div>
+            }
+            @if (config.value.type === 'non-uk-company') {
+              <div>
+                Incorporated in: {{config.value.contact_country}}
+              </div>
+            }
+            @if (config.value.type === 'uk-company') {
+              <div>
+                Registered in: {{country_label(config.value.country)}}
+              </div>
+            }
+          </mat-card-content>
+          <mat-card-actions align="start">
+            <button mat-button (click)="edit(config.key)">
+              <mat-icon>edit</mat-icon> EDIT
+            </button>
+            <button mat-button (click)="delete(config.key, config.value)">
+              <mat-icon>delete</mat-icon> DELETE
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
     </div>
 
   </div>

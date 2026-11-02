@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatNativeDateModule } from '@angular/material/core';
 import {
     DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
 } from '@angular/material/core';
@@ -28,36 +27,34 @@ import {
 } from './error-dialog/error-dialog.component';
 
 @NgModule({
-    declarations: [
-	SafePipe,
+    imports: [
+        CommonModule,
+        MatProgressBarModule,
+        MatIconModule,
+        MatTableModule,
+        MatDialogModule,
+        MatProgressSpinnerModule,
+        MatButtonModule,
+        SafePipe,
         ImageUploaderComponent,
         RenderComponent,
         KeyValueTableComponent,
-	ErrorDialogComponent,
-    ],
-    imports: [
-	CommonModule,
-	MatProgressBarModule,
-	MatIconModule,
-	MatTableModule,
-	MatDialogModule,
-	MatProgressSpinnerModule,
-	MatButtonModule,
+        ErrorDialogComponent,
     ],
     exports: [
-	SafePipe,
+        SafePipe,
         ImageUploaderComponent,
-	RenderComponent,
-	KeyValueTableComponent,
+        RenderComponent,
+        KeyValueTableComponent,
     ],
     providers: [
-	{ provide: LOCALE_ID, useValue: "en-GB" },
-	{ provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
-	{
+        { provide: LOCALE_ID, useValue: "en-GB" },
+        { provide: DEFAULT_CURRENCY_CODE, useValue: 'GBP' },
+        {
             provide: DateAdapter, useClass: MomentDateAdapter,
-	    deps: [MAT_DATE_LOCALE]
-	},
-	{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
+            deps: [MAT_DATE_LOCALE]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
     ]
 })
 export class SharedModule { }

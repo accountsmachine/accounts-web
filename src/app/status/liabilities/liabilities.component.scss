@@ -1,5 +1,5 @@
 
-@import "../../../theme.scss";
+@use "../../../theme.scss" as *;
 
 .tab-contents {
     padding: 1rem;

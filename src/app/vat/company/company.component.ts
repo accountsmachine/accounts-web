@@ -1,22 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 
 import moment from 'moment';
 
-import { CompanyService, Company, Companies } from '../../company/company.service';
+import { CompanyService, Companies } from '../../company/company.service';
 import { WorkingService } from '../../working.service';
-import { VatConfig } from '../vat-config';
 import { VatConfigService } from '../vat-config.service';
+import { VatConfig } from '../vat-config';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { KeyValuePipe } from '@angular/common';
 
 @Component({
     selector: 'vat-company',
     templateUrl: './company.component.html',
-    styleUrls: ['./company.component.scss']
+    styleUrls: ['./company.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, MatHint, MatButton, KeyValuePipe]
 })
-export class CompanyComponent implements OnInit {
+export class CompanyComponent {
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private companyService = inject(CompanyService);
+    private snackBar = inject(MatSnackBar);
+    private filing = inject(VatConfigService);
+    private fb = inject(FormBuilder);
+    working = inject(WorkingService);
+
 
     companies : Companies = {};
 
@@ -25,17 +40,9 @@ export class CompanyComponent implements OnInit {
     });
 
     id = "";
-    config : any = {};
+    config : VatConfig = {};
 
-    constructor(
-	private route : ActivatedRoute,
-	private router : Router,
-	private companyService : CompanyService,
-	private snackBar : MatSnackBar,
-	private filing : VatConfigService,
-	private fb : FormBuilder,
-	public working : WorkingService,
-    ) {
+    constructor() {
 
 	this.route.params.subscribe(
 	    params => {
@@ -53,7 +60,7 @@ export class CompanyComponent implements OnInit {
 			this.config = e.config;
 			this.load();
 		    },
-		    error: err => {
+		    error: _err => {
 			this.working.stop();
 		    },
 		    complete: () => {
@@ -70,10 +77,7 @@ export class CompanyComponent implements OnInit {
 
     }
 
-    ngOnInit() : void {
-    }
-
-    to_date(d : any) {
+    to_date(d : string) {
 	return moment(d);
     }
 
@@ -83,16 +87,16 @@ export class CompanyComponent implements OnInit {
 	});
     }
 
-    from_date(d : any) {
+    from_date(d : moment.Moment) {
 	return d.format("YYYY-MM-DD");
     }
 
     submit() {
 
-	this.config.company = this.form.value.company;
+	this.config.company = this.form.value.company ?? undefined;
 
 	this.filing.save().subscribe(
-	    e => {
+	    _e => {
 		this.snackBar.open("Configuration saved", "dismiss",
 				   { duration: 5000 });
 	    }

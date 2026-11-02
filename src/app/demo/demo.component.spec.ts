@@ -8,8 +8,8 @@ describe( 'NestedComponent', () => {
 
   beforeEach( async( () => {
     TestBed.configureTestingModule( {
-      declarations: [ NestedComponent ]
-    } )
+    imports: [NestedComponent]
+} )
       .compileComponents();
   } ) );
 

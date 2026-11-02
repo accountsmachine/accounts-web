@@ -1,35 +1,30 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { Component, OnInit, Input, OnChanges, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { MatTableDataSource } from '@angular/material/table';
-import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow } from '@angular/material/table';
 
-import { StatusService, Statuses } from '../status.service';
+
 import { VatService, Payment } from '../../vat/vat.service';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'payments',
-  templateUrl: './payments.component.html',
-  styleUrls: ['./payments.component.scss']
+    selector: 'payments',
+    templateUrl: './payments.component.html',
+    styleUrls: ['./payments.component.scss'],
+    imports: [MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, CurrencyPipe, DatePipe]
 })
 export class PaymentsComponent implements OnInit, OnChanges {
+    private route = inject(ActivatedRoute);
+    private vat = inject(VatService);
 
-    id : string = "";
-    @Input("payments") payments : Payment[] = [];
+
+    id  = "";
+    @Input() payments : Payment[] = [];
 
     columns = ["received", "amount"];
 
     data : MatTableDataSource<Payment> =
 	new MatTableDataSource<Payment>([]);
-
-    constructor(
-	private route : ActivatedRoute,
-	private vat : VatService,
-    ) {
-    }
 
     update() : void {
 	this.data.data = this.payments;

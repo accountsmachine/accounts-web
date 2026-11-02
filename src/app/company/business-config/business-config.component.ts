@@ -1,21 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import moment from 'moment';
 
 import { CompanyService, Company } from '../company.service';
 import { WorkingService } from '../../working.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatHint, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatDatepickerInput, MatDatepickerToggle, MatDatepicker } from '@angular/material/datepicker';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatIcon } from '@angular/material/icon';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'business-config',
     templateUrl: './business-config.component.html',
-    styleUrls: ['./business-config.component.scss']
+    styleUrls: ['./business-config.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatHint, MatDatepickerInput, MatDatepickerToggle, MatSuffix, MatDatepicker, MatSelect, MatOption, MatChipGrid, MatChipRow, MatChipRemove, MatIcon, MatChipInput, MatSlideToggle, MatButton]
 })
 export class BusinessConfigComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private state = inject(CompanyService);
+    private snackBar = inject(MatSnackBar);
+    private working = inject(WorkingService);
+
 
     readonly chipSeparatorKeysCodes = [ENTER, COMMA] as const;
 
@@ -24,7 +39,7 @@ export class BusinessConfigComponent implements OnInit {
 	company_number: new FormControl({value: '', disabled: true}, [
 //	    Validators.required, Validators.pattern("[0-9]{8}")
 	]),
-	registration_date: new FormControl<any>('', [Validators.required]),
+	registration_date: new FormControl<moment.Moment | string>('', [Validators.required]),
 	owner: new FormControl('', []),
 	country: new FormControl('', []),
 	form: new FormControl('', []),
@@ -33,18 +48,13 @@ export class BusinessConfigComponent implements OnInit {
 	jurisdiction: new FormControl<string>('', []),
     });
 
-    constructor(
-	private route : ActivatedRoute,
-	private state: CompanyService,
-	private snackBar: MatSnackBar,
-	private working : WorkingService,
-    ) {
+    constructor() {
 	this.company = new Company();
     }
 
     company : Company;
 
-    to_date(d : any) {
+    to_date(d : string) {
 	return moment(d);
     }
 
@@ -78,7 +88,7 @@ export class BusinessConfigComponent implements OnInit {
 				this.load();
 			    }
 			},
-			error: (e) => {
+			error: (_e) => {
 			    this.working.stop();
 			}
 		    });
@@ -88,11 +98,13 @@ export class BusinessConfigComponent implements OnInit {
     }
 
     public success() {
-	let snack = this.snackBar.open("Configuration saved", "dismiss",
+	this.snackBar.open("Configuration saved", "dismiss",
 				       { duration: 5000 });
     }
 
-    from_date(d : any) {
+    from_date(d : moment.Moment | string | null | undefined) {
+	if (!d) return "";
+	if (typeof d === "string") return d;
 	return d.format("YYYY-MM-DD");
     }
 
@@ -140,8 +152,8 @@ export class BusinessConfigComponent implements OnInit {
 	this.working.start();
 
 	this.state.save().subscribe({
-	    next: (e) => { this.working.stop(); this.success(); },
-	    error: (e) => { this.working.stop(); },
+	    next: () => { this.working.stop(); this.success(); },
+	    error: (_e) => { this.working.stop(); },
 	    complete: () => {},
 	});
 

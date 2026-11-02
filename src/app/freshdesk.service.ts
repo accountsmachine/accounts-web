@@ -3,17 +3,18 @@ import { Injectable } from '@angular/core';
 export abstract class Config {
   abstract widgetId: number;
   abstract locale: string;
-  abstract callback(widget : any): any;
+  abstract callback(widget : (...args: unknown[]) => void): void;
 }
 
-function getWindow(): any {
-  return window;
+function getWindow(): Window & Record<string, unknown> {
+  return window as unknown as Window & Record<string, unknown>;
 }
 
 @Injectable()
 export class FreshdeskService {
 
-    constructor(private config? : Config) {
+    // eslint-disable-next-line @angular-eslint/prefer-inject
+    constructor(private config: Config) {
 
 	if (this.config == undefined) return;
 
@@ -27,31 +28,33 @@ export class FreshdeskService {
 
 	const script = document.createElement('script');
 
-	let id = this.config.widgetId;
+	const id = this.config.widgetId;
 
 	script.type = 'text/javascript';
 	script.async = true;
 	script.src = `https://euc-widget.freshworks.com/widgets/${id}.js`;
 
-	window.fwSettings = {
+	window['fwSettings'] = {
 	    'widget_id': id,
 	    'locale': this.config.locale
 	};
 
-	window.FreshworksWidget || function() {
-	    if ("function" != typeof window.FreshworksWidget) {
-		let n : any = function() {
+	/* eslint-disable @typescript-eslint/no-unused-expressions, @typescript-eslint/no-explicit-any, prefer-rest-params */
+	window['FreshworksWidget'] || function() {
+	    if ("function" != typeof window['FreshworksWidget']) {
+		const n : any = function() {
 		    n['q'].push(arguments)
 		};
-		n['q'] = [], window.FreshworksWidget = n
+		n['q'] = [], window['FreshworksWidget'] = n
 	    }
 	}();
+	/* eslint-enable @typescript-eslint/no-unused-expressions, @typescript-eslint/no-explicit-any, prefer-rest-params */
 
-	let cfg = this.config;
+	const cfg = this.config;
 
-	script.onload = function (event) {
+	script.onload = function (_event) {
 	    try {
-		cfg.callback(window.FreshworksWidget);
+		cfg.callback(window['FreshworksWidget'] as (...args: unknown[]) => void);
 	    } catch (error) {
 		console.log("error.: ", error)
 	    }
@@ -65,9 +68,9 @@ export class FreshdeskService {
 
     }
 
-    get FreshworksWidget() {
+    get FreshworksWidget() : (...args: unknown[]) => void {
 	const window = getWindow();
-	return window.FreshworksWidget;
+	return window['FreshworksWidget'] as (...args: unknown[]) => void;
     }
 
 }

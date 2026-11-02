@@ -1,41 +1,40 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { AuthService } from '../../auth.service';
 import { WorkingService } from '../../working.service';
 import { FrontPageService } from '../front-page.service';
+import { MatCard, MatCardTitle } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    styleUrls: ['./login.component.scss'],
+    imports: [MatCard, MatCardTitle, FormsModule, MatFormField, MatLabel, MatInput, MatButton]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
+    private auth = inject(AuthService);
+    private state = inject(FrontPageService);
+    working = inject(WorkingService);
 
-    username : string = "";
-    password : string = "";
 
-    constructor(
-	private auth : AuthService,
-	private state : FrontPageService,
-	public working : WorkingService,
-    ) { }
-
-    ngOnInit(): void {
-    }
+    username  = "";
+    password  = "";
 
     login() {
 
 	this.working.start();
 
-	let cmp = this;
-
 	this.auth.login(
 	    this.username, this.password
 	).subscribe({
-	    next(e : any) { cmp.working.stop(); },
-	    error(e : Error) { cmp.working.stop(); },
-	    complete() { }
+	    next: () => { this.working.stop(); },
+	    error: () => { this.working.stop(); },
+	    complete: () => { }
 	}
 	);
 

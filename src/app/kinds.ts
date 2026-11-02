@@ -1,9 +1,7 @@
 
-type KindLabel = {
-    [key: string]: string;
-};
+type KindLabel = Record<string, string>;
 
-let kind_labels : KindLabel = {
+const kind_labels : KindLabel = {
     "accounts": "company accounts",
     "vat": "vat",
     "corptax": "corporation tax",

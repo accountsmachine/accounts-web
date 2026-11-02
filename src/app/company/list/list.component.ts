@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+    MatDialog
 } from '@angular/material/dialog';
 
 import { CompanyService, Company, Companies } from '../company.service';
@@ -12,23 +12,25 @@ import {
 import {
     ErrorDialogComponent
 } from '../../shared/error-dialog/error-dialog.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions } from '@angular/material/card';
+import { UpperCasePipe, KeyValuePipe } from '@angular/common';
 
 @Component({
     selector: 'list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss']
+    styleUrls: ['./list.component.scss'],
+    imports: [MatButton, MatIcon, MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatCardActions, UpperCasePipe, KeyValuePipe]
 })
 export class ListComponent implements OnInit {
+    private router = inject(Router);
+    private companyService = inject(CompanyService);
+    private dialog = inject(MatDialog);
+    private working = inject(WorkingService);
+
 
     configs : Companies = {};
-
-    constructor(
-	private router : Router,
-	private companyService : CompanyService,
-	private dialog : MatDialog,
-	private working : WorkingService,
-    ) {
-    }
 
     ngOnInit() : void {
 	this.reload();
@@ -36,16 +38,14 @@ export class ListComponent implements OnInit {
 
     reload() {
 
-	let cmp = this;
-
 	this.working.start();
 
 	this.companyService.get_list().subscribe({
 	    next: (e) => {
-		cmp.configs = e;
+		this.configs = e;
 		this.working.stop();
 	    },
-	    error: (e) => {
+	    error: (_e) => {
 		this.working.stop();
 		this.error("Failed to load company list");
 	    },
@@ -83,7 +83,7 @@ export class ListComponent implements OnInit {
 	    }
 	);
 	
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { proceed: boolean }) => {
 	    if (result) {
 		if (result.proceed) {
 		    this.working.start();
@@ -110,7 +110,7 @@ export class ListComponent implements OnInit {
 		},
 	    }
 	);
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { retry: boolean }) => {
 	    if (result) {
 		if (result.retry) {
 		    this.reload();

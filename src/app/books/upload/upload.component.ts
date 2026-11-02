@@ -1,47 +1,50 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ProgressBarMode } from '@angular/material/progress-bar';
+import { ProgressBarMode, MatProgressBar } from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { BooksService } from '../books.service';
+import { BooksService, BookInfo } from '../books.service';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'upload',
     templateUrl: './upload.component.html',
-    styleUrls: ['./upload.component.scss']
+    styleUrls: ['./upload.component.scss'],
+    imports: [MatButton, MatIcon, MatRadioGroup, FormsModule, MatRadioButton, MatProgressBar, DatePipe]
 })
-export class UploadComponent implements OnInit {
+export class UploadComponent implements AfterViewInit {
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private books = inject(BooksService);
+    private snackBar = inject(MatSnackBar);
+
 
     file = "";
     filename = "";
     status = "idle";
     kind = "gnucash-sqlite"
     
-    books_info : any = null;
+    books_info : BookInfo | null = null;
 
     get length() {
-	return Math.round(this.books_info.length / 1024) + " kB"
+	return Math.round(this.books_info!.length / 1024) + " kB"
     }
 
     get time() {
-	let d = new Date(this.books_info.time + "Z");
+	const d = new Date(this.books_info!.time + "Z");
 	return d;
     }
 
     mode : ProgressBarMode = "determinate";
 
-    uploadProgress : number = 0;
+    uploadProgress  = 0;
     uploadSub : Subscription | null = null;
-
-    constructor(
-	private route : ActivatedRoute,
-	private router : Router,
-	private books : BooksService,
-	private snackBar: MatSnackBar,
-    ) {
-    }
 
     update_books_info() {
 	this.books.get_books_info(this.id).subscribe(
@@ -49,9 +52,7 @@ export class UploadComponent implements OnInit {
 	);
     }
 
-    id : string = "";
-
-    ngOnInit() : void {}
+    id  = "";
 
     ngAfterViewInit(): void {
 	this.route.params.subscribe(
@@ -64,8 +65,8 @@ export class UploadComponent implements OnInit {
 	);
     }
 
-    calc(event : any) : number {
-	let val = Math.round(100 * (event.loaded / event.total));
+    calc(event : { loaded: number; total: number }) : number {
+	const val = Math.round(100 * (event.loaded / event.total));
 	return val;
     }
 
@@ -85,7 +86,7 @@ export class UploadComponent implements OnInit {
 	this.router.navigate(["/books/" + this.id + "/detail"]);
     }
 
-    onError(err : any) {
+    onError(err : Error | { error?: string }) {
 
 	this.mode = 'determinate';
 	this.status = 'complete';
@@ -93,22 +94,17 @@ export class UploadComponent implements OnInit {
 
 	console.log(err);
 
-	var errmsg = "";
-	if (err.error) {
-	    errmsg = err.error;
-	} else {
-	    errmsg = err.toString();
-	}
+	const errmsg = ('error' in err && err.error) ? err.error : err.toString();
 
 	this.snackBar.open(errmsg, "dismiss", { duration: 5000 });
 
     }
 
-    onFileSelected(event : any) {
+    onFileSelected(event : Event) {
 
 	this.mode = 'determinate';
 	this.status = 'uploading...';
-        const file:File = event.target.files[0];
+        const file:File = (event.target as HTMLInputElement).files![0];
 	
         if (file) {
 	    

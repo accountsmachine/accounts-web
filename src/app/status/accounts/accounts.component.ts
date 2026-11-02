@@ -1,48 +1,51 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest } from 'rxjs';
 
-import { MatTableDataSource } from '@angular/material/table';
 import {
-    MatDialog, MatDialogRef, MAT_DIALOG_DATA
+    MatDialog
 } from '@angular/material/dialog';
 
-import { StatusService, Statuses } from '../status.service';
-import { CompanyService, Companies, Company } from '../../company/company.service';
+import { StatusService } from '../status.service';
+import { CompanyService, Company } from '../../company/company.service';
 import { AccountsService } from '../../accounts/accounts.service';
 import {
     DisconnectConfirmationComponent
 } from '../disconnect-confirmation/disconnect-confirmation.component';
+import { MatCard } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-accounts',
-  templateUrl: './accounts.component.html',
-  styleUrls: ['./accounts.component.scss']
+    selector: 'app-accounts',
+    templateUrl: './accounts.component.html',
+    styleUrls: ['./accounts.component.scss'],
+    imports: [MatCard, MatIcon, FormsModule, MatFormField, MatLabel, MatInput, MatHint, MatButton]
 })
 export class AccountsComponent implements OnInit {
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+    private statusService = inject(StatusService);
+    private accounts = inject(AccountsService);
+    private companyService = inject(CompanyService);
+    private dialog = inject(MatDialog);
+
 
     setup = false;
 
-    authentication_code : string = "";
-    id : string= "";
+    authentication_code  = "";
+    id = "";
 
     company : Company = new Company();
-
-    constructor(
-	private router : Router,
-	private route : ActivatedRoute,
-	private statusService : StatusService,
-	private accounts : AccountsService,
-	private companyService : CompanyService,
-	private dialog : MatDialog,
-    ) {
-    }
 
     ngOnInit(): void {
 
 	this.route.params.subscribe(
 	    params => {
-		let id = params["id"];
+		const id = params["id"];
 		combineLatest({
 		    status: this.statusService.get(id),
 		    companies: this.companyService.get_list(),
@@ -81,7 +84,7 @@ export class AccountsComponent implements OnInit {
 	    }
 	);
 	
-	dialogRef.afterClosed().subscribe((result : any) => {
+	dialogRef.afterClosed().subscribe((result : { proceed?: boolean } | undefined) => {
 	    if (result) {
 		if (result.proceed) {
 		    this.accounts.deauthorize(this.id).subscribe(() => {

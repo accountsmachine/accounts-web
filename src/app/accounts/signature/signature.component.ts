@@ -1,55 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import moment from 'moment';
-import { Observable } from 'rxjs';
 
 import { AccountsConfig } from '../accounts-config';
 import { AccountsConfigService } from '../accounts-config.service';
 
 import { SignatureService } from '../signature.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { ImageUploaderComponent } from '../../shared/image-uploader/image-uploader.component';
+import { Observable } from 'rxjs';
 
 class Uploader {
-    svc : any;
-    cmp : any;
-    constructor(cmp : any) {
-	this.svc = cmp.signatureService;
-	this.cmp = cmp;
+    svc : SignatureService;
+    id : () => string;
+    constructor(svc : SignatureService, id : () => string) {
+	this.svc = svc;
+	this.id = id;
     }
-    upload(x : any) {
-	return this.svc.upload(this.cmp.id, x);
+    upload(x : File) : Observable<number> {
+	return this.svc.upload(this.id(), x);
     }
-};
+}
 
 @Component({
     selector: 'signature',
     templateUrl: './signature.component.html',
-    styleUrls: ['./signature.component.scss']
+    styleUrls: ['./signature.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, ImageUploaderComponent]
 })
 export class SignatureComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private filing = inject(AccountsConfigService);
+    private signatureService = inject(SignatureService);
 
-    id : string = "";
+
+    id  = "";
 
     filename = "";
 
-    upload = new Uploader(this);
+    upload = new Uploader(this.signatureService, () => this.id);
 
-    imgbin : any | null = null;
-    imgtype : string = "";
-    
-    constructor(
-	private route : ActivatedRoute,
-	private filing: AccountsConfigService,
-	private signatureService : SignatureService,
-    ) {
-    }
+    imgbin : Blob | null = null;
+    imgtype  = "";
 
     config : AccountsConfig | null = null;
 
-    public image_url : any | null = null;
+    public image_url : string | ArrayBuffer | null = null;
     
     createImageFromBlob(image: Blob) {
 
-	let reader = new FileReader();
+	const reader = new FileReader();
 
 	reader.addEventListener("load", () => {
 	    this.image_url = reader.result;
@@ -70,14 +70,14 @@ export class SignatureComponent implements OnInit {
 	    }
 	);
 
-	this.signatureService.onload().subscribe((img : any) => {
+	this.signatureService.onload().subscribe(() => {
 	    this.update_signature();
 	});
 
     }
 
     update_signature() {
-	this.signatureService.get(this.id).subscribe((img : any) => {
+	this.signatureService.get(this.id).subscribe((img : Blob) => {
 	    this.createImageFromBlob(img);
 	});
     }

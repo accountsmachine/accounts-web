@@ -7,43 +7,49 @@
 
     <mat-form-field>
       <input matInput (keyup)="apply_filter($event.target)"
-	     placeholder="Filter">
+        placeholder="Filter">
     </mat-form-field>
 
     <mat-table #table [dataSource]="mapping" matSort>
 
       <ng-container matColumnDef="line">
-	<mat-header-cell mat-sort-header *matHeaderCellDef>
-	  Accounting line
-	</mat-header-cell>
-	<mat-cell *matCellDef="let row">{{row.line}}</mat-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef>
+          Accounting line
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.line}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="box">
-	<mat-header-cell mat-sort-header *matHeaderCellDef>
-	  VAT box
-	</mat-header-cell>
-	<mat-cell *matCellDef="let row">{{row.box}}</mat-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef>
+          VAT box
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.box}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="accounts">
-	<mat-header-cell class="header-right" mat-sort-header *matHeaderCellDef>
-	  Mapped accounts
-	</mat-header-cell>
-	<mat-cell *matCellDef="let row">
-	  <div *ngFor="let acct of row.mapping"
-	       [class]="'mapping ' + (acct.reversed ? 'reverse' : 'add')">
-	    <mat-icon *ngIf="acct.reversed">remove</mat-icon>
-	    <mat-icon *ngIf="!acct.reversed">add_circle</mat-icon>
-	    {{acct.account}}
-	  </div>
-	</mat-cell>
+        <mat-header-cell class="header-right" mat-sort-header *matHeaderCellDef>
+          Mapped accounts
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          @for (acct of row.mapping; track acct) {
+            <div
+              [class]="'mapping ' + (acct.reversed ? 'reverse' : 'add')">
+              @if (acct.reversed) {
+                <mat-icon>remove</mat-icon>
+              }
+              @if (!acct.reversed) {
+                <mat-icon>add_circle</mat-icon>
+              }
+              {{acct.account}}
+            </div>
+          }
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
 
       <mat-row matRipple *matRowDef="let row; columns: columns;"
-	       (click)="select(row)">
+        (click)="select(row)">
       </mat-row>
 
     </mat-table>
@@ -71,7 +77,7 @@
       For help with VAT account mapping
       see
       <a href="https://accountsmachine.io/vat-mapping">
-	Mapping your VAT accounts to the VAT return
+        Mapping your VAT accounts to the VAT return
       </a>.
     </p>
   </div>

@@ -9,17 +9,15 @@ import { ChecklistTableComponent
        } from './checklist-table/checklist-table.component';
 
 @NgModule({
-    declarations: [
-	ChecklistTableComponent,
-    ],
     exports: [
-	ChecklistTableComponent,
+        ChecklistTableComponent,
     ],
     imports: [
-	MatIconModule,
-	MatTableModule,
-	MatButtonModule,
-	CommonModule,
+        MatIconModule,
+        MatTableModule,
+        MatButtonModule,
+        CommonModule,
+        ChecklistTableComponent,
     ]
 })
 export class ChecklistModule { }

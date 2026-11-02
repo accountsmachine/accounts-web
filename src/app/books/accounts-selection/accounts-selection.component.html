@@ -3,83 +3,103 @@
 
 <mat-dialog-content>
 
-  <p *ngIf="key == 'vat-output-sales'">
-    This value corresponds with VAT return box 1:
-    VAT due on sales and other outputs.
-  </p>
-  <p *ngIf="key == 'vat-output-acquisitions'">
-    This value corresponds with VAT return box 2:
-    VAT period on acquisitions of goods made in Northern Ireland
-    from EU Member States
-  </p>
-  <p *ngIf="key == 'vat-input'">
-    This value corresponds with VAT return box 4:
-    VAT reclaimed on purchases and other inputs.
-  </p>
-  <p *ngIf="key == 'total-vatex-sales'">
-    This value corresponds with VAT return box 6:
-    total value of sales and all other outputs excluding any VAT.
-  </p>
-  <p *ngIf="key == 'total-vatex-purchases'">
-    This value corresponds with VAT return box 7:
-    total value of purchases and all other inputs excluding any VAT.
-  </p>
-  <p *ngIf="key == 'total-vatex-goods-supplied'">
-    This value corresponds with VAT return box 8:
-    total value of all supplies of goods and related costs, excluding any VAT,
-    to EU member states.
-  </p>
-  <p *ngIf="key == 'total-vatex-acquisitions'">
-    This value corresponds with VAT return box 9:
-    the total value of all acquisitions of goods and related costs, excluding
-    any VAT, from EU member states.
-  </p>
+  @if (key === 'vat-output-sales') {
+    <p>
+      This value corresponds with VAT return box 1:
+      VAT due on sales and other outputs.
+    </p>
+  }
+  @if (key === 'vat-output-acquisitions') {
+    <p>
+      This value corresponds with VAT return box 2:
+      VAT period on acquisitions of goods made in Northern Ireland
+      from EU Member States
+    </p>
+  }
+  @if (key === 'vat-input') {
+    <p>
+      This value corresponds with VAT return box 4:
+      VAT reclaimed on purchases and other inputs.
+    </p>
+  }
+  @if (key === 'total-vatex-sales') {
+    <p>
+      This value corresponds with VAT return box 6:
+      total value of sales and all other outputs excluding any VAT.
+    </p>
+  }
+  @if (key === 'total-vatex-purchases') {
+    <p>
+      This value corresponds with VAT return box 7:
+      total value of purchases and all other inputs excluding any VAT.
+    </p>
+  }
+  @if (key === 'total-vatex-goods-supplied') {
+    <p>
+      This value corresponds with VAT return box 8:
+      total value of all supplies of goods and related costs, excluding any VAT,
+      to EU member states.
+    </p>
+  }
+  @if (key === 'total-vatex-acquisitions') {
+    <p>
+      This value corresponds with VAT return box 9:
+      the total value of all acquisitions of goods and related costs, excluding
+      any VAT, from EU member states.
+    </p>
+  }
 
   <p>
     Selected mapping:
   </p>
 
   <div class="selected">
-    <div *ngFor="let acct of data.mapping"
-	 [class]="'mapping ' + (acct.reversed ? 'reverse' : 'add')">
-      <mat-icon *ngIf="acct.reversed">remove</mat-icon>
-      <mat-icon *ngIf="!acct.reversed">add_circle</mat-icon>
-      {{acct.account}}
-      <button mat-button aria-label="Delete" (click)="unmap(acct.account)">
-	<mat-icon>delete</mat-icon>
-      </button>
-    </div>
+    @for (acct of data.mapping; track acct) {
+      <div
+        [class]="'mapping ' + (acct.reversed ? 'reverse' : 'add')">
+        @if (acct.reversed) {
+          <mat-icon>remove</mat-icon>
+        }
+        @if (!acct.reversed) {
+          <mat-icon>add_circle</mat-icon>
+        }
+        {{acct.account}}
+        <button mat-button aria-label="Delete" (click)="unmap(acct.account)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    }
   </div>
-  
+
   <div class="container mat-elevation-z8">
 
     <mat-form-field>
       <input matInput (keyup)="apply_filter($event.target)"
-	     placeholder="Filter">
+        placeholder="Filter">
     </mat-form-field>
 
     <mat-table #table [dataSource]="accounts" matSort>
 
       <ng-container matColumnDef="account">
-	<mat-header-cell mat-sort-header *matHeaderCellDef>
-	  Account
-	</mat-header-cell>
-	<mat-cell *matCellDef="let row">{{row.account}}</mat-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef>
+          Account
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.account}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">
-	<mat-header-cell mat-sort-header *matHeaderCellDef>
-	</mat-header-cell>
-	<mat-cell *matCellDef="let row">
-	  <button class="add" mat-icon-button aria-label="Add account normally"
-		  (click)="map(row.account, false)">
-	    <mat-icon>add_circle</mat-icon>
-	  </button>
-	  <button class="reverse" mat-icon-button aria-label="Add account reversed"
-		  (click)="map(row.account, true)">
-	    <mat-icon>remove</mat-icon>
-	  </button>
-	</mat-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <button class="add" mat-icon-button aria-label="Add account normally"
+            (click)="map(row.account, false)">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+          <button class="reverse" mat-icon-button aria-label="Add account reversed"
+            (click)="map(row.account, true)">
+            <mat-icon>remove</mat-icon>
+          </button>
+        </mat-cell>
       </ng-container>
 
       <mat-row *matRowDef="let row; columns: columns;">

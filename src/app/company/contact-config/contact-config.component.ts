@@ -1,42 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import moment from 'moment';
 
 import { CompanyService, Company } from '../company.service';
 import { WorkingService } from '../../working.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'contact-config',
-  templateUrl: './contact-config.component.html',
-  styleUrls: ['./contact-config.component.scss']
+    selector: 'contact-config',
+    templateUrl: './contact-config.component.html',
+    styleUrls: ['./contact-config.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatInput, MatHint, MatSelect, MatOption, MatButton]
 })
 export class ContactConfigComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private state = inject(CompanyService);
+    private snackBar = inject(MatSnackBar);
+    private working = inject(WorkingService);
+
 
     form = new FormGroup({
-	contact_email: new FormControl<any>
+	contact_email: new FormControl<string>
 	    ('', [Validators.required, Validators.email]),
-	contact_tel_country: new FormControl<any>(
+	contact_tel_country: new FormControl<string>(
 	    '', [ Validators.required, Validators.pattern("\\+[0-9]+") ]),
-	contact_tel_area: new FormControl<any>('', [
+	contact_tel_area: new FormControl<string>('', [
 	    Validators.required, Validators.pattern("[0-9]+")
 	]),
-	contact_tel_number: new FormControl<any>('', [
+	contact_tel_number: new FormControl<string>('', [
 	    Validators.required, Validators.pattern("[0-9]+")
 	]),
-	contact_tel_type: new FormControl<any>('', [
-	    Validators.required, 
+	contact_tel_type: new FormControl<string>('', [
+	    Validators.required,
 	]),
     });
 
-    constructor(
-	private route : ActivatedRoute,
-	private state: CompanyService,
-	private snackBar: MatSnackBar,
-	private working : WorkingService,
-    ) {
+    constructor() {
 	this.company = new Company();
     }
 
@@ -65,7 +71,7 @@ export class ContactConfigComponent implements OnInit {
 				this.load();
 			    }
 			},
-			error: (e) => {
+			error: (_e) => {
 			    this.working.stop();
 			}
 		    });
@@ -75,22 +81,22 @@ export class ContactConfigComponent implements OnInit {
     }
 
     public success() {
-	let snack = this.snackBar.open("Configuration saved", "dismiss",
+	this.snackBar.open("Configuration saved", "dismiss",
 				       { duration: 5000 });
     }
 
     public submit() {
-	this.company.contact_email = this.form.value.contact_email;
-	this.company.contact_tel_country = this.form.value.contact_tel_country;
-	this.company.contact_tel_area = this.form.value.contact_tel_area;
-	this.company.contact_tel_number = this.form.value.contact_tel_number;
-	this.company.contact_tel_type = this.form.value.contact_tel_type;
+	this.company.contact_email = this.form.value.contact_email ?? '';
+	this.company.contact_tel_country = this.form.value.contact_tel_country ?? '';
+	this.company.contact_tel_area = this.form.value.contact_tel_area ?? '';
+	this.company.contact_tel_number = this.form.value.contact_tel_number ?? '';
+	this.company.contact_tel_type = this.form.value.contact_tel_type ?? '';
 
 	this.working.start();
 
 	this.state.save().subscribe({
-	    next: (e) => { this.working.stop(); this.success(); },
-	    error: (e) => { this.working.stop(); },
+	    next: () => { this.working.stop(); this.success(); },
+	    error: (_e) => { this.working.stop(); },
 	    complete: () => {},
 	});
 

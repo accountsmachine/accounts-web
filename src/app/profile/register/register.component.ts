@@ -1,30 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { AuthService } from '../../auth.service';
 import { WorkingService } from '../../working.service';
 import { FrontPageService } from '../front-page.service';
 import { ReferrerService } from '../../referrer.service';
+import { MatCard, MatCardTitle } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'register',
     templateUrl: './register.component.html',
-    styleUrls: ['./register.component.scss']
+    styleUrls: ['./register.component.scss'],
+    imports: [MatCard, MatCardTitle, FormsModule, MatFormField, MatLabel, MatInput, MatHint, MatButton]
 })
 export class RegisterComponent implements OnInit {
+    private auth = inject(AuthService);
+    private state = inject(FrontPageService);
+    working = inject(WorkingService);
+    private referrer = inject(ReferrerService);
 
-    username : string = "";
-    password : string = "";
-    password2 : string = "";
-    phone : string = "";
-    name : string = "";
+
+    username  = "";
+    password  = "";
+    password2  = "";
+    phone  = "";
+    name  = "";
     ref = "";
-
-    constructor(
-	private auth : AuthService,
-	private state : FrontPageService,
-	public working : WorkingService,
-	private referrer : ReferrerService,
-    ) { }
 
     ngOnInit(): void {
 	this.referrer.onchange().subscribe(e => {

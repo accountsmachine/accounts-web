@@ -1,6 +1,6 @@
 
 // FIXME: Should cache information (lists).
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, Subject, of } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -8,12 +8,13 @@ import { v4 as uuid } from 'uuid';
 
 import { ApiService } from '../api.service';
 
-export type ConfigEvent = {
+export interface ConfigEvent {
     id : string;
-    config : any;    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    config : any;
 }
 
-export type FilingItem = {
+export interface FilingItem {
     id : string;
     kind : string;
     label : string;
@@ -25,19 +26,20 @@ export type FilingItem = {
     providedIn: 'root'
 })
 export class FilingConfigService {
+    private api = inject(ApiService);
 
-    id : string = "";
+
+    id  = "";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     config : any = {};
 
-    constructor(
-	private api: ApiService,
-    ) {
+    constructor() {
 
 	// All changes are announced on this subject.  Could be a lot of
 	// publications in a short space, so debounce to 1 notification
 	// every 100 ms.
 	this.onfieldchange_subject.pipe(debounceTime(100)).subscribe(
-	    e => {
+	    _e => {
 		this.onchange_subject.next({id: this.id, config: this.config});
 	    }
 	);
@@ -53,16 +55,16 @@ export class FilingConfigService {
     // FIXME: Cache filings?
 
     list() : Observable<FilingItem[]> {
-	let url = "/api/filings";
+	const url = "/api/filings";
 
 	return new Observable<FilingItem[]>(obs => {
 
-	    this.api.get<any[]>(url).subscribe({
+	    this.api.get<Record<string, FilingItem>>(url).subscribe({
 
 		next: (res) => {
 
-		    let f : FilingItem[] = [];
-		    for (var id in res) {
+		    const f : FilingItem[] = [];
+		    for (const id in res) {
 			f.push(res[id]);
 			res[id]["id"] = id;
 		    }
@@ -71,7 +73,7 @@ export class FilingConfigService {
 
 		},
 
-		error: (e) => { obs.error(); },
+		error: (_e) => { obs.error(); },
 		complete: () => { obs.complete(); },
 
 	    });
@@ -126,11 +128,11 @@ export class FilingConfigService {
 	    return of<ConfigEvent>({id: this.id, config: this.config});
 	}
 
-	let url = "/api/filing/" + id;
+	const url = "/api/filing/" + id;
 
 	return new Observable(obs => {
 
-	    this.api.get<any>(url).subscribe(config => {
+	    this.api.get<Record<string, unknown>>(url).subscribe(config => {
 		this.id = id;
 		this.config = config;
 		this.onload_subject.next({id: this.id, config: this.config});
@@ -143,11 +145,11 @@ export class FilingConfigService {
 
     save() {
 
-	let url = "/api/filing/" + this.id;
+	const url = "/api/filing/" + this.id;
 
 	return new Observable<void>(obs => {
 	    
-	    return this.api.put<any>(url, this.config).subscribe(e => {
+	    return this.api.put<unknown>(url, this.config).subscribe(_e => {
 		    this.onsave_subject.next({id: this.id, config: this.config});
 		    obs.next();
 		}
@@ -156,16 +158,16 @@ export class FilingConfigService {
 
     }
 
-    create(config : any) : Observable<string> {
+    create(config : Record<string, unknown>) : Observable<string> {
 
 	return new Observable<string>(obs => {
 
-	    this.list().subscribe(lst => {
+	    this.list().subscribe(_lst => {
 
 		this.id = uuid();
 		this.config = config;
 
-		this.save().subscribe(e => {
+		this.save().subscribe(_e => {
 		    obs.next(this.id);
 		});
 
@@ -179,13 +181,13 @@ export class FilingConfigService {
 	this.onfieldchange_subject.next(true);
     }
 
-    delete(id : any) : Observable<void> {
+    delete(id : string) : Observable<void> {
 
 	return new Observable<void>(obs => {
 
-	    let url = "/api/filing/" + id;
+	    const url = "/api/filing/" + id;
 
-	    this.api.delete(url).subscribe(config => {
+	    this.api.delete(url).subscribe(_config => {
 		obs.next();
 	    });
 
@@ -193,13 +195,13 @@ export class FilingConfigService {
 
     }
 
-    move_draft(id : any) : Observable<void> {
+    move_draft(id : string) : Observable<void> {
 
 	return new Observable<void>(obs => {
 
-	    let url = "/api/filing/" + id + "/move-draft";
+	    const url = "/api/filing/" + id + "/move-draft";
 
-	    this.api.post(url, {}).subscribe(config => {
+	    this.api.post(url, {}).subscribe(_config => {
 		obs.next();
 	    });
 
@@ -207,39 +209,39 @@ export class FilingConfigService {
 
     }
 
-    get_report(id : string) : any {
+    get_report(id : string) : Observable<unknown> {
 
-	let url = "/api/filing/" + id + "/report";
+	const url = "/api/filing/" + id + "/report";
 
 	return new Observable(obs => {
 
-	    this.api.get(url, {responseType: 'text'}).subscribe(config => {
+	    this.api.get(url, {responseType: 'text'}).subscribe(report => {
+		obs.next(report);
+	    });
+	});
+	
+    }
+
+    get_data(id : string) : Observable<unknown> {
+
+	const url = "/api/filing/" + id + "/data";
+
+	return new Observable(obs => {
+
+	    this.api.get<unknown>(url).subscribe(config => {
 		obs.next(config);
 	    });
 	});
 	
     }
 
-    get_data(id : string) : any {
+    get_status(id : string) : Observable<unknown> {
 
-	let url = "/api/filing/" + id + "/data";
-
-	return new Observable(obs => {
-
-	    this.api.get<any>(url).subscribe(config => {
-		obs.next(config);
-	    });
-	});
-	
-    }
-
-    get_status(id : string) : any {
-
-	let url = "/api/filing/" + id + "/status";
+	const url = "/api/filing/" + id + "/status";
 
 	return new Observable(obs => {
 
-	    this.api.get<any>(url).subscribe(config => {
+	    this.api.get<unknown>(url).subscribe(config => {
 		obs.next(config);
 	    });
 	});
@@ -248,9 +250,9 @@ export class FilingConfigService {
 
     submit(id : string, kind : string) {
 
-	let url = "/api/" + kind + "/submit/" + id;
+	const url = "/api/" + kind + "/submit/" + id;
 
-    	return this.api.post<any>(url, {});
+    	return this.api.post<unknown>(url, {});
 
     }
 

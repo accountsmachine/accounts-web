@@ -5,122 +5,111 @@
     <mat-drawer mode="side" class="drawer-side" opened>
       <navigator></navigator>
     </mat-drawer>
-    
+
     <mat-drawer-content class="main-content">
 
-      <div *ngIf="data.data.length < 1">
-	No transaction records to display.
-      </div>
+      @if (data.data.length < 1) {
+        <div>
+          No transaction records to display.
+        </div>
+      }
 
-      <div class="container mat-elevation-z8" *ngIf="data.data.length > 0">
-
-	<mat-table #table [dataSource]="data">
-
-	  <ng-container matColumnDef="time">
-	    <mat-header-cell mat-header-cell
-			     *matHeaderCellDef>Time</mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      {{row.time | date:'dd/MM/YYYY HH:mm'}}
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="type">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Type
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      {{row.type}}
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="status">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Stat
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      {{row.status}}
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="subtotal">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Subtotal
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      {{row.subtotal / 100 | currency}}
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="total">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Total
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      {{row.total / 100 | currency}}
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="v">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      VAT
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      <span class="{{row.v < 0 ? 'debit' : 'credit'}}">
-		{{row.v != 0 ? row.v : ''}}
-	      </span>
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="c">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Corp Tax
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      <span class="{{row.c < 0 ? 'debit' : 'credit'}}">
-		{{row.c != 0 ? row.c : ''}}
-	      </span>
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="a">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Acct
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-	      <span class="{{row.a < 0 ? 'debit' : 'credit'}}">
-		{{row.a != 0 ? row.a : ''}}
-	      </span>
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="company">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Company
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-		{{row.company}}
-	    </mat-cell>
-	  </ng-container>
-
-	  <ng-container matColumnDef="filing">
-	    <mat-header-cell mat-header-cell *matHeaderCellDef>
-	      Filing
-	    </mat-header-cell>
-	    <mat-cell mat-cell *matCellDef="let row">
-		{{row.filing}}
-	    </mat-cell>
-	  </ng-container>
-
-	  <mat-header-row *matHeaderRowDef="columns; sticky: true">
-	  </mat-header-row>
-
-	  <mat-row *matRowDef="let row; columns: columns;"
-		   (click)="select(row)">
-	  </mat-row>
-
-	</mat-table>
-
-      </div>
+      @if (data.data.length > 0) {
+        <div class="container mat-elevation-z8">
+          <mat-table #table [dataSource]="data">
+            <ng-container matColumnDef="time">
+              <mat-header-cell mat-header-cell
+              *matHeaderCellDef>Time</mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                {{row.time | date:'dd/MM/YYYY HH:mm'}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                Type
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                {{row.type}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="status">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                Stat
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                {{row.status}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="subtotal">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                Subtotal
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                {{row.subtotal / 100 | currency}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="total">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                Total
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                {{row.total / 100 | currency}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="v">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                VAT
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                <span class="{{row.v < 0 ? 'debit' : 'credit'}}">
+                  {{row.v !== 0 ? row.v : ''}}
+                </span>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="c">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                Corp Tax
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                <span class="{{row.c < 0 ? 'debit' : 'credit'}}">
+                  {{row.c !== 0 ? row.c : ''}}
+                </span>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="a">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                Acct
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                <span class="{{row.a < 0 ? 'debit' : 'credit'}}">
+                  {{row.a !== 0 ? row.a : ''}}
+                </span>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="company">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                Company
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                {{row.company}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="filing">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>
+                Filing
+              </mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let row">
+                {{row.filing}}
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="columns; sticky: true">
+            </mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"
+              (click)="select(row)">
+            </mat-row>
+          </mat-table>
+        </div>
+      }
 
     </mat-drawer-content>
 

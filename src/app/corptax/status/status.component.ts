@@ -1,25 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CorptaxConfig } from '../corptax-config';
 import { CorptaxConfigService } from '../corptax-config.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
 
 @Component({
-  selector: 'corptax-status',
-  templateUrl: './status.component.html',
-  styleUrls: ['./status.component.scss']
+    selector: 'corptax-status',
+    templateUrl: './status.component.html',
+    styleUrls: ['./status.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent]
 })
 export class StatusComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private filing = inject(CorptaxConfigService);
+
 
     id = "";
     config : CorptaxConfig = {};
 
-    status : string = "";
-
-    constructor(
-	private route : ActivatedRoute,
-	private filing : CorptaxConfigService,
-    ) {}
+    status  = "";
 
     ngOnInit(): void {
 
@@ -29,7 +30,7 @@ export class StatusComponent implements OnInit {
 		    this.id = params["id"];
 		    this.config = e.config;
 		    this.filing.get_status(this.id).subscribe(
-			(e : any) => this.status = e.report
+			(e : { report: string }) => this.status = e.report
 		    );
 		});
 	    }

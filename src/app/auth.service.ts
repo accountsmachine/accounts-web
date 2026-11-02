@@ -1,13 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
-import {
-    onAuthStateChanged
-} from 'firebase/auth';
 
 import {
     client_version, application_name, application_id
@@ -24,13 +20,16 @@ export enum AuthState {
     providedIn: 'root'
 })
 export class AuthService {
+    private http = inject(HttpClient);
+    fireAuth = inject(AngularFireAuth);
 
-    _auth : any | null = null;
-    _user : any | null = null;
-    _token : any | null = null;
+
+    _auth : firebase.User | null = null;
+    _user : string | null = null;
+    _token : string | null = null;
 
     onuser_subject = new BehaviorSubject<string | null>(null);
-    onauth_subject = new BehaviorSubject<any>(null);
+    onauth_subject = new BehaviorSubject<firebase.User | null>(null);
     onstatechange_subject = new BehaviorSubject<AuthState>(AuthState.UNINITIALISED);
     onerr_subject = new Subject<string>();
 
@@ -40,17 +39,12 @@ export class AuthService {
 	this.onerr_subject.next(err);
     }
 
-    constructor(
-	private http : HttpClient,
-	public fireAuth : AngularFireAuth,
-    ) {
-
-	let svc = this;
+    constructor() {
 
 	this.fireAuth.authState.subscribe({
-	    next(e : any) { svc.set_auth(e); },
-	    error(err : any) { },
-	    complete() {}
+	    next: (e) => { this.set_auth(e); },
+	    error: (_err) => { },
+	    complete: () => {}
 	});
     }
 
@@ -74,11 +68,11 @@ export class AuthService {
 	});
     }
 
-    onauth() : Observable<any> {
-	return new Observable<any>(obs => {
+    onauth() : Observable<firebase.User | null> {
+	return new Observable<firebase.User | null>(obs => {
 	    this.onauth_subject.subscribe({
-		next(e : any) { obs.next(e); },
-		error(e : Error) { },
+		next(e) { obs.next(e); },
+		error(_e : Error) { },
 		complete() {}
 	    });
 	});
@@ -92,11 +86,11 @@ export class AuthService {
 	});
     }
 
-    set_auth(auth : any | null) {
+    set_auth(auth : firebase.User | null) {
 
 	this._auth = auth;
 
-	let prev_state = (this._auth != null);
+	const _prev_state = (this._auth != null);
 
 	if (auth) {
 	    if (auth.emailVerified)
@@ -104,7 +98,8 @@ export class AuthService {
 	    else
 		this.auth_state = AuthState.UNVERIFIED;
 	    this._user = auth.uid;
-	    this._token = auth.auth.currentUser.accessToken;
+	    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+	    this._token = (auth as any).auth.currentUser.accessToken;
 	} else {
 	    this.auth_state = AuthState.UNAUTHENTICATED;
 	    this._user = null;
@@ -119,7 +114,7 @@ export class AuthService {
     }
 
     login(user : string, password : string) {
-	return new Observable<any>(obs => {
+	return new Observable<unknown>(obs => {
 
 	    this.fireAuth.signInWithEmailAndPassword(
 		user, password
@@ -168,13 +163,13 @@ export class AuthService {
     create_user(user : string, password : string, phone : string,
 		name : string, ref? : string) {
 
-	let headers = new HttpHeaders({
+	const headers = new HttpHeaders({
 		"X-Client-Version": client_version,
 		"X-Application-Name": application_name,
 		"X-Application-ID": application_id,
 	});
 
-	let reg : any = {
+	const reg : Record<string, string> = {
 	    email: user,
 	    password: password,
 	    phone_number: phone,
@@ -192,11 +187,11 @@ export class AuthService {
 		next: () => obs.next(),
 		error: (e) => {
 		    try {
-			let err = JSON.parse(e.error);
+			const err = JSON.parse(e.error);
 		        this.error(err.message);
 		        obs.error(err.message);
 			return;
-		    } catch (e) {
+		    } catch {
 		    }
 		    this.error(e.error);
 		    obs.error(e.error);
@@ -227,7 +222,7 @@ export class AuthService {
 	    this.fireAuth.sendPasswordResetEmail(
 		user
 	    ).then(
-		(t : any) => {
+		(_t: void) => {
 		    this.error(
 			"A password reset email has been emailed to you."
 		    );
@@ -235,7 +230,7 @@ export class AuthService {
 		    obs.complete();
 		}
 	    ).catch(
-		(error : any) => {
+		(error: { message: string }) => {
 		    obs.error(error.message);
 		    this.error(error.message);
 		}
@@ -250,14 +245,14 @@ export class AuthService {
 			{ displayName: name }
 
 		    ).then(
-			(t : any) => {
+			(_t: void) => {
 			    this.error(
 				"Profile saved"
 			    );
 			    obs.next()
 			}
 		    ).catch(
-			(error : any) => {
+			(error: { message: string }) => {
 			    obs.error(error.message);
 			}
 		    )
@@ -272,14 +267,14 @@ export class AuthService {
 		    res!.updateEmail(
 			email
 		    ).then(
-			(t : any) => {
+			(_t: void) => {
 			    this.error(
 				"Email address updated.  An email has been sent to the new address."
 			    );
 			    obs.next()
 			}
 		    ).catch(
-			(error : any) => {
+			(error: { message: string }) => {
 			    obs.error(error.message);
 			}
 		    )
@@ -293,14 +288,14 @@ export class AuthService {
 	    this.fireAuth.currentUser.then(res =>
 		    res!.sendEmailVerification(
 		    ).then(
-			(t : any) => {
+			(_t: void) => {
 			    this.error(
 				"Verification sent"
 			    );
 			    obs.next()
 			}
 		    ).catch(
-			(error : any) => {
+			(error: { message: string }) => {
 			    obs.error(error.message);
 			}
 		    )
@@ -314,14 +309,14 @@ export class AuthService {
 	    this.fireAuth.currentUser.then(res =>
 
 		res!.updatePassword(password).then(
-		    (t : any) => {
+		    (_t: void) => {
 			this.error(
 			    "Password set"
 			);
 			obs.next()
 		    }
 		).catch(
-		    (error : any) => {
+		    (error: { message: string }) => {
 			obs.error(error.message);
 		    }
 		)
@@ -333,7 +328,7 @@ export class AuthService {
     
     delete_user() {
 
-	let subs = this.get_token().subscribe({
+	const subs = this.get_token().subscribe({
 	
 	    next: (token : string | null) => {
 
@@ -342,7 +337,7 @@ export class AuthService {
 		    return;
 		}
 
-		let headers = new HttpHeaders({
+		const headers = new HttpHeaders({
 		    "Authorization": `Bearer ${token}`,
 		});
 
@@ -350,12 +345,12 @@ export class AuthService {
 		    "/api/user-account/delete", {}, {headers: headers}
 		).subscribe({
 
-		    next: (e : any) => {
+		    next: () => {
 			console.log("User deletion successful.");
 			this.logout();
 		    },
 
-		    error: (e : any) => {
+		    error: (e: unknown) => {
 			console.log(e);
 		    },
 
@@ -368,7 +363,7 @@ export class AuthService {
 
 	    },
 
-	    error: (e : any) => {
+	    error: (e: unknown) => {
 		console.log(e);
 	    	subs.unsubscribe();
 	    },

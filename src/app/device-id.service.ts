@@ -7,8 +7,6 @@ import { v4 as uuid } from 'uuid';
 })
 export class DeviceIdService {
 
-    constructor() { }
-
     get_id() : string {
 
 	let id = window.localStorage.getItem("device-id");
@@ -37,8 +35,8 @@ export class DeviceIdService {
             s += "+";
         }
 
-	let h = Math.floor(n / 60).toFixed(0);
-	let m = Math.floor(n % 60).toFixed(0);
+	const h = Math.floor(n / 60).toFixed(0);
+	const m = Math.floor(n % 60).toFixed(0);
 
 	if (h.length < 2) s += "0";
 	s += h
@@ -61,10 +59,10 @@ export class DeviceIdService {
     }
 
     get_screen_params() : string {
-	let s = this.get_screen_size();
-	let w = this.get_win_size();
-	let d = window.screen.colorDepth;
-	let r = window.devicePixelRatio;
+	const s = this.get_screen_size();
+	const w = this.get_win_size();
+	const d = window.screen.colorDepth;
+	const r = window.devicePixelRatio;
 	
 	return JSON.stringify([s[0], s[1], w[0], w[1], d, r]);
     }

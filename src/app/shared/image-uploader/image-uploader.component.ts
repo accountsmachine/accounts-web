@@ -1,21 +1,26 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { ProgressBarMode } from '@angular/material/progress-bar';
+import { Component, Input, inject } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { ProgressBarMode, MatProgressBar } from '@angular/material/progress-bar';
 import { ActivatedRoute } from '@angular/router';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+
+interface Uploader {
+    upload(file: File): Observable<number>;
+}
 
 @Component({
     selector: 'image-uploader',
     templateUrl: './image-uploader.component.html',
-    styleUrls: ['./image-uploader.component.scss']
+    styleUrls: ['./image-uploader.component.scss'],
+    imports: [MatButton, MatIcon, MatProgressBar]
 })
-export class ImageUploaderComponent implements OnInit {
+export class ImageUploaderComponent {
+    private route = inject(ActivatedRoute);
+
 
     @Input()
-    get progress() { return this._progress; }
-
-    @Input()
-    uploader : any = {};
+    uploader!: Uploader;
 
     file = "";
     filename = "";
@@ -25,8 +30,10 @@ export class ImageUploaderComponent implements OnInit {
 
     mode : ProgressBarMode = "determinate";
 
-    _progress : number = 0;
+    _progress  = 0;
 
+    @Input()
+    get progress() { return this._progress; }
     set progress(num : number) {
 	this._progress = num;
 	if (num >= 99) {
@@ -37,18 +44,10 @@ export class ImageUploaderComponent implements OnInit {
 
     uploadSub : Subscription | null = null;
 
-    constructor(
-	private route : ActivatedRoute,
-    ) {
-    }
+    id  = "";
 
-    id : string = "";
-
-    ngOnInit(): void {
-    }
-
-    private calc(event : any) : number {
-	let val = Math.round(100 * (event.loaded / event.total));
+    private calc(event : { loaded: number; total: number }) : number {
+	const val = Math.round(100 * (event.loaded / event.total));
 	return val;
     }
 
@@ -62,23 +61,21 @@ export class ImageUploaderComponent implements OnInit {
 	this.complete();
     }
 
-    onFileSelected(event : any) {
+    onFileSelected(event : Event) {
 
 	this.mode = 'determinate';
 	this.status = 'uploading...';
-        const file:File = event.target.files[0];
+        const file:File = (event.target as HTMLInputElement).files![0];
 	
         if (file) {
 	    
             this.filename = file.name;
 
-	    let cmp = this;
-	    
 	    this.uploadSub = this.uploader.upload(
 		file
 	    ).subscribe({
-		next(obs : number) { cmp.progress = obs; },
-		complete() { cmp.onComplete(); }
+		next: (obs : number) => { this.progress = obs; },
+		complete: () => { this.onComplete(); }
 	    });
 
 	}

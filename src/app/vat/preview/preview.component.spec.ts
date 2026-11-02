@@ -8,8 +8,8 @@ describe('VatPreviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VatPreviewComponent ]
-    })
+    imports: [VatPreviewComponent]
+})
     .compileComponents();
   });
 

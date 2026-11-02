@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Observable, map, of, Subject } from 'rxjs';
-import { debounceTime, take, tap } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 
 import { ApiService } from '../api.service';
@@ -8,21 +7,21 @@ import { ApiService } from '../api.service';
 import { DeviceIdService } from './../device-id.service';
 import { client_version, application_name, application_id } from '../../version';
 
-export type Obligation = {
+export interface Obligation {
     status: string,
     periodKey: string,
     start: Date,
     end: Date,
     received?: Date,
     due: Date,
-};
+}
 
-export type Payment = {
+export interface Payment {
     amount: number,
     received: Date,
-};
+}
 
-export type Liability = {
+export interface Liability {
     type: string,
     originalAmount: number,
     outstandingAmount?: number,
@@ -31,7 +30,7 @@ export type Liability = {
 	to: Date,
     },
     due: Date,
-};
+}
 
 export class Status {
     liabilities : Liability[] = [];
@@ -39,7 +38,7 @@ export class Status {
     obligations : Obligation[] = [];
 };
 
-export type Return = {
+export interface Return {
     periodKey: string,
     vatDueSales: number,
     vatDueAcquisitions: number,
@@ -50,25 +49,21 @@ export type Return = {
     totalValuePurchasesExVAT: number,
     totalValueGoodsSuppliedExVAT: number,
     totalAcquisitionsExVAT: number,
-};
+}
 
-export type Criteria = {
+export interface Criteria {
     cid : string,
     start : string,
     end : string,
-};
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class VatService {
+    private api = inject(ApiService);
+    private device = inject(DeviceIdService);
 
-    constructor(
-	private api : ApiService,
-	private device : DeviceIdService,
-    ) {
-
-    }
 
     code = "";
     state = "";
@@ -90,7 +85,7 @@ export class VatService {
 	url = url + "?start=" + start;
 	url = url + "&end=" + end;
 
-    	return this.api.get<any>(url, this.options);
+    	return this.api.get<Status>(url, this.options);
 
     }
 
@@ -104,7 +99,7 @@ export class VatService {
 
     getOpenObligations(cid : string) : Observable<Obligation[]> {
 
-	let url = "/api/vat/open-obligations/" + cid;
+	const url = "/api/vat/open-obligations/" + cid;
 
     	return this.api.get<Obligation[]>(
 	    url, this.options
@@ -140,7 +135,7 @@ export class VatService {
 	);
     }
 
-    receiveToken(code : any, state : any) {
+    receiveToken(code : string, state : string) {
 	this.code = code;
 	this.state = state;
     }
@@ -151,9 +146,9 @@ export class VatService {
 
     get_auth_url(c : string) : Observable<string> {
 
-	let url = "/api/vat/authorize/" + c;
+	const url = "/api/vat/authorize/" + c;
 
-    	return this.api.get<any>(
+    	return this.api.get<{ url: string }>(
 	    url, this.options
 	).pipe(
 	    map(e => e.url)
@@ -163,9 +158,9 @@ export class VatService {
 
     deauthorize(c : string) : Observable<void> {
 
-	let url = "/api/vat/deauthorize/" + c;
+	const url = "/api/vat/deauthorize/" + c;
 
-    	return this.api.post<any>(
+    	return this.api.post<void>(
 	    url, {}, this.options
 	);
 
@@ -173,9 +168,9 @@ export class VatService {
 
     submit(id : string) {
 
-	let url = "/api/vat/submit/" + id;
+	const url = "/api/vat/submit/" + id;
 
-    	return this.api.post<any>(
+    	return this.api.post<void>(
 	    url, {}, this.options
 	);
 

@@ -1,21 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormGroup, FormControl} from '@angular/forms';
+import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipGrid, MatChipRow, MatChipRemove, MatChipInput } from '@angular/material/chips';
 import { Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import moment from 'moment';
 
 import { CompanyService, Company } from '../company.service';
 import { WorkingService } from '../../working.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 @Component({
     selector: 'activities-config',
     templateUrl: './activities-config.component.html',
-    styleUrls: ['./activities-config.component.scss']
+    styleUrls: ['./activities-config.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, MatHint, MatInput, MatChipGrid, MatChipRow, MatChipRemove, MatIcon, MatChipInput, MatButton]
 })
 export class ActivitiesConfigComponent implements OnInit {
+    private route = inject(ActivatedRoute);
+    private state = inject(CompanyService);
+    private snackBar = inject(MatSnackBar);
+    private working = inject(WorkingService);
+
 
     readonly chipSeparatorKeysCodes = [ENTER, COMMA] as const;
 
@@ -25,12 +37,7 @@ export class ActivitiesConfigComponent implements OnInit {
 	sic_codes: new FormControl<string[]>([]),
     });
 
-    constructor(
-	private route : ActivatedRoute,
-	private state: CompanyService,
-	private snackBar: MatSnackBar,
-	private working : WorkingService,
-    ) {
+    constructor() {
 	this.company = new Company();
     }
 
@@ -60,7 +67,7 @@ export class ActivitiesConfigComponent implements OnInit {
 				this.load();
 			    }
 			},
-			error: (e) => {
+			error: (_e) => {
 			    this.working.stop();
 			}
 		    });
@@ -70,7 +77,7 @@ export class ActivitiesConfigComponent implements OnInit {
     }
 
     public success() {
-	let snack = this.snackBar.open("Configuration saved", "dismiss",
+	this.snackBar.open("Configuration saved", "dismiss",
 				       { duration: 5000 });
     }
 
@@ -94,8 +101,8 @@ export class ActivitiesConfigComponent implements OnInit {
 	this.working.start();
 
 	this.state.save().subscribe({
-	    next: (e) => { this.working.stop(); this.success(); },
-	    error: (e) => { this.working.stop(); },
+	    next: () => { this.working.stop(); this.success(); },
+	    error: (_e) => { this.working.stop(); },
 	    complete: () => {},
 	});
 

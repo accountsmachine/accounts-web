@@ -1,24 +1,41 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, interval, catchError } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription, interval } from 'rxjs';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { CheckoutService } from '../checkout.service';
-import { Order } from '../commerce.model';
+import { Order, CryptoCurrencies, CryptoEstimate,
+         CryptoPayment, CryptoPaymentStatus
+       } from '../commerce.model';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { NavComponent } from '../nav/nav.component';
+import { OrderComponent } from '../order/order.component';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { UpperCasePipe } from '@angular/common';
 
 @Component({
     selector: 'app-checkout',
     templateUrl: './crypto-checkout.component.html',
-    styleUrls: ['./crypto-checkout.component.scss']
+    styleUrls: ['./crypto-checkout.component.scss'],
+    imports: [MatDrawerContainer, MatDrawer, NavComponent, MatDrawerContent, OrderComponent, FormsModule, ReactiveFormsModule, MatFormField, MatLabel, MatSelect, MatOption, MatHint, MatButton, MatIcon, UpperCasePipe]
 })
-export class CryptoCheckoutComponent implements OnInit {
+export class CryptoCheckoutComponent implements OnInit, OnDestroy {
+    private service = inject(CheckoutService);
+    private router = inject(Router);
+    private snackBar = inject(MatSnackBar);
+    private formBuilder = inject(FormBuilder);
+
 
     public form : FormGroup;
 
-    estimate : number = 0.0;
-    minimum : number = 0.0;
+    estimate  = 0.0;
+    minimum  = 0.0;
 
     pay_amount? : number;
     actually_paid? : number;
@@ -34,16 +51,11 @@ export class CryptoCheckoutComponent implements OnInit {
 
     order : Order  = new Order();
 
-    est_subs : any = null;
-    status_subs : any = null;
-    ord_subs : any = null;
+    est_subs : Subscription | null = null;
+    status_subs : Subscription | null = null;
+    ord_subs : Subscription | null = null;
 
-    constructor(
-	private service : CheckoutService,
-	private router : Router,
-	private snackBar: MatSnackBar,
-	private formBuilder: FormBuilder,
-    ) {
+    constructor() {
 	this.form = this.formBuilder.group({
 	    currency: ["eth"],
 	});
@@ -53,7 +65,7 @@ export class CryptoCheckoutComponent implements OnInit {
     ngOnInit(): void {
 
 	this.est_subs = interval(30000).subscribe({
-	    next: (e: any) => {
+	    next: () => {
 		if (!this.pay_address) {
 		    this.adjust_estimate();
 		    this.adjust_minimum();
@@ -64,16 +76,16 @@ export class CryptoCheckoutComponent implements OnInit {
 	});
 
 	this.status_subs = interval(5000).subscribe({
-	    next: (e: any) => {
+	    next: () => {
 		if (this.payment_id) {
 		    if (this.payment_status != "finished") {
 			this.service.get_crypto_payment_status(
 			    this.payment_id
 			).subscribe(
-			    (e : any) => {
-				this.payment_status = e["payment_status"];
-				this.actually_paid = e["actually_paid"];
-				if (e["payment_status"] == "finished") {
+			    (status : CryptoPaymentStatus) => {
+				this.payment_status = status.payment_status;
+				this.actually_paid = status.actually_paid;
+				if (status.payment_status == "finished") {
 				    // Nothing to do?
 				}
 			    }
@@ -86,7 +98,7 @@ export class CryptoCheckoutComponent implements OnInit {
 	});
 
 	this.service.get_crypto_currencies().subscribe({
-	    next: (c : any) => {
+	    next: (c : CryptoCurrencies) => {
 		this.currencies = c.currencies.sort();
 	    },
 	    error: (err) => {
@@ -114,17 +126,17 @@ export class CryptoCheckoutComponent implements OnInit {
 
     place_order() {
 
-	let currency = this.form.value.currency;
+	const currency = this.form.value.currency;
 
 	this.service.create_crypto_payment(currency).subscribe({
-	    next: (e : any) => {
-		this.pay_address = e["pay_address"];
-		this.pay_amount = e["pay_amount"];
-		this.actually_paid = e["actually_paid"];
-		this.payment_id = e["payment_id"];
-		this.pay_currency = e["pay_currency"];
-		this.order_id = e["order_id"];
-		this.payment_status = e["payment_status"];
+	    next: (e : CryptoPayment) => {
+		this.pay_address = e.pay_address;
+		this.pay_amount = e.pay_amount;
+		this.actually_paid = e.actually_paid;
+		this.payment_id = e.payment_id;
+		this.pay_currency = e.pay_currency;
+		this.order_id = e.order_id;
+		this.payment_status = e.payment_status;
 	    },
 	    error: (err) => {
 		console.log("place-order");
@@ -150,11 +162,11 @@ export class CryptoCheckoutComponent implements OnInit {
 
     adjust_estimate() {
 
-	let currency = this.form.value.currency;
+	const currency = this.form.value.currency;
 
 	this.service.get_crypto_estimate(currency).subscribe({
-	    next: (e : any) => {
-		this.estimate = e["estimated_amount"];
+	    next: (e : CryptoEstimate) => {
+		this.estimate = e.estimated_amount;
 		this.check_min();
 	    },
 	    error: (err) => {
@@ -171,10 +183,10 @@ export class CryptoCheckoutComponent implements OnInit {
 
     adjust_minimum() {
 
-	let currency = this.form.value.currency;
+	const currency = this.form.value.currency;
 
 	this.service.get_crypto_minimum(currency).subscribe({
-	    next: (e : any) => {
+	    next: (e : number) => {
 		this.minimum = e;
 		this.check_min();
 	    },
@@ -189,7 +201,7 @@ export class CryptoCheckoutComponent implements OnInit {
 
     }
 
-    error(err : any) {
+    error(err : HttpErrorResponse) {
 	if (err && err.error) {
 	    if (err.error.message) {
 		this.snackBar.open(err.error.message,
